@@ -1,23 +1,13 @@
-import React, { Component } from 'react';
-
+import React  from 'react';
 import LoginForm from '../components/login/LoginForm.js';
 
-class LoginPage extends Component {
+const LoginPage = () => {
 
-    constructor(props) {
-      super(props); 
-      this.state = {
-      };
-    }
-
-    render = () => {
-        return( 
-            <div>
-                <LoginForm {...this}
-                />
-            </div>
-        )
-    }
+    return( 
+        <div>
+            <LoginForm/>
+        </div>
+    )
 }
 
 export default LoginPage;
