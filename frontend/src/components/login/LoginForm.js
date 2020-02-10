@@ -1,39 +1,37 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from '../../assets/gpp.png';
 import {getMensajito} from '../../services/LoginServices';
 
-class LoginForm extends Component { 
-    constructor(props) {
-        super(props);
-        this.state = {
-          mensajito : "Esperando mensaje..."
-        };
-    }
+const useLogin = () => {
 
-    componentDidMount = () => {
-      getMensajito()
-      .then( response => {
-        if (response.status === 200) this.setState({mensajito: response.data.message})
-      })
-      .catch((error) => {
-        console.log(error)
-      });
-    }
-    
-    render = () => {
-        return (
-            <div className="App">
-              <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <br></br>
-                <br></br>
-                <p>
-                  {this.state.mensajito}
-                </p>
-              </header>
-            </div>
-          );
-    }
+  const [mensajito, setMensajito] = useState("Esperando mensaje...");
+
+  useEffect( () => {
+    getMensajito()
+    .then( response => {
+      if (response.status === 200) setMensajito(response.data.message);
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  }, []);
+
+  return mensajito;
 }
 
-export default LoginForm;
+export default function LoginForm () {
+  const mensajito = useLogin();
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <br></br>
+        <br></br>
+        <p>
+          {mensajito}
+        </p>
+      </header>
+    </div>
+  );
+}
