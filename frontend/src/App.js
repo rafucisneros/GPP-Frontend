@@ -5,6 +5,7 @@ import './App.css';
 import LoginPage from './containers/LoginPage.js';
 import RegisterPage from './containers/RegisterPage.js';
 import MensajitoPage from './containers/MensajitoPage.js';
+import CreateTestPage from './containers/CreateTestPage.js';
 
 const App = () => {
   
@@ -25,6 +26,11 @@ const App = () => {
           exact
           path='/mensajito'
           render={(props) => <MensajitoPage {...props} />}
+        />
+        <Route
+          exact
+          path='/create_test'
+          render={(props) => <CreateTestPage {...props} />}
         />
         <Redirect strict from="/" to="/mensajito" />
       </Switch>
