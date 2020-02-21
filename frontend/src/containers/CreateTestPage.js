@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, Fragment } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,7 +17,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -25,11 +24,16 @@ import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import CheckIcon from '@material-ui/icons/Check';
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown';
 import CloseIcon from '@material-ui/icons/Close';
-import LowPriorityIcon from '@material-ui/icons/LowPriority';
 import AddIcon from '@material-ui/icons/Add';
 import Box from '@material-ui/core/Box';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
+import Switch from '@material-ui/core/Switch';
 
+//assets
 import '../assets/css/createTestPage.css';
+
+// components
+import TextArea from '../components/text_area/TextArea.js'
 
 const drawerWidth = 240;
 
@@ -71,42 +75,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const menuDeOpciones = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <CheckIcon />
-      </ListItemIcon>
-      <ListItemText primary="Selección Simple" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ThumbsUpDownIcon />
-      </ListItemIcon>
-      <ListItemText primary="Verdadero / Falso" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <LowPriorityIcon />
-      </ListItemIcon>
-      <ListItemText primary="Completación" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <FormatListNumberedIcon />
-      </ListItemIcon>
-      <ListItemText primary="Ordenar" />
-    </ListItem>
-    <ListItem button>
-    </ListItem>
-  </div>
-);
-
 export default function CreateTestPage() {
   const classes = useStyles();
 
   const [bar, setBar] = useState(true);
   const [respuestas, setRespuestas] = useState([]);
+  const [tituloRespuesta, setTituloRespuesta] = useState("Selección Simple");
+  const [tipoPregunta, setTipoPregunta] = useState("seleccion_simple");
 
   const handleBarOpen = () => {
     setBar(true);
@@ -130,6 +105,45 @@ export default function CreateTestPage() {
     setRespuestas(campos);
   }
 
+  const menuDeOpciones = (
+    <div>
+      <ListItem button onClick={() => handleCambiarTipoPregunta("seleccion_simple")}>
+        <ListItemIcon>
+          <CheckIcon />
+        </ListItemIcon>
+        <ListItemText primary="Selección Simple" />
+      </ListItem>
+      <ListItem button onClick={() => handleCambiarTipoPregunta("seleccion_multiple")}>
+        <ListItemIcon>
+          <DoneAllIcon />
+        </ListItemIcon>
+        <ListItemText primary="Selección Múltiple" />
+      </ListItem>
+      <ListItem button onClick={() => handleCambiarTipoPregunta("verdadero_falso")}>
+        <ListItemIcon>
+          <ThumbsUpDownIcon />
+        </ListItemIcon>
+        <ListItemText primary="Verdadero / Falso" />
+      </ListItem>
+      <ListItem button onClick={() => handleCambiarTipoPregunta("ordenamiento")}>
+        <ListItemIcon>
+          <FormatListNumberedIcon />
+        </ListItemIcon>
+        <ListItemText primary="Ordenamiento" />
+      </ListItem>
+      <ListItem button>
+      </ListItem>
+    </div>
+  );
+
+  const handleCambiarTipoPregunta = (tipo) => {
+    if (tipo === "seleccion_simple") setTituloRespuesta("Selección Simple");
+    else if (tipo === "seleccion_multiple") setTituloRespuesta("Selección Múltiple");
+    else if (tipo === "verdadero_falso") setTituloRespuesta("Verdadero y Falso");
+    else if (tipo === "ordenamiento") setTituloRespuesta("Ordenamiento");
+    setTipoPregunta(tipo)
+  }
+
   const handleCambiarRespuesta = (e, index) => {
       let valores = [...respuestas];
       let name = e.target.name;
@@ -137,6 +151,84 @@ export default function CreateTestPage() {
       valores[index][name] = value;
       setRespuestas(valores);
   }
+
+  const handleSeleccionarTipoPregunta = () => {
+    if ( tipoPregunta === "seleccion_simple" ){
+      return (
+        <Fragment>
+          <TextArea/>
+          <Grid item xs={12} md={12} lg={12}>
+              <Paper className="paper-crear-test section-paper-crear-test ultima-seccion">
+                  <Box id="titulo-respuesta" className="flex-box-titulo">
+                      <Box >
+                          <span className = "respuestas-subtitulo">
+                              Respuestas
+                          </span>
+                      </Box>
+                      <Box >
+                          <IconButton className="boton-agregar-respuestas" onClick={handleAgregarRespuesta}>
+                              <AddIcon className="agregar-respuestas"/>
+                          </IconButton>
+                      </Box>
+                  </Box>
+                  {respuestas.map( (respuesta, index) => {
+                      return (
+                        <Box key={`${respuesta}-${index}`} className="flex-box-respuestas">
+                        <Box >
+                            <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            value={respuesta.respuesta}
+                            id={`respuesta${index}`}
+                            label="Escribe una respuesta"
+                            name={`respuesta`}
+                            autoFocus
+                            onChange={(e) => handleCambiarRespuesta(e, index)}
+                        />
+                        </Box>
+                        <Box >
+                          {/* <Switch checked={true} onChange={handleChange('checkedA')} value="checkedA" /> */}
+                          <Switch checked={true} value="checkedA" color="primary"/>
+                        </Box>
+                        <Box >
+                            <IconButton className="boton-borrar-respuestas" onClick={ () => handleEliminarRespuesta(index)}>
+                                <CloseIcon className="borrar-respuestas"/>
+                            </IconButton>
+                        </Box>
+                    </Box>
+                      )
+                    })
+                  }
+
+              </Paper>
+          </Grid>
+        </Fragment> 
+      )
+    } else if ( tipoPregunta === "seleccion_multiple")  {
+      return (
+        <Fragment>
+          <TextArea/>
+        </Fragment> 
+      )
+    } else if ( tipoPregunta === "verdadero_falso" ) {
+      return (
+        <Fragment>
+          <TextArea/>
+        </Fragment>
+      )
+    } else if ( tipoPregunta === "ordenamiento" ) {
+      return (
+        <Fragment>
+          <TextArea/>
+        </Fragment>
+      )
+    } else {
+      return(<div></div>)
+    }
+  }
+
 
   return (
     <div style={{display : 'flex'}}>
@@ -157,9 +249,6 @@ export default function CreateTestPage() {
               <ControlPointIcon style={{marginRight : '8px'}}/>
               Agregar Pregunta
             </Box>
-            {/* <Grid item> */}
-                
-            {/* </Grid> */}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -187,77 +276,39 @@ export default function CreateTestPage() {
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <Paper className="paper-crear-test">
-                        Selección Simple
+                      {tituloRespuesta}
                     </Paper>
                 </Grid>
+
                 <Divider />
+
                 {/* <form className="container-login-signup-form" noValidate> */}
-                    <Grid item xs={12} md={12} lg={12}>
-                        <Paper className="paper-crear-test section-paper-crear-test">
-                            <TextareaAutosize aria-label="minimum height" rowsMin={15} placeholder="Aqui va el texto" />
-                        </Paper>
-                    </Grid>
-                    <Grid item xs={12} md={12} lg={12}>
-                        <Paper className="paper-crear-test section-paper-crear-test ultima-seccion">
-                            <Box id="titulo-respuesta" className="flex-box-titulo">
-                                <Box >
-                                    <span className = "respuestas-subtitulo">
-                                        Respuestas
-                                    </span>
-                                </Box>
-                                <Box >
-                                    <IconButton className="boton-agregar-respuestas" onClick={handleAgregarRespuesta}>
-                                        <AddIcon className="agregar-respuestas"/>
-                                    </IconButton>
-                                </Box>
-                            </Box>
-                            {respuestas.map( (respuesta, index) => {
-                                return (
-                                  <Box key={`${respuesta}-${index}`} className="flex-box-respuestas">
-                                  <Box >
-                                      <TextField
-                                      variant="outlined"
-                                      margin="normal"
-                                      required
-                                      fullWidth
-                                      value={respuesta.respuesta}
-                                      id={`respuesta${index}`}
-                                      label="Escribe una respuesta"
-                                      name={`respuesta`}
-                                      autoFocus
-                                      onChange={(e) => handleCambiarRespuesta(e, index)}
-                                  />
-                                  </Box>
-                                  <Box >
-                                      <IconButton className="boton-borrar-respuestas" onClick={ () => handleEliminarRespuesta(index)}>
-                                          <CloseIcon className="borrar-respuestas"/>
-                                      </IconButton>
-                                  </Box>
-                              </Box>
-                                )
-                              })
-                            }
-                            <Box className="flex-box-titulo">
-                              <Box className="div-buttons-respuestas">
-                                <Button
-                                  type="submit"
-                                  variant="contained"
-                                  color="primary"
-                                  style={{marginRight: '8px'}}
-                                >
-                                  Crear Pregunta
-                                </Button>
-                                <Button
-                                  type="submit"
-                                  variant="contained"
-                                  color="secondary"
-                                >
-                                Terminar Examen
-                                </Button>
-                              </Box>
-                            </Box>
-                        </Paper>
-                    </Grid>
+                { handleSeleccionarTipoPregunta() }
+
+                <Grid item xs={12} md={12} lg={12}>
+                  <Paper className="paper-crear-test">
+                    <Box className="flex-box-titulo">
+                      <Box className="div-buttons-respuestas">
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          style={{marginRight: '8px'}}
+                        >
+                          Crear Pregunta
+                        </Button>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="secondary"
+                        >
+                        Terminar Examen
+                        </Button>
+                      </Box>
+                    </Box>
+                  </Paper>
+                </Grid>
+                
                 {/* </form> */}
             </Grid>
         </Container>
@@ -265,5 +316,3 @@ export default function CreateTestPage() {
     </div>
   );
 }
-
-              
