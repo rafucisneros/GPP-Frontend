@@ -2,10 +2,14 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import './App.css';
 
-import LoginPage from './containers/LoginPage.js';
-import RegisterPage from './containers/RegisterPage.js';
-import MensajitoPage from './containers/MensajitoPage.js';
-import CreateTestPage from './containers/CreateTestPage.js';
+// vistas
+import LoginPage from './vistas/LoginPage.js';
+import RegisterPage from './vistas/RegisterPage.js';
+import MensajitoPage from './vistas/MensajitoPage.js';
+import CreateTestPage from './vistas/CreateTestPage.js';
+
+// proveedores
+import {TipoPreguntaRespuestaProvider} from './context/general_context';
 
 const App = () => {
   
@@ -30,7 +34,11 @@ const App = () => {
         <Route
           exact
           path='/create_test'
-          render={(props) => <CreateTestPage {...props} />}
+          render={(props) => 
+            <TipoPreguntaRespuestaProvider>
+              <CreateTestPage {...props} />
+            </TipoPreguntaRespuestaProvider>
+          }
         />
         <Redirect strict from="/" to="/mensajito" />
       </Switch>

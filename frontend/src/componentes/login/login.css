@@ -13,14 +13,14 @@ body{
 }
 
 .container-image-login{
-    background-image: url(../../assets/examen-signup.jpg);
+    background-image: url(../../assets/imagenes/examen-signup.jpg);
     background-repeat: 'no-repeat';
     background-size: cover;
     background-position: 'center';
 }
 
 .container-image-signup{
-    background-image: url(../../assets/examen-signup.jpg);
+    background-image: url(../../assets/imagenes/examen-signup.jpg);
     background-repeat: 'no-repeat';
     background-size: cover;
     background-position: 'center';

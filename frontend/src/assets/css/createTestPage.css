@@ -25,7 +25,7 @@
 }
 
 .paper-crear-test.section-paper-crear-test.ultima-seccion{
-    height: 300px;
+    height: 200px;
 }
 
 /* Toolbar*/
@@ -59,11 +59,11 @@
     justify-content: flex-start;
 }
 
-.flex-box-titulo > div:last-child{
+/* .flex-box-titulo > div:last-child{
     display: flex;
     flex: 1;
     justify-content: flex-end;
-}
+} */
 
 .flex-box-respuestas{
     display: flex;
