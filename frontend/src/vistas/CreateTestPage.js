@@ -1,4 +1,4 @@
-import React, {useState, Fragment } from 'react';
+import React, {useState } from 'react';
 
 import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -23,7 +23,6 @@ import '../assets/css/createTestPage.css';
 // import { useStylesCreateTestPage } from '../assets/css/styleCreateTestPage.js';
 
 // componentes
-import TextArea from '../componentes/text_area/TextArea.js';
 import ListaTipoPregunta from '../componentes/lista_tipo_pregunta/ListaTipoPregunta.js';
 import RespuestaSeleccion from '../componentes/respuesta_seleccion/RespuestaSeleccion.js'
 
@@ -100,9 +99,7 @@ export default function CreateTestPage() {
       )
     } else if ( tipoPregunta === "ordenamiento" ) {
       return (
-        <Fragment>
-          <TextArea/>
-        </Fragment>
+        <RespuestaSeleccion key={`${tipoPregunta}`} />
       )
     } else {
       return(<div></div>)
