@@ -24,7 +24,6 @@ export default function RespuestaSeleccion() {
     const {tituloRespuesta, tipoPregunta} = useTipoPreguntaRespuesta();
 
     const handleAgregarRespuesta = () => {
-      console.log("11")
         let campo = [...respuestas];
         campo.push({
             respuesta : '',
@@ -66,10 +65,14 @@ export default function RespuestaSeleccion() {
         setRespuestas(checkeds);
     }
 
+    const handleAgregarRadio = () => {
+      handleAgregarRespuesta();
+    }
+
     const handleChangeRadio = (e, index) => {
         let checkeds = [...respuestas];
         let value = e.target.value;
-        checkeds[index].respuestaVerdaderoFalso = value;
+        checkeds.respuestaVerdaderoFalso = value;
     }
 
     const reorder = (list, startIndex, endIndex) => {
@@ -105,7 +108,7 @@ export default function RespuestaSeleccion() {
                               Respuestas
                           </span>
                       </Box>
-                      { (tipoPregunta === 'verdadero_falso') &&
+                      {/* { (tipoPregunta === 'verdadero_falso') &&
                             <Grid style={{display: 'inline-flex'}}>
                                 <Box style={{marginRight : '10px'}}>
                                     <span>
@@ -118,45 +121,43 @@ export default function RespuestaSeleccion() {
                                     </span>
                                 </Box>
                             </Grid>
+                      } */}
+                      { (tipoPregunta !== 'verdadero_falso') &&
+                        <Box >
+                            <IconButton className="boton-agregar-respuestas" onClick={handleAgregarRespuesta}>
+                                <AddIcon className="agregar-respuestas"/>
+                            </IconButton>
+                        </Box>
                       }
-                      <Box >
-                          <IconButton className="boton-agregar-respuestas" onClick={handleAgregarRespuesta}>
-                              <AddIcon className="agregar-respuestas"/>
-                          </IconButton>
-                      </Box>
                   </Box>
-                  {tipoPregunta !== 'ordenamiento' && respuestas.map( (respuesta, index) => {
+                  { (tipoPregunta === 'verdadero_falso') &&
+                    <RadioGroup name="vdd_fals" defaultValue="verdadero" onChange={(e) => handleChangeRadio(e)} style={{display : 'block', textAlignLast: 'center'}}>
+                          Verdadero 
+                          <Radio value="verdadero" color="primary" style={{marginLeft : '10px'}} label="Verdadero"/>
+                          <Radio value="falso" style={{marginRight : '10px'}} label="Falso"/>
+                          Falso
+                    </RadioGroup>
+                  }
+                  {tipoPregunta !== 'ordenamiento' && tipoPregunta !== 'verdadero_falso' && respuestas.map( (respuesta, index) => {
                     return (
                           <Box key={`${respuesta}-${index}`} className="flex-box-respuestas">
                             <Box >
-                                <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-                                value={respuesta.respuesta}
-                                id={`respuesta${index}`}
-                                label="Escribe una respuesta"
-                                name={`respuesta`}
-                                autoFocus
-                                onChange={(e) => handleCambiarRespuesta(e, index)}
-                                />
+                              <TextField
+                              variant="outlined"
+                              margin="normal"
+                              required
+                              fullWidth
+                              value={respuesta.respuesta}
+                              id={`respuesta${index}`}
+                              label="Escribe una respuesta"
+                              name={`respuesta`}
+                              autoFocus
+                              onChange={(e) => handleCambiarRespuesta(e, index)}
+                              />
                             </Box>
-                            { (tipoPregunta === 'verdadero_falso') &&
-                                <RadioGroup name="vdd_fals" defaultValue="verdadero" onChange={(e) => handleChangeRadio(e, index)} style={{display : 'block'}}>
-                                    {/* <Box > */}
-                                        <Radio value="verdadero" color="primary" style={{marginRight : '10px'}}/>
-                                    {/* </Box>
-                                    <Box > */}
-                                        <Radio value="falso" style={{marginRight : '10px', marginLeft : '7px'}}/>
-                                    {/* </Box> */}
-                                </RadioGroup>
-                            }
-                            { (tipoPregunta === 'seleccion_simple' || tipoPregunta === 'seleccion_multiple') &&
-                                <Box >
-                                    <Switch checked={respuesta.checked} onChange={tipoPregunta === 'seleccion_simple' ? (e) => handleChangeCheckedSimple(e, index) : (e) => handleChangeCheckedMultiple(e, index)} color="primary"/>
-                                </Box>
-                            }
+                            <Box >
+                                <Switch checked={respuesta.checked} onChange={tipoPregunta === 'seleccion_simple' ? (e) => handleChangeCheckedSimple(e, index) : (e) => handleChangeCheckedMultiple(e, index)} color="primary"/>
+                            </Box>
                             <Box >
                                 <IconButton className="boton-borrar-respuestas" onClick={ () => handleEliminarRespuesta(index)}>
                                     <CloseIcon className="borrar-respuestas"/>
