@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../../assets/gpp.png';
-import {getMensajito} from '../../services/LoginServices';
+import logo from '../assets/imagenes/gpp.png';
+import { getMensajito } from '../servicios/LoginServices';
 
-const useLogin = () => {
+const useMensajito = () => {
 
   const [mensajito, setMensajito] = useState("Esperando mensaje...");
 
@@ -19,8 +19,8 @@ const useLogin = () => {
   return mensajito;
 }
 
-export default function LoginForm () {
-  const mensajito = useLogin();
+export default function MensajitoPage () {
+  const mensajito = useMensajito();
 
   return (
     <div className="App">
