@@ -136,15 +136,13 @@ export default function CreateTestPage() {
         open={bar}
       >
         <div className="toolbar-icono">
-            Tipo de Pregunta
+            Menú del Examen
             <IconButton onClick={handleBarClose}>
                 <ChevronLeftIcon />
             </IconButton>
         </div>
         <Divider />
-        <List>
-          <ListaTipoPregunta/>
-        </List>
+        <ListaTipoPregunta/>
       </Drawer>
       <main className="content-main-crear-test">
         <div className="toolbar-icono"/>
