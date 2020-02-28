@@ -25,7 +25,8 @@
 }
 
 .paper-crear-test.section-paper-crear-test.ultima-seccion{
-    height: 200px;
+    height: auto;
+    max-height: 300px;
 }
 
 /* Toolbar*/

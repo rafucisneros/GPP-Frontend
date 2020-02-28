@@ -1,26 +1,25 @@
 import React, {useState } from 'react';
-
 import clsx from 'clsx';
+
+import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import MenuIcon from '@material-ui/icons/Menu';
-import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import Button from '@material-ui/core/Button';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Box from '@material-ui/core/Box';
+
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 // assets
 import '../assets/css/createTestPage.css';
-// import { useStylesCreateTestPage } from '../assets/css/styleCreateTestPage.js';
 
 // componentes
 import ListaTipoPregunta from '../componentes/lista_tipo_pregunta/ListaTipoPregunta.js';
@@ -29,7 +28,6 @@ import RespuestaSeleccion from '../componentes/respuesta_seleccion/RespuestaSele
 // contexts
 import {useTipoPreguntaRespuesta} from '../context/general_context';
 
-import { makeStyles } from '@material-ui/core/styles';
 const drawerWidth = 240;
 
 const useStyle = makeStyles(theme => ({
@@ -74,13 +72,14 @@ export default function CreateTestPage() {
   const classes = useStyle();
 
   const [bar, setBar] = useState(true);
-  const {tituloRespuesta, tipoPregunta} = useTipoPreguntaRespuesta();
+  const {tituloRespuesta, tipoPregunta, handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
 
   const handleBarOpen = () => {
     setBar(true);
   };
 
   const handleBarClose = () => {
+    setSubMenuTipoPregunta();
     setBar(false);
   };
 
@@ -122,8 +121,7 @@ export default function CreateTestPage() {
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap style={{flexGrow: 1}}>
             <Box className="flex-box-titulo">
-              <ControlPointIcon style={{marginRight : '8px'}}/>
-              Agregar Pregunta
+              GPI
             </Box>
           </Typography>
         </Toolbar>
@@ -154,14 +152,20 @@ export default function CreateTestPage() {
                     </Paper>
                 </Grid>
 
+                <Grid item xs={12} md={12} lg={12}>
+                  <Paper className="paper-crear-test">
+                      Temas, areas y sub areas 
+                      <br/>
+                      aasas
+                  </Paper>
+                </Grid>
+
                 <Divider />
 
-                {/* <form className="container-login-signup-form" noValidate> */}
                 { handleSeleccionarTipoPregunta() }
 
                 <Grid item xs={12} md={12} lg={12}>
                   <Paper className="paper-crear-test">
-                    {/* <Box className="flex-box-titulo"> */}
                       <Box className="div-buttons-respuestas">
                         <Button
                           type="submit"
@@ -176,10 +180,9 @@ export default function CreateTestPage() {
                           variant="contained"
                           color="secondary"
                         >
-                        Terminar Examen
+                          Publicar Examen
                         </Button>
                       </Box>
-                    {/* </Box> */}
                   </Paper>
                 </Grid>
                 
