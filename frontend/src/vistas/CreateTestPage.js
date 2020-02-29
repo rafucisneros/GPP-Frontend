@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -24,6 +24,7 @@ import '../assets/css/createTestPage.css';
 // componentes
 import ListaTipoPregunta from '../componentes/lista_tipo_pregunta/ListaTipoPregunta.js';
 import RespuestaSeleccion from '../componentes/respuesta_seleccion/RespuestaSeleccion.js'
+import SeleccionarAreaTema from '../componentes/seleccionar_tema/SeleccionarAreaTema.js'
 
 // contexts
 import {useTipoPreguntaRespuesta} from '../context/general_context';
@@ -154,9 +155,7 @@ export default function CreateTestPage() {
 
                 <Grid item xs={12} md={12} lg={12}>
                   <Paper className="paper-crear-test">
-                      Temas, areas y sub areas 
-                      <br/>
-                      aasas
+                    <SeleccionarAreaTema/>
                   </Paper>
                 </Grid>
 
