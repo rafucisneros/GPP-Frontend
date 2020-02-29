@@ -1,5 +1,6 @@
 import React, { useState, Fragment } from 'react';
 
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';  
 import Select from '@material-ui/core/Select';
@@ -13,6 +14,13 @@ import Box from '@material-ui/core/Box';
 import MultiSelect from './MultiSelect.js';
 
 // contexts
+
+const useStyles = makeStyles(theme => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  }
+}));
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -99,6 +107,8 @@ const temas = {
 
 export default function SeleccionarAreaTema() {
 
+    const classes = useStyles();
+
     const [ListaSeleccionadoArea, setListaSeleccionadoaArea] = useState([]);
     const [ListaSeleccionadoSubArea, setListaSeleccionadoSubArea] = useState([]);
     const [ListaSeleccionadoTema, setListaSeleccionadoTema] = useState([]);
@@ -140,75 +150,81 @@ export default function SeleccionarAreaTema() {
     };
 
     return (
-      <Fragment>
-        <FormControl>
-            <InputLabel>Area</InputLabel>
-            <Select
-            // labelId="demo-mutiple-checkbox-label"
-            // id="demo-mutiple-checkbox"
-            multiple
-            value={ListaSeleccionadoArea}
-            onChange={(e) => handleChange(e, 'area')}
-            input={<Input />}
-            renderValue={selected => selected.join(', ')}
-            MenuProps={MenuProps}
-            >
-            {ListaFiltradoArea.map(item => (
-                <MenuItem key={item} value={item}>
-                  <Checkbox checked={ListaSeleccionadoArea.indexOf(item) > -1} color="primary"/>
-                  <ListItemText primary={item} />
-                </MenuItem>
-            ))}
-            </Select>
-        </FormControl>
+      <Box style={{textAlign : 'center', width : '100%'}}>
+        <Box style={{float : 'left'}}>
+          <FormControl className={classes.formControl}>
+              <InputLabel>Áreas</InputLabel>
+              <Select
+              // labelId="demo-mutiple-checkbox-label"
+              // id="demo-mutiple-checkbox"
+              multiple
+              value={ListaSeleccionadoArea}
+              onChange={(e) => handleChange(e, 'area')}
+              input={<Input />}
+              renderValue={selected => selected.join(', ')}
+              MenuProps={MenuProps}
+              >
+              {ListaFiltradoArea.map(item => (
+                  <MenuItem key={item} value={item}>
+                    <Checkbox checked={ListaSeleccionadoArea.indexOf(item) > -1} color="primary"/>
+                    <ListItemText primary={item} />
+                  </MenuItem>
+              ))}
+              </Select>
+          </FormControl>
+        </Box>
 
         {
           permitirSubArea &&
-          <FormControl>
-            <InputLabel>SubArea</InputLabel>
-            <Select
-            // labelId="demo-mutiple-checkbox-label"
-            // id="demo-mutiple-checkbox"
-            multiple
-            value={ListaSeleccionadoSubArea}
-            onChange={(e) => handleChange(e, 'subarea')}
-            input={<Input />}
-            renderValue={selected => selected.join(', ')}
-            MenuProps={MenuProps}
-            >
-            {ListaFiltradoSubArea.map(item => (
-                <MenuItem key={item} value={item}>
-                <Checkbox checked={ListaSeleccionadoSubArea.indexOf(item) > -1} color="primary"/>
-                <ListItemText primary={item} />
-                </MenuItem>
-            ))}
-            </Select>
-          </FormControl>
+          <Box style={{display: 'inline-block'}}>
+            <FormControl className={classes.formControl}>
+              <InputLabel>Sub Áreas</InputLabel>
+              <Select
+              // labelId="demo-mutiple-checkbox-label"
+              // id="demo-mutiple-checkbox"
+              multiple
+              value={ListaSeleccionadoSubArea}
+              onChange={(e) => handleChange(e, 'subarea')}
+              input={<Input />}
+              renderValue={selected => selected.join(', ')}
+              MenuProps={MenuProps}
+              >
+              {ListaFiltradoSubArea.map(item => (
+                  <MenuItem key={item} value={item}>
+                  <Checkbox checked={ListaSeleccionadoSubArea.indexOf(item) > -1} color="primary"/>
+                  <ListItemText primary={item} />
+                  </MenuItem>
+              ))}
+              </Select>
+            </FormControl>
+          </Box>
         }
 
         {
           permitirTarea &&
-          <FormControl>
-            <InputLabel>Tema</InputLabel>
-            <Select
-            // labelId="demo-mutiple-checkbox-label"
-            // id="demo-mutiple-checkbox"
-            multiple
-            value={ListaSeleccionadoTema}
-            onChange={(e) => handleChange(e, 'tema')}
-            input={<Input />}
-            renderValue={selected => selected.join(', ')}
-            MenuProps={MenuProps}
-            >
-            {ListaFiltradoTema.map(item => (
-                <MenuItem key={item} value={item}>
-                <Checkbox checked={ListaSeleccionadoTema.indexOf(item) > -1} color="primary"/>
-                <ListItemText primary={item} />
-                </MenuItem>
-            ))}
-            </Select>
-          </FormControl>
+          <Box style={{float : 'right'}}>
+            <FormControl className={classes.formControl}>
+              <InputLabel>Temas</InputLabel>
+              <Select
+              // labelId="demo-mutiple-checkbox-label"
+              // id="demo-mutiple-checkbox"
+              multiple
+              value={ListaSeleccionadoTema}
+              onChange={(e) => handleChange(e, 'tema')}
+              input={<Input />}
+              renderValue={selected => selected.join(', ')}
+              MenuProps={MenuProps}
+              >
+              {ListaFiltradoTema.map(item => (
+                  <MenuItem key={item} value={item}>
+                  <Checkbox checked={ListaSeleccionadoTema.indexOf(item) > -1} color="primary"/>
+                  <ListItemText primary={item} />
+                  </MenuItem>
+              ))}
+              </Select>
+            </FormControl>
+          </Box>
         }
-      </Fragment>
+      </Box>
     )
 }
