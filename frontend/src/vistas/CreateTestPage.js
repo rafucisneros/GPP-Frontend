@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import TextField from '@material-ui/core/TextField';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -140,7 +141,6 @@ export default function CreateTestPage() {
                 <ChevronLeftIcon />
             </IconButton>
         </div>
-        <Divider />
         <ListaTipoPregunta/>
       </Drawer>
       <main className="content-main-crear-test">
@@ -148,18 +148,70 @@ export default function CreateTestPage() {
         <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <Paper className="paper-crear-test">
-                      {tituloRespuesta}
+                    <Paper className="paper-crear-test" style={{display : 'contents'}}>
+                      <Typography variant="h6" gutterBottom>
+                        {tituloRespuesta}
+                      </Typography>
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} md={12} lg={12}>
-                  <Paper className="paper-crear-test">
+                <Grid item lg={6} sm={6} xl={6} xs={6}>
+                  <Paper className="paper-crear-test" style={{height : '100%'}}>
+                    Enfoque
                     <SeleccionarAreaTema/>
                   </Paper>
                 </Grid>
-
-                <Divider />
+                <Grid item lg={6} sm={6} xl={6} xs={6}>
+                  <Paper className="paper-crear-test" style={{height : '100%'}}>
+                    Evaluación
+                    <Box style={{display: 'flex'}}>
+                      <Box style={{float: 'left', width : '50%', paddingRight: '3px'}}>
+                        <TextField
+                          id={`dificultad`}
+                          label="Number"
+                          type="number"
+                          margin="normal"
+                          label="Dificultad"
+                          required
+                          variant="outlined"
+                          fullWidth
+                          // name={`dificultad`}
+                          autoFocus
+                          // onChange={(e) => handleCambiarRespuesta(e, index)}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          InputProps={{
+                            inputProps: { 
+                                max: 5, min: 0, step : 1
+                          }}}
+                        />
+                      </Box>
+                      <Box style={{float: 'rigth', width : '50%', paddingLeft: '3px'}}>
+                        <TextField
+                          id={`ponderacion`}
+                          label="Number"
+                          type="number"
+                          margin="normal"
+                          label="Ponderación"
+                          required
+                          variant="outlined"
+                          fullWidth
+                          // name={`ponderacion`}
+                          autoFocus
+                          // onChange={(e) => handleCambiarRespuesta(e, index)}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          InputProps={{
+                            inputProps: { 
+                                max: 100, min: 0, step : 0.25
+                          }}}
+                        />
+                      </Box>
+                    </Box>
+                  </Paper>
+                </Grid>
 
                 { handleSeleccionarTipoPregunta() }
 
