@@ -54,8 +54,8 @@ const useStyle = makeStyles(theme => ({
       width: drawerWidth,
       transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-      }),
+      duration: theme.transitions.duration.enteringScreen}),
+      // height: '60%',
   },
   drawerPaperClose: {
       overflowX: 'hidden',
@@ -142,6 +142,10 @@ export default function CreateTestPage() {
             </IconButton>
         </div>
         <ListaTipoPregunta/>
+        <Divider/>
+        <Box style = {{padding: '16px'}}>
+          Aqui van las Preguntas
+        </Box>
       </Drawer>
       <main className="content-main-crear-test">
         <div className="toolbar-icono"/>
