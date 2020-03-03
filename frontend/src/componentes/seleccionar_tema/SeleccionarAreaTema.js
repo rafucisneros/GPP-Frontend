@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect} from 'react';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -109,45 +109,53 @@ export default function SeleccionarAreaTema() {
 
     const classes = useStyles();
 
-    const [ListaSeleccionadoArea, setListaSeleccionadoaArea] = useState([]);
-    const [ListaSeleccionadoSubArea, setListaSeleccionadoSubArea] = useState([]);
-    const [ListaSeleccionadoTema, setListaSeleccionadoTema] = useState([]);
-    const [ListaFiltradoArea, setListFiltradoaArea] = useState(areas);
-    const [ListaFiltradoSubArea, setListaFiltradoSubArea] = useState([]);
-    const [ListaFiltradoTema, setListaFiltradoTema] = useState([]);
+    const [listaSeleccionadoArea, setListaSeleccionadoaArea] = useState([]);  // Arreglo de areas seleccionadas
+    const [listaSeleccionadoSubArea, setListaSeleccionadoSubArea] = useState([]);  // Arreglo de subareas seleccionadas
+    const [listaSeleccionadoTema, setListaSeleccionadoTema] = useState([]);  // Arreglo de temas seleccionadas
+
+    const [listaFiltradoArea, setListaFiltradoaArea] = useState(areas);  // Arreglo de areas filtradas a mostrar
+    const [listaFiltradoSubArea, setListaFiltradoSubArea] = useState([]);  // Arreglo de subareas filtradas a mostrar
+    const [listaFiltradoTema, setListaFiltradoTema] = useState([]);  // Arreglo de temas filtradas a mostrar
+
     const [permitirSubArea, setPermitirSubArea] = useState(false);
     const [permitirTarea, setPermitirTarea] = useState(false);
 
     const handleChange = (e, type) => {
       if (type === 'area'){
-
-        setListaSeleccionadoaArea(e.target.value);
         setPermitirSubArea(true);
-
-        let areasSeleccionadas = []; 
-        ListaSeleccionadoArea.forEach( area => {
-          subareas[area].forEach(item => {
-            areasSeleccionadas.push(item);
-          })
-        })
-        setListaFiltradoSubArea(areasSeleccionadas);
+        setListaSeleccionadoaArea(e.target.value);
+        
       } else if (type === 'subarea'){
-
-        setListaSeleccionadoSubArea(e.target.value);
         setPermitirTarea(true);
+        setListaSeleccionadoSubArea(e.target.value);
 
-        let subAreasSeleccionadas = [];
-        ListaSeleccionadoSubArea.forEach( subarea => {
-          temas[subarea].forEach(item => {
-            subAreasSeleccionadas.push(item);
-          })
-        })
-        setListaFiltradoTema(subAreasSeleccionadas);
       } else if (type === 'tema'){
         setListaSeleccionadoTema(e.target.value);
       }
       
     };
+
+    useEffect(() => {
+      let areasSeleccionadas = []; 
+      listaSeleccionadoArea.forEach( area => {
+        subareas[area].forEach(item => {
+          areasSeleccionadas.push(item);
+        })
+      })
+      
+      setListaFiltradoSubArea(areasSeleccionadas);
+    }, [listaSeleccionadoArea])
+    
+    useEffect(() => {
+      let subAreasSeleccionadas = [];
+      listaSeleccionadoSubArea.forEach( subarea => {
+        temas[subarea].forEach(item => {
+          subAreasSeleccionadas.push(item);
+        })
+      })
+
+      setListaFiltradoTema(subAreasSeleccionadas);
+    }, [listaSeleccionadoSubArea])
 
     return (
       <Box style={{textAlign : 'center', width : '100%'}}>
@@ -158,15 +166,15 @@ export default function SeleccionarAreaTema() {
               // labelId="demo-mutiple-checkbox-label"
               // id="demo-mutiple-checkbox"
               multiple
-              value={ListaSeleccionadoArea}
+              value={listaSeleccionadoArea}
               onChange={(e) => handleChange(e, 'area')}
               input={<Input />}
               renderValue={selected => selected.join(', ')}
               MenuProps={MenuProps}
               >
-              {ListaFiltradoArea.map(item => (
+              {listaFiltradoArea.map(item => (
                   <MenuItem key={item} value={item}>
-                    <Checkbox checked={ListaSeleccionadoArea.indexOf(item) > -1} color="primary"/>
+                    <Checkbox checked={listaSeleccionadoArea.indexOf(item) > -1} color="primary"/>
                     <ListItemText primary={item} />
                   </MenuItem>
               ))}
@@ -180,18 +188,16 @@ export default function SeleccionarAreaTema() {
             <FormControl className={classes.formControl}>
               <InputLabel>Sub Áreas</InputLabel>
               <Select
-              // labelId="demo-mutiple-checkbox-label"
-              // id="demo-mutiple-checkbox"
               multiple
-              value={ListaSeleccionadoSubArea}
+              value={listaSeleccionadoSubArea}
               onChange={(e) => handleChange(e, 'subarea')}
               input={<Input />}
               renderValue={selected => selected.join(', ')}
               MenuProps={MenuProps}
               >
-              {ListaFiltradoSubArea.map(item => (
+              {listaFiltradoSubArea.map(item => (
                   <MenuItem key={item} value={item}>
-                  <Checkbox checked={ListaSeleccionadoSubArea.indexOf(item) > -1} color="primary"/>
+                  <Checkbox checked={listaSeleccionadoSubArea.indexOf(item) > -1} color="primary"/>
                   <ListItemText primary={item} />
                   </MenuItem>
               ))}
@@ -206,18 +212,16 @@ export default function SeleccionarAreaTema() {
             <FormControl className={classes.formControl}>
               <InputLabel>Temas</InputLabel>
               <Select
-              // labelId="demo-mutiple-checkbox-label"
-              // id="demo-mutiple-checkbox"
               multiple
-              value={ListaSeleccionadoTema}
+              value={listaSeleccionadoTema}
               onChange={(e) => handleChange(e, 'tema')}
               input={<Input />}
               renderValue={selected => selected.join(', ')}
               MenuProps={MenuProps}
               >
-              {ListaFiltradoTema.map(item => (
+              {listaFiltradoTema.map(item => (
                   <MenuItem key={item} value={item}>
-                  <Checkbox checked={ListaSeleccionadoTema.indexOf(item) > -1} color="primary"/>
+                  <Checkbox checked={listaSeleccionadoTema.indexOf(item) > -1} color="primary"/>
                   <ListItemText primary={item} />
                   </MenuItem>
               ))}

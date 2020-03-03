@@ -109,20 +109,6 @@ export default function RespuestaSeleccion() {
                               Respuestas
                           </span>
                       </Box>
-                      {/* { (tipoPregunta === 'verdadero_falso') &&
-                            <Grid style={{display: 'inline-flex'}}>
-                                <Box style={{marginRight : '10px'}}>
-                                    <span>
-                                        Verdadero
-                                    </span>
-                                </Box>
-                                <Box style={{marginRight : '15px',  marginLeft : '5px'}}>
-                                    <span>
-                                        Falso
-                                    </span>
-                                </Box>
-                            </Grid>
-                      } */}
                       { (tipoPregunta !== 'verdadero_falso') &&
                         <Box >
                             <IconButton className="boton-agregar-respuestas" onClick={handleAgregarRespuesta}>

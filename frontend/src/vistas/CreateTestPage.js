@@ -26,9 +26,11 @@ import '../assets/css/createTestPage.css';
 import ListaTipoPregunta from '../componentes/lista_tipo_pregunta/ListaTipoPregunta.js';
 import RespuestaSeleccion from '../componentes/respuesta_seleccion/RespuestaSeleccion.js'
 import SeleccionarAreaTema from '../componentes/seleccionar_tema/SeleccionarAreaTema.js'
+import ListaPreguntasExamen from '../componentes/lista_preguntas_examen/ListaPreguntasExamen.js'
 
 // contexts
 import {useTipoPreguntaRespuesta} from '../context/general_context';
+import { maxHeight } from '@material-ui/system';
 
 const drawerWidth = 240;
 
@@ -56,6 +58,9 @@ const useStyle = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen}),
       // height: '60%',
+      backgroundColor : '#fcfcfc',  
+      maxHeight : 750
+
   },
   drawerPaperClose: {
       overflowX: 'hidden',
@@ -121,7 +126,7 @@ export default function CreateTestPage() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap style={{flexGrow: 1}}>
+          <Typography component="h2" variant="h6" color="inherit" noWrap style={{flexGrow: 1}}>
             <Box className="flex-box-titulo">
               GPI
             </Box>
@@ -141,11 +146,10 @@ export default function CreateTestPage() {
                 <ChevronLeftIcon />
             </IconButton>
         </div>
+        <Divider/>
         <ListaTipoPregunta/>
         <Divider/>
-        <Box style = {{padding: '16px'}}>
-          Aqui van las Preguntas
-        </Box>
+        <ListaPreguntasExamen/>
       </Drawer>
       <main className="content-main-crear-test">
         <div className="toolbar-icono"/>
