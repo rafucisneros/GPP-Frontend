@@ -157,6 +157,20 @@ export default function SeleccionarAreaTema() {
       setListaFiltradoTema(subAreasSeleccionadas);
     }, [listaSeleccionadoSubArea])
 
+    useEffect(() => {
+      if (listaSeleccionadoSubArea.length === 0){
+        setListaSeleccionadoTema([]);
+      }
+      
+    }, [listaSeleccionadoSubArea])
+    
+    useEffect(() => {
+      if (listaSeleccionadoArea.length === 0){
+        setListaSeleccionadoTema([]);
+        setListaSeleccionadoSubArea([]);
+      }
+    }, [listaSeleccionadoArea])
+
     return (
       <Box style={{textAlign : 'center', width : '100%'}}>
         <Box style={{float : 'left'}}>
@@ -183,7 +197,7 @@ export default function SeleccionarAreaTema() {
         </Box>
 
         {
-          permitirSubArea &&
+          permitirSubArea && listaFiltradoSubArea.length > 0 &&
           <Box style={{display: 'inline-block'}}>
             <FormControl className={classes.formControl}>
               <InputLabel>Sub Áreas</InputLabel>
@@ -207,7 +221,7 @@ export default function SeleccionarAreaTema() {
         }
 
         {
-          permitirTarea &&
+          permitirTarea && listaFiltradoTema.length > 0 && listaFiltradoSubArea.length > 0 &&
           <Box style={{float : 'right'}}>
             <FormControl className={classes.formControl}>
               <InputLabel>Temas</InputLabel>
