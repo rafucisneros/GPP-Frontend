@@ -37,6 +37,11 @@ export default function ListaTipoPregunta() {
     setSubMenuTipoPregunta(false);
     handleSeleccionarItem(key);
   };
+
+  const handleSeleccionarConfiguraciones = () => {
+    handleCloseSubMenuTipoPregunta('2');
+    handleOpcionExamen("configuracion", '2');
+  }
   
   return(
     <div>
@@ -88,7 +93,7 @@ export default function ListaTipoPregunta() {
         </Collapse>
         <ListItem
           button
-          onClick={ () => handleCloseSubMenuTipoPregunta('2')}
+          onClick={ () => handleSeleccionarConfiguraciones()}
           selected={itemSeleccionado === '2'}
         >
           <ListItemIcon>

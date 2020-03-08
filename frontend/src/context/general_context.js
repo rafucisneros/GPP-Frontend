@@ -13,6 +13,7 @@ export function TipoPreguntaRespuestaProvider(props) {
         else if (tipo === "seleccion_multiple") setTituloRespuesta("Selección Múltiple");
         else if (tipo === "verdadero_falso") setTituloRespuesta("Verdadero y Falso");
         else if (tipo === "ordenamiento") setTituloRespuesta("Ordenamiento");
+        else if (tipo === "configuracion") setTituloRespuesta("Configuración del Examen");
         setTipoPregunta(tipo);
         setItemSeleccionado(key);
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import clsx from 'clsx';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,6 +27,7 @@ import ListaTipoPregunta from '../componentes/lista_tipo_pregunta/ListaTipoPregu
 import RespuestaSeleccion from '../componentes/respuesta_seleccion/RespuestaSeleccion.js'
 import SeleccionarAreaTema from '../componentes/seleccionar_tema/SeleccionarAreaTema.js'
 import ListaPreguntasExamen from '../componentes/lista_preguntas_examen/ListaPreguntasExamen.js'
+import PonderacionDificultad from '../componentes/ponderacion_dificultad/PonderacionDificultad.js'
 
 // contexts
 import {useTipoPreguntaRespuesta} from '../context/general_context';
@@ -148,103 +149,73 @@ export default function CreateTestPage() {
         </div>
         <Divider/>
         <ListaTipoPregunta/>
-        <Divider/>
-        <ListaPreguntasExamen/>
+
+        { tipoPregunta !== 'configuracion' &&
+          <Divider/> &&
+          <ListaPreguntasExamen/>
+        }
       </Drawer>
       <main className="content-main-crear-test">
         <div className="toolbar-icono"/>
+
         <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Paper className="paper-crear-test" style={{display : 'contents'}}>
-                      <Typography variant="h6" gutterBottom>
-                        {tituloRespuesta}
-                      </Typography>
+
+              { tipoPregunta !== 'configuracion' ?
+                <Fragment>
+                  <Grid item xs={12}>
+                      <Paper className="paper-crear-test" style={{display : 'contents'}}>
+                        <Typography variant="h6" gutterBottom>
+                          {tituloRespuesta}
+                        </Typography>
+                      </Paper>
+                  </Grid>
+
+                  <Grid item lg={6} sm={6} xl={6} xs={6}>
+                    <Paper className="paper-crear-test" style={{height : '100%'}}>
+                      Enfoque
+                      <SeleccionarAreaTema/>
                     </Paper>
-                </Grid>
+                  </Grid>
 
-                <Grid item lg={6} sm={6} xl={6} xs={6}>
-                  <Paper className="paper-crear-test" style={{height : '100%'}}>
-                    Enfoque
-                    <SeleccionarAreaTema/>
-                  </Paper>
-                </Grid>
-                <Grid item lg={6} sm={6} xl={6} xs={6}>
-                  <Paper className="paper-crear-test" style={{height : '100%'}}>
-                    Evaluación
-                    <Box style={{display: 'flex'}}>
-                      <Box style={{float: 'left', width : '50%', paddingRight: '3px'}}>
-                        <TextField
-                          id={`dificultad`}
-                          label="Number"
-                          type="number"
-                          margin="normal"
-                          label="Dificultad"
-                          required
-                          variant="outlined"
-                          fullWidth
-                          // name={`dificultad`}
-                          autoFocus
-                          // onChange={(e) => handleCambiarRespuesta(e, index)}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          InputProps={{
-                            inputProps: { 
-                                max: 5, min: 0, step : 1
-                          }}}
-                        />
-                      </Box>
-                      <Box style={{float: 'rigth', width : '50%', paddingLeft: '3px'}}>
-                        <TextField
-                          id={`ponderacion`}
-                          label="Number"
-                          type="number"
-                          margin="normal"
-                          label="Ponderación"
-                          required
-                          variant="outlined"
-                          fullWidth
-                          // name={`ponderacion`}
-                          autoFocus
-                          // onChange={(e) => handleCambiarRespuesta(e, index)}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          InputProps={{
-                            inputProps: { 
-                                max: 100, min: 0, step : 0.25
-                          }}}
-                        />
-                      </Box>
-                    </Box>
-                  </Paper>
-                </Grid>
+                  <Grid item lg={6} sm={6} xl={6} xs={6}>
+                    <Paper className="paper-crear-test" style={{height : '100%'}}>
+                      Evaluación
+                      <PonderacionDificultad/>
+                    </Paper>
+                  </Grid>
 
-                { handleSeleccionarTipoPregunta() }
+                    { handleSeleccionarTipoPregunta() }
 
-                <Grid item xs={12} md={12} lg={12}>
-                  <Paper className="paper-crear-test">
-                      <Box className="div-buttons-respuestas">
-                        <Button
-                          type="submit"
-                          variant="contained"
-                          color="primary"
-                          style={{marginRight: '8px'}}
-                        >
-                          Crear Pregunta
-                        </Button>
-                        <Button
-                          type="submit"
-                          variant="contained"
-                          color="secondary"
-                        >
-                          Publicar Examen
-                        </Button>
-                      </Box>
-                  </Paper>
-                </Grid>
-                
+                  <Grid item xs={12} md={12} lg={12}>
+                    <Paper className="paper-crear-test">
+                        <Box className="div-buttons-respuestas">
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            style={{marginRight: '8px'}}
+                          >
+                            Crear Pregunta
+                          </Button>
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            color="secondary"
+                          >
+                            Publicar Examen
+                          </Button>
+                        </Box>
+                    </Paper>
+                  </Grid> 
+                </Fragment>
+                :
+                  <Grid item xs={12} md={12} lg={12}>
+                    <Paper className="paper-crear-test" style={{height : '100%'}}>
+                      Lista de Opciones
+                    </Paper>
+                  </Grid>
+              }
                 {/* </form> */}
             </Grid>
         </Container>
