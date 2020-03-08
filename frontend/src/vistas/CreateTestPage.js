@@ -14,7 +14,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import TextField from '@material-ui/core/TextField';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -24,17 +23,16 @@ import '../assets/css/createTestPage.css';
 
 // componentes
 import ListaTipoPregunta from '../componentes/lista_tipo_pregunta/ListaTipoPregunta.js';
-import RespuestaSeleccion from '../componentes/respuesta_seleccion/RespuestaSeleccion.js'
-import SeleccionarAreaTema from '../componentes/seleccionar_tema/SeleccionarAreaTema.js'
-import ListaPreguntasExamen from '../componentes/lista_preguntas_examen/ListaPreguntasExamen.js'
-import PonderacionDificultad from '../componentes/ponderacion_dificultad/PonderacionDificultad.js'
+import RespuestaSeleccion from '../componentes/respuesta_seleccion/RespuestaSeleccion.js';
+import SeleccionarAreaTema from '../componentes/seleccionar_tema/SeleccionarAreaTema.js';
+import ListaPreguntasExamen from '../componentes/lista_preguntas_examen/ListaPreguntasExamen.js';
+import PonderacionDificultad from '../componentes/ponderacion_dificultad/PonderacionDificultad.js';
+import ConfiguracionExamen from '../componentes/configuracion_examen/ConfiguracionExamen.js'
 
 // contexts
 import {useTipoPreguntaRespuesta} from '../context/general_context';
-import { maxHeight } from '@material-ui/system';
 
 const drawerWidth = 240;
-
 const useStyle = makeStyles(theme => ({
   appBar: {
       zIndex: theme.zIndex.drawer + 1,
@@ -211,9 +209,10 @@ export default function CreateTestPage() {
                 </Fragment>
                 :
                   <Grid item xs={12} md={12} lg={12}>
-                    <Paper className="paper-crear-test" style={{height : '100%'}}>
+                    {/* <Paper className="paper-crear-test" style={{height : '100%'}}>
                       Lista de Opciones
-                    </Paper>
+                    </Paper> */}
+                    <ConfiguracionExamen/>
                   </Grid>
               }
                 {/* </form> */}

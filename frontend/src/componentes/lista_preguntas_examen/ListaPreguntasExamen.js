@@ -27,7 +27,7 @@ const EstilosStartDragging = styled.div`
     opacity : ${props => props.isDragging ? 0.5 : 1};
 `
 
-export default function TextArea() {
+export default function ListaPreguntasExamen() {
 
     const [preguntas, setPreguntas] = useState([
         {color : 'rgb(209, 213, 238)', texto : 'Pregunta 1'},
