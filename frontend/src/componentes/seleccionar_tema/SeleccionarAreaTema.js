@@ -109,9 +109,9 @@ export default function SeleccionarAreaTema() {
 
     const classes = useStyles();
 
-    const [listaSeleccionadoArea, setListaSeleccionadoaArea] = useState([]);  // Arreglo de areas seleccionadas
-    const [listaSeleccionadoSubArea, setListaSeleccionadoSubArea] = useState([]);  // Arreglo de subareas seleccionadas
-    const [listaSeleccionadoTema, setListaSeleccionadoTema] = useState([]);  // Arreglo de temas seleccionadas
+    const [areaSeleccionada, setAreaSeleccionada] = useState(null);  // Arreglo de areas seleccionadas
+    const [subareaSeleccionada, setSubareaSeleccionada] = useState(null);  // Arreglo de subareas seleccionadas
+    const [temaSeleccionado, setTemaSeleccionado] = useState(null);  // Arreglo de temas seleccionadas
 
     const [listaFiltradoArea, setListaFiltradoaArea] = useState(areas);  // Arreglo de areas filtradas a mostrar
     const [listaFiltradoSubArea, setListaFiltradoSubArea] = useState([]);  // Arreglo de subareas filtradas a mostrar
@@ -123,72 +123,84 @@ export default function SeleccionarAreaTema() {
     const handleChange = (e, type) => {
       if (type === 'area'){
         setPermitirSubArea(true);
-        setListaSeleccionadoaArea(e.target.value);
+        setAreaSeleccionada(e.target.value);
+
+        if (e.target.value !== areaSeleccionada) {
+          setTemaSeleccionado(null);
+          setSubareaSeleccionada(null);
+        }
         
       } else if (type === 'subarea'){
         setPermitirTarea(true);
-        setListaSeleccionadoSubArea(e.target.value);
+        setSubareaSeleccionada(e.target.value);
+
+        if (e.target.value !== subareaSeleccionada) {
+          setTemaSeleccionado(null);
+        }
 
       } else if (type === 'tema'){
-        setListaSeleccionadoTema(e.target.value);
+        setTemaSeleccionado(e.target.value);
       }
       
     };
 
     useEffect(() => {
-      let areasSeleccionadas = []; 
-      listaSeleccionadoArea.forEach( area => {
-        subareas[area].forEach(item => {
+      if (areaSeleccionada){
+        let areasSeleccionadas = []; 
+        subareas[areaSeleccionada].forEach(item => {
           areasSeleccionadas.push(item);
         })
-      })
-      
-      setListaFiltradoSubArea(areasSeleccionadas);
-    }, [listaSeleccionadoArea])
+        
+        setListaFiltradoSubArea(areasSeleccionadas);
+      }
+    }, [areaSeleccionada])
     
     useEffect(() => {
-      let subAreasSeleccionadas = [];
-      listaSeleccionadoSubArea.forEach( subarea => {
-        temas[subarea].forEach(item => {
+      if (subareaSeleccionada){
+        let subAreasSeleccionadas = [];
+        temas[subareaSeleccionada].forEach(item => {
           subAreasSeleccionadas.push(item);
         })
-      })
 
-      setListaFiltradoTema(subAreasSeleccionadas);
-    }, [listaSeleccionadoSubArea])
+        setListaFiltradoTema(subAreasSeleccionadas);
+      }
+    }, [subareaSeleccionada])
 
     useEffect(() => {
-      if (listaSeleccionadoSubArea.length === 0){
-        setListaSeleccionadoTema([]);
+      if (!subareaSeleccionada){
+        setTemaSeleccionado(null);
+        setPermitirTarea(false);
       }
       
-    }, [listaSeleccionadoSubArea])
+    }, [subareaSeleccionada])
     
     useEffect(() => {
-      if (listaSeleccionadoArea.length === 0){
-        setListaSeleccionadoTema([]);
-        setListaSeleccionadoSubArea([]);
+      if (!areaSeleccionada){
+        setTemaSeleccionado(null);
+        setSubareaSeleccionada(null);
+        setPermitirSubArea(false);
+        setPermitirSubArea(false);
       }
-    }, [listaSeleccionadoArea])
+    }, [areaSeleccionada])
 
     return (
       <Box style={{textAlign : 'center', width : '100%'}}>
         <Box style={{float : 'left'}}>
-          <FormControl className={classes.formControl}>
+          <FormControl required className={classes.formControl}>
               <InputLabel>Áreas</InputLabel>
               <Select
               // labelId="demo-mutiple-checkbox-label"
               // id="demo-mutiple-checkbox"
-              multiple
-              value={listaSeleccionadoArea}
+              // multiple
+              value={areaSeleccionada}
               onChange={(e) => handleChange(e, 'area')}
-              input={<Input />}
-              renderValue={selected => selected.join(', ')}
-              MenuProps={MenuProps}
+              // input={<Input />}
+              // renderValue={selected => selected.join(', ')}
+              // MenuProps={MenuProps}
               >
               {listaFiltradoArea.map(item => (
                   <MenuItem key={item} value={item}>
-                    <Checkbox checked={listaSeleccionadoArea.indexOf(item) > -1} color="primary"/>
+                    {/* <Checkbox checked={areaSeleccionada.indexOf(item) > -1} color="primary"/> */}
                     <ListItemText primary={item} />
                   </MenuItem>
               ))}
@@ -199,19 +211,19 @@ export default function SeleccionarAreaTema() {
         {
           permitirSubArea && listaFiltradoSubArea.length > 0 &&
           <Box style={{display: 'inline-block'}}>
-            <FormControl className={classes.formControl}>
+            <FormControl required className={classes.formControl}>
               <InputLabel>Sub Áreas</InputLabel>
               <Select
-              multiple
-              value={listaSeleccionadoSubArea}
+              // multiple
+              value={subareaSeleccionada}
               onChange={(e) => handleChange(e, 'subarea')}
-              input={<Input />}
-              renderValue={selected => selected.join(', ')}
+              // input={<Input />}
+              // renderValue={selected => selected.join(', ')}
               MenuProps={MenuProps}
               >
               {listaFiltradoSubArea.map(item => (
                   <MenuItem key={item} value={item}>
-                  <Checkbox checked={listaSeleccionadoSubArea.indexOf(item) > -1} color="primary"/>
+                  {/* <Checkbox checked={subareaSeleccionada.indexOf(item) > -1} color="primary"/> */}
                   <ListItemText primary={item} />
                   </MenuItem>
               ))}
@@ -223,19 +235,19 @@ export default function SeleccionarAreaTema() {
         {
           permitirTarea && listaFiltradoTema.length > 0 && listaFiltradoSubArea.length > 0 &&
           <Box style={{float : 'right'}}>
-            <FormControl className={classes.formControl}>
+            <FormControl required className={classes.formControl}>
               <InputLabel>Temas</InputLabel>
               <Select
-              multiple
-              value={listaSeleccionadoTema}
+              // multiple
+              value={temaSeleccionado}
               onChange={(e) => handleChange(e, 'tema')}
-              input={<Input />}
-              renderValue={selected => selected.join(', ')}
-              MenuProps={MenuProps}
+              // input={<Input />}
+              // renderValue={selected => selected.join(', ')}
+              // MenuProps={MenuProps}
               >
               {listaFiltradoTema.map(item => (
                   <MenuItem key={item} value={item}>
-                  <Checkbox checked={listaSeleccionadoTema.indexOf(item) > -1} color="primary"/>
+                  {/* <Checkbox checked={temaSeleccionado.indexOf(item) > -1} color="primary"/> */}
                   <ListItemText primary={item} />
                   </MenuItem>
               ))}

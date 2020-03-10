@@ -148,10 +148,8 @@ export default function CreateTestPage() {
         <Divider/>
         <ListaTipoPregunta/>
 
-        { tipoPregunta !== 'configuracion' &&
-          <Divider/> &&
+          <Divider/>
           <ListaPreguntasExamen/>
-        }
       </Drawer>
       <main className="content-main-crear-test">
         <div className="toolbar-icono"/>
@@ -169,14 +167,14 @@ export default function CreateTestPage() {
                       </Paper>
                   </Grid>
 
-                  <Grid item lg={6} sm={6} xl={6} xs={6}>
+                  <Grid item lg={9} sm={9} xl={9} xs={9}>
                     <Paper className="paper-crear-test" style={{height : '100%'}}>
                       Enfoque
                       <SeleccionarAreaTema/>
                     </Paper>
                   </Grid>
 
-                  <Grid item lg={6} sm={6} xl={6} xs={6}>
+                  <Grid item lg={3} sm={3} xl={3} xs={3}>
                     <Paper className="paper-crear-test" style={{height : '100%'}}>
                       Evaluación
                       <PonderacionDificultad/>
