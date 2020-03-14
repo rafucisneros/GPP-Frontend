@@ -20,7 +20,7 @@ body{
 }
 
 .container-image-signup{
-    background-image: url(../../assets/imagenes/examen-signup.jpg);
+    background-image: url(../../assets/imagenes/examen-login.jpg);
     background-repeat: 'no-repeat';
     background-size: cover;
     background-position: 'center';
