@@ -10,7 +10,6 @@ export default function PonderacionDificultad() {
             <Box style={{float: 'left', width : '50%', paddingRight: '3px'}}>
             <TextField
                 id={`dificultad`}
-                label="Number"
                 type="number"
                 margin="normal"
                 label="Dificultad"
@@ -32,7 +31,6 @@ export default function PonderacionDificultad() {
             <Box style={{float: 'rigth', width : '50%', paddingLeft: '3px'}}>
             <TextField
                 id={`ponderacion`}
-                label="Number"
                 type="number"
                 margin="normal"
                 label="Ponderación"

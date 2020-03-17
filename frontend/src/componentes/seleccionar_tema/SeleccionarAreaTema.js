@@ -17,7 +17,7 @@ import MultiSelect from './MultiSelect.js';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
-    margin: theme.spacing(1),
+    marginTop: theme.spacing(2),
     minWidth: 120,
   }
 }));
