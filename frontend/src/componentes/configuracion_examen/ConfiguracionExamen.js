@@ -8,8 +8,6 @@ import {
   CardActions,
   Grid,
   Divider,
-  FormControlLabel,
-  Checkbox,
   Switch,
   Button,
   Box,
@@ -20,6 +18,12 @@ import {
   ListItemText
 } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
+import MomentUtils from '@date-io/moment';
+import moment from 'moment';
+import {
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers'
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
@@ -70,6 +74,8 @@ const Configuracion = props => {
     const [switchChecked, setSwitchChecked] = useState(false);
     const [tipoConfiguracion, setTipoConfiguracion] = useState("Configuración Estática");
     const [numeroSeccionSeleccionado, setNumeroSeccionSeleccionado] = useState(null); 
+    const [valorFechaInicio, setValorFechaInicio] = useState( new Date() );
+    const [valorFechaFin, setValorFechaFin] = useState( new Date() );
 
     const handleCambiarSwitch = () =>{
         setSwitchChecked(!switchChecked);
@@ -107,63 +113,40 @@ const Configuracion = props => {
                 <Fragment>
                 <Divider />
                 <CardContent>
-                    {/* <Grid
-                        container
-                        spacing={6}
-                        wrap="wrap"
-                    >
-                        <Grid
-                        item
-                        style={{display : 'grid'}}
-                        md={12}
-                        sm={12}
-                        xs={12}
-                        >
-                        <FormControlLabel
-                            control={<Checkbox color="primary" />}
-                            label="Fecha de inicio del Examen"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox color="primary" />}
-                            label="Fecha de fin del Examen"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox color="primary" />}
-                            label="Estado del examen"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox color="primary" />}
-                            label="Duracion del examen"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox color="primary" />}
-                            label="Duracion del examen"
-                        />
-                        </Grid>
-                    </Grid> */}
                     <Grid container spacing={2}>
                         <Grid item xs={6} md={6} lg={6}>
-                        <TextField
-                            autoComplete="fname"
-                            name="firstName"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            id="firstName"
-                            label="Nombres"
-                            autoFocus
-                        />
+                            <FormControl required variant="outlined" style={{textAlignLast: 'center'}} className={classes.formControl}>
+                                <MuiPickersUtilsProvider utils={MomentUtils}>
+                                    <DateTimePicker 
+                                        inputVariant="outlined"
+                                        format="DD/MM/YYYY hh:mm a"
+                                        margin="normal"
+                                        value={valorFechaInicio} 
+                                        onChange={setValorFechaInicio} 
+                                        label="Fecha y hora de comienzo"
+                                        KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                        }}
+                                        />
+                                </MuiPickersUtilsProvider>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                        <TextField
-                            variant="outlined"
-                            required
-                            fullWidth
-                            id="lastName"
-                            label="Apellidos"
-                            name="lastName"
-                            autoComplete="lname"
-                        />
+                            <FormControl required variant="outlined" style={{textAlignLast: 'center'}} className={classes.formControl}>
+                                <MuiPickersUtilsProvider utils={MomentUtils}>
+                                    <DateTimePicker
+                                        inputVariant="outlined"
+                                        format="DD/MM/YYYY hh:mm a"
+                                        margin="normal"
+                                        value={valorFechaFin}  
+                                        onChange={setValorFechaFin} 
+                                        label="Fecha y hora de culminacion"
+                                        KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                        }}
+                                    />
+                                </MuiPickersUtilsProvider>
+                            </FormControl>
                         </Grid> 
                     </Grid>
                     <Grid container spacing={2}>
@@ -208,12 +191,23 @@ const Configuracion = props => {
                         </FormControl>
                         </Grid>
                     </Grid>
-                    <TextField
-                    placeholder="MultiLine with rows: 2 and rowsMax: 4"
-                    multiline
-                    rows={6}
-                    rowsMax={6}
-                    />
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={12} lg={12}>
+                            <TextField
+                                id={`comentarios`}
+                                margin="normal"
+                                label="Comentario"
+                                variant="outlined"
+                                fullWidth
+                                name={`comentarios`}
+                                placeholder="Comentarios adicionales..."
+                                multiline
+                                rows={6}
+                                rowsMax={6}
+                                variant="outlined"
+                            />
+                        </Grid>
+                    </Grid>
                 </CardContent>
                 </Fragment>
                 <Divider />
