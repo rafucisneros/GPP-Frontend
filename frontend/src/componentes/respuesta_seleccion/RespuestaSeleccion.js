@@ -9,14 +9,11 @@ import Radio from '@material-ui/core/Radio';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 import Box from '@material-ui/core/Box';
-import IconButton from '@material-ui/core/IconButton';
 import RadioGroup from '@material-ui/core/RadioGroup';
 
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 
-// componentes
-import TextArea from '../text_area/TextArea.js';
 
 // contexts
 import {useTipoPreguntaRespuesta} from '../../context/general_context'
