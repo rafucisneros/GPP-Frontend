@@ -1,23 +1,16 @@
-import React, { useState, Fragment, useEffect} from 'react';
+import React, { useState, useEffect} from 'react';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';  
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
 import Box from '@material-ui/core/Box';
-
-// componentes
-import MultiSelect from './MultiSelect.js';
-
-// contexts
 
 const useStyles = makeStyles(theme => ({
   formControl: {
-    margin: theme.spacing(1),
+    marginTop: theme.spacing(2),
     minWidth: 120,
   }
 }));
@@ -189,18 +182,11 @@ export default function SeleccionarAreaTema() {
           <FormControl required className={classes.formControl}>
               <InputLabel>Áreas</InputLabel>
               <Select
-              // labelId="demo-mutiple-checkbox-label"
-              // id="demo-mutiple-checkbox"
-              // multiple
               value={areaSeleccionada}
               onChange={(e) => handleChange(e, 'area')}
-              // input={<Input />}
-              // renderValue={selected => selected.join(', ')}
-              // MenuProps={MenuProps}
               >
               {listaFiltradoArea.map(item => (
                   <MenuItem key={item} value={item}>
-                    {/* <Checkbox checked={areaSeleccionada.indexOf(item) > -1} color="primary"/> */}
                     <ListItemText primary={item} />
                   </MenuItem>
               ))}
@@ -214,16 +200,12 @@ export default function SeleccionarAreaTema() {
             <FormControl required className={classes.formControl}>
               <InputLabel>Sub Áreas</InputLabel>
               <Select
-              // multiple
               value={subareaSeleccionada}
               onChange={(e) => handleChange(e, 'subarea')}
-              // input={<Input />}
-              // renderValue={selected => selected.join(', ')}
               MenuProps={MenuProps}
               >
               {listaFiltradoSubArea.map(item => (
                   <MenuItem key={item} value={item}>
-                  {/* <Checkbox checked={subareaSeleccionada.indexOf(item) > -1} color="primary"/> */}
                   <ListItemText primary={item} />
                   </MenuItem>
               ))}
@@ -238,16 +220,11 @@ export default function SeleccionarAreaTema() {
             <FormControl required className={classes.formControl}>
               <InputLabel>Temas</InputLabel>
               <Select
-              // multiple
               value={temaSeleccionado}
               onChange={(e) => handleChange(e, 'tema')}
-              // input={<Input />}
-              // renderValue={selected => selected.join(', ')}
-              // MenuProps={MenuProps}
               >
               {listaFiltradoTema.map(item => (
                   <MenuItem key={item} value={item}>
-                  {/* <Checkbox checked={temaSeleccionado.indexOf(item) > -1} color="primary"/> */}
                   <ListItemText primary={item} />
                   </MenuItem>
               ))}

@@ -6,15 +6,14 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import Radio from '@material-ui/core/Radio';
+import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip';
 import Box from '@material-ui/core/Box';
-import IconButton from '@material-ui/core/IconButton';
 import RadioGroup from '@material-ui/core/RadioGroup';
 
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 
-// componentes
-import TextArea from '../text_area/TextArea.js';
 
 // contexts
 import {useTipoPreguntaRespuesta} from '../../context/general_context'
@@ -100,115 +99,130 @@ export default function RespuestaSeleccion() {
 
     return (
         <Fragment>
-          <TextArea/>
-          <Grid item xs={12} md={12} lg={12}>
-              <Paper className="paper-crear-test section-paper-crear-test ultima-seccion">
-                  <Box id="titulo-respuesta" className="flex-box-titulo">
-                      <Box >
-                          <span className = "respuestas-subtitulo">
-                              Respuestas
-                          </span>
-                      </Box>
-                      { (tipoPregunta !== 'verdadero_falso') &&
-                        <Box >
-                            <IconButton className="boton-agregar-respuestas" onClick={handleAgregarRespuesta}>
-                                <AddIcon className="agregar-respuestas"/>
-                            </IconButton>
-                        </Box>
-                      }
-                  </Box>
-                  { (tipoPregunta === 'verdadero_falso') &&
-                    <RadioGroup name="vdd_fals" defaultValue="verdadero" onChange={(e) => handleChangeRadio(e)} style={{display : 'block', textAlignLast: 'center'}}>
-                          Verdadero 
-                          <Radio value="verdadero" color="primary" style={{marginLeft : '10px'}} label="Verdadero"/>
-                          <Radio value="falso" style={{marginRight : '10px'}} label="Falso"/>
-                          Falso
-                    </RadioGroup>
-                  }
-                  {tipoPregunta !== 'ordenamiento' && tipoPregunta !== 'verdadero_falso' && respuestas.map( (respuesta, index) => {
-                    return (
-                          <Box key={`${respuesta}-${index}`} className="flex-box-respuestas">
-                            <Box >
-                              <TextField
-                              variant="outlined"
-                              margin="normal"
-                              required
-                              fullWidth
-                              value={respuesta.respuesta}
-                              id={`respuesta${index}`}
-                              label="Escribe una respuesta"
-                              name={`respuesta`}
-                              autoFocus
-                              onChange={(e) => handleCambiarRespuesta(e, index)}
-                              />
-                            </Box>
-                            <Box >
-                                <Switch checked={respuesta.checked} onChange={tipoPregunta === 'seleccion_simple' ? (e) => handleChangeCheckedSimple(e, index) : (e) => handleChangeCheckedMultiple(e, index)} color="primary"/>
-                            </Box>
-                            <Box >
-                                <IconButton className="boton-borrar-respuestas" onClick={ () => handleEliminarRespuesta(index)}>
-                                    <CloseIcon className="borrar-respuestas"/>
-                                </IconButton>
-                            </Box>
-                          </Box>
-                      )
-                    })
-                  }
-                  {tipoPregunta === 'ordenamiento' &&
-                    <DragDropContext onDragEnd={onDragEnd}>
-                      <Droppable droppableId="droppable">
-                        {(provided, snapshot) => (
-                          <div
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                            // style={getListStyle(snapshot.isDraggingOver)}
-                          >
-                            {respuestas.map((respuesta, index) => (
-                              <Draggable key={`respuesta-${index}`} draggableId={`respuesta-${index}`} index={index}>
-                                {(provided, snapshot) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    key={`${respuesta}-${index}`}
-                                    className="flex-box-respuestas"
-                                    // style={getItemStyle(
-                                    //   snapshot.isDragging,
-                                    //   provided.draggableProps.style
-                                    // )}
-                                  >
-                                    {/* <Box > */}
-                                      <Box >
-                                        <TextField
-                                        variant="outlined"
-                                        margin="normal"
-                                        required
-                                        fullWidth
-                                        value={respuesta.respuesta}
-                                        id={`respuesta${index}`}
-                                        label="Escribe una respuesta"
-                                        name={`respuesta`}
-                                        autoFocus
-                                        onChange={(e) => handleCambiarRespuesta(e, index)}
-                                        />
-                                      </Box>
-                                      <Box >
-                                        <IconButton className="boton-borrar-respuestas" onClick={ () => handleEliminarRespuesta(index)}>
-                                            <CloseIcon className="borrar-respuestas"/>
-                                        </IconButton>
-                                      </Box>
-                                    {/* </Box> */}
-                                  </div>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </DragDropContext>
-                  }
+            <Grid item xs={12} md={12} lg={12}>
+              <Paper className="paper-crear-test section-paper-crear-test">
+                <TextField
+                    id={`pregunta`}
+                    margin="normal"
+                    label="Pregunta"
+                    variant="outlined"
+                    fullWidth
+                    name={`pregunta`}
+                    placeholder="Introduzca su pregunta..."
+                    multiline
+                    rows={7}
+                    rowsMax={7}
+                    variant="outlined"
+                />
               </Paper>
+            </Grid>
+          <Grid item xs={12} md={12} lg={12}>
+            <Paper className="paper-crear-test section-paper-crear-test ultima-seccion">
+                <Box id="titulo-respuesta" className="flex-box-titulo">
+                    <Box >
+                        <span className = "respuestas-subtitulo">
+                            Respuestas
+                        </span>
+                    </Box>
+                    { (tipoPregunta !== 'verdadero_falso') &&
+                      <Box >
+                        <Tooltip title="Agregar respuesta" aria-label="add">
+                          <Fab color="primary" size="small" onClick={handleAgregarRespuesta}>
+                              <AddIcon/>
+                          </Fab>
+                        </Tooltip>
+                      </Box>
+                    }
+                </Box>
+                { (tipoPregunta === 'verdadero_falso') &&
+                  <RadioGroup name="vdd_fals" defaultValue="verdadero" onChange={(e) => handleChangeRadio(e)} style={{display : 'block', textAlignLast: 'center'}}>
+                        Verdadero 
+                        <Radio value="verdadero" color="primary" style={{marginLeft : '10px'}} label="Verdadero"/>
+                        <Radio value="falso" style={{marginRight : '10px'}} label="Falso"/>
+                        Falso
+                  </RadioGroup>
+                }
+                {tipoPregunta !== 'ordenamiento' && tipoPregunta !== 'verdadero_falso' && respuestas.map( (respuesta, index) => {
+                  return (
+                        <Box key={`${respuesta}-${index}`} className="flex-box-respuestas">
+                          <Box >
+                            <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            value={respuesta.respuesta}
+                            id={`respuesta${index}`}
+                            label="Escribe una respuesta"
+                            name={`respuesta`}
+                            autoFocus
+                            onChange={(e) => handleCambiarRespuesta(e, index)}
+                            />
+                          </Box>
+                          <Box >
+                              <Switch checked={respuesta.checked} onChange={tipoPregunta === 'seleccion_simple' ? (e) => handleChangeCheckedSimple(e, index) : (e) => handleChangeCheckedMultiple(e, index)} color="primary"/>
+                          </Box>
+                          <Box >
+                            <Tooltip title="Eliminar respuesta" aria-label="delete">
+                              <Fab color="secondary" size="small" onClick={ () => handleEliminarRespuesta(index)}>
+                                <CloseIcon/>
+                              </Fab>
+                            </Tooltip>
+                          </Box>
+                        </Box>
+                    )
+                  })
+                }
+                {tipoPregunta === 'ordenamiento' &&
+                  <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId="droppable">
+                      {(provided, snapshot) => (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                        >
+                          {respuestas.map((respuesta, index) => (
+                            <Draggable key={`respuesta-${index}`} draggableId={`respuesta-${index}`} index={index}>
+                              {(provided, snapshot) => (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  key={`${respuesta}-${index}`}
+                                  className="flex-box-respuestas"
+                                >
+                                    <Box >
+                                      <TextField
+                                      variant="outlined"
+                                      margin="normal"
+                                      required
+                                      fullWidth
+                                      value={respuesta.respuesta}
+                                      id={`respuesta${index}`}
+                                      label="Escribe una respuesta"
+                                      name={`respuesta`}
+                                      autoFocus
+                                      onChange={(e) => handleCambiarRespuesta(e, index)}
+                                      />
+                                    </Box>
+                                    <Box >
+                                      <Tooltip title="Eliminar respuesta" aria-label="delete">
+                                        <Fab color="secondary" size="small" onClick={ () => handleEliminarRespuesta(index)}>
+                                          <CloseIcon/>
+                                        </Fab>
+                                      </Tooltip>
+                                    </Box>
+                                </div>
+                              )}
+                            </Draggable>
+                          ))}
+                          {provided.placeholder}
+                        </div>
+                      )}
+                    </Droppable>
+                  </DragDropContext>
+                }
+            </Paper>
           </Grid>
         </Fragment> 
     )

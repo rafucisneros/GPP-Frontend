@@ -161,9 +161,23 @@ export default function CreateTestPage() {
                 <Fragment>
                   <Grid item xs={12}>
                       <Paper className="paper-crear-test" style={{display : 'contents'}}>
-                        <Typography variant="h6" gutterBottom>
-                          {tituloRespuesta}
-                        </Typography>
+                        <Box className="flex-box-titulo">
+                          <Box style={{height : 'auto'}}>
+                            <Typography variant="h6">
+                              {tituloRespuesta}
+                            </Typography>
+                          </Box>
+                          <Box >
+                            <Button
+                              style={{background:"#ff4949", color : "white"}}
+                              type="submit"
+                              variant="contained"
+                              color="red"
+                            >
+                              Publicar Examen
+                            </Button>
+                          </Box>
+                        </Box>
                       </Paper>
                   </Grid>
 
@@ -199,7 +213,7 @@ export default function CreateTestPage() {
                             variant="contained"
                             color="secondary"
                           >
-                            Publicar Examen
+                            Eliminar Pregunta
                           </Button>
                         </Box>
                     </Paper>
