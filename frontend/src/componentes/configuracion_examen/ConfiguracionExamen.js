@@ -15,7 +15,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  ListItemText
 } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import MomentUtils from '@date-io/moment';
@@ -76,6 +75,10 @@ const Configuracion = props => {
     const [numeroSeccionSeleccionado, setNumeroSeccionSeleccionado] = useState(null); 
     const [valorFechaInicio, setValorFechaInicio] = useState( new Date() );
     const [valorFechaFin, setValorFechaFin] = useState( new Date() );
+
+    const handleCambiarNumeroSeccion = (e) => {
+        setNumeroSeccionSeleccionado(e.target.value);
+    };
 
     const handleCambiarSwitch = () =>{
         setSwitchChecked(!switchChecked);
@@ -161,7 +164,6 @@ const Configuracion = props => {
                                 fullWidth
                                 name={`numero_secciones`}
                                 autoFocus
-                                // onChange={(e) => handleCambiarRespuesta(e, index)}
                                 InputLabelProps={{
                                 shrink: true,
                                 }}
@@ -169,26 +171,25 @@ const Configuracion = props => {
                                 inputProps: { 
                                     max: 100, min: 0, step : 1
                                 }}}
+
                             />
                         </Grid>
                         <Grid item xs={6} md={6} lg={6}>
-                        <FormControl required variant="outlined" className={classes.formControl}>
-                            <InputLabel>Duracion del examen</InputLabel>
-                            <Select
-                            // multiple
-                            // native
-                            value={numeroSeccionSeleccionado}
-                            // inputProps={<Input />}
-                            MenuProps={MenuProps}
-                            >
-                            {duracionExamen.map(item => (
-                                <MenuItem key={item.valor} value={item.valor}>
-                                {/* <Checkbox checked={subareaSeleccionada.indexOf(item) > -1} color="primary"/> */}
-                                <ListItemText primary={item.label} />
-                                </MenuItem>
-                            ))}
-                            </Select>
-                        </FormControl>
+                            <FormControl required variant="outlined" style={{textAlignLast: 'center'}} className={classes.formControl}>
+                                <InputLabel>Duracion del examen</InputLabel>
+                                <Select
+                                    label="Duracion del examen"
+                                    value={numeroSeccionSeleccionado}
+                                    MenuProps={MenuProps}
+                                    onChange={handleCambiarNumeroSeccion} 
+                                >
+                                {duracionExamen.map(item => (
+                                    <MenuItem key={item.valor} value={item.valor} >
+                                        {item.label}
+                                    </MenuItem>
+                                ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                     </Grid>
                     <Grid container spacing={2}>

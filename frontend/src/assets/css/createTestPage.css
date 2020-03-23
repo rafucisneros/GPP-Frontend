@@ -90,18 +90,10 @@
     opacity: 0.6;
 }
 
-.boton-agregar-respuestas:hover{
-    background-color: rgb(158, 215, 241)!important;
-    opacity: 0.6;
-}
-
 .borrar-respuestas{
     color: crimson;
 }
 
-.agregar-respuestas{
-    color: rgb(64, 136, 219);
-}
 
 .div-buttons-respuestas{
     display: flex;

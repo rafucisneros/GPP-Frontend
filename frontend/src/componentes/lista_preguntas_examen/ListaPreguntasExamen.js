@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components'
@@ -80,17 +80,19 @@ export default function ListaPreguntasExamen() {
 
     return (
         // <Grid className = "contenedor-lista-preguntas" >
-            <Box className = "seccion-lista-preguntas">
+        <Fragment>
+            <Box style={{padding : '16px 16px 0px 16px'}}>
                 <Typography variant="subtitle1" gutterBottom>
                     Lista de Preguntas
                 </Typography>
+            </Box>
+            <Box className = "seccion-lista-preguntas">
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId="droppable">
                         {(provided, snapshot) => (
                         <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
-                            // style={estilosStartDragging(provided.droppableProps, snapshot)}
                         >
                             {preguntas.map( (pregunta, index) => (
                                 <Draggable key={`pregunta-${index}`} draggableId={`pregunta-${index}`} index={index}>
@@ -115,6 +117,7 @@ export default function ListaPreguntasExamen() {
                     </Droppable>
                 </DragDropContext>
             </Box>
+        </Fragment>
         // </Grid>
     )
 }
