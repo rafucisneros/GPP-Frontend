@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../assets/imagenes/gpp.png';
-import { getMensajito } from '../servicios/LoginServices';
+import { getMensajito } from '../servicios/servidioRandom.js';
 
 const useMensajito = () => {
 

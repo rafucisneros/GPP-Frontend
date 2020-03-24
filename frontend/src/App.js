@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import './App.css';
+import { getToken } from './helpers/auth.js'
 
 // vistas
 import LoginPage from './vistas/LoginPage.js';
@@ -10,8 +11,27 @@ import CreateTestPage from './vistas/CreateTestPage.js';
 
 // proveedores
 import {TipoPreguntaRespuestaProvider} from './context/general_context';
+import {UsuarioProvider} from './context/usuarioContext.js';
+
+export default () => <UsuarioProvider>
+  <App></App>
+</UsuarioProvider>
 
 const App = () => {
+
+  const requireAuth = (Comp, props) => {
+    if( !getToken() ){
+      return (<Redirect to="/login" />);
+    } else{
+      return (
+        <div>
+          <TipoPreguntaRespuestaProvider>
+            <Comp {...props} />
+          </TipoPreguntaRespuestaProvider>
+        </div>
+      )
+    }
+  }
   
   return (
     <Router>
@@ -34,16 +54,10 @@ const App = () => {
         <Route
           exact
           path='/create_test'
-          render={(props) => 
-            <TipoPreguntaRespuestaProvider>
-              <CreateTestPage {...props} />
-            </TipoPreguntaRespuestaProvider>
-          }
+          render={(props) => requireAuth(CreateTestPage, props)}
         />
-        <Redirect strict from="/" to="/mensajito" />
+        <Redirect strict from="/" to="/login" />
       </Switch>
     </Router>
   );
 }
-
-export default App;
