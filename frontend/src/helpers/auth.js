@@ -9,3 +9,9 @@ exports.getToken = () => {
 exports.deleteToken = () => {
     return localStorage.removeItem('TOKEN_KEY');
 }
+
+exports.logout = () => {
+    this.deleteToken();
+    window.location = '/login';
+
+}

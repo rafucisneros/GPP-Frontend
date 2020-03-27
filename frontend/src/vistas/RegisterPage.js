@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import RegisterForm from '../componentes/register/RegisterForm.js';
 import { register } from '../servicios/servicioUsuario';
 

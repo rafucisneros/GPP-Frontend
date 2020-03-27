@@ -1,4 +1,4 @@
-import React, { useEffect, useState }  from 'react';
+import React, { useState }  from 'react';
 import LoginForm from '../componentes/login/LoginForm.js';
 import { login } from '../servicios/servicioUsuario.js';
 import { addToken } from '../helpers/auth.js';

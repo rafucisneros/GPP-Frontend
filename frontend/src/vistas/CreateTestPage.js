@@ -17,6 +17,7 @@ import Box from '@material-ui/core/Box';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 // assets
 import '../assets/css/createTestPage.css';
@@ -28,6 +29,9 @@ import SeleccionarAreaTema from '../componentes/seleccionar_tema/SeleccionarArea
 import ListaPreguntasExamen from '../componentes/lista_preguntas_examen/ListaPreguntasExamen.js';
 import PonderacionDificultad from '../componentes/ponderacion_dificultad/PonderacionDificultad.js';
 import ConfiguracionExamen from '../componentes/configuracion_examen/ConfiguracionExamen.js'
+
+// helpers
+import { logout } from '../helpers/auth.js'
 
 // contexts
 import {useTipoPreguntaRespuesta} from '../context/general_context';
@@ -130,6 +134,9 @@ export default function CreateTestPage() {
               GPI
             </Box>
           </Typography>
+          <IconButton color="inherit" onClick={logout}>
+            <PowerSettingsNewIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
       <Drawer
