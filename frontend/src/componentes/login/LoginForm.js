@@ -29,14 +29,13 @@ const useStyles = makeStyles(theme => ({
 
 export default function LoginForm(props) {
 
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log( 'Email:', email, 'Password:', password);
-    // this.props.useLogin({email : email, password : password});
-    props.setError(true);
+    console.log( 'Username:', username, 'Password:', password);
+    props.useLogin({username : username, password : password});
   }
 
   const classes = useStyles();
@@ -53,23 +52,23 @@ export default function LoginForm(props) {
               Ingresar
             </Typography>
             <div className={classes.root}>
-              <Collapse in={props.error}>
+              <Collapse in={props.error.open}>
                 <Alert 
-                  severity="error"
+                  severity={props.error.type}
                   action={
                     <IconButton
                     aria-label="close"
                     color="inherit"
                     size="small"
                     onClick={() => {
-                      props.setError(false);
+                      props.setError({...props.error, open : false});
                     }}
                     >
                       <CloseIcon fontSize="inherit" />
                     </IconButton>
                   }
                   >
-                <AlertTitle>Ingreso Fallido</AlertTitle>
+                <AlertTitle>{props.error.titulo}</AlertTitle>
                   {`Correo eletrónico o contraseña incorrecta`}
                 </Alert>
               </Collapse>
@@ -80,11 +79,11 @@ export default function LoginForm(props) {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
+                id="username"
                 label="Correo Electrónico"
-                name="email"
+                name="username"
                 autoComplete="email"
-                onInput={ (e) => setEmail(e.target.value)}
+                onInput={ (e) => setUsername(e.target.value)}
                 autoFocus
               />
               <TextField

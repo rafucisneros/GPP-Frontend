@@ -8,7 +8,7 @@ export function login(data){
       return response;
     })
     .catch( (error) => {
-      console.log(error)
+      return Promise.reject(error);
     });
 }
 
@@ -19,7 +19,7 @@ export function register(data){
         return response;
       })
       .catch( (error) => {
-        console.log(error)
+        return Promise.reject(error);
       });
 }
 
@@ -30,6 +30,6 @@ export function getDataUsuario(){
         return response;
       })
       .catch( (error) => {
-        console.log(error)
+        return Promise.reject(error);
       });
 }

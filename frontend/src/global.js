@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import auth from './helpers/auth.js'
 
-const SERVER_NAME = 'http://localhost:8000/';
+const SERVER_NAME = 'http://192.168.1.101:8000';
 
 export const global = {
     // BACKEND : SERVER_NAME,
@@ -37,6 +37,6 @@ Axios.interceptors.response
         if (401 === error.response.status) {
         window.location = '/login';
     } else {
-        return error;
+        return Promise.reject(error.response)
     }
 });

@@ -32,6 +32,17 @@ const App = () => {
       )
     }
   }
+
+  const forzarLogin = (Comp, props) => {
+    if( !getToken() ){
+      return (
+      <div>
+          <Comp {...props} />
+      </div>);
+    } else{
+      return ( <Redirect to="/create_test" />);
+    }
+  }
   
   return (
     <Router>
@@ -39,17 +50,17 @@ const App = () => {
         <Route
           exact
           path='/login'
-          render={(props) => <LoginPage {...props} />}
+          render={(props) => forzarLogin(LoginPage, props)}
         />
         <Route
           exact
           path='/register'
-          render={(props) => <RegisterPage {...props} />}
+          render={(props) => forzarLogin(RegisterPage, props)}
         />
         <Route
           exact
           path='/mensajito'
-          render={(props) => <MensajitoPage {...props} />}
+          render={(props) => forzarLogin(MensajitoPage, props)}
         />
         <Route
           exact

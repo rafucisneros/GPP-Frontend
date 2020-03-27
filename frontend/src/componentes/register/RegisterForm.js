@@ -37,9 +37,7 @@ export default function RegisterForm(props) {
   const onSubmit = (event) => {
     event.preventDefault();
     console.log('First Name:', firstName, 'Last Name:', lastName, 'Email:', email, 'Password:', password);
-    console.log({email : email, password : password, first_name : firstName, last_name : lastName})
-    // this.props.useRegistro({email : email, password : password, first_name : firstName, last_name : lastName});
-    props.setExito(true)
+    props.useRegistro({email : email, password : password, first_name : firstName, last_name : lastName});
   }
 
   const classes = useStyles();
@@ -56,24 +54,24 @@ export default function RegisterForm(props) {
             Registro
           </Typography>
           <div className={classes.root}>
-          <Collapse in={props.exito}>
+          <Collapse in={props.alert.open}>
             <Alert 
-              severity="success"
+              severity={props.alert.type}
               action={
                 <IconButton
                 aria-label="close"
                 color="inherit"
                 size="small"
                 onClick={() => {
-                  props.setExito(false);
+                  props.setAlert({...props.alert, open : false});
                 }}
                 >
                   <CloseIcon fontSize="inherit" />
                 </IconButton>
               }
               >
-            <AlertTitle>Registro Exitoso</AlertTitle>
-              {`Bienvenido ${firstName} ${lastName}`}
+            <AlertTitle>{props.alert.titulo}</AlertTitle>
+              {props.alert.mensaje}
             </Alert>
           </Collapse>
         </div>

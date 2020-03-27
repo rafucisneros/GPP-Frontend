@@ -8,7 +8,8 @@ export function UsuarioProvider(props) {
     const [usuario, setUsuario] = useState({
         'email' : '',
         'first_name': '',
-        'last_name' : ''
+        'last_name' : '',
+        'username' : ''
     });
     const [cargandoUsuario, setCargandoUsuario] = useState(true);
 
@@ -44,7 +45,7 @@ export function UsuarioProvider(props) {
 export function useUsuario() {
     const context = React.useContext(UsuarioContext);
     if (!context){
-        throw new Error('useTipoPreguntaRespuesta debe estar dentro del proveedor TipoPreguntaRespuestaContext')
+        throw new Error('useUsuario debe estar dentro del proveedor UsuarioContext');
     }
     return context;
 }

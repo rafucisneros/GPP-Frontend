@@ -8,30 +8,28 @@ import {useUsuario} from '../context/usuarioContext.js';
 
 const LoginPage = () => {
 
-    const [error, setError] = useState(false);
+    const [error, setError] = useState({});
+    const [usuario, setUsuario] = useState(null);
 
     const useLogin = (data) => {
-
-        const [usuario, setUsuario] = useUsuario(null);
       
-        useEffect( () => {
-            login(data)
-            .then( response => {
-                if (response.status === 200) {
-                    console.log(response.data);
-                    addToken(response.data.token);
-                    delete response.data.token;
-                    setUsuario(...response.data.token);
-                    window.location = '/create_test';
-                } else {
-                    setError(true);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-                setError(true);
-            });
-        }, []);
+        login(data)
+        .then( response => {
+            if (response.status === 200) {
+                addToken(response.data.access);
+                window.location = '/create_test';
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+            let mensaje = {
+                titulo : 'Ingreso Fallido',
+                mensaje : 'Correo eletrónico o contraseña incorrecta',
+                type : 'error',
+                open : true
+            }
+            setError(mensaje);
+        });
     
         return usuario;
     }
