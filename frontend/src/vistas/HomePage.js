@@ -25,7 +25,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import GroupIcon from '@material-ui/icons/Group';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom'
 const drawerWidth = 240;
@@ -110,21 +110,37 @@ export default function HomePage(){
         open={bar}
       >
         <div className="toolbar-icono">
-            Menu
-            <IconButton onClick={handleBarClose}>
-                <ChevronLeftIcon />
-            </IconButton>
+          Menu
+          <IconButton onClick={handleBarClose}>
+            <ChevronLeftIcon />
+          </IconButton>
         </div>
         <Divider />
         <List>
-            <Link to={"create_test/"}>
-          <ListItem>
+          <Link to={"create_test/"}>
+            <ListItem>
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText primary="Mi Perfil" />
-          </ListItem>
-            </Link>
+            </ListItem>
+          </Link>
+          <Link to={"create_test/"}>
+            <ListItem>
+              <ListItemIcon>
+              <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Crear Examen" />
+            </ListItem>
+          </Link>
+          <Link to={"create_test/"}>
+            <ListItem>
+              <ListItemIcon>
+                <GroupAddIcon />
+              </ListItemIcon>
+              <ListItemText primary="Crear Salon" />
+            </ListItem>
+          </Link>
           <ListItem>
             <ListItemIcon>
               <CloseIcon />
@@ -136,27 +152,6 @@ export default function HomePage(){
       <main className="content-main-crear-test">
       <div className="toolbar-icono"/>
         <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}>
-          <Grid container spacing={2}>
-              <div>
-                <h1>Opciones</h1>
-              </div>
-              <Grid container spacing={2} direction="row" justify="space-around">
-                <Card>
-                  <CardContent>
-                    <AssignmentIcon style={{fontSize: "5.5rem"}}/>
-                    <Divider />
-                    Crear Examen
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent>
-                    <GroupIcon style={{fontSize: "5.5rem"}}/>
-                    <Divider />
-                    Crear Salon
-                  </CardContent>
-                </Card>
-              </Grid>
-          </Grid>
           <Grid container spacing={2} direction="column">
               <div>
                 <h1>Mis Examenes</h1>
@@ -189,7 +184,10 @@ export default function HomePage(){
                       Examen 1
                   </CardContent>
                   <CardActions>
-                    <Button size="small">Ver detalles</Button>
+                    {/* <Link to={`/makeTest/${id}`}> */}
+                    <Link to={`/makeTest/`}>
+                      <Button size="small">Ver detalles</Button>
+                    </Link>
                   </CardActions>
                 </Card>
               </Grid>
