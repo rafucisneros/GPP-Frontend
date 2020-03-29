@@ -4,12 +4,12 @@ import { login } from '../servicios/servicioUsuario.js';
 import { addToken } from '../helpers/auth.js';
 
 // context
-import {useUsuario} from '../context/usuarioContext.js';
+// import {useUsuario} from '../context/usuarioContext.js';
 
 const LoginPage = () => {
 
     const [error, setError] = useState({});
-    const [usuario, setUsuario] = useState(null);
+    const [usuario] = useState(null);
 
     const useLogin = (data) => {
       

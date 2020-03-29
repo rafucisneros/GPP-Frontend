@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -22,7 +22,7 @@ import {useTipoPreguntaRespuesta} from '../../context/general_context'
 
 export default function ListaTipoPregunta() {
 
-  const {tituloRespuesta, tipoPregunta, handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
+  const {handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
 
   const handleSubMenuTipoPregunta = (key) => {
     setSubMenuTipoPregunta(!subMenuTipoPregunta);

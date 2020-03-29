@@ -9,6 +9,9 @@ import RegisterPage from './vistas/RegisterPage.js';
 import MensajitoPage from './vistas/MensajitoPage.js';
 import CreateTestPage from './vistas/CreateTestPage.js';
 
+// componentes
+import NavBar from './componentes/navbar/NavBar.js';
+
 // proveedores
 import {TipoPreguntaRespuestaProvider} from './context/general_context';
 import {UsuarioProvider} from './context/usuarioContext.js';
@@ -20,13 +23,16 @@ export default () => <UsuarioProvider>
 const App = () => {
 
   const requireAuth = (Comp, props) => {
+    console.log(Comp)
     if( !getToken() ){
       return (<Redirect to="/login" />);
     } else{
       return (
         <div>
           <TipoPreguntaRespuestaProvider>
-            <Comp {...props} />
+            <NavBar > 
+              <Comp {...props}/>
+            </NavBar>
           </TipoPreguntaRespuestaProvider>
         </div>
       )
