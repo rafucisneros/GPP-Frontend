@@ -12,7 +12,7 @@ const estilosDropDragging = (style, snapshot) => {
     if (!snapshot.isDropAnimating) {
       return style;
     }
-    const { moveTo, curve, duration } = snapshot.dropAnimation;
+    const { curve, duration } = snapshot.dropAnimation;
     // const translate = `translate(${moveTo.x}px, ${moveTo.y}px)`;
     // const rotate = 'rotate(1turn)';
   

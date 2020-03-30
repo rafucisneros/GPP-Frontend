@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,13 +17,14 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ForwardIcon from '@material-ui/icons/Forward';
 import Typography from '@material-ui/core/Typography';
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 // contexts
-import {useTipoPreguntaRespuesta} from '../../context/general_context'
+import {useTipoPreguntaRespuesta} from '../../context/createTestContext'
 
 export default function ListaTipoPregunta() {
 
-  const {tituloRespuesta, tipoPregunta, handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
+  const {handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
 
   const handleSubMenuTipoPregunta = (key) => {
     setSubMenuTipoPregunta(!subMenuTipoPregunta);
@@ -103,10 +105,23 @@ export default function ListaTipoPregunta() {
             primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Configuraciones</Typography>}
           />
         </ListItem>
+        <Link to="home" className="link">
+          <ListItem
+            button
+            selected={itemSeleccionado === '3'}
+          >
+            <ListItemIcon>
+              <MenuBookIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Menú Principal</Typography>}
+            />
+          </ListItem>
+        </Link>
         <ListItem
           button
-          onClick={ () => handleCloseSubMenuTipoPregunta('3')}
-          selected={itemSeleccionado === '3'}
+          onClick={ () => handleCloseSubMenuTipoPregunta('4')}
+          selected={itemSeleccionado === '4'}
         >
           <ListItemIcon>
             <ForwardIcon />

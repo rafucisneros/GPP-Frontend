@@ -18,13 +18,14 @@ import {
 } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import MomentUtils from '@date-io/moment';
-import moment from 'moment';
+// import moment from 'moment';
+
 import {
   DateTimePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers'
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 const tituloTooltip = "El modo estático le permitirá mostrar el examen en el orden que usted desee. En el modo dinámico el examen será mostrado de manera aleatoria de acuerdo a las configuraciones introucidas."
 
@@ -198,7 +199,6 @@ const Configuracion = props => {
                                 id={`comentarios`}
                                 margin="normal"
                                 label="Comentario"
-                                variant="outlined"
                                 fullWidth
                                 name={`comentarios`}
                                 placeholder="Comentarios adicionales..."

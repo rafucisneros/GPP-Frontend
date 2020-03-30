@@ -1,5 +1,7 @@
 import React, {useState } from 'react';
 
+import { useGeneral } from '../context/generalContext';
+
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -28,127 +30,14 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom'
-const drawerWidth = 240;
-
-
-const useStyle = makeStyles(theme => ({
-  appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-      }),
-  },
-  appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-      }),
-  },
-  drawerPaper: {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-      }),
-  },
-  drawerPaperClose: {
-      overflowX: 'hidden',
-      transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-      },
-  },
-}))
 
 export default function HomePage(){
-  const classes = useStyle();
+  const { setContentMenu } = useGeneral();
 
-  const [bar, setBar] = useState(true);
-
-  const handleBarOpen = () => {
-    setBar(true);
-  };
-
-  const handleBarClose = () => {
-    setBar(false);
-  };
+  setContentMenu('home');
 
   return (
-    <div style={{display : 'flex'}}>
-      <AppBar position="absolute" className={clsx(classes.appBar, bar && classes.appBarShift)}>
-        <Toolbar style={{paddingRight : '24px'}}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleBarOpen}
-            className = {!bar ? 'abrir-menu-crear-examen' : 'cerrar-menu-crear-examen'}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap style={{flexGrow: 1}}>
-            <Box className="flex-box-titulo">
-              Bienvenido
-            </Box>
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !bar && classes.drawerPaperClose),
-        }}
-        open={bar}
-      >
-        <div className="toolbar-icono">
-          Menu
-          <IconButton onClick={handleBarClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <Link to={"create_test/"}>
-            <ListItem>
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Mi Perfil" />
-            </ListItem>
-          </Link>
-          <Link to={"create_test/"}>
-            <ListItem>
-              <ListItemIcon>
-              <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary="Crear Examen" />
-            </ListItem>
-          </Link>
-          <Link to={"create_test/"}>
-            <ListItem>
-              <ListItemIcon>
-                <GroupAddIcon />
-              </ListItemIcon>
-              <ListItemText primary="Crear Salon" />
-            </ListItem>
-          </Link>
-          <ListItem>
-            <ListItemIcon>
-              <CloseIcon />
-            </ListItemIcon>
-            <ListItemText primary="Salir del Sistema" />
-          </ListItem>
-        </List>
-      </Drawer>
+    <div>
       <main className="content-main-crear-test">
       <div className="toolbar-icono"/>
         <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}>
@@ -185,7 +74,7 @@ export default function HomePage(){
                   </CardContent>
                   <CardActions>
                     {/* <Link to={`/makeTest/${id}`}> */}
-                    <Link to={`/makeTest/`}>
+                    <Link to={`/make_test/1`}>
                       <Button size="small">Ver detalles</Button>
                     </Link>
                   </CardActions>
