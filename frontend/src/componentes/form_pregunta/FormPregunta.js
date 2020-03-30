@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -11,11 +11,18 @@ import FormGroup from '@material-ui/core/FormGroup';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Checkbox from '@material-ui/core/Checkbox';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 export default function FormPregunta(props){
   const pregunta = props.pregunta;
   const [respuesta, setRespuesta] = React.useState("");
   const [respuestaMultiple, setRespuestaMultiple] = React.useState([]);
+
+  useEffect(()=> {
+    if(pregunta.tipo === "ordenamiento"){
+      setRespuestaMultiple(pregunta.opciones)
+    }
+  })
 
   const handleChange = event => {
     setRespuesta(event.target.value);
@@ -45,6 +52,19 @@ export default function FormPregunta(props){
       pregunta["respuesta"] = respuesta
     }
     props.changeQuestion(pregunta, pregunta["_id"] + 1)
+  }
+
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    let nuevoOrden = respuestaMultiple
+
+    let elementoCambiado = respuestaMultiple.splice(result.source.index, 1)[0]
+    nuevoOrden.splice(result.destination.index, 0, elementoCambiado)
+    setRespuestaMultiple(nuevoOrden)
   }
 
   return (
@@ -101,9 +121,50 @@ export default function FormPregunta(props){
             </div>)
           }
           {pregunta.tipo === "ordenamiento" && 
-            <div>
-              ordenamiento
-            </div>
+            (<div>
+              <FormLabel component="legend">{pregunta.pregunta}</FormLabel>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {respuestaMultiple && respuestaMultiple.map((opcion, index) => (
+                        <Draggable key={`opcion-${index}`} draggableId={`opcion-${index}`} index={index}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              key={`${opcion}-${index}`}
+                              className="flex-box-opcions"
+                            >
+                              {opcion}
+                                {/* <Box >
+                                  <TextField
+                                  variant="outlined"
+                                  margin="normal"
+                                  required
+                                  fullWidth
+                                  value={opcion}
+                                  id={`respuesta${index}`}
+                                  label="Escribe una respuesta"
+                                  name={`respuesta`}
+                                  autoFocus
+                                  onChange={(e) => handleCambiarRespuesta(e, index)}
+                                  />
+                                </Box> */}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </div>)
           }
         </Grid>
         <br />

@@ -119,7 +119,7 @@ export default function MakeTestPage(){
 
   const [bar, setBar] = useState(true);
   const [exam, setExam] = useState(null);
-  const [preguntaActual, setPreguntaActual] = useState(1);
+  const [preguntaActual, setPreguntaActual] = useState(4);
 
   useEffect(()=> {
     setExam(examenPrueba)
