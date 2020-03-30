@@ -1,4 +1,5 @@
 import React, { useState }  from 'react';
+import { Redirect } from 'react-router-dom';
 import LoginForm from '../componentes/login/LoginForm.js';
 import { login } from '../servicios/servicioUsuario.js';
 import { addToken } from '../helpers/auth.js';
@@ -17,7 +18,7 @@ const LoginPage = () => {
         .then( response => {
             if (response.status === 200) {
                 addToken(response.data.access);
-                window.location = '/create_test';
+                window.location = "/home";
             }
         })
         .catch((error) => {
@@ -31,7 +32,7 @@ const LoginPage = () => {
             setError(mensaje);
         });
     
-        return usuario;
+        return <Redirect to="/home"/>;
     }
     
     return( 

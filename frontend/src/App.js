@@ -8,13 +8,18 @@ import LoginPage from './vistas/LoginPage.js';
 import RegisterPage from './vistas/RegisterPage.js';
 import MensajitoPage from './vistas/MensajitoPage.js';
 import CreateTestPage from './vistas/CreateTestPage.js';
+import HomePage from './vistas/HomePage.js';
+import MakeTestPage from './vistas/MakeTestPage.js';
+import MantenimientoPage from './vistas/MantemientoPage.js';
 
 // componentes
 import NavBar from './componentes/navbar/NavBar.js';
 
 // proveedores
-import {TipoPreguntaRespuestaProvider} from './context/general_context';
-import {UsuarioProvider} from './context/usuarioContext.js';
+import { TipoPreguntaRespuestaProvider } from './context/createTestContext';
+import { UsuarioProvider } from './context/usuarioContext.js';
+import { GeneralProvider } from './context/generalContext.js';
+import { MakeTestProvider } from './context/makeTestContext.js';
 
 export default () => <UsuarioProvider>
   <App></App>
@@ -29,11 +34,15 @@ const App = () => {
     } else{
       return (
         <div>
-          <TipoPreguntaRespuestaProvider>
-            <NavBar > 
-              <Comp {...props}/>
-            </NavBar>
-          </TipoPreguntaRespuestaProvider>
+            <TipoPreguntaRespuestaProvider>
+              <MakeTestProvider>
+                <GeneralProvider>
+                  <NavBar > 
+                    <Comp {...props}/>
+                  </NavBar>
+                </GeneralProvider>
+              </MakeTestProvider>
+            </TipoPreguntaRespuestaProvider> 
         </div>
       )
     }
@@ -46,7 +55,7 @@ const App = () => {
           <Comp {...props} />
       </div>);
     } else{
-      return ( <Redirect to="/create_test" />);
+      return ( <Redirect to="/home" />);
     }
   }
   
@@ -65,13 +74,32 @@ const App = () => {
         />
         <Route
           exact
-          path='/mensajito'
-          render={(props) => forzarLogin(MensajitoPage, props)}
+          path='/home'
+          render={(props) => requireAuth(HomePage, props)}
+        />
+        <Route
+          exact
+          path='/home'
+          render={(props) => requireAuth(MensajitoPage, props)}
+        />
+        <Route
+          path='/make_test/:id'
+          render={(props) => requireAuth(MakeTestPage, props, MakeTestProvider)}
         />
         <Route
           exact
           path='/create_test'
-          render={(props) => requireAuth(CreateTestPage, props)}
+          render={(props) => requireAuth(CreateTestPage, props, TipoPreguntaRespuestaProvider)}
+        />
+        <Route
+          exact
+          path='/create_classroom'
+          render={(props) => <MantenimientoPage {...props} />}
+        />
+        <Route
+          exact
+          path='/perfil'
+          render={(props) => <MantenimientoPage {...props} />}
         />
         <Redirect strict from="/" to="/login" />
       </Switch>

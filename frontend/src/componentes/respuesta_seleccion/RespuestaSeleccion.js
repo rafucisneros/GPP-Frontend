@@ -16,7 +16,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 
 // contexts
-import {useTipoPreguntaRespuesta} from '../../context/general_context'
+import {useTipoPreguntaRespuesta} from '../../context/createTestContext'
 
 export default function RespuestaSeleccion() {
 

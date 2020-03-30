@@ -10,7 +10,8 @@ import PonderacionDificultad from '../componentes/ponderacion_dificultad/Pondera
 import ConfiguracionExamen from '../componentes/configuracion_examen/ConfiguracionExamen.js'
 
 // contexts
-import { useTipoPreguntaRespuesta } from '../context/general_context';
+import { useTipoPreguntaRespuesta } from '../context/createTestContext';
+import { useGeneral } from '../context/generalContext';
 
 // material
 import Typography from '@material-ui/core/Typography';
@@ -22,7 +23,8 @@ import Box from '@material-ui/core/Box';
 
 export default function CreateTestPage() {
 
-  const {tituloRespuesta, tipoPregunta} = useTipoPreguntaRespuesta();
+  const { setContentMenu } = useGeneral();
+  const { tituloRespuesta, tipoPregunta } = useTipoPreguntaRespuesta();
 
   const handleSeleccionarTipoPregunta = () => {
     if ( tipoPregunta === "seleccion_simple" ){
@@ -45,6 +47,8 @@ export default function CreateTestPage() {
       return(<div></div>)
     }
   }
+
+  setContentMenu('create_test');
 
   return (
       <div>
