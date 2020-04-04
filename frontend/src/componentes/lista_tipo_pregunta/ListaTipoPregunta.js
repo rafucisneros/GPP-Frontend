@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
+// componentes
+import ModalAddAreaSubAreaTema from '../modals/ModalAddAreaSubAreaTema.js';
+
+// materials
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Collapse from "@material-ui/core/Collapse";
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
 import CheckIcon from '@material-ui/icons/Check';
 import ThumbsUpDownIcon from '@material-ui/icons/ThumbsUpDown';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
@@ -16,13 +20,21 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ForwardIcon from '@material-ui/icons/Forward';
 import Typography from '@material-ui/core/Typography';
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import AddIcon from '@material-ui/icons/Add';
 
 // contexts
-import {useTipoPreguntaRespuesta} from '../../context/general_context'
+import {useTipoPreguntaRespuesta} from '../../context/createTestContext'
 
 export default function ListaTipoPregunta() {
 
-  const {tituloRespuesta, tipoPregunta, handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
+  const {handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
+  const [open, setOpen] = useState();
+
+  const handleModal = () => {
+    if (open) handleSeleccionarItem(null);
+    setOpen(!open);
+  };
 
   const handleSubMenuTipoPregunta = (key) => {
     setSubMenuTipoPregunta(!subMenuTipoPregunta);
@@ -37,6 +49,11 @@ export default function ListaTipoPregunta() {
     setSubMenuTipoPregunta(false);
     handleSeleccionarItem(key);
   };
+
+  const openModal = (key) => {
+    handleSeleccionarItem(key);
+    handleModal();
+  }
 
   const handleSeleccionarConfiguraciones = () => {
     handleCloseSubMenuTipoPregunta('2');
@@ -105,8 +122,33 @@ export default function ListaTipoPregunta() {
         </ListItem>
         <ListItem
           button
-          onClick={ () => handleCloseSubMenuTipoPregunta('3')}
+          onClick={ () => openModal('3')}
           selected={itemSeleccionado === '3'}
+        >
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Añadir Contenido </Typography>}
+          />
+        </ListItem>
+        <Link to="home" className="link">
+          <ListItem
+            button
+            selected={itemSeleccionado === '4'}
+          >
+            <ListItemIcon>
+              <MenuBookIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Menú Principal</Typography>}
+            />
+          </ListItem>
+        </Link>
+        <ListItem
+          button
+          onClick={ () => handleCloseSubMenuTipoPregunta('5')}
+          selected={itemSeleccionado === '5'}
         >
           <ListItemIcon>
             <ForwardIcon />
@@ -116,6 +158,12 @@ export default function ListaTipoPregunta() {
           />
         </ListItem>
       </List>
+
+      <ModalAddAreaSubAreaTema
+        open={open}
+        handleModal={handleModal}
+      >
+      </ModalAddAreaSubAreaTema>
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import { Redirect } from "react-router-dom";
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -9,21 +8,38 @@ import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close'
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import './login.css';
 import logo from '../../assets/imagenes/gpi.jpg';
 
-export default function LoginForm() {
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
 
-  const [permitirAuth, setPermitirAuth] = useState(false);
+export default function LoginForm(props) {
 
-  const onSubmit = () => {
-    setPermitirAuth(true);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    console.log( 'Username:', username, 'Password:', password);
+    props.useLogin({username : username, password : password}, props.setError);
   }
 
+  const classes = useStyles();
+
   return (
-    <div>
-      { permitirAuth && <Redirect to="/mensajito"/>}
       <Grid container component="main" className="container-login-signup">
         <CssBaseline />
         <Grid item xs={false} sm={4} md={7} className="container-image-login" />
@@ -31,19 +47,42 @@ export default function LoginForm() {
           <div className="container-login-signup-paper">
             <Avatar className="container-login-signup-avatar" src={logo}>
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography component="h1" variant="h5" style={{marginBottom: '16px'}}>
               Ingresar
             </Typography>
-            <form className="container-login-signup-form" onSubmit={onSubmit} noValidate>
+            <div className={classes.root}>
+              <Collapse in={props.error.open}>
+                <Alert 
+                  severity={props.error.type}
+                  action={
+                    <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      props.setError({...props.error, open : false});
+                    }}
+                    >
+                      <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                  }
+                  >
+                <AlertTitle>{props.error.titulo}</AlertTitle>
+                  {`Correo eletrónico o contraseña incorrecta`}
+                </Alert>
+              </Collapse>
+            </div>
+            <form className="container-login-signup-form" onSubmit={onSubmit}>
               <TextField
                 variant="outlined"
                 margin="normal"
                 required
                 fullWidth
-                id="email"
+                id="username"
                 label="Correo Electrónico"
-                name="email"
+                name="username"
                 autoComplete="email"
+                onInput={ (e) => setUsername(e.target.value)}
                 autoFocus
               />
               <TextField
@@ -55,6 +94,7 @@ export default function LoginForm() {
                 label="Contraseña"
                 type="password"
                 id="password"
+                onInput={ (e) => setPassword(e.target.value)}
                 autoComplete="current-password"
               />
               <Button
@@ -81,6 +121,5 @@ export default function LoginForm() {
           </div>
         </Grid>
       </Grid>
-    </div>
   );
 }

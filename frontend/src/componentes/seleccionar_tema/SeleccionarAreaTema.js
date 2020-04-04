@@ -106,7 +106,7 @@ export default function SeleccionarAreaTema() {
     const [subareaSeleccionada, setSubareaSeleccionada] = useState(null);  // Arreglo de subareas seleccionadas
     const [temaSeleccionado, setTemaSeleccionado] = useState(null);  // Arreglo de temas seleccionadas
 
-    const [listaFiltradoArea, setListaFiltradoaArea] = useState(areas);  // Arreglo de areas filtradas a mostrar
+    const [listaFiltradoArea] = useState(areas);  // Arreglo de areas filtradas a mostrar
     const [listaFiltradoSubArea, setListaFiltradoSubArea] = useState([]);  // Arreglo de subareas filtradas a mostrar
     const [listaFiltradoTema, setListaFiltradoTema] = useState([]);  // Arreglo de temas filtradas a mostrar
 

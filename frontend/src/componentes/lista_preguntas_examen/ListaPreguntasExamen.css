@@ -4,8 +4,8 @@
 
 .seccion-lista-preguntas{
     padding: 16px;
-    overflow : auto;
-    height: 100%;
+    overflow-y : auto;
+    height: auto;
 }
 
 .rectangulo-pregunta{

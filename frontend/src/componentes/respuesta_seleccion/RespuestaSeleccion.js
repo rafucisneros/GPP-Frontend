@@ -16,12 +16,12 @@ import AddIcon from '@material-ui/icons/Add';
 
 
 // contexts
-import {useTipoPreguntaRespuesta} from '../../context/general_context'
+import {useTipoPreguntaRespuesta} from '../../context/createTestContext'
 
 export default function RespuestaSeleccion() {
 
     const [respuestas, setRespuestas] = useState([]);
-    const {tituloRespuesta, tipoPregunta} = useTipoPreguntaRespuesta();
+    const {tipoPregunta} = useTipoPreguntaRespuesta();
 
     const handleAgregarRespuesta = () => {
         let campo = [...respuestas];
@@ -63,10 +63,6 @@ export default function RespuestaSeleccion() {
         let checkeds = [...respuestas];
         checkeds[index].checked = !checkeds[index].checked;
         setRespuestas(checkeds);
-    }
-
-    const handleAgregarRadio = () => {
-      handleAgregarRespuesta();
     }
 
     const handleChangeRadio = (e, index) => {
@@ -112,7 +108,6 @@ export default function RespuestaSeleccion() {
                     multiline
                     rows={7}
                     rowsMax={7}
-                    variant="outlined"
                 />
               </Paper>
             </Grid>
