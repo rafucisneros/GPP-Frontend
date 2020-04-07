@@ -17,7 +17,9 @@ const LoginPage = () => {
         login(data)
         .then( response => {
             if (response.status === 200) {
-                addToken(response.data.access);
+                console.log("termino")
+                let hola = addToken(response.data.access);
+                console.log(hola)
                 window.location = "/home";
             }
         })

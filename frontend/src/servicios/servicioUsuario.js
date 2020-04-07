@@ -2,8 +2,11 @@ import { global } from '../global';
 import Axios from 'axios';
 
 export function login(data){
+  const axios = Axios.create({
+    baseURL: global.SERVER_NAME
+  });
 
-  return Axios.post(global.API_POST_LOGIN, data)
+  return axios.post(global.API_POST_LOGIN, data)
     .then((response) => {
       return response;
     })
@@ -25,7 +28,7 @@ export function register(data){
 
 export function getDataUsuario(){
 
-    return Axios.post(global.API_GET_USUARIO)
+    return Axios.get(global.API_GET_USUARIO)
       .then((response) => {
         return response;
       })
