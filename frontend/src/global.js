@@ -5,8 +5,9 @@ const SERVER_NAME = 'http://192.168.1.103:8000';
 // const SERVER_NAME = 'http://localhost:8000';
 
 export const global = {
+    SERVER_NAME : SERVER_NAME,
     API_GET_MENSAJE: `${SERVER_NAME}/mensajito`,
-    API_GET_USUARIO: `${SERVER_NAME}/usuarios`,
+    API_GET_USUARIO: `${SERVER_NAME}/user/info`,
 
     API_POST_REGISTRO: `${SERVER_NAME}/user/signup`,
     API_POST_LOGIN: `${SERVER_NAME}/user/login`,
@@ -16,15 +17,17 @@ export const global = {
 Axios.interceptors.request
     .use( (request) => {
         const token = auth.getToken();
-
         request.headers['Content-Type'] = 'application/json';
-        if (token) request.headers.Authorization = `bearer ${token}`;
+        if (token) request.headers.Authorization = `Bearer ${token}`;
+        console.log(request)
+        // debugger
         return request;
 });
-  
+
 Axios.interceptors.response
     .use( (response) => {
         return response;
     }, (error) => {
+        if (401 === error.response.status) auth.logout();
         return Promise.reject(error.response);
 });

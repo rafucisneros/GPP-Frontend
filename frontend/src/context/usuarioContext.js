@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
-// import { getToken } from '../helpers/auth';
-// import { getDataUsuario } from '../servicios/servicioUsuario.js';
+import React, { useState, useMemo, useEffect } from 'react';
+import { getToken } from '../helpers/auth';
+import { getDataUsuario } from '../servicios/servicioUsuario.js';
 
 const UsuarioContext = React.createContext();
 
@@ -9,36 +9,33 @@ export function UsuarioProvider(props) {
         'email' : '',
         'first_name': '',
         'last_name' : '',
-        'username' : ''
     });
-    // const [cargandoUsuario, setCargandoUsuario] = useState(true);
-    // const [cargandoUsuario] = useState(true);
+    const [cargandoUsuario, setCargandoUsuario] = useState(true);
 
-    // useEffect(() => {
-    //     async function cargarUsuario(){
-    //         if (!getToken()) {
-    //             setCargandoUsuario(true);
-    //             return;
-    //         }
+    useEffect(() => {
+        async function cargarUsuario(){
+            if (!getToken()) {
+                setCargandoUsuario(false);
+                return;
+            }
 
-    //         try{
-    //             const { data : usuario } = await getDataUsuario();
-    //             setUsuario(usuario);
-    //             setCargandoUsuario(false);
-    //         } catch (err) {
-    //             console.log(err);
-    //         }
-    //     }
-    // })
+            try{
+                const { data : usuario } = await getDataUsuario();
+                setUsuario(usuario);
+                setCargandoUsuario(false);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        cargarUsuario();
+    }, [])
 
     const value = useMemo( () => {
         return({
             usuario,
-            setUsuario,
-            // cargandoUsuario,
+            cargandoUsuario,
         })
-    // }, [usuario, cargandoUsuario]);
-    }, [usuario]);
+    }, [usuario, cargandoUsuario]);
 
     return <UsuarioContext.Provider value = {value} {...props} />
 }

@@ -14,10 +14,11 @@ import MantenimientoPage from './vistas/MantemientoPage.js';
 
 // componentes
 import NavBar from './componentes/navbar/NavBar.js';
+import Loading from './componentes/loading/Loading.js';
 
 // proveedores
 import { TipoPreguntaRespuestaProvider } from './context/createTestContext';
-import { UsuarioProvider } from './context/usuarioContext.js';
+import { UsuarioProvider, useUsuario } from './context/usuarioContext.js';
 import { GeneralProvider } from './context/generalContext.js';
 import { MakeTestProvider } from './context/makeTestContext.js';
 
@@ -27,24 +28,31 @@ export default () => <UsuarioProvider>
 
 const App = () => {
 
+  const { cargandoUsuario } = useUsuario();
+
   const requireAuth = (Comp, props) => {
-    console.log(Comp)
     if( !getToken() ){
       return (<Redirect to="/login" />);
     } else{
-      return (
-        <div>
-            <TipoPreguntaRespuestaProvider>
-              <MakeTestProvider>
-                <GeneralProvider>
-                  <NavBar > 
-                    <Comp {...props}/>
-                  </NavBar>
-                </GeneralProvider>
-              </MakeTestProvider>
-            </TipoPreguntaRespuestaProvider> 
-        </div>
-      )
+      if (cargandoUsuario){
+        return (
+          <Loading/>
+        )
+      } else {
+        return (
+          <div>
+              <TipoPreguntaRespuestaProvider>
+                <MakeTestProvider>
+                  <GeneralProvider>
+                    <NavBar > 
+                      <Comp {...props}/>
+                    </NavBar>
+                  </GeneralProvider>
+                </MakeTestProvider>
+              </TipoPreguntaRespuestaProvider> 
+          </div>
+        )
+      }
     }
   }
 
