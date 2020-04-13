@@ -241,7 +241,13 @@ const NavBar = ({children}) => {
                 <List>
                     {exam.Preguntas.map( (pregunta, index) => {
                     return (              
-                        <ListItem key={index}>
+                        <ListItem 
+                            key={index}
+                            onClick={()=>{
+                                exam.changeQuestion(pregunta._id)
+                            }}
+                            style={{cursor: "pointer"}}
+                        >
                         <ListItemIcon>
                             {["ordenamiento", "seleccion_multiple"].includes(pregunta.tipo) ?
                             (pregunta.respuesta.length ? 

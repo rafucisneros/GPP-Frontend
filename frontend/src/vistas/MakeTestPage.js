@@ -1,47 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
-import ControlPointIcon from '@material-ui/icons/ControlPoint';
-import clsx from 'clsx';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Carousel from '../componentes/carousel/carousel.js';
-import CloseIcon from '@material-ui/icons/Close';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
-import CheckIcon from '@material-ui/icons/Check';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom'
-
 import FormPregunta from '../componentes/form_pregunta/FormPregunta'
 import { useGeneral } from '../context/generalContext';
+import ClockIcon from '@material-ui/icons/AccessTime';
 
 // contexts
 import {useMakeTest} from '../context/makeTestContext';
 
+let time = require("moment")
 const drawerWidth = 240;
 
 const examenPrueba = {
   Nombre: "Examen de Prueba",
-  fecha_inicio: Date.now(),
-  fecha_fin: Date.now() + (60 * 60 * 1000),
-  duracion: 60,
+  fecha_inicio: time().format("DD/MM/YYYY - HH:mmA"),
+  duracion: 2,
   Preguntas: [
     {
       _id: 1,
@@ -84,38 +58,55 @@ export default function MakeTestPage(){
   const { exam, setExam } = useMakeTest();
 
   const [bar, setBar] = useState(true);
-  const [exam, setExam] = useState(null);
-  const [preguntaActual, setPreguntaActual] = useState(4);
+  const [preguntaActual, setPreguntaActual] = useState(1);
+  const [tiempoRestante, setTiempoRestante] = useState("00:00");
+  
+  const changeAnswer = (newAnswer) => {
+    let nuevoExamen = {...exam}
+    let pregunta = nuevoExamen["Preguntas"].find(x => x["_id"] === preguntaActual)
+    pregunta["respuesta"] = newAnswer
+    setExam(nuevoExamen)
+  }
 
+  const changeQuestion = (idQuestion) => {
+    setPreguntaActual(idQuestion)
+  }
+
+  const finishExam = () => {
+    alert("Termino Examen")
+  }
+
+  const timer = () => {
+    let ahora = time()
+    let fin = time(examenPrueba.fecha_fin, "DD/MM/YYYY - HH:mmA").add(1,"minutes")
+    let restanteMinutos = time.duration(fin.diff(ahora)).asMinutes()
+    let restante = time([Math.floor(restanteMinutos / 60), restanteMinutos % 60], "HH:mm").format("HH:mm")
+    setTiempoRestante(restante)
+    if(restante === "00:00"){
+      finishExam()
+    } 
+  }
   setContentMenu('make_test');
 
   useEffect(()=> {
-    setExam(examenPrueba)
-  })
+    examenPrueba.fecha_fin = time(examenPrueba.fecha_inicio, "DD/MM/YYYY - HH:mmA").add(examenPrueba.duracion, "minutes").format("DD/MM/YYYY - HH:mmA")
+    setExam({
+      ...examenPrueba,
+      changeQuestion
+    })
 
-  const nextQuestion = (question) => {
-    let nuevoExamen = exam
-    let pregunta = nuevoExamen.find(x => x["_id"] === question["Pregunta_Actual"])
-    pregunta["respuesta"] = question["respuesta"]
-    setExam(nuevoExamen)
-    setPreguntaActual(preguntaActual + 1)
-  }
+    let intervalID = setInterval(()=>{
+      timer()
+    }, 60000)
 
-  const previousQuestion = (question) => {
-    let nuevoExamen = exam
-    let pregunta = nuevoExamen.find(x => x["_id"] === question["Pregunta_Actual"])
-    pregunta["respuesta"] = question["respuesta"]    
-    setExam(nuevoExamen)
-    setPreguntaActual(preguntaActual - 1)
-  }
+    timer()
 
-  const changeQuestion = (question, idQuestion) => {
-    let nuevoExamen = exam
-    let pregunta = nuevoExamen["Preguntas"].find(x => x["_id"] === question["_id"])
-    pregunta["respuesta"] = question["respuesta"]
-    setExam(nuevoExamen)
-    setPreguntaActual(idQuestion)
-  }
+    // Limpiamos el timer
+    return () => {
+      window.clearInterval(intervalID)
+    }
+  }, [])
+
   if(exam){
     return (
       <div >
@@ -124,15 +115,18 @@ export default function MakeTestPage(){
           <Container maxWidth="lg" style={{paddingTop: '20px', paddingBottom: '32px'}}>
             <Grid container spacing={2} direction="row" justify="space-around">
               <h3>Hora de Inicio: {exam.fecha_inicio}</h3>
+              <h3><ClockIcon style={{color: "black"}}/> {tiempoRestante}</h3>
               <h3>Hora de Fin: {exam.fecha_fin}</h3>
             </Grid>
           </Container>
           <FormPregunta 
             pregunta={exam.Preguntas.find(x => x["_id"] == preguntaActual)} 
-            // pregunta={exam.Preguntas.find(x => x["_id"] == exam.Pregunta_Actual)} 
+            // pregunta={exam.Preguntas.find(x => x["_id"] == exam.Pregunta_Actual)}
+            changeAnswer={changeAnswer} 
             changeQuestion={changeQuestion}
-            lastQuestion={preguntaActual === exam["Preguntas"].length}
-            firstQuestion={preguntaActual === 1}
+            isLastQuestion={preguntaActual === exam["Preguntas"].length}
+            isFirstQuestion={preguntaActual === 1}
+            finishExam={finishExam}
           />
         </main>
       </div>

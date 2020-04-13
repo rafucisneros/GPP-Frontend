@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import List from '@material-ui/core/List';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
@@ -13,58 +12,43 @@ import Radio from '@material-ui/core/Radio';
 import Checkbox from '@material-ui/core/Checkbox';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-export default function FormPregunta(props){
-  const pregunta = props.pregunta;
-  const [respuesta, setRespuesta] = React.useState("");
-  const [respuestaMultiple, setRespuestaMultiple] = React.useState([]);
+export default function FormPregunta({ 
+  pregunta, changeAnswer, changeQuestion, isFirstQuestion, isLastQuestion, finishExam 
+  }){
 
-  useEffect(()=> {
-    if(pregunta.tipo === "ordenamiento"){
-      setRespuestaMultiple(pregunta.opciones)
-    }
-  })
-
+  // Cambio de respuesta en seleccion simple/verdadero y falso
   const handleChange = event => {
-    setRespuesta(event.target.value);
+    changeAnswer(event.target.value.toString());
   };
 
+  // Cambio de respuesta en seleccion multiple
   const handleChangeMultiple = event => {
     if(event.target.checked){
-      setRespuestaMultiple([...respuestaMultiple, event.target.value]);
+      changeAnswer([...pregunta.respuesta, event.target.value]);
     } else {
-      setRespuestaMultiple(respuestaMultiple.filter(x => x !== event.target.value));
+      changeAnswer(pregunta.respuesta.filter(x => x !== event.target.value));
     }
   };
 
-  const handlePreviousQuestion = ()=>{
-    if(pregunta.tipo === "seleccion_multiple" || pregunta.tipo === "ordenamiento") {
-      pregunta["respuesta"] = respuestaMultiple
-    } else {
-      pregunta["respuesta"] = respuesta
-    }
-    props.changeQuestion(pregunta, pregunta["_id"] - 1)
-  }
-
-  const handleNextQuestion = ()=>{
-    if(pregunta.tipo === "seleccion_multiple" || pregunta.tipo === "ordenamiento") {
-      pregunta["respuesta"] = respuestaMultiple
-    } else {
-      pregunta["respuesta"] = respuesta
-    }
-    props.changeQuestion(pregunta, pregunta["_id"] + 1)
-  }
-
-
+  // Cambio de respuesta en ordenamiento
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
     }
-
-    let nuevoOrden = respuestaMultiple
-
-    let elementoCambiado = respuestaMultiple.splice(result.source.index, 1)[0]
+    let nuevoOrden = pregunta.respuesta.length ? [...pregunta.respuesta] : [...pregunta.opciones]
+    let elementoCambiado = nuevoOrden.splice(result.source.index, 1)[0]
     nuevoOrden.splice(result.destination.index, 0, elementoCambiado)
-    setRespuestaMultiple(nuevoOrden)
+    changeAnswer(nuevoOrden)
+  }
+
+  // Cambiar a siguiente pregunta
+  const handlePreviousQuestion = ()=>{
+    changeQuestion(pregunta["_id"] - 1)
+  }
+
+  // Cambiar a pregunta anterior
+  const handleNextQuestion = ()=>{
+    changeQuestion(pregunta["_id"] + 1)
   }
 
   return (
@@ -78,7 +62,7 @@ export default function FormPregunta(props){
             (<div>              
               <FormControl component="fieldset">
                 <FormLabel component="legend">{pregunta.pregunta}</FormLabel>
-                <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={respuesta}>
+                <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={pregunta.respuesta}>
                   {pregunta.opciones.map((opcion, index) => {
                     return <FormControlLabel value={opcion.toString()} control={<Radio />} label={opcion} key={index} />
                   })}
@@ -95,7 +79,7 @@ export default function FormPregunta(props){
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={respuestaMultiple.find(x => x === opcion.toString()) ? true : false}
+                            checked={pregunta.respuesta.find(x => x === opcion.toString()) ? true : false}
                             onChange={handleChangeMultiple}
                             name="checkedB"
                             color="primary"
@@ -113,7 +97,7 @@ export default function FormPregunta(props){
             (<div>              
               <FormControl component="fieldset">
                 <FormLabel component="legend">{pregunta.pregunta}</FormLabel>
-                <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={respuesta}>
+                <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={pregunta.respuesta}>
                   <FormControlLabel value={"Verdadero"} control={<Radio />} label="Verdadero"/>
                   <FormControlLabel value={"Falso"} control={<Radio />} label="Falso"/>
                 </RadioGroup>
@@ -130,7 +114,7 @@ export default function FormPregunta(props){
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      {respuestaMultiple && respuestaMultiple.map((opcion, index) => (
+                      {pregunta.respuesta.length ? pregunta.respuesta.map((opcion, index) => (
                         <Draggable key={`opcion-${index}`} draggableId={`opcion-${index}`} index={index}>
                           {(provided, snapshot) => (
                             <div
@@ -141,24 +125,26 @@ export default function FormPregunta(props){
                               className="flex-box-opcions"
                             >
                               {opcion}
-                                {/* <Box >
-                                  <TextField
-                                  variant="outlined"
-                                  margin="normal"
-                                  required
-                                  fullWidth
-                                  value={opcion}
-                                  id={`respuesta${index}`}
-                                  label="Escribe una respuesta"
-                                  name={`respuesta`}
-                                  autoFocus
-                                  onChange={(e) => handleCambiarRespuesta(e, index)}
-                                  />
-                                </Box> */}
                             </div>
                           )}
                         </Draggable>
-                      ))}
+                      ))
+                      : pregunta.opciones.map((opcion, index) => (
+                        <Draggable key={`opcion-${index}`} draggableId={`opcion-${index}`} index={index}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              key={`${opcion}-${index}`}
+                              className="flex-box-opcions"
+                            >
+                              {opcion}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))
+                      }
                       {provided.placeholder}
                     </div>
                   )}
@@ -174,7 +160,7 @@ export default function FormPregunta(props){
               type="submit"
               variant="contained"
               color="primary"
-              disabled={props.firstQuestion}
+              disabled={isFirstQuestion}
               onClick={handlePreviousQuestion}
             >
               Anterior
@@ -183,7 +169,7 @@ export default function FormPregunta(props){
               type="submit"
               variant="contained"
               color="primary"
-              disabled={props.lastQuestion}
+              disabled={isLastQuestion}
               onClick={handleNextQuestion}
             >
               Siguiente
@@ -192,6 +178,7 @@ export default function FormPregunta(props){
               type="submit"
               variant="contained"
               color="secondary"
+              onClick={finishExam}
             >
             Terminar Examen
             </Button>
