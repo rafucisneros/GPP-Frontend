@@ -10,21 +10,18 @@ import { addToken } from '../helpers/auth.js';
 const LoginPage = () => {
 
     const [error, setError] = useState({});
-    const [usuario] = useState(null);
+    // const [usuario] = useState(null);
 
     const useLogin = (data) => {
       
         login(data)
         .then( response => {
             if (response.status === 200) {
-                console.log("termino")
-                let hola = addToken(response.data.access);
-                console.log(hola)
+                addToken(response.data.access);
                 window.location = "/home";
             }
         })
         .catch((error) => {
-            console.log(error)
             let mensaje = {
                 titulo : 'Ingreso Fallido',
                 mensaje : 'Correo eletrónico o contraseña incorrecta',

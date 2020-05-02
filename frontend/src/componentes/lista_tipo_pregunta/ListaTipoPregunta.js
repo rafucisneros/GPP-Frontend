@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 // componentes
@@ -26,7 +26,7 @@ import AddIcon from '@material-ui/icons/Add';
 // contexts
 import {useTipoPreguntaRespuesta} from '../../context/createTestContext'
 
-export default function ListaTipoPregunta() {
+export default function ListaTipoPregunta({step}) {
 
   const {handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
   const [open, setOpen] = useState();
@@ -63,75 +63,80 @@ export default function ListaTipoPregunta() {
   return(
     <div>
       <List>
-        <ListItem
-          button
-          onClick={ () => handleSubMenuTipoPregunta('1')}
-          selected={itemSeleccionado === '1'}
-        >
-          <ListItemIcon>
-            <PostAddIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Añadir Pregunta</Typography>}
-          />
-          {subMenuTipoPregunta ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-        <Collapse
-            in={subMenuTipoPregunta}
-            timeout="auto"
-            unmountOnExit
-        >
-          <List component="div" disablePadding>
-            <ListItem button style={{paddingLeft : '38px'}} onClick={() => handleOpcionExamen("seleccion_simple", '1.1')} selected={itemSeleccionado === '1.1'}>
-              <ListItemIcon>
-                <CheckIcon />
-              </ListItemIcon>
-              <ListItemText primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Selección Simple</Typography>} />
-            </ListItem>
-            <ListItem button style={{paddingLeft : '38px'}} onClick={() => handleOpcionExamen("seleccion_multiple", '1.2')} selected={itemSeleccionado === '1.2'}>
-              <ListItemIcon>
-                <DoneAllIcon />
-              </ListItemIcon>
-              <ListItemText primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Selección Múltiple</Typography>} />
-            </ListItem>
-            <ListItem button style={{paddingLeft : '38px'}} onClick={() => handleOpcionExamen("verdadero_falso", '1.3')} selected={itemSeleccionado === '1.3'}>
-              <ListItemIcon>
-                <ThumbsUpDownIcon />
-              </ListItemIcon>
-              <ListItemText primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Verdadero / Falso</Typography>} />
-            </ListItem>
-            <ListItem button style={{paddingLeft : '38px'}} onClick={() => handleOpcionExamen("ordenamiento", '1.4')} selected={itemSeleccionado === '1.4'}>
-              <ListItemIcon>
-                <FormatListNumberedIcon />
-              </ListItemIcon>
-              <ListItemText primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Ordenamiento</Typography>} />
-            </ListItem>
-          </List>
-        </Collapse>
-        <ListItem
-          button
-          onClick={ () => handleSeleccionarConfiguraciones()}
-          selected={itemSeleccionado === '2'}
-        >
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Configuraciones</Typography>}
-          />
-        </ListItem>
-        <ListItem
-          button
-          onClick={ () => openModal('3')}
-          selected={itemSeleccionado === '3'}
-        >
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Añadir Contenido </Typography>}
-          />
-        </ListItem>
+        {
+          step === 'step_1' &&
+            <Fragment>
+              <ListItem
+                button
+                onClick={ () => handleSubMenuTipoPregunta('1')}
+                selected={itemSeleccionado === '1'}
+              >
+                <ListItemIcon>
+                  <PostAddIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Añadir Pregunta</Typography>}
+                />
+                {subMenuTipoPregunta ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse
+                  in={subMenuTipoPregunta}
+                  timeout="auto"
+                  unmountOnExit
+              >
+                <List component="div" disablePadding>
+                  <ListItem button style={{paddingLeft : '38px'}} onClick={() => handleOpcionExamen("seleccion_simple", '1.1')} selected={itemSeleccionado === '1.1'}>
+                    <ListItemIcon>
+                      <CheckIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Selección Simple</Typography>} />
+                  </ListItem>
+                  <ListItem button style={{paddingLeft : '38px'}} onClick={() => handleOpcionExamen("seleccion_multiple", '1.2')} selected={itemSeleccionado === '1.2'}>
+                    <ListItemIcon>
+                      <DoneAllIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Selección Múltiple</Typography>} />
+                  </ListItem>
+                  <ListItem button style={{paddingLeft : '38px'}} onClick={() => handleOpcionExamen("verdadero_falso", '1.3')} selected={itemSeleccionado === '1.3'}>
+                    <ListItemIcon>
+                      <ThumbsUpDownIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Verdadero / Falso</Typography>} />
+                  </ListItem>
+                  <ListItem button style={{paddingLeft : '38px'}} onClick={() => handleOpcionExamen("ordenamiento", '1.4')} selected={itemSeleccionado === '1.4'}>
+                    <ListItemIcon>
+                      <FormatListNumberedIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Ordenamiento</Typography>} />
+                  </ListItem>
+                </List>
+              </Collapse>
+              <ListItem
+                button
+                onClick={ () => handleSeleccionarConfiguraciones()}
+                selected={itemSeleccionado === '2'}
+              >
+                <ListItemIcon>
+                  <SettingsIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Configuraciones</Typography>}
+                />
+              </ListItem>
+              <ListItem
+                button
+                onClick={ () => openModal('3')}
+                selected={itemSeleccionado === '3'}
+              >
+                <ListItemIcon>
+                  <AddIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Añadir Contenido </Typography>}
+                />
+              </ListItem>
+            </Fragment>
+        }
         <Link to="home" className="link">
           <ListItem
             button

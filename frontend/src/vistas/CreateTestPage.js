@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 
 // assets
 import '../assets/css/createTestPage.css';
@@ -7,7 +7,8 @@ import '../assets/css/createTestPage.css';
 import RespuestaSeleccion from '../componentes/respuesta_seleccion/RespuestaSeleccion.js';
 import SeleccionarAreaTema from '../componentes/seleccionar_tema/SeleccionarAreaTema.js';
 import PonderacionDificultad from '../componentes/ponderacion_dificultad/PonderacionDificultad.js';
-import ConfiguracionExamen from '../componentes/configuracion_examen/ConfiguracionExamen.js'
+import ConfiguracionBasica from '../componentes/configuracion_examen/ConfiguracionBasica.js'
+import StepConfiguracionDinamica from '../componentes/steps/StepConfiguracionDinamica.js';
 
 // contexts
 import { useTipoPreguntaRespuesta } from '../context/createTestContext';
@@ -15,7 +16,11 @@ import { useGeneral } from '../context/generalContext';
 
 // material
 import Typography from '@material-ui/core/Typography';
+import SaveIcon from '@material-ui/icons/Save';
+import PublishIcon from '@material-ui/icons/Publish';
 import Container from '@material-ui/core/Container';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -25,6 +30,8 @@ export default function CreateTestPage() {
 
   const { setContentMenu } = useGeneral();
   const { tituloRespuesta, tipoPregunta } = useTipoPreguntaRespuesta();
+  const [ step, setStep ] = useState('step_1');
+  const [ tipoConfiguracion, setTipoConfiguracion ] = useState("Configuración Dinámica");
 
   const handleSeleccionarTipoPregunta = () => {
     if ( tipoPregunta === "seleccion_simple" ){
@@ -48,7 +55,11 @@ export default function CreateTestPage() {
     }
   }
 
-  setContentMenu('create_test');
+  const handleChangeStep = (step) => {
+    setStep(step)
+  }
+
+  setContentMenu(`create_test ${step}`);
 
   return (
       <div>
@@ -59,69 +70,127 @@ export default function CreateTestPage() {
 
               { tipoPregunta !== 'configuracion' ?
                 <Fragment>
-                  <Grid item xs={12}>
-                      <Paper className="paper-crear-test" style={{display : 'contents'}}>
-                        <Box className="flex-box-titulo">
-                          <Box style={{height : 'auto'}}>
-                            <Typography variant="h6">
-                              {tituloRespuesta}
-                            </Typography>
+                  { step === 'step_1' ?
+                    <Fragment>
+                    <Grid item xs={12}>
+                        <Paper className="paper-crear-test" style={{display : 'contents'}}>
+                          <Box className="flex-box-titulo">
+                            <Box style={{height : 'auto'}}>
+                              <Typography variant="h6">
+                                Paso - Creación Examen ({tipoConfiguracion}) - {tituloRespuesta}
+                              </Typography>
+                            </Box>
+                            <Box >
+                              <Button
+                                style={{background:"#7e5ca8", color : "white", marginRight: '8px'}}
+                                type="submit"
+                                variant="contained"
+                                color="red"
+                                endIcon={<SaveIcon/>}
+                              >
+                                Guardado Automático
+                              </Button>
+                              <Button
+                                style={{background:"#ff4949", color : "white"}}
+                                type="submit"
+                                variant="contained"
+                                color="red"
+                                onClick={ () => handleChangeStep(tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_3' )}
+                                endIcon={<NavigateNextIcon/>}
+                              >
+                                Siguiente Paso
+                              </Button>
+                            </Box>
                           </Box>
-                          <Box >
+                        </Paper>
+                    </Grid>
+
+                    <Grid item lg={9} sm={9} xl={9} xs={9}>
+                      <Paper className="paper-crear-test" style={{height : '100%'}}>
+                        Enfoque
+                        <SeleccionarAreaTema/>
+                      </Paper>
+                    </Grid>
+
+                    <Grid item lg={3} sm={3} xl={3} xs={3}>
+                      <Paper className="paper-crear-test" style={{height : '100%'}}>
+                        Evaluación
+                        <PonderacionDificultad/>
+                      </Paper>
+                    </Grid>
+
+                      { handleSeleccionarTipoPregunta() }
+
+                    <Grid item xs={12} md={12} lg={12}>
+                      <Paper className="paper-crear-test">
+                          <Box className="div-buttons-respuestas">
                             <Button
-                              style={{background:"#ff4949", color : "white"}}
                               type="submit"
                               variant="contained"
-                              color="red"
+                              color="primary"
+                              style={{marginRight: '8px'}}
                             >
-                              Publicar Examen
+                              Crear Pregunta
+                            </Button>
+                            <Button
+                              type="submit"
+                              variant="contained"
+                              color="secondary"
+                            >
+                              Eliminar Pregunta
                             </Button>
                           </Box>
-                        </Box>
                       </Paper>
-                  </Grid>
-
-                  <Grid item lg={9} sm={9} xl={9} xs={9}>
-                    <Paper className="paper-crear-test" style={{height : '100%'}}>
-                      Enfoque
-                      <SeleccionarAreaTema/>
-                    </Paper>
-                  </Grid>
-
-                  <Grid item lg={3} sm={3} xl={3} xs={3}>
-                    <Paper className="paper-crear-test" style={{height : '100%'}}>
-                      Evaluación
-                      <PonderacionDificultad/>
-                    </Paper>
-                  </Grid>
-
-                    { handleSeleccionarTipoPregunta() }
-
-                  <Grid item xs={12} md={12} lg={12}>
-                    <Paper className="paper-crear-test">
-                        <Box className="div-buttons-respuestas">
-                          <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            style={{marginRight: '8px'}}
-                          >
-                            Crear Pregunta
-                          </Button>
-                          <Button
-                            type="submit"
-                            variant="contained"
-                            color="secondary"
-                          >
-                            Eliminar Pregunta
-                          </Button>
-                        </Box>
-                    </Paper>
-                  </Grid> 
-                </Fragment>
+                    </Grid> 
+                    </Fragment>
+                    : step === 'step_2' ?
+                      <StepConfiguracionDinamica
+                        step = {step}
+                        handleChangeStep = {handleChangeStep}
+                        tipoConfiguracion = {tipoConfiguracion}
+                      />
+                      : step === 'step_3' &&
+                        <Grid item xs={12}>
+                        <Paper className="paper-crear-test" style={{display : 'contents'}}>
+                          <Box className="flex-box-titulo">
+                            <Box style={{height : 'auto'}}>
+                              <Typography variant="h6">
+                                Paso - Asignar Secciones
+                              </Typography>
+                            </Box>
+                            <Box >
+                              <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                style={{marginRight: '8px'}}
+                                onClick={ () => handleChangeStep( tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_1')}
+                                endIcon={<NavigateBeforeIcon/>}
+                              >
+                                Paso Anterior
+                              </Button>
+                              <Button
+                                style={{background:"#ff4949", color : "white"}}
+                                type="submit"
+                                variant="contained"
+                                color="red"
+                                onClick={ () => handleChangeStep('step_3')}
+                                endIcon={<PublishIcon/>}
+                              >
+                                Publicar Examen
+                              </Button>
+                            </Box>
+                          </Box>
+                        </Paper>
+                        </Grid>
+                    }
+                  </Fragment>
                 :
                   <Grid item xs={12} md={12} lg={12}>
-                    <ConfiguracionExamen/>
+                    <ConfiguracionBasica 
+                      tipoConfiguracion = {tipoConfiguracion}
+                      setTipoConfiguracion = {setTipoConfiguracion}
+                    />
                   </Grid>
               }
             </Grid>
