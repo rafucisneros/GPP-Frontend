@@ -229,7 +229,7 @@ const StepConfiguracionDinamica = (props) => {
                                 <FormControl required variant="outlined" style={{textAlignLast: 'center'}} className={classes.formControl}>
                                     <InputLabel>Enfoque de las preguntas</InputLabel>
                                     <Select
-                                        label="Enfoque"
+                                        label="Enfoque de las preguntas "
                                         value={tipoPreguntaSeleccionado}
                                         MenuProps={MenuProps}
                                         onChange={handleTipoPregunta} 
