@@ -1,31 +1,31 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import PropTypes from 'prop-types';
+// import moment from 'moment';
+
+// material
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardActions,
-  Grid,
-  Divider,
-  Switch,
-  Button,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+    Card,
+    CardHeader,
+    CardContent,
+    CardActions,
+    Grid,
+    Divider,
+    Switch,
+    Button,
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
 } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
 import MomentUtils from '@date-io/moment';
-// import moment from 'moment';
-
 import {
-  DateTimePicker,
-  MuiPickersUtilsProvider,
+    DateTimePicker,
+    MuiPickersUtilsProvider,
 } from '@material-ui/pickers'
-
-import { makeStyles } from '@material-ui/core/styles';
 
 const tituloTooltip = "El modo estático le permitirá mostrar el examen en el orden que usted desee. En el modo dinámico el examen será mostrado de manera aleatoria de acuerdo a las configuraciones introucidas."
 
@@ -64,15 +64,11 @@ const MenuProps = {
     },
 };
 
-const Configuracion = props => {
-
-    // const { className, ...rest } = props;
-    // const classes = useStyles();
+const ConfiguracionBasica = ({tipoConfiguracion, setTipoConfiguracion}) => {
 
     const classes = useStyles();
 
-    const [switchChecked, setSwitchChecked] = useState(false);
-    const [tipoConfiguracion, setTipoConfiguracion] = useState("Configuración Estática");
+    const [switchChecked, setSwitchChecked] = useState(true);
     const [numeroSeccionSeleccionado, setNumeroSeccionSeleccionado] = useState(null); 
     const [valorFechaInicio, setValorFechaInicio] = useState( new Date() );
     const [valorFechaFin, setValorFechaFin] = useState( new Date() );
@@ -89,7 +85,16 @@ const Configuracion = props => {
         if (switchChecked) setTipoConfiguracion("Configuración Dinámica");
         else setTipoConfiguracion("Configuración Estática");
         
-      }, [switchChecked])
+    }, [switchChecked, setTipoConfiguracion])
+
+    useEffect(() => {
+        let tipo = tipoConfiguracion;
+        setTipoConfiguracion(tipo);
+
+        if (tipo === "Configuración Dinámica") setSwitchChecked(true);
+        else setSwitchChecked(false);
+        
+    }, [tipoConfiguracion, setTipoConfiguracion])
 
     return (
         <Card>
@@ -156,23 +161,18 @@ const Configuracion = props => {
                     <Grid container spacing={2}>
                         <Grid item xs={6} md={6} lg={6}>
                             <TextField
-                                id={`numero-secciones`}
-                                type="number"
+                                id={`titulo`}
+                                type="text"
                                 margin="normal"
-                                label="Número de Secciones"
+                                label="Título del Examen"
                                 required
                                 variant="outlined"
                                 fullWidth
-                                name={`numero_secciones`}
+                                name={`titulo`}
                                 autoFocus
                                 InputLabelProps={{
-                                shrink: true,
+                                    shrink: true,
                                 }}
-                                InputProps={{
-                                inputProps: { 
-                                    max: 100, min: 0, step : 1
-                                }}}
-
                             />
                         </Grid>
                         <Grid item xs={6} md={6} lg={6}>
@@ -225,8 +225,8 @@ const Configuracion = props => {
     )
 }
 
-Configuracion.propTypes = {
+ConfiguracionBasica.propTypes = {
     className: PropTypes.string
 };
-  
-export default Configuracion;
+
+export default ConfiguracionBasica;

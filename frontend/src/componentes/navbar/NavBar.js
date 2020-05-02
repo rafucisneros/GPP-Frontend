@@ -198,7 +198,7 @@ const NavBar = ({children}) => {
                 </Fragment>
             }
             
-            { contentMenu === 'create_test' &&
+            { contentMenu.split(' ')[0] === 'create_test' &&
                 <Fragment>
                     <div className="toolbar-icono">
                         Menú del Examen
@@ -207,10 +207,12 @@ const NavBar = ({children}) => {
                         </IconButton>
                     </div>
                     <Divider/>
-                    <ListaTipoPregunta/>
+                    <ListaTipoPregunta step = {contentMenu.split(' ')[1]}/>
     
                     <Divider/>
-                    <ListaPreguntasExamen/>
+                    {
+                        contentMenu.split(' ')[1] === 'step_1' && <ListaPreguntasExamen/>
+                    }
                 </Fragment>
             }
 
