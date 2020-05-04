@@ -1,11 +1,11 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 // import uuid from 'uuid/v1';
 // import moment from 'moment';
 // import PerfectScrollbar from 'react-perfect-scrollbar';
 import MaterialTable from "material-table";
 import { createMuiTheme } from '@material-ui/core/styles';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
     palette: {
@@ -18,13 +18,45 @@ const theme = createMuiTheme({
 });
 
 const ListaEstudiantes = props => {
-    const { className, secciones, seccionSeleccionada, estudiantes, handleAgregarEstudiante, ...rest } = props;
+    const { 
+        className, 
+        secciones, 
+        seccionSeleccionada, 
+        estudiantes, 
+        handleAgregarEstudiante, 
+        handleUpdateSecciones,
+        ...rest 
+    } = props;
     // const [ estudiantes, handleAgregarEstudiante ] = useState(res);
     // const [selectedUsers, setSelectedUsers] = useState([]);
     const [columns, setColumns] = useState([
         { title: 'Nombre', field: 'name' },
         { title: 'Correo Electrónico', field: 'email' },
     ]);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        let identidad = (x) => x;
+        setData([...estudiantes].map(identidad));
+    }, [])
+
+    useEffect(() => {
+        let auxEstudiantes = [...data];
+        if (seccionSeleccionada) {
+            let finalData = auxEstudiantes.filter(value => {
+                for( let estudiante of seccionSeleccionada.estudiantes ){
+                    if(estudiante.email === value.email) {
+                        estudiante.tableData.checked = true;
+                        return estudiante;
+                    }
+                }
+                value.tableData.checked = false;
+                return value;
+            })
+            setData(finalData)
+        } 
+        
+    }, [seccionSeleccionada])
 
     return (
         <Fragment>
@@ -33,7 +65,7 @@ const ListaEstudiantes = props => {
                     <MaterialTable
                         title="Lista de Estudiantes"
                         columns={columns}
-                        data={estudiantes}
+                        data={[...data]}
                         options={{
                             grouping: true,
                             selection: true,
@@ -42,10 +74,11 @@ const ListaEstudiantes = props => {
                             showSelectAllCheckbox: false,
                             actionsColumnIndex: -1,
                             rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? 'rgb(238, 238, 238)' : '' }),
-                            // selectionProps: rowData => ({
-                            //     checked: rowData.name === 'Andrés Buelvas',
-                            //     color: 'primary'
-                            // })
+                            // selectionProps: rowData => ( console.log(rowData), ({
+                            //     checked: rowData.tableData.checked,
+                            //     color: 'secondary',
+                            //     // disabled: rowData.tableData.checked
+                            // }))
                         }}
                         localization={{
                             body: {
@@ -81,13 +114,23 @@ const ListaEstudiantes = props => {
                                 lastTooltip: 'Última Página'
                             }
                         }}
-                        // onSelectionChange={(rows) => alert('You selected ' + rows.length + ' rows')}
+                        onSelectionChange={(rows) => {
+                            new Promise((resolve) => {
+                                setTimeout(() => {
+                                    let nuevaSeccion = [...secciones];
+                                    for( let seccion of nuevaSeccion){
+                                        if (seccion.id === props.seccionSeleccionada.id) {
+                                            seccion.estudiantes = rows;
+                                            break;
+                                        }    
+                                    }
+                                    resolve();
+                                    handleUpdateSecciones(nuevaSeccion);
+
+                                }, 600);
+                            })
+                        }}
                         actions={[
-                            // {
-                            //     icon: 'save',
-                            //     tooltip: 'Save User',
-                            //     onClick: (event, rowData) => alert("You saved " + rowData.name)
-                            // },
                             {
                                 icon: 'delete',
                                 tooltip: 'Eliminar Elemento',
@@ -100,20 +143,20 @@ const ListaEstudiantes = props => {
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     resolve();
-                                    const data = [...estudiantes];
-                                    data.push(newData);
-                                    handleAgregarEstudiante(data);
+                                    const auxData = [...estudiantes];
+                                    auxData.push(newData);
+                                    handleAgregarEstudiante(auxData);
                                     
-                                }, 1000);
+                                }, 600);
                             }),
                             // onRowUpdate: (newData, oldData) =>
                             // new Promise((resolve) => {
                             //     setTimeout(() => {
                             //         if (oldData) {
                             //             setState(() => {
-                            //             const data = [...prevState.data];
-                            //             data[data.indexOf(oldData)] = newData;
-                            //             return { ...prevState, data };
+                            //             const auxData = [...prevState.auxData];
+                            //             auxData[auxData.indexOf(oldData)] = newData;
+                            //             return { ...prevState, auxData };
                             //             });
                             //         }
                             //         resolve();
@@ -122,10 +165,22 @@ const ListaEstudiantes = props => {
                             onRowDelete: (oldData) =>
                             new Promise((resolve) => {
                                 setTimeout(() => {
+                                    const auxData = [...estudiantes];
+                                    const nuevaSeccion = [...secciones];
+
+                                    auxData.splice(auxData.indexOf(oldData), 1);
+
+                                    for( let seccion of nuevaSeccion ){
+                                        if (seccion.id === props.seccionSeleccionada.id) {
+                                            seccion.estudiantes.splice(seccion.estudiantes.indexOf(oldData), 1);
+                                            break;
+                                        }    
+                                    }
+
+                                    handleAgregarEstudiante(auxData);
                                     resolve();
-                                    const data = [...estudiantes];
-                                    data.splice(data.indexOf(oldData), 1);
-                                    handleAgregarEstudiante(data);
+                                    handleUpdateSecciones(nuevaSeccion);
+                                    
                                 }, 1000);
                             }),
                         }}
@@ -138,7 +193,7 @@ const ListaEstudiantes = props => {
 
 ListaEstudiantes.propTypes = {
     className: PropTypes.string,
-    estudiantes: PropTypes.array.isRequired
+    // estudiantes: PropTypes.array.isRequired
 };
 
 export default ListaEstudiantes;

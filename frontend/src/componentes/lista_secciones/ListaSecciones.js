@@ -73,7 +73,7 @@ const ListaSecciones = (props) => {
                     >
                     <ListItemText
                         primary={`Sección ${index + 1}`}
-                        secondary={`${item.estudiantes.length} estudiantes escogidos`}
+                        secondary={`${item.estudiantes.length} estudiante(s) escogido(s)`}
                     />
                     <IconButton
                         edge="end"

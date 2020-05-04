@@ -69,6 +69,7 @@ const StepSecciones = (props) => {
     const [ secciones, setSecciones ] = useState([]);
     const [ seccionSeleccionada, setSeccionSeleccionada] = useState(null);
     const [ estudiantes, setEstudiantes ] = useState(res);
+    // const [ estudiantes, setEstudiantes ] = useState(res);
 
     const handleAgregarEstudiante = (estudiante) => {
         setEstudiantes(estudiante);
@@ -83,6 +84,10 @@ const StepSecciones = (props) => {
                 }    
             }
         }
+    }
+
+    const handleUpdateSecciones = (item) => {
+        setSecciones(item);
     }
 
     const handleAgregarSecciones = () => {
@@ -150,7 +155,8 @@ const StepSecciones = (props) => {
                             secciones = {secciones}
                             seccionSeleccionada = {seccionSeleccionada}
                             handleAgregarEstudiante = {handleAgregarEstudiante}
-                            estudiantes = {estudiantes}
+                            estudiantes = {[...estudiantes]}
+                            handleUpdateSecciones = {handleUpdateSecciones}
                         />
                     </Grid>
                 </Grid>
