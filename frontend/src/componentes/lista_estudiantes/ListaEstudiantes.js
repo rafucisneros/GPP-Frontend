@@ -30,31 +30,57 @@ const ListaEstudiantes = props => {
     // const [ estudiantes, handleAgregarEstudiante ] = useState(res);
     // const [selectedUsers, setSelectedUsers] = useState([]);
     const [columns, setColumns] = useState([
-        { title: 'Nombre', field: 'name' },
+        { title: 'Nombre', field: 'name', defaultSort : 'asc' },
         { title: 'Correo Electrónico', field: 'email' },
     ]);
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        let identidad = (x) => x;
-        setData([...estudiantes].map(identidad));
+        const aux = estudiantes.map( value => { return {...value} })
+        setData(aux);
     }, [])
 
     useEffect(() => {
-        let auxEstudiantes = [...data];
+        let auxEstudiantes = estudiantes.map( value => { return {...value} });
         if (seccionSeleccionada) {
-            let finalData = auxEstudiantes.filter(value => {
-                for( let estudiante of seccionSeleccionada.estudiantes ){
-                    if(estudiante.email === value.email) {
-                        estudiante.tableData.checked = true;
-                        return estudiante;
+            let finalData = [];
+            let lenSecciones = secciones.length;
+            for(let estudiante of auxEstudiantes){
+                let encontrado = false;
+                let count = 0;
+                for(let seccion of secciones) {
+                    if(seccionSeleccionada.id === seccion.id){
+                        for( let estudianteSeleccionado of seccionSeleccionada.estudiantes) {
+                            if(estudianteSeleccionado.email === estudiante.email) {
+                                estudiante.tableData = {};
+                                estudiante.tableData.checked = true;
+                                finalData.push(estudiante);
+                                encontrado = true;
+                                break;
+                            }
+                        }
+                    } else if (seccionSeleccionada.id !== seccion.id) {
+                        for( let estudianteNoSeleccionado of seccion.estudiantes) {
+                            if(estudianteNoSeleccionado.email === estudiante.email) {
+                                encontrado = true;
+                                break;
+                            }
+                        }
+                    } 
+                    count++;
+                    if (encontrado) {
+                        break;
+                    } else {
+                        if(count === lenSecciones){
+                            estudiante.tableData = {};
+                            estudiante.tableData.checked = false;
+                            finalData.push(estudiante);
+                        }
                     }
                 }
-                value.tableData.checked = false;
-                return value;
-            })
-            setData(finalData)
-        } 
+            }
+            setData(finalData);
+        }
         
     }, [seccionSeleccionada])
 

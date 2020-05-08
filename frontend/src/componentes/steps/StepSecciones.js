@@ -19,7 +19,7 @@ const res = [
         name : 'Andrés Buelvas', email : '13-10184@usb.ve'
     },
     { 
-        name : 'Ritces Parra', email : ''
+        name : 'Ritces Parra', email : 'ritces.parra@gmail.com'
     },
     { 
         name : 'Jefferson Gutierritos', email : 'jefferson@usb.ve'
@@ -28,48 +28,47 @@ const res = [
         name : 'Alvin Yakitori', email : 'alvin@usb.ve'
     },
     { 
-        name : 'Donato Bracuto', email : 'seccion_5'
+        name : 'Donato Bracuto', email : 'seccion_5@usb.ve'
     },
     { 
-        name : 'Rafael Cisneros', email : 'seccion_6'
+        name : 'Rafael Cisneros', email : 'seccion_6@usb.ve'
     },
     { 
-        name : 'Miguel Canedo', email : 'seccion_7'
+        name : 'Miguel Canedo', email : 'seccion_7@usb.ve'
     },
     { 
-        name : 'Carolina Martínez', email : 'seccion_8'
+        name : 'Carolina Martínez', email : 'seccion_8@usb.ve'
     },
     { 
-        name : 'Andrés Buelvas', email : '13-10184@usb.ve'
+        name : 'Andrés Buelvas', email : '13-10184_v2@usb.ve'
     },
     { 
-        name : 'Ritces Parra', email : ''
+        name : 'Ritces Parra', email : 'ritces.parra_v2@gmail.com'
     },
     { 
-        name : 'Jefferson Gutierritos', email : 'jefferson@usb.ve'
+        name : 'Jefferson Gutierritos', email : 'jefferson_v2@usb.ve'
     },
     { 
-        name : 'Alvin Yakitori', email : 'alvin@usb.ve'
+        name : 'Alvin Yakitori', email : 'alvin_v2@usb.ve'
     },
     { 
-        name : 'Donato Bracuto', email : 'seccion_5'
+        name : 'Donato Bracuto', email : 'seccion_5_v2@usb.ve'
     },
     { 
-        name : 'Rafael Cisneros', email : 'seccion_6'
+        name : 'Rafael Cisneros', email : 'seccion_6_v2@usb.ve'
     },
     { 
-        name : 'Miguel Canedo', email : 'seccion_7'
+        name : 'Miguel Canedo', email : 'seccion_7_v2@usb.ve'
     },
     { 
-        name : 'Carolina Martínez', email : 'seccion_8'
+        name : 'Carolina Martínez', email : 'seccion_8_v2@usb.ve'
     },
 ]
 
 const StepSecciones = (props) => {
     const [ secciones, setSecciones ] = useState([]);
     const [ seccionSeleccionada, setSeccionSeleccionada] = useState(null);
-    const [ estudiantes, setEstudiantes ] = useState(res);
-    // const [ estudiantes, setEstudiantes ] = useState(res);
+    const [ estudiantes, setEstudiantes ] = useState([...res]);
 
     const handleAgregarEstudiante = (estudiante) => {
         setEstudiantes(estudiante);
