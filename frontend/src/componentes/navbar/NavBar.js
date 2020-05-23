@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
 // componentes
-import ListaTipoPregunta from '../../componentes/lista_tipo_pregunta/ListaTipoPregunta.js';
-import ListaPreguntasExamen from '../../componentes/lista_preguntas_examen/ListaPreguntasExamen.js';
+import MenuCreateTest from '../../componentes/menu_create_test/MenuCreateTest.js';
+import ListaPreguntasExamen from '../../componentes/menu_create_test/ListaPreguntasExamen.js';
 
 // contexts
 import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
@@ -31,6 +31,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import ListItem from '@material-ui/core/ListItem';
+import EditIcon from '@material-ui/icons/Edit';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
@@ -43,45 +44,45 @@ import CloseIcon from '@material-ui/icons/Close';
 // constants
 const drawerWidth = 240;
 const useStyle = makeStyles(theme => ({
-  appBar: {
-      zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-      }),
-  },
-  appBarShift: {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-      }),
-  },
-  drawerPaper: {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: drawerWidth,
-      overflowY : 'auto',
-      transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen}),
-      height: '100vh',
-      backgroundColor : '#fcfcfc',  
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    drawerPaper: {
+        position: 'relative',
+        whiteSpace: 'nowrap',
+        width: drawerWidth,
+        overflowY : 'auto',
+        transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen}),
+        height: '100vh',
+        backgroundColor : '#fcfcfc',  
     //   maxHeight : 750
 
-  },
-  drawerPaperClose: {
-      overflowX: 'hidden',
-      transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: 0,
-      // [theme.breakpoints.up('sm')]: {
-      // width: theme.spacing(9),
-      // },
-  },
+    },
+    drawerPaperClose: {
+        overflowX: 'hidden',
+        transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+        }),
+        width: 0,
+        // [theme.breakpoints.up('sm')]: {
+        // width: theme.spacing(9),
+        // },
+    },
 }))
 
 const NavBar = ({children}) => {
@@ -187,6 +188,18 @@ const NavBar = ({children}) => {
                                 button  
                             >
                                 <ListItemIcon>
+                                    <EditIcon />
+                                </ListItemIcon>
+                                <ListItemText 
+                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Editar Examenes </Typography>}
+                                />
+                            </ListItem>
+                        </Link>
+                        <Link to={"create_classroom"} className='link'>
+                            <ListItem
+                                button  
+                            >
+                                <ListItemIcon>
                                     <GroupAddIcon />
                                 </ListItemIcon>
                                 <ListItemText 
@@ -207,7 +220,7 @@ const NavBar = ({children}) => {
                         </IconButton>
                     </div>
                     <Divider/>
-                    <ListaTipoPregunta step = {contentMenu.split(' ')[1]}/>
+                    <MenuCreateTest step = {contentMenu.split(' ')[1]}/>
     
                     <Divider/>
                     {

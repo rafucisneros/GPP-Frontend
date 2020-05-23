@@ -1,200 +1,210 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 
 // assets
 import '../assets/css/createTestPage.css';
 
-// componentes
-import RespuestaSeleccion from '../componentes/respuesta_seleccion/RespuestaSeleccion.js';
-import SeleccionarAreaTema from '../componentes/seleccionar_tema/SeleccionarAreaTema.js';
-import PonderacionDificultad from '../componentes/ponderacion_dificultad/PonderacionDificultad.js';
-import ConfiguracionBasica from '../componentes/configuracion_examen/ConfiguracionBasica.js'
+// Steps
+import StepConfiguracionBasica from '../componentes/steps/StepConfiguracionBasica.js';
+import StepCrearPreguntas from '../componentes/steps/StepCrearPreguntas.js';
 import StepConfiguracionDinamica from '../componentes/steps/StepConfiguracionDinamica.js';
+import StepSecciones from '../componentes/steps/StepSecciones.js';
 
 // contexts
-import { useTipoPreguntaRespuesta } from '../context/createTestContext';
 import { useGeneral } from '../context/generalContext';
+import { useUsuario } from '../context/usuarioContext.js';
 
 // material
-import Typography from '@material-ui/core/Typography';
-import SaveIcon from '@material-ui/icons/Save';
-import PublishIcon from '@material-ui/icons/Publish';
 import Container from '@material-ui/core/Container';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
+
+// servicios
+import { createTest, getStudents, postSecciones } from '../servicios/servicioCrearExamen.js';
 
 export default function CreateTestPage() {
 
-  const { setContentMenu } = useGeneral();
-  const { tituloRespuesta, tipoPregunta } = useTipoPreguntaRespuesta();
-  const [ step, setStep ] = useState('step_1');
-  const [ tipoConfiguracion, setTipoConfiguracion ] = useState("Configuración Dinámica");
+    // Página
+    const { setContentMenu } = useGeneral();
+    const [ step, setStep ] = useState('step_0');
+    const [ tipoConfiguracion, setTipoConfiguracion ] = useState("Configuración Dinámica");
+    const [ exam_id, SetExamId ] = useState(null);
+    const { usuario } = useUsuario();
 
-  const handleSeleccionarTipoPregunta = () => {
-    if ( tipoPregunta === "seleccion_simple" ){
-      return(
-        <RespuestaSeleccion key={`${tipoPregunta}`} />
-      )
-    } else if ( tipoPregunta === "seleccion_multiple")  {
-      return (
-        <RespuestaSeleccion key={`${tipoPregunta}`} />
-      )
-    } else if ( tipoPregunta === "verdadero_falso" ) {
-      return (
-        <RespuestaSeleccion key={`${tipoPregunta}`} />
-      )
-    } else if ( tipoPregunta === "ordenamiento" ) {
-      return (
-        <RespuestaSeleccion key={`${tipoPregunta}`} />
-      )
-    } else {
-      return(<div></div>)
+    // Configuracion Basica
+    const [switchChecked, setSwitchChecked] = useState(true);
+    const [duracion, setDuracion] = useState(null); 
+    const [valorFechaInicio, setValorFechaInicio] = useState( moment().toDate() );
+    const [valorFechaFin, setValorFechaFin] = useState( moment().add(1, 'd').toDate() );
+    const [titulo, setTitulo] = useState(null);
+    const [comentarios, setComentarios] = useState(null);
+
+    // Secciones
+    const [estudiantes, setEstudiantes] = useState([]);
+    const [secciones, setSecciones] = useState([]);
+    const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
+
+    const handleCambiarValor = (e) => {
+        if (e.target.name === 'duracion') setDuracion(e.target.value);
+        else if (e.target.name === 'comentarios') setComentarios(e.target.value);
+        else if (e.target.name === 'titulo') setTitulo(e.target.value);
+        
+    };
+
+    const handleCambiarSwitch = () =>{
+        setSwitchChecked(!switchChecked);
     }
-  }
 
-  const handleChangeStep = (step) => {
-    setStep(step)
-  }
+    const handleChangeStartDate = (e) =>{
+        setValorFechaInicio(e.toDate());
+    }
 
-  setContentMenu(`create_test ${step}`);
+    const handleChangeFinishDate = (e) =>{
+        setValorFechaFin(e.toDate());
+    }
 
-  return (
-      <div>
-        <div className="toolbar-icono"/>
+    const handleUpdateSecciones = (item) => {
+        setSecciones(item);
+    }
 
-        <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}>
-            <Grid container spacing={2}>
+    const handleChangeSeccionSeleccionada = (item) => {
+        setSeccionSeleccionada(item);
+    }
 
-              { tipoPregunta !== 'configuracion' ?
-                <Fragment>
-                  { step === 'step_1' ?
-                    <Fragment>
-                    <Grid item xs={12}>
-                        <Paper className="paper-crear-test" style={{display : 'contents'}}>
-                          <Box className="flex-box-titulo">
-                            <Box style={{height : 'auto'}}>
-                              <Typography variant="h6">
-                                Paso - Creación Examen ({tipoConfiguracion}) - {tituloRespuesta}
-                              </Typography>
-                            </Box>
-                            <Box >
-                              <Button
-                                style={{background:"#7e5ca8", color : "white", marginRight: '8px'}}
-                                type="submit"
-                                variant="contained"
-                                color="red"
-                                endIcon={<SaveIcon/>}
-                              >
-                                Guardado Automático
-                              </Button>
-                              <Button
-                                style={{background:"#ff4949", color : "white"}}
-                                type="submit"
-                                variant="contained"
-                                color="red"
-                                onClick={ () => handleChangeStep(tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_3' )}
-                                endIcon={<NavigateNextIcon/>}
-                              >
-                                Siguiente Paso
-                              </Button>
-                            </Box>
-                          </Box>
-                        </Paper>
-                    </Grid>
+    const handleChangeEstudiantes = (estudiantes) => {
+        setEstudiantes(estudiantes);
+    }
 
-                    <Grid item lg={9} sm={9} xl={9} xs={9}>
-                      <Paper className="paper-crear-test" style={{height : '100%'}}>
-                        Enfoque
-                        <SeleccionarAreaTema/>
-                      </Paper>
-                    </Grid>
+    // POSTS REQUEST 
+    const sendSectionsData = () => {
+        let data = {};
+        secciones.forEach( seccion => {
+            if (seccion) {
+                let students = seccion.estudiantes.map( estudiante => {
+                    return estudiante.email;
+                })
+                data[`${seccion.id}`] = students;
+            }
+        })
+        let request = { sections : data }
+        // postSecciones(request, exam_id)
+        // .then( res => {
+        //     console.log(res)
+        //     if (res) {
+        //         console.log("Update Secciones")
+        //     }
+        // })
+    }
 
-                    <Grid item lg={3} sm={3} xl={3} xs={3}>
-                      <Paper className="paper-crear-test" style={{height : '100%'}}>
-                        Evaluación
-                        <PonderacionDificultad/>
-                      </Paper>
-                    </Grid>
+    const sendInitialData = (step) => {
+        // let request = {
+        //     name : titulo,
+        //     start_date : moment(valorFechaInicio).toISOString(),
+        //     finish_date : moment(valorFechaFin).toISOString(),
+        //     duration : duracion,
+        //     description : comentarios,
+        //     static : switchChecked,
+        //     email : usuario.email,
+        //     status : true
+        // }
+        // createTest(request)
+        // .then( res => {
+        //     console.log(res)
+        //     if (res) {
+        //         SetExamId(res.data.id);
+                handleChangeStep(step);
+        //     }
+        // })
+    }
 
-                      { handleSeleccionarTipoPregunta() }
+    // GETS REQUEST 
+    useEffect(() => {
+        getStudents()
+        .then( res => {
+            if (res) setEstudiantes(res.data.results);
+        })
+    }, [])
 
-                    <Grid item xs={12} md={12} lg={12}>
-                      <Paper className="paper-crear-test">
-                          <Box className="div-buttons-respuestas">
-                            <Button
-                              type="submit"
-                              variant="contained"
-                              color="primary"
-                              style={{marginRight: '8px'}}
-                            >
-                              Crear Pregunta
-                            </Button>
-                            <Button
-                              type="submit"
-                              variant="contained"
-                              color="secondary"
-                            >
-                              Eliminar Pregunta
-                            </Button>
-                          </Box>
-                      </Paper>
-                    </Grid> 
-                    </Fragment>
-                    : step === 'step_2' ?
-                      <StepConfiguracionDinamica
-                        step = {step}
-                        handleChangeStep = {handleChangeStep}
-                        tipoConfiguracion = {tipoConfiguracion}
-                      />
-                      : step === 'step_3' &&
-                        <Grid item xs={12}>
-                        <Paper className="paper-crear-test" style={{display : 'contents'}}>
-                          <Box className="flex-box-titulo">
-                            <Box style={{height : 'auto'}}>
-                              <Typography variant="h6">
-                                Paso - Asignar Secciones
-                              </Typography>
-                            </Box>
-                            <Box >
-                              <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                style={{marginRight: '8px'}}
-                                onClick={ () => handleChangeStep( tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_1')}
-                                endIcon={<NavigateBeforeIcon/>}
-                              >
-                                Paso Anterior
-                              </Button>
-                              <Button
-                                style={{background:"#ff4949", color : "white"}}
-                                type="submit"
-                                variant="contained"
-                                color="red"
-                                onClick={ () => handleChangeStep('step_3')}
-                                endIcon={<PublishIcon/>}
-                              >
-                                Publicar Examen
-                              </Button>
-                            </Box>
-                          </Box>
-                        </Paper>
-                        </Grid>
+    useEffect(() => {
+        if (switchChecked) setTipoConfiguracion("Configuración Dinámica");
+        else setTipoConfiguracion("Configuración Estática");
+        
+    }, [switchChecked, setTipoConfiguracion])
+
+    useEffect(() => {
+        let tipo = tipoConfiguracion;
+        setTipoConfiguracion(tipo);
+
+        if (tipo === "Configuración Dinámica") setSwitchChecked(true);
+        else setSwitchChecked(false);
+        
+    }, [tipoConfiguracion, setTipoConfiguracion])
+
+
+
+    const handleChangeStep = (step) => {
+        setStep(step)
+    }
+
+    setContentMenu(`create_test ${step}`);
+
+    return (
+        <div>
+            <div className="toolbar-icono"/>
+            <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}>
+                <Grid container spacing={2}>
+                    { 
+                        step === 'step_0' ?
+                            <Grid item xs={12} md={12} lg={12}>
+                                <StepConfiguracionBasica 
+                                tipoConfiguracion = {tipoConfiguracion}
+                                setTipoConfiguracion = {setTipoConfiguracion}
+                                handleChangeStep = {handleChangeStep}
+                                handleCambiarValor = {handleCambiarValor}
+                                handleCambiarSwitch = {handleCambiarSwitch}
+                                sendInitialData = {sendInitialData}
+                                switchChecked = {switchChecked}
+                                duracion = {duracion}
+                                valorFechaInicio = {valorFechaInicio}
+                                valorFechaFin = {valorFechaFin}
+                                titulo = {titulo}
+                                comentarios = {comentarios}
+                                handleChangeStartDate = {handleChangeStartDate}
+                                handleChangeFinishDate = {handleChangeFinishDate}
+                                exam_id = {exam_id}
+                                />
+                            </Grid>
+                        : step === 'step_1' ?
+                            <StepCrearPreguntas
+                                step = {step}
+                                handleChangeStep = {handleChangeStep}
+                                tipoConfiguracion = {tipoConfiguracion}
+                                tipoConfiguracion = {tipoConfiguracion}
+                                exam_id = {exam_id}
+                            />
+                        : step === 'step_2' ?
+                            <StepConfiguracionDinamica
+                                step = {step}
+                                handleChangeStep = {handleChangeStep}
+                                tipoConfiguracion = {tipoConfiguracion}
+                                exam_id = {exam_id}
+                            />
+                        : step === 'step_3' &&
+                            <StepSecciones
+                                step = {step}
+                                estudiantes = {estudiantes}
+                                secciones = {secciones}
+                                seccionSeleccionada = {seccionSeleccionada}
+                                handleChangeStep = {handleChangeStep}
+                                handleUpdateSecciones = {handleUpdateSecciones}
+                                handleChangeSeccionSeleccionada = {handleChangeSeccionSeleccionada}
+                                handleChangeEstudiantes = {handleChangeEstudiantes}
+                                tipoConfiguracion = {tipoConfiguracion}
+                                exam_id = {exam_id}
+                                sendSectionsData = {sendSectionsData}
+                            />
                     }
-                  </Fragment>
-                :
-                  <Grid item xs={12} md={12} lg={12}>
-                    <ConfiguracionBasica 
-                      tipoConfiguracion = {tipoConfiguracion}
-                      setTipoConfiguracion = {setTipoConfiguracion}
-                    />
-                  </Grid>
-              }
-            </Grid>
-        </Container>
-      </div>
-  );
+                </Grid>
+            </Container>
+        </div>
+    );
 }

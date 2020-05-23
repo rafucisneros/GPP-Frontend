@@ -6,7 +6,7 @@ export function login(data){
     baseURL: global.SERVER_NAME
   });
 
-  return axios.post(global.API_POST_LOGIN, data)
+  return axios.post(global.POST_LOGIN, data)
     .then((response) => {
       return response;
     })
@@ -17,7 +17,7 @@ export function login(data){
 
 export function register(data){
 
-    return Axios.post(global.API_POST_REGISTRO, data)
+    return Axios.post(global.POST_REGISTRO, data)
       .then((response) => {
         return response;
       })
@@ -28,7 +28,7 @@ export function register(data){
 
 export function getDataUsuario(){
 
-    return Axios.get(global.API_GET_USUARIO)
+    return Axios.get(global.GET_USUARIO)
       .then((response) => {
         return response;
       })

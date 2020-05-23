@@ -18,7 +18,7 @@ import AddIcon from '@material-ui/icons/Add';
 // contexts
 import {useTipoPreguntaRespuesta} from '../../context/createTestContext'
 
-export default function RespuestaSeleccion() {
+export default function FormCrearPregunta() {
 
     const [respuestas, setRespuestas] = useState([]);
     const {tipoPregunta} = useTipoPreguntaRespuesta();
