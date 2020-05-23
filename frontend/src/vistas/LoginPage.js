@@ -13,7 +13,6 @@ const LoginPage = () => {
     // const [usuario] = useState(null);
 
     const useLogin = (data) => {
-      
         login(data)
         .then( response => {
             if (response.status === 200) {

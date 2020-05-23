@@ -33,8 +33,8 @@ export default function LoginForm(props) {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log( 'Username:', username, 'Password:', password);
-    props.useLogin({username : username, password : password}, props.setError);
+    console.log( 'EMAIL:', username, 'Password:', password);
+    props.useLogin({email : username, password : password}, props.setError);
   }
 
   const classes = useStyles();

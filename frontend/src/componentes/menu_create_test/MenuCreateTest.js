@@ -26,7 +26,7 @@ import AddIcon from '@material-ui/icons/Add';
 // contexts
 import {useTipoPreguntaRespuesta} from '../../context/createTestContext'
 
-export default function ListaTipoPregunta({step}) {
+export default function MenuCreateTest({step}) {
 
   const {handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
   const [open, setOpen] = useState();
@@ -113,20 +113,8 @@ export default function ListaTipoPregunta({step}) {
               </Collapse>
               <ListItem
                 button
-                onClick={ () => handleSeleccionarConfiguraciones()}
+                onClick={ () => openModal('2')}
                 selected={itemSeleccionado === '2'}
-              >
-                <ListItemIcon>
-                  <SettingsIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Configuraciones</Typography>}
-                />
-              </ListItem>
-              <ListItem
-                button
-                onClick={ () => openModal('3')}
-                selected={itemSeleccionado === '3'}
               >
                 <ListItemIcon>
                   <AddIcon />
@@ -140,7 +128,7 @@ export default function ListaTipoPregunta({step}) {
         <Link to="home" className="link">
           <ListItem
             button
-            selected={itemSeleccionado === '4'}
+            selected={itemSeleccionado === '3'}
           >
             <ListItemIcon>
               <MenuBookIcon />
@@ -152,8 +140,8 @@ export default function ListaTipoPregunta({step}) {
         </Link>
         <ListItem
           button
-          onClick={ () => handleCloseSubMenuTipoPregunta('5')}
-          selected={itemSeleccionado === '5'}
+          onClick={ () => handleCloseSubMenuTipoPregunta('4')}
+          selected={itemSeleccionado === '4'}
         >
           <ListItemIcon>
             <ForwardIcon />

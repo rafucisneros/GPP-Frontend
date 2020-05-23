@@ -9,99 +9,45 @@ import ListaEstudiantes from '../../componentes/lista_estudiantes/ListaEstudiant
 import Typography from '@material-ui/core/Typography';
 import PublishIcon from '@material-ui/icons/Publish';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import SaveIcon from '@material-ui/icons/Save';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
-const res = [
-    { 
-        name : 'Andrés Buelvas', email : '13-10184@usb.ve'
-    },
-    { 
-        name : 'Ritces Parra', email : 'ritces.parra@gmail.com'
-    },
-    { 
-        name : 'Jefferson Gutierritos', email : 'jefferson@usb.ve'
-    },
-    { 
-        name : 'Alvin Yakitori', email : 'alvin@usb.ve'
-    },
-    { 
-        name : 'Donato Bracuto', email : 'seccion_5@usb.ve'
-    },
-    { 
-        name : 'Rafael Cisneros', email : 'seccion_6@usb.ve'
-    },
-    { 
-        name : 'Miguel Canedo', email : 'seccion_7@usb.ve'
-    },
-    { 
-        name : 'Carolina Martínez', email : 'seccion_8@usb.ve'
-    },
-    { 
-        name : 'Andrés Buelvas', email : '13-10184_v2@usb.ve'
-    },
-    { 
-        name : 'Ritces Parra', email : 'ritces.parra_v2@gmail.com'
-    },
-    { 
-        name : 'Jefferson Gutierritos', email : 'jefferson_v2@usb.ve'
-    },
-    { 
-        name : 'Alvin Yakitori', email : 'alvin_v2@usb.ve'
-    },
-    { 
-        name : 'Donato Bracuto', email : 'seccion_5_v2@usb.ve'
-    },
-    { 
-        name : 'Rafael Cisneros', email : 'seccion_6_v2@usb.ve'
-    },
-    { 
-        name : 'Miguel Canedo', email : 'seccion_7_v2@usb.ve'
-    },
-    { 
-        name : 'Carolina Martínez', email : 'seccion_8_v2@usb.ve'
-    },
-]
-
 const StepSecciones = (props) => {
-    const [ secciones, setSecciones ] = useState([]);
-    const [ seccionSeleccionada, setSeccionSeleccionada] = useState(null);
-    const [ estudiantes, setEstudiantes ] = useState([...res]);
+    // const [ secciones ] = useState([...props.secciones]);
+    // const [ seccionSeleccionada ] = useState(props.seccionSeleccionada);
+    // const [ estudiantes ] = useState([...props.estudiantes]);
 
     const handleAgregarEstudiante = (estudiante) => {
-        setEstudiantes(estudiante);
+        props.handleChangeEstudiantes(estudiante)
     }
 
     const handleSeleccionarSeccion = (id) => {
-        if (secciones.length > 0){
-            for( let seccion of secciones){
+        if (props.secciones.length > 0){
+            for( let seccion of props.secciones){
                 if(seccion.id === id) {
-                    setSeccionSeleccionada(seccion);
+                    props.handleChangeSeccionSeleccionada(seccion);
                     break;
                 }    
             }
         }
     }
 
-    const handleUpdateSecciones = (item) => {
-        setSecciones(item);
-    }
-
     const handleAgregarSecciones = () => {
-        let data = [...secciones];
+        let data = [...props.secciones];
         data.push({
             id: uuid(),
             estudiantes : []
         });
-        setSecciones(data);
+        props.handleUpdateSecciones(data);
     }
 
     const handleEliminarSecciones = (index) => {
-        let data = [...secciones];
+        let data = [...props.secciones];
         data.splice(index, 1);
-        setSecciones(data);
+        props.handleUpdateSecciones(data);
     }
     
     return( 
@@ -115,6 +61,16 @@ const StepSecciones = (props) => {
                             </Typography>
                         </Box>
                     <Box >
+                        <Button
+                            style={{background:"#7e5ca8", color : "white", marginRight: '8px'}}
+                            type="submit"
+                            variant="contained"
+                            color="red"
+                            endIcon={<SaveIcon/>}
+                            onClick={ () => props.sendSectionsData()}
+                        >
+                            Guardado Manual
+                        </Button>
                         <Button
                             type="submit"
                             variant="contained"
@@ -130,7 +86,7 @@ const StepSecciones = (props) => {
                             type="submit"
                             variant="contained"
                             color="red"
-                            onClick={ () => props.handleChangeStep('step_3')}
+                            onClick={ () => props.sendSectionsData()}
                             endIcon={<PublishIcon/>}
                         >
                             Publicar Examen
@@ -142,20 +98,20 @@ const StepSecciones = (props) => {
                 <Grid container spacing={4} style={{marginTop : '4px'}}>
                     <Grid item lg={4} md={4} xl={4} xs={12}>
                         <ListaSecciones 
-                            secciones = {secciones}
+                            secciones = {[...props.secciones]}
                             handleAgregarSecciones = {handleAgregarSecciones}
                             handleEliminarSecciones = {handleEliminarSecciones}
                             handleSeleccionarSeccion = {handleSeleccionarSeccion}
-                            seccionSeleccionada = {seccionSeleccionada}
+                            seccionSeleccionada = {props.seccionSeleccionada}
                         />
                     </Grid>
                     <Grid item lg={8} md={8} xl={8} xs={12}>
                         <ListaEstudiantes 
-                            secciones = {secciones}
-                            seccionSeleccionada = {seccionSeleccionada}
+                            secciones = {[...props.secciones]}
+                            seccionSeleccionada = {props.seccionSeleccionada}
                             handleAgregarEstudiante = {handleAgregarEstudiante}
-                            estudiantes = {[...estudiantes]}
-                            handleUpdateSecciones = {handleUpdateSecciones}
+                            estudiantes = {[...props.estudiantes]}
+                            handleUpdateSecciones = {props.handleUpdateSecciones}
                         />
                     </Grid>
                 </Grid>

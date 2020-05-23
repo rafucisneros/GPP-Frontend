@@ -3,7 +3,7 @@ import Axios from 'axios';
 
 export function getMensajito(){
 
-    return Axios.get(global.API_GET_MENSAJE)
+    return Axios.get(global.GET_MENSAJE)
       .then((response) => {
         return response;
       })

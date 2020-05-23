@@ -2,7 +2,6 @@ import React, { useState, Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 // import uuid from 'uuid/v1';
 // import moment from 'moment';
-// import PerfectScrollbar from 'react-perfect-scrollbar';
 import MaterialTable from "material-table";
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
@@ -30,7 +29,8 @@ const ListaEstudiantes = props => {
     // const [ estudiantes, handleAgregarEstudiante ] = useState(res);
     // const [selectedUsers, setSelectedUsers] = useState([]);
     const [columns, setColumns] = useState([
-        { title: 'Nombre', field: 'name', defaultSort : 'asc' },
+        { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
+        { title: 'Apellidos', field: 'last_name' },
         { title: 'Correo Electrónico', field: 'email' },
     ]);
     const [data, setData] = useState([]);

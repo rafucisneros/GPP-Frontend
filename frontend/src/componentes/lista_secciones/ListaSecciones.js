@@ -20,7 +20,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        height: '100%'
+        height: '100%',
     },
     content: {
         padding: 0
@@ -64,36 +64,38 @@ const ListaSecciones = (props) => {
             />
             <Divider />
             <CardContent className={classes.content}>
-                <List>
-                {props.secciones.map((item, index) => (
-                    <ListItem
-                        divider={index < props.secciones.length - 1}
-                        key={index}
-                        selected={item && props.seccionSeleccionada ? item.id === props.seccionSeleccionada.id : false}
-                    >
-                    <ListItemText
-                        primary={`Sección ${index + 1}`}
-                        secondary={`${item.estudiantes.length} estudiante(s) escogido(s)`}
-                    />
-                    <IconButton
-                        edge="end"
-                        size="small"
-                        onClick={() => props.handleEliminarSecciones(index)}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
-                    <Box style={{paddingLeft: '16px'}}>
+                <Box style={{maxHeight: '60vh', overflow: 'auto'}}>
+                    <List>
+                    {props.secciones.map((item, index) => (
+                        <ListItem
+                            divider={index < props.secciones.length - 1}
+                            key={index}
+                            selected={item && props.seccionSeleccionada ? item.id === props.seccionSeleccionada.id : false}
+                        >
+                        <ListItemText
+                            primary={`Sección ${index + 1}`}
+                            secondary={`${item.estudiantes.length} estudiante(s) escogido(s)`}
+                        />
                         <IconButton
                             edge="end"
                             size="small"
-                            onClick={() => props.handleSeleccionarSeccion(item.id)}
+                            onClick={() => props.handleEliminarSecciones(index)}
                         >
-                            <NavigateNextIcon />
+                            <DeleteIcon />
                         </IconButton>
-                    </Box>
-                    </ListItem>
-                ))}
-                </List>
+                        <Box style={{paddingLeft: '16px'}}>
+                            <IconButton
+                                edge="end"
+                                size="small"
+                                onClick={() => props.handleSeleccionarSeccion(item.id)}
+                            >
+                                <NavigateNextIcon />
+                            </IconButton>
+                        </Box>
+                        </ListItem>
+                    ))}
+                    </List>
+                </Box>
             </CardContent>
         </Card>
     );

@@ -10,16 +10,16 @@ import './ListaPreguntasExamen.css';
 
 const estilosDropDragging = (style, snapshot) => {
     if (!snapshot.isDropAnimating) {
-      return style;
+        return style;
     }
     const { curve, duration } = snapshot.dropAnimation;
     // const translate = `translate(${moveTo.x}px, ${moveTo.y}px)`;
     // const rotate = 'rotate(1turn)';
-  
+
     return {
-      ...style,
+        ...style,
     //   transform: 'rotate(10deg)',
-      transition: `all ${curve} ${duration + 1}s`,
+        transition: `all ${curve} ${duration + 1}s`,
     };
 }
 
@@ -60,13 +60,13 @@ export default function ListaPreguntasExamen() {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
         result.splice(endIndex, 0, removed);
-      
+
         return result;
-      };
-  
-      const onDragEnd = (result) => {
+    };
+
+    const onDragEnd = (result) => {
         if (!result.destination) {
-          return;
+            return;
         }
     
         const items = reorder(
