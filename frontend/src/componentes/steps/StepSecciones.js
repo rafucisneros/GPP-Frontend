@@ -16,19 +16,16 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
 const StepSecciones = (props) => {
-    // const [ secciones ] = useState([...props.secciones]);
-    // const [ seccionSeleccionada ] = useState(props.seccionSeleccionada);
-    // const [ estudiantes ] = useState([...props.estudiantes]);
 
     const handleAgregarEstudiante = (estudiante) => {
-        props.handleChangeEstudiantes(estudiante)
+        props.handleChangeComp(estudiante, 'estudiantes')
     }
 
     const handleSeleccionarSeccion = (id) => {
         if (props.secciones.length > 0){
             for( let seccion of props.secciones){
                 if(seccion.id === id) {
-                    props.handleChangeSeccionSeleccionada(seccion);
+                    props.handleChangeComp(seccion, 'seccion_seleccionada');
                     break;
                 }    
             }
@@ -41,13 +38,13 @@ const StepSecciones = (props) => {
             id: uuid(),
             estudiantes : []
         });
-        props.handleUpdateSecciones(data);
+        props.handleChangeComp(data, 'secciones');
     }
 
     const handleEliminarSecciones = (index) => {
         let data = [...props.secciones];
         data.splice(index, 1);
-        props.handleUpdateSecciones(data);
+        props.handleChangeComp(data, 'secciones');
     }
     
     return( 
@@ -57,7 +54,7 @@ const StepSecciones = (props) => {
                     <Box className="flex-box-titulo">
                         <Box style={{height : 'auto'}}>
                             <Typography variant="h6">
-                                Paso - Asignar Secciones
+                                Paso - Asignar Secciones e Invitaciones
                             </Typography>
                         </Box>
                     <Box >
@@ -111,6 +108,7 @@ const StepSecciones = (props) => {
                             seccionSeleccionada = {props.seccionSeleccionada}
                             handleAgregarEstudiante = {handleAgregarEstudiante}
                             estudiantes = {[...props.estudiantes]}
+                            handleChangeComp = {props.handleChangeComp}
                             handleUpdateSecciones = {props.handleUpdateSecciones}
                         />
                     </Grid>

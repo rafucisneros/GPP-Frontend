@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
+import ListItemText from '@material-ui/core/ListItemText';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import TextField from '@material-ui/core/TextField';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -13,7 +14,14 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Box,
 } from '@material-ui/core';
+
+// contexts
+import { useCreateTestPage } from '../../context/createTestPageContext.js';
+
+// servicios
+import { postTopics } from '../../servicios/servicioGeneral.js';
 
 // const styles = theme => ({
 //   root: {
@@ -76,17 +84,73 @@ const DialogActions = withStyles(theme => ({
 
 export default function ModalAddAreaSubAreaTema(props) {
   const classes = useStyles();
-  const [seleccionado, setSeleccionado] = useState(null)
-  const [elemento, setElemento] = useState(null);
+  const [ seleccionado, setSeleccionado ] = useState(null)
+  const [ elemento, setElemento ] = useState(null);
+  const [ arraySubareas, setArraySubareas ] = useState([]);
+  const [ areaSeleccionada, setAreaSeleccionada ] = useState(null);
+  const [ subareaSeleccionada, setSubareaSeleccionada ] = useState(null);
+
+  const { areas, subareas } = useCreateTestPage();
+
+  const sendTopics = () => {
+    let data = {};
+    if (seleccionado === 'tema'){
+      data.area = areaSeleccionada;
+      data.subarea = subareaSeleccionada;
+      data.topic = elemento;
+    } else if (seleccionado === 'subarea'){
+      data.subarea = elemento;
+      data.area = areaSeleccionada;
+    } else data.area = elemento;
+    postTopics(data)
+    .then( res => {
+        console.log(res)
+        if (res) {
+            console.log("Update Secciones")
+        }
+    })
+    handleCloseModal()
+}
+
+  useEffect(() => {
+    if (subareas){
+      let keys = Object.keys(subareas)
+      let data = [];
+      keys.map( key => {
+        subareas[`${key}`].forEach( sub => {
+          data.push(sub);
+        })
+      })
+      setArraySubareas(data);
+    }
+  }, [subareas])
+
+  useEffect(() => {
+    if (subareaSeleccionada){
+      let keys = Object.keys(subareas)
+      let select;
+      keys.map( key => {
+        if (subareas[`${key}`].includes(subareaSeleccionada)) select = key;
+      })
+      setAreaSeleccionada(select);
+    }
+  }, [subareaSeleccionada])
 
   const handleCambiarSeleccionado = (e, flag) => {
     if (flag === 'select') setSeleccionado(e.target.value);
     else setElemento(e.target.value)
   };
 
+  const handleChange = (e, flag) => {
+    if (flag === 'area') setAreaSeleccionada(e.target.value);
+    else if (flag === 'subarea') setSubareaSeleccionada(e.target.value);
+  }
+
   const handleCloseModal = () => {
     setSeleccionado(null);
     setElemento(null);
+    setAreaSeleccionada(null);
+    setSubareaSeleccionada(null);
     props.handleModal();
   };
 
@@ -114,30 +178,64 @@ export default function ModalAddAreaSubAreaTema(props) {
               ))}
               </Select>
             </FormControl>
-            { seleccionado &&
-              <TextField
-                id={`elemento`}
-                // type="number"
-                margin="normal"
-                label="Título"
-                required
-                autoFocus
-                fullWidth
-                name={`elemento`}
-                onChange={(e) => handleCambiarSeleccionado(e)} 
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  inputProps: { 
-                      max: 100, min: 0, step : 1, style: { textAlign: 'center' }
-                  }}}
-              />
-            }
+            <Grid style={{ display: 'flex', width : '100%'}}>
+              { (seleccionado === 'tema' || seleccionado === 'subarea')  &&
+                <Box style={{ display: 'grid', margin: '8px', marginBottom: '16px', width : '100%'}}>
+                  <Select
+                    value={areaSeleccionada}
+                    onChange={(e) => handleChange(e, 'area')}
+                    disabled={seleccionado === 'tema' ? true : false}
+                    MenuProps={MenuProps}
+                    >
+                    {areas.map(item => (
+                      <MenuItem key={item} value={item}>
+                          <ListItemText primary={item} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Box>
+              }
+              { seleccionado === 'tema' &&
+                <Box style={{ display: 'grid', margin: '8px', marginBottom: '16px', width : '100%'}}>
+                  <Select
+                    value={subareaSeleccionada}
+                    onChange={(e) => handleChange(e, 'subarea')}
+                    MenuProps={MenuProps}
+                    >
+                    {arraySubareas.map(item => (
+                      <MenuItem key={item} value={item}>
+                          <ListItemText primary={item} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Box>
+              }
+              { seleccionado &&
+                <Box style={{ display: 'grid', margin: '8px', width : '100%'}}>
+                  <TextField
+                    id="elemento"
+                    // type="number"
+                    margin="normal"
+                    required
+                    autoFocus
+                    fullWidth
+                    name="elemento"
+                    onChange={(e) => handleCambiarSeleccionado(e)} 
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{
+                      inputProps: { 
+                          max: 100, min: 0, step : 1, style: { textAlign: 'center' }
+                    }}}
+                  />
+                </Box>
+              }
+            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal} color="primary">
+          <Button onClick={sendTopics} color="primary">
             Agregar
           </Button>
           <Button onClick={handleCloseModal} color="secondary">

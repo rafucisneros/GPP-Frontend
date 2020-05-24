@@ -24,7 +24,8 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import AddIcon from '@material-ui/icons/Add';
 
 // contexts
-import {useTipoPreguntaRespuesta} from '../../context/createTestContext'
+import { CreateTestPageProvider } from '../../context/createTestPageContext.js';
+import { useTipoPreguntaRespuesta } from '../../context/createTestContext'
 
 export default function MenuCreateTest({step}) {
 
@@ -151,12 +152,13 @@ export default function MenuCreateTest({step}) {
           />
         </ListItem>
       </List>
-
-      <ModalAddAreaSubAreaTema
-        open={open}
-        handleModal={handleModal}
-      >
-      </ModalAddAreaSubAreaTema>
+      <CreateTestPageProvider>
+        <ModalAddAreaSubAreaTema
+          open={open}
+          handleModal={handleModal}
+        >
+        </ModalAddAreaSubAreaTema>
+      </CreateTestPageProvider>
     </div>
   )
 }

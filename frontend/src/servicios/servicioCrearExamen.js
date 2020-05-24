@@ -34,3 +34,13 @@ export function postSecciones(req, id){
         return Promise.reject(error);
     });
 }
+
+export function getTopics(){
+    return Axios.get(global.TOPICS)
+    .then((response) => {
+        return response;
+    })
+    .catch( (error) => {
+        return Promise.reject(error);
+    });
+}

@@ -21,20 +21,6 @@ import Box from '@material-ui/core/Box';
 const StepCrearPreguntas = (props) => {
 
     const { tituloRespuesta, tipoPregunta } = useTipoPreguntaRespuesta();
-
-    const handleSeleccionarTipoPregunta = () => {
-        if ( tipoPregunta === "seleccion_simple" ){
-            return( <FormCrearPregunta key={`${tipoPregunta}`} /> )
-        } else if ( tipoPregunta === "seleccion_multiple")  {
-            return ( <FormCrearPregunta key={`${tipoPregunta}`} /> )
-        } else if ( tipoPregunta === "verdadero_falso" ) {
-            return ( <FormCrearPregunta key={`${tipoPregunta}`} /> )
-        } else if ( tipoPregunta === "ordenamiento" ) {
-            return ( <FormCrearPregunta key={`${tipoPregunta}`} /> )
-        } else {
-            return(<div></div>)
-        }
-    }
     
     return( 
         <Fragment>
@@ -84,36 +70,56 @@ const StepCrearPreguntas = (props) => {
             <Grid item lg={9} sm={9} xl={9} xs={9}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
                     Enfoque
-                    <SeleccionarAreaTema/>
+                    <SeleccionarAreaTema
+                        handleChangeAreaSubAreaTema = {props.handleChangeAreaSubAreaTema}
+                        areaSeleccionada = {props.areaSeleccionada}
+                        subareaSeleccionada = {props.subareaSeleccionada}
+                        temaSeleccionado = {props.temaSeleccionado}
+                        listaFiltradoArea = {props.listaFiltradoArea}
+                        listaFiltradoSubArea = {props.listaFiltradoSubArea}
+                        listaFiltradoTema = {props.listaFiltradoTema}
+                        permitirSubArea = {props.permitirSubArea}
+                        permitirTarea = {props.permitirTarea}
+                        areas = {props.areas}
+                        subareas = {props.subareas}
+                        temas = {props.temas}
+                    />
                 </Paper>
             </Grid>
 
             <Grid item lg={3} sm={3} xl={3} xs={3}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
                     Evaluación
-                    <PonderacionDificultad/>
+                    <PonderacionDificultad
+                        handleChangeInput = {props.handleChangeInput}
+                        dificultad = {props.dificultad}
+                        ponderacion = {props.ponderacion}
+                    />
                 </Paper>
             </Grid>
 
-            { handleSeleccionarTipoPregunta() }
+            <FormCrearPregunta
+                tipoPregunta = {tipoPregunta}
+                handleChangeInput = {props.handleChangeInput}
+            />
 
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test">
                     <Box className="div-buttons-respuestas">
                         <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        style={{marginRight: '8px'}}
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            style={{marginRight: '8px'}}
                         >
-                        Crear Pregunta
+                            Crear Pregunta
                         </Button>
                         <Button
-                        type="submit"
-                        variant="contained"
-                        color="secondary"
+                            type="submit"
+                            variant="contained"
+                            color="secondary"
                         >
-                        Eliminar Pregunta
+                            Eliminar Pregunta
                         </Button>
                     </Box>
                 </Paper>

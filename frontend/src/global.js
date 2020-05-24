@@ -17,6 +17,7 @@ export const global = {
     PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
 
     GET_STUDENTS: `${SERVER_NAME}/users/`,
+    TOPICS: `${SERVER_NAME}/approach/`
 };
 
 Axios.interceptors.request

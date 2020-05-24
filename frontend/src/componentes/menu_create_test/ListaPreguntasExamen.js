@@ -103,7 +103,7 @@ export default function ListaPreguntasExamen() {
                                             {...provided.dragHandleProps}
                                             key={`${pregunta}-${index}`}
                                             isDragging={snapshot.isDragging && !snapshot.isDropAnimating}
-                                            style={Object.assign({backgroundColor : pregunta.color }, estilosDropDragging(provided.draggableProps.style, snapshot))}
+                                            style={Object.assign({ backgroundColor : pregunta.color, textOverflow: 'ellipsis' }, estilosDropDragging(provided.draggableProps.style, snapshot))}
                                             className="rectangulo-pregunta" 
                                             >
                                             {pregunta.texto}
