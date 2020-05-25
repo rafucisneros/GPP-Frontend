@@ -4,6 +4,9 @@ import MaterialTable from "material-table";
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 
+// contexts
+import { useCreateTestPage } from '../../context/createTestPageContext';
+
 const columns = [
     { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
     { title: 'Apellidos', field: 'last_name' },
@@ -21,19 +24,17 @@ const theme = createMuiTheme({
 });
 
 const ListaEstudiantes = (props) => {
+    const { handleAgregarEstudiante } = props;
+    const [ data, setData ] = useState([]);
     const { 
-        className, 
-        secciones, 
-        seccionSeleccionada, 
-        estudiantes, 
-        handleAgregarEstudiante, 
-        handleChangeComp
-        // ...rest 
-    } = props;
-    const [data, setData] = useState([]);
+        handleChangeComp,
+        seccionSeleccionada,
+        secciones,
+        estudiantes,
+    } = useCreateTestPage();
 
     useEffect(() => {
-        const aux = estudiantes.map( value => { return {...value} })
+        const aux = estudiantes.map( value => { return {...value} });
         setData(aux);
     }, [])
 
@@ -142,7 +143,7 @@ const ListaEstudiantes = (props) => {
                                 setTimeout(() => {
                                     let nuevaSeccion = [...secciones];
                                     for( let seccion of nuevaSeccion){
-                                        if (seccion.id === props.seccionSeleccionada.id) {
+                                        if (seccion.id === seccionSeleccionada.id) {
                                             seccion.estudiantes = rows;
                                             break;
                                         }    
@@ -194,7 +195,7 @@ const ListaEstudiantes = (props) => {
                                     auxData.splice(auxData.indexOf(oldData), 1);
 
                                     for( let seccion of nuevaSeccion ){
-                                        if (seccion.id === props.seccionSeleccionada.id) {
+                                        if (seccion.id === seccionSeleccionada.id) {
                                             seccion.estudiantes.splice(seccion.estudiantes.indexOf(oldData), 1);
                                             break;
                                         }    

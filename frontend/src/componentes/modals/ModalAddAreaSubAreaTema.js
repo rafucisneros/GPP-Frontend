@@ -83,14 +83,14 @@ const DialogActions = withStyles(theme => ({
 }))(MuiDialogActions);
 
 export default function ModalAddAreaSubAreaTema(props) {
-  const classes = useStyles();
+
   const [ seleccionado, setSeleccionado ] = useState(null)
   const [ elemento, setElemento ] = useState(null);
   const [ arraySubareas, setArraySubareas ] = useState([]);
   const [ areaSeleccionada, setAreaSeleccionada ] = useState(null);
   const [ subareaSeleccionada, setSubareaSeleccionada ] = useState(null);
-
   const { areas, subareas } = useCreateTestPage();
+  const classes = useStyles();
 
   const sendTopics = () => {
     let data = {};
@@ -104,12 +104,11 @@ export default function ModalAddAreaSubAreaTema(props) {
     } else data.area = elemento;
     postTopics(data)
     .then( res => {
-        console.log(res)
-        if (res) {
-            console.log("Update Secciones")
-        }
+      if (res) {
+          console.log("Update Secciones");
+      }
     })
-    handleCloseModal()
+    handleCloseModal();
 }
 
   useEffect(() => {
@@ -179,42 +178,13 @@ export default function ModalAddAreaSubAreaTema(props) {
               </Select>
             </FormControl>
             <Grid style={{ display: 'flex', width : '100%'}}>
-              { (seleccionado === 'tema' || seleccionado === 'subarea')  &&
-                <Box style={{ display: 'grid', margin: '8px', marginBottom: '16px', width : '100%'}}>
-                  <Select
-                    value={areaSeleccionada}
-                    onChange={(e) => handleChange(e, 'area')}
-                    disabled={seleccionado === 'tema' ? true : false}
-                    MenuProps={MenuProps}
-                    >
-                    {areas.map(item => (
-                      <MenuItem key={item} value={item}>
-                          <ListItemText primary={item} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </Box>
-              }
-              { seleccionado === 'tema' &&
-                <Box style={{ display: 'grid', margin: '8px', marginBottom: '16px', width : '100%'}}>
-                  <Select
-                    value={subareaSeleccionada}
-                    onChange={(e) => handleChange(e, 'subarea')}
-                    MenuProps={MenuProps}
-                    >
-                    {arraySubareas.map(item => (
-                      <MenuItem key={item} value={item}>
-                          <ListItemText primary={item} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </Box>
-              }
               { seleccionado &&
                 <Box style={{ display: 'grid', margin: '8px', width : '100%'}}>
                   <TextField
                     id="elemento"
                     // type="number"
+                    label="Título"
+                    placeholder="Título"
                     margin="normal"
                     required
                     autoFocus
@@ -231,6 +201,45 @@ export default function ModalAddAreaSubAreaTema(props) {
                   />
                 </Box>
               }
+              { seleccionado === 'tema' &&
+              <Box style={{ display: 'grid', margin: '8px', marginBottom: '16px', width : '100%'}}>
+                <FormControl required style={{textAlignLast: 'center'}} >
+                  <InputLabel>Subarea</InputLabel>
+                  <Select
+                    label="Subarea"
+                    value={subareaSeleccionada}
+                    onChange={(e) => handleChange(e, 'subarea')}
+                    MenuProps={MenuProps}
+                    >
+                    {arraySubareas.map(item => (
+                      <MenuItem key={item} value={item}>
+                          <ListItemText primary={item} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            }
+            { (seleccionado === 'tema' || seleccionado === 'subarea')  &&
+              <Box style={{ display: 'grid', margin: '8px', marginBottom: '16px', width : '100%'}}>
+                <FormControl required style={{textAlignLast: 'center'}} >
+                  <InputLabel>Área</InputLabel>
+                  <Select
+                    label="Área"
+                    value={areaSeleccionada}
+                    onChange={(e) => handleChange(e, 'area')}
+                    disabled={seleccionado === 'tema' ? true : false}
+                    MenuProps={MenuProps}
+                    >
+                    {areas.map(item => (
+                      <MenuItem key={item} value={item}>
+                          <ListItemText primary={item} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  </FormControl>
+              </Box>
+            }
             </Grid>
           </Grid>
         </DialogContent>

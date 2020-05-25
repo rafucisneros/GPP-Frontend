@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -30,22 +30,18 @@ const MenuProps = {
 };
 
 export default function SeleccionarAreaTema(props) {
+    const classes = useStyles();
+    const { areas, subareas, temas } = useCreateTestPage();
     const { 
       handleChangeAreaSubAreaTema,
       areaSeleccionada,
       subareaSeleccionada,
       temaSeleccionado,
-      // listaFiltradoArea,
       listaFiltradoSubArea,
       listaFiltradoTema,
       permitirSubArea,
       permitirTarea
-    } = props;
-
-    const { areas, subareas, temas } = useCreateTestPage();
-    const classes = useStyles();
-
-    console.log(useCreateTestPage)
+    } = useCreateTestPage();
 
     const handleChange = (e, type) => {
       if (type === 'area'){
@@ -104,7 +100,6 @@ export default function SeleccionarAreaTema(props) {
       }
     }, [areaSeleccionada])
 
-    console.log(areas)
     return (
       <Box style={{textAlign : 'center', width : '100%'}}>
         <Box style={{float : 'left'}}>

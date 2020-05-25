@@ -1,9 +1,13 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components'
 
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+
+// contexts
+import { useCreateTestPage } from '../../context/createTestPageContext.js';
 
 // assets
 import './ListaPreguntasExamen.css';
@@ -19,7 +23,7 @@ const estilosDropDragging = (style, snapshot) => {
     return {
         ...style,
     //   transform: 'rotate(10deg)',
-        transition: `all ${curve} ${duration + 1}s`,
+        transition: `all ${curve} ${duration}s`,
     };
 }
 
@@ -27,56 +31,44 @@ const EstilosStartDragging = styled.div`
     opacity : ${props => props.isDragging ? 0.5 : 1};
 `
 
-export default function ListaPreguntasExamen() {
+export default () => <ListaPreguntasExamen></ListaPreguntasExamen>
 
-    const [preguntas, setPreguntas] = useState([
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 1'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 2'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 3'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 4'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 5'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 6'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 7'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 8'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 9'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 10'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 11'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 12'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 13'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 14'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 15'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 16'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 17'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 18'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 19'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 20'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 21'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 22'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 23'},
-        {color : 'rgb(209, 213, 238)', texto : 'Pregunta 24'},
-    ])
+const ListaPreguntasExamen = () => {
+
+    const { listaPreguntasExamen } = useCreateTestPage();
+    const [ lista, setLista ] = useState([]);
+
+    useEffect(() => {
+        let aux = [];
+        console.log(listaPreguntasExamen)
+        if (listaPreguntasExamen && listaPreguntasExamen.length > 0){
+            let aux = listaPreguntasExamen.map( (pregunta, index)  => {
+                return {color : 'rgb(209, 213, 238)', texto : `Pregunta ${index + 1}`, posicion : index}
+            })
+            setLista(aux);
+        }
+    }, [listaPreguntasExamen])
 
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
         result.splice(endIndex, 0, removed);
-
         return result;
     };
 
     const onDragEnd = (result) => {
-        if (!result.destination) {
-            return;
-        }
-    
+        if (!result.destination) return;
+
         const items = reorder(
-            preguntas,
+            lista,
             result.source.index,
             result.destination.index
         );
-    
-        setPreguntas(items);
+
+        setLista(items);
     }
+
+    console.log(lista)
 
     return (
         // <Grid className = "contenedor-lista-preguntas" >
@@ -93,21 +85,24 @@ export default function ListaPreguntasExamen() {
                         <div
                             {...provided.droppableProps}
                             ref={provided.innerRef}
+                            // onClick={() => alert('click')}
                         >
-                            {preguntas.map( (pregunta, index) => (
+                            {lista && lista.length > 0 && lista.map( (pregunta, index) => (
                                 <Draggable key={`pregunta-${index}`} draggableId={`pregunta-${index}`} index={index}>
                                     {(provided, snapshot) => (
-                                        <EstilosStartDragging
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            key={`${pregunta}-${index}`}
-                                            isDragging={snapshot.isDragging && !snapshot.isDropAnimating}
-                                            style={Object.assign({ backgroundColor : pregunta.color, textOverflow: 'ellipsis' }, estilosDropDragging(provided.draggableProps.style, snapshot))}
-                                            className="rectangulo-pregunta" 
+                                        // <Button>
+                                            <EstilosStartDragging
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                key={`${pregunta}-${index}`}
+                                                isDragging={snapshot.isDragging && !snapshot.isDropAnimating}
+                                                style={Object.assign({ backgroundColor : pregunta.color, textOverflow: 'ellipsis' }, estilosDropDragging(provided.draggableProps.style, snapshot))}
+                                                className="rectangulo-pregunta" 
                                             >
-                                            {pregunta.texto}
-                                        </EstilosStartDragging>
+                                                {pregunta.texto}
+                                            </EstilosStartDragging>
+                                        // </Button>
                                     )}
                                 </Draggable>
                             ))}

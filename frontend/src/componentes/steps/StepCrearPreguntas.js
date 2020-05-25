@@ -7,6 +7,7 @@ import PonderacionDificultad from '../../componentes/ponderacion_dificultad/Pond
 
 // contexts
 import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
+import { useCreateTestPage } from '../../context/createTestPageContext';
 
 // material
 import Typography from '@material-ui/core/Typography';
@@ -18,9 +19,76 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
-const StepCrearPreguntas = (props) => {
+const StepCrearPreguntas = () => {
 
     const { tituloRespuesta, tipoPregunta } = useTipoPreguntaRespuesta();
+    const {  
+        handleChangeStep,
+        tipoConfiguracion,
+        listaPreguntasExamen,
+        areaSeleccionada,
+        subareaSeleccionada,
+        temaSeleccionado,
+        ponderacion,
+        dificultad,
+        pregunta,
+        setListaPreguntasExamen,
+        handleChangeAreaSubAreaTema,
+        handleChangeInput,
+        respuestas,
+        setRespuestas,
+        selectedRespuesta,
+        setSelectedRespuesta,
+        exam_id
+    } = useCreateTestPage();
+
+    const handleCrearPregunta = () => {
+        const auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
+        const form = {};
+        const answer = [];
+
+        respuestas.forEach( (respuesta, index) => {
+            answer.push({
+                content : tipoPregunta === 'verdadero_falso' ? '' : respuesta.respuesta,
+                correct : tipoPregunta === 'verdadero_falso' ? selectedRespuesta : tipoPregunta === 'ordenamiento' ? index : respuesta.checked
+            })
+        })
+
+        form.content = pregunta;
+        form.q_type = tituloRespuesta;
+        form.exam = exam_id;
+        form.position = auxListaExamen.length + 1;
+        form.difficulty = Number(dificultad);
+        form.approach = {
+            topic : temaSeleccionado,
+            area : areaSeleccionada,
+            subarea : subareaSeleccionada,
+        }
+        form.answers = answer;
+        form.weighing = Number(ponderacion);
+        auxListaExamen.push(form);
+
+        // Agregar Nueva Pregunta
+        setListaPreguntasExamen(auxListaExamen);
+
+        // Clean Form
+        handleCleanForm();
+    }
+
+    const handleCleanForm = () => {
+        const event_pond = { target : { name : 'ponderacion', value : ''}};
+        const event_diff = { target : { name : 'dificultad', value : ''}};
+        const event_preg = { target : { name : 'pregunta', value : ''}};
+
+        handleChangeInput(event_pond);
+        handleChangeInput(event_diff);
+        handleChangeInput(event_preg);
+        handleChangeAreaSubAreaTema(null, 'area_seleccionada');
+        handleChangeAreaSubAreaTema(null, 'subarea_seleccionada');
+        handleChangeAreaSubAreaTema(null, 'tema_seleccionada');
+        setSelectedRespuesta(true);
+        setRespuestas([]);
+    }
     
     return( 
         <Fragment>
@@ -29,7 +97,7 @@ const StepCrearPreguntas = (props) => {
                     <Box className="flex-box-titulo">
                         <Box style={{height : 'auto'}}>
                             <Typography variant="h6">
-                                Paso - Creación Examen ({props.tipoConfiguracion}) - {tituloRespuesta}
+                                Paso - Creación Examen ({tipoConfiguracion}) - {tituloRespuesta}
                             </Typography>
                         </Box>
                         <Box >
@@ -47,7 +115,7 @@ const StepCrearPreguntas = (props) => {
                                 variant="contained"
                                 color="primary"
                                 style={{marginRight: '8px'}}
-                                onClick={ () => props.handleChangeStep('step_0')}
+                                onClick={ () => handleChangeStep('step_0')}
                                 endIcon={<NavigateBeforeIcon/>}
                             >
                                 Paso Anterior
@@ -57,7 +125,7 @@ const StepCrearPreguntas = (props) => {
                                 type="submit"
                                 variant="contained"
                                 color="red"
-                                onClick={ () => props.handleChangeStep(props.tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_3' )}
+                                onClick={ () => handleChangeStep(tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_3' )}
                                 endIcon={<NavigateNextIcon/>}
                             >
                                 Siguiente Paso
@@ -70,38 +138,18 @@ const StepCrearPreguntas = (props) => {
             <Grid item lg={9} sm={9} xl={9} xs={9}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
                     Enfoque
-                    <SeleccionarAreaTema
-                        handleChangeAreaSubAreaTema = {props.handleChangeAreaSubAreaTema}
-                        areaSeleccionada = {props.areaSeleccionada}
-                        subareaSeleccionada = {props.subareaSeleccionada}
-                        temaSeleccionado = {props.temaSeleccionado}
-                        listaFiltradoArea = {props.listaFiltradoArea}
-                        listaFiltradoSubArea = {props.listaFiltradoSubArea}
-                        listaFiltradoTema = {props.listaFiltradoTema}
-                        permitirSubArea = {props.permitirSubArea}
-                        permitirTarea = {props.permitirTarea}
-                        areas = {props.areas}
-                        subareas = {props.subareas}
-                        temas = {props.temas}
-                    />
+                    <SeleccionarAreaTema/>
                 </Paper>
             </Grid>
 
             <Grid item lg={3} sm={3} xl={3} xs={3}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
                     Evaluación
-                    <PonderacionDificultad
-                        handleChangeInput = {props.handleChangeInput}
-                        dificultad = {props.dificultad}
-                        ponderacion = {props.ponderacion}
-                    />
+                    <PonderacionDificultad/>
                 </Paper>
             </Grid>
 
-            <FormCrearPregunta
-                tipoPregunta = {tipoPregunta}
-                handleChangeInput = {props.handleChangeInput}
-            />
+            <FormCrearPregunta/>
 
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test">
@@ -111,6 +159,7 @@ const StepCrearPreguntas = (props) => {
                             variant="contained"
                             color="primary"
                             style={{marginRight: '8px'}}
+                            onClick={() => handleCrearPregunta()}
                         >
                             Crear Pregunta
                         </Button>
@@ -118,6 +167,7 @@ const StepCrearPreguntas = (props) => {
                             type="submit"
                             variant="contained"
                             color="secondary"
+                            disable={true}
                         >
                             Eliminar Pregunta
                         </Button>

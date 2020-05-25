@@ -18,6 +18,7 @@ import Loading from './componentes/loading/Loading.js';
 
 // proveedores
 import { TipoPreguntaRespuestaProvider } from './context/createTestContext';
+import { CreateTestPageProvider } from './context/createTestPageContext';
 import { UsuarioProvider, useUsuario } from './context/usuarioContext.js';
 import { GeneralProvider } from './context/generalContext.js';
 import { MakeTestProvider } from './context/makeTestContext.js';
@@ -43,11 +44,13 @@ const App = () => {
           <div>
               <TipoPreguntaRespuestaProvider>
                 <MakeTestProvider>
-                  <GeneralProvider>
-                    <NavBar > 
-                      <Comp {...props}/>
-                    </NavBar>
-                  </GeneralProvider>
+                  <CreateTestPageProvider>
+                    <GeneralProvider>
+                      <NavBar > 
+                        <Comp {...props}/>
+                      </NavBar>
+                    </GeneralProvider>
+                  </CreateTestPageProvider>
                 </MakeTestProvider>
               </TipoPreguntaRespuestaProvider> 
           </div>
