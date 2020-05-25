@@ -28,6 +28,10 @@ import {
     MuiPickersUtilsProvider,
 } from '@material-ui/pickers'
 
+// contexts
+import { useCreateTestPage } from '../../context/createTestPageContext';
+import { useUsuario } from '../../context/usuarioContext';
+
 const tituloTooltip = "El modo estático le permitirá mostrar el examen en el orden que usted desee. En el modo dinámico el examen será mostrado de manera aleatoria de acuerdo a las configuraciones introucidas."
 
 const useStyles = makeStyles(theme => ({
@@ -69,9 +73,45 @@ const MenuProps = {
     },
 };
 
-const StepConfiguracionBasica = (props) => {
+const StepConfiguracionBasica = () => {
 
     const classes = useStyles();
+    const { usuario } = useUsuario();
+    const {  
+        handleChangeStep,
+        handleCambiarSwitch,
+        handleCambiarValor,
+        handleChangeStartDate,
+        handleChangeFinishDate,
+        titulo,
+        duracion,
+        valorFechaInicio,
+        valorFechaFin,
+        comentarios,
+        switchChecked,
+        tipoConfiguracion
+    } = useCreateTestPage();
+
+    const sendInitialData = (step) => {
+        // let request = {
+        //     name : titulo,
+        //     start_date : moment(valorFechaInicio).toISOString(),
+        //     finish_date : moment(valorFechaFin).toISOString(),
+        //     duration : duracion,
+        //     description : comentarios,
+        //     static : switchChecked,
+        //     email : usuario.email,
+        //     status : true
+        // }
+        // createTest(request)
+        // .then( res => {
+        //     console.log(res)
+        //     if (res) {
+        //         SetExamId(res.data.id);
+            handleChangeStep(step);
+        //     }
+        // })
+    }
 
     return (
         <Fragment>
@@ -89,7 +129,7 @@ const StepConfiguracionBasica = (props) => {
                                 type="submit"
                                 variant="contained"
                                 color="red"
-                                onClick={ () => props.sendInitialData('step_1')}
+                                onClick={ () => sendInitialData('step_1')}
                                 endIcon={<NavigateNextIcon/>}
                             >
                                 Siguiente Paso
@@ -114,9 +154,9 @@ const StepConfiguracionBasica = (props) => {
                         style = {{'display' : 'block', 'padding': '16px'}}
                     >
                         <Box style={{display: 'flex'}}>
-                            <Switch checked={props.switchChecked} onClick={() => props.handleCambiarSwitch()} color="primary"/>
+                            <Switch checked={switchChecked} onClick={() => handleCambiarSwitch()} color="primary"/>
                             <Tooltip title={tituloTooltip} placement="right" arrow>
-                                <Box style={{alignSelf: 'center'}}>{props.tipoConfiguracion}</Box>
+                                <Box style={{alignSelf: 'center'}}>{tipoConfiguracion}</Box>
                             </Tooltip>
                         </Box>
                     </Grid>
@@ -132,8 +172,8 @@ const StepConfiguracionBasica = (props) => {
                                     margin="normal"
                                     label="Título del Examen"
                                     required
-                                    value={props.titulo}
-                                    onChange={props.handleCambiarValor}
+                                    value={titulo}
+                                    onChange={handleCambiarValor}
                                     variant="outlined"
                                     fullWidth
                                     autoFocus
@@ -149,9 +189,9 @@ const StepConfiguracionBasica = (props) => {
                                         label="Duracion del examen"
                                         id='duracion'
                                         name='duracion'
-                                        value={props.duracion}
+                                        value={duracion}
                                         MenuProps={MenuProps}
-                                        onChange={props.handleCambiarValor} 
+                                        onChange={handleCambiarValor} 
                                     >
                                     {duracionExamen.map(item => (
                                         <MenuItem key={item.valor} value={item.valor} >
@@ -172,8 +212,8 @@ const StepConfiguracionBasica = (props) => {
                                             margin="normal"
                                             id='start_date'
                                             name='start_date'
-                                            value={props.valorFechaInicio} 
-                                            onChange={(e) => props.handleChangeStartDate(e)} 
+                                            value={valorFechaInicio} 
+                                            onChange={(e) => handleChangeStartDate(e)} 
                                             label="Fecha y hora de comienzo"
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
@@ -191,8 +231,8 @@ const StepConfiguracionBasica = (props) => {
                                             margin="normal"
                                             id='finish_date'
                                             name='finish_date'
-                                            value={props.valorFechaFin}  
-                                            onChange={(e) => props.handleChangeFinishDate(e)} 
+                                            value={valorFechaFin}  
+                                            onChange={(e) => handleChangeFinishDate(e)} 
                                             label="Fecha y hora de culminacion"
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
@@ -209,8 +249,8 @@ const StepConfiguracionBasica = (props) => {
                                     name='comentarios'
                                     margin="normal"
                                     label="Comentarios"
-                                    value={props.comentarios}
-                                    onChange={props.handleCambiarValor}
+                                    value={comentarios}
+                                    onChange={handleCambiarValor}
                                     fullWidth
                                     placeholder="Comentarios adicionales..."
                                     multiline
@@ -223,14 +263,6 @@ const StepConfiguracionBasica = (props) => {
                     </CardContent>
                     </Fragment>
                     <Divider />
-                    {/* <CardActions>
-                        <Button
-                            color="primary"
-                            variant="outlined"
-                        >
-                        Guardar
-                        </Button>
-                    </CardActions> */}
                 </form>
             </Card>
         </Fragment>

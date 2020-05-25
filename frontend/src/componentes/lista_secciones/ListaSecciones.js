@@ -18,6 +18,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Tooltip from '@material-ui/core/Tooltip';
 
+// contexts
+import { useCreateTestPage } from '../../context/createTestPageContext';
+
 const useStyles = makeStyles(theme => ({
     root: {
         height: '100%',
@@ -40,6 +43,10 @@ const useStyles = makeStyles(theme => ({
 const ListaSecciones = (props) => {
     const classes = useStyles();
     const { className, ...rest } = props;
+    const {  
+        secciones,
+        seccionSeleccionada
+    } = useCreateTestPage();
 
     return (
         <Card
@@ -48,7 +55,7 @@ const ListaSecciones = (props) => {
         >
             <CardHeader
                 title="Lista de Secciones"
-                subheader={`${props.secciones.length} en total`}
+                subheader={`${secciones.length} en total`}
                 action={
                     <Box style={{alignSelf: 'center', paddingTop: '8px'}}>
                         <Tooltip title={'Agregar sección'} placement="right" arrow>
@@ -66,11 +73,11 @@ const ListaSecciones = (props) => {
             <CardContent className={classes.content}>
                 <Box style={{maxHeight: '60vh', overflow: 'auto'}}>
                     <List>
-                    {props.secciones.map((item, index) => (
+                    {secciones.map((item, index) => (
                         <ListItem
-                            divider={index < props.secciones.length - 1}
+                            divider={index < secciones.length - 1}
                             key={index}
-                            selected={item && props.seccionSeleccionada ? item.id === props.seccionSeleccionada.id : false}
+                            selected={item && seccionSeleccionada ? item.id === seccionSeleccionada.id : false}
                         >
                         <ListItemText
                             primary={`Sección ${index + 1}`}

@@ -1,10 +1,17 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
-// import uuid from 'uuid/v1';
-// import moment from 'moment';
 import MaterialTable from "material-table";
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
+
+// contexts
+import { useCreateTestPage } from '../../context/createTestPageContext';
+
+const columns = [
+    { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
+    { title: 'Apellidos', field: 'last_name' },
+    { title: 'Correo Electrónico', field: 'email' },
+]
 
 const theme = createMuiTheme({
     palette: {
@@ -16,27 +23,18 @@ const theme = createMuiTheme({
     },
 });
 
-const ListaEstudiantes = props => {
+const ListaEstudiantes = (props) => {
+    const { handleAgregarEstudiante } = props;
+    const [ data, setData ] = useState([]);
     const { 
-        className, 
-        secciones, 
-        seccionSeleccionada, 
-        estudiantes, 
-        handleAgregarEstudiante, 
-        handleUpdateSecciones,
-        ...rest 
-    } = props;
-    // const [ estudiantes, handleAgregarEstudiante ] = useState(res);
-    // const [selectedUsers, setSelectedUsers] = useState([]);
-    const [columns, setColumns] = useState([
-        { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
-        { title: 'Apellidos', field: 'last_name' },
-        { title: 'Correo Electrónico', field: 'email' },
-    ]);
-    const [data, setData] = useState([]);
+        handleChangeComp,
+        seccionSeleccionada,
+        secciones,
+        estudiantes,
+    } = useCreateTestPage();
 
     useEffect(() => {
-        const aux = estudiantes.map( value => { return {...value} })
+        const aux = estudiantes.map( value => { return {...value} });
         setData(aux);
     }, [])
 
@@ -145,13 +143,13 @@ const ListaEstudiantes = props => {
                                 setTimeout(() => {
                                     let nuevaSeccion = [...secciones];
                                     for( let seccion of nuevaSeccion){
-                                        if (seccion.id === props.seccionSeleccionada.id) {
+                                        if (seccion.id === seccionSeleccionada.id) {
                                             seccion.estudiantes = rows;
                                             break;
                                         }    
                                     }
                                     resolve();
-                                    handleUpdateSecciones(nuevaSeccion);
+                                    handleChangeComp(nuevaSeccion, 'secciones');
 
                                 }, 600);
                             })
@@ -197,7 +195,7 @@ const ListaEstudiantes = props => {
                                     auxData.splice(auxData.indexOf(oldData), 1);
 
                                     for( let seccion of nuevaSeccion ){
-                                        if (seccion.id === props.seccionSeleccionada.id) {
+                                        if (seccion.id === seccionSeleccionada.id) {
                                             seccion.estudiantes.splice(seccion.estudiantes.indexOf(oldData), 1);
                                             break;
                                         }    
@@ -205,7 +203,7 @@ const ListaEstudiantes = props => {
 
                                     handleAgregarEstudiante(auxData);
                                     resolve();
-                                    handleUpdateSecciones(nuevaSeccion);
+                                    handleChangeComp(nuevaSeccion, 'secciones');
                                     
                                 }, 1000);
                             }),

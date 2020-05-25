@@ -23,6 +23,9 @@ import {
     TextField,
 } from '@material-ui/core';
 
+// contexts
+import { useCreateTestPage } from '../../context/createTestPageContext';
+
 const tipoPreguntas = [
     {valor : 'area', label: 'Área'},
     {valor : 'subarea', label: 'Subárea'},
@@ -85,13 +88,18 @@ const MenuProps = {
 };
 
 const StepConfiguracionDinamica = (props) => {
-
     const classes = useStyles();
-    const [tipoPreguntaSeleccionado, setTipoPreguntaSeleccionado] = useState(null); 
-    const [listaTipoPreguntas, setListaTipoPregunta] = useState(null);
-    const [countPreguntas, setCountPreguntas] = useState(0);
-    const [maxPreguntas, setMaxPreguntas] = useState(0);
-
+    const {  
+        handleChangeStep,
+        tipoPreguntaSeleccionado,
+        listaTipoPreguntas,
+        countPreguntas,
+        maxPreguntas,
+        setTipoPreguntaSeleccionado,
+        setListaTipoPregunta,
+        setCountPreguntas,
+        setMaxPreguntas,
+    } = useCreateTestPage();
 
     const handleTipoPregunta = (e) => {
         let preguntas;
@@ -165,6 +173,30 @@ const StepConfiguracionDinamica = (props) => {
             }
         } else console.log("Limite excedido")
     }
+
+    const sendConfDinamica = (step) => {
+        let request = {
+            total_quantity : maxPreguntas,
+            count : countPreguntas,
+            approach : tipoPreguntaSeleccionado,
+        }
+        let divisions = listaTipoPreguntas.map( topic => {
+            return {
+                name : topic.label,
+                quantity : topic.valor,
+                max_quantity : topic.max
+            }
+        })
+        request.divisions = divisions;
+        handleChangeStep(step);
+        // createTest(request)
+        // .then( res => {
+        //     console.log(res)
+        //     if (res) {
+        //         SetExamId(res.data.id);
+        //     }
+        // })
+    }
     
     return( 
         <Fragment>
@@ -182,7 +214,7 @@ const StepConfiguracionDinamica = (props) => {
                                 variant="contained"
                                 color="primary"
                                 style={{marginRight: '8px'}}
-                                onClick={ () => props.handleChangeStep('step_1')}
+                                onClick={ () => handleChangeStep('step_1')}
                                 endIcon={<NavigateBeforeIcon/>}
                             >
                                 Paso Anterior
@@ -192,7 +224,7 @@ const StepConfiguracionDinamica = (props) => {
                                 type="submit"
                                 variant="contained"
                                 color="red"
-                                onClick={ () => props.handleChangeStep('step_3')}
+                                onClick={ () => sendConfDinamica('step_3')}
                                 endIcon={<NavigateNextIcon/>}
                             >
                                 Siguiente Paso
@@ -206,7 +238,7 @@ const StepConfiguracionDinamica = (props) => {
             >
                 <CardHeader
                     subheader={`Aquí puedes modificar las configuraciones avanzadas de tu examen.`}
-                    title="Configuraciones Avanzadas"
+                    title="Configuraciones Dinámica"
                 />
                 <Divider />
                 <Grid
@@ -244,14 +276,15 @@ const StepConfiguracionDinamica = (props) => {
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <TextField
-                                    id={`numero_preguntas`}
+                                    id="numero_preguntas"
                                     type="number"
                                     margin="normal"
                                     label="Número de Preguntas"
                                     required
                                     variant="outlined"
                                     fullWidth
-                                    name={`numero_preguntas`}
+                                    value={maxPreguntas}
+                                    name="numero_preguntas"
                                     autoFocus
                                     style={{textAlignLast: 'center'}}
                                     onChange={handleMaxPreguntas} 
