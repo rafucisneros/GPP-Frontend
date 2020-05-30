@@ -6,6 +6,8 @@ import FormPregunta from '../componentes/form_pregunta/FormPregunta'
 import { useGeneral } from '../context/generalContext';
 import ClockIcon from '@material-ui/icons/AccessTime';
 
+import "../assets/css/makeTestPage.css";
+
 // contexts
 import {useMakeTest} from '../context/makeTestContext';
 
@@ -15,7 +17,7 @@ const drawerWidth = 240;
 const examenPrueba = {
   Nombre: "Examen de Prueba",
   fecha_inicio: time().format("DD/MM/YYYY - HH:mmA"),
-  duracion: 2,
+  duracion: 200,
   Preguntas: [
     {
       _id: 1,
@@ -73,7 +75,14 @@ export default function MakeTestPage(){
   }
 
   const finishExam = () => {
-    alert("Termino Examen")
+    if(window.confirm("¿Seguro que desea terminar el examen?")){
+      SaveExam()
+      window.location = "/exam_finished/1"
+    }
+  }
+
+  const SaveExam = () => {
+    alert("API")
   }
 
   const timer = () => {
@@ -83,7 +92,9 @@ export default function MakeTestPage(){
     let restante = time([Math.floor(restanteMinutos / 60), restanteMinutos % 60], "HH:mm").format("HH:mm")
     setTiempoRestante(restante)
     if(restante === "00:00"){
-      finishExam()
+      SaveExam()
+      alert("Termino Examen")
+      window.location = "/exam_finished/1"
     } 
   }
   setContentMenu('make_test');
@@ -109,26 +120,24 @@ export default function MakeTestPage(){
 
   if(exam){
     return (
-      <div >
-        <div className="content-main-crear-test">
+      <div className="content-main-presentar-test">
         <div className="toolbar-icono"/>
-          <Container maxWidth="lg" style={{paddingTop: '20px', paddingBottom: '32px'}}>
-            <Grid container spacing={2} direction="row" justify="space-around">
-              <h3>Hora de Inicio: {exam.fecha_inicio}</h3>
-              <h3><ClockIcon style={{color: "black"}}/> {tiempoRestante}</h3>
-              <h3>Hora de Fin: {exam.fecha_fin}</h3>
-            </Grid>
-          </Container>
-          <FormPregunta 
-            pregunta={exam.Preguntas.find(x => x["_id"] == preguntaActual)} 
-            // pregunta={exam.Preguntas.find(x => x["_id"] == exam.Pregunta_Actual)}
-            changeAnswer={changeAnswer} 
-            changeQuestion={changeQuestion}
-            isLastQuestion={preguntaActual === exam["Preguntas"].length}
-            isFirstQuestion={preguntaActual === 1}
-            finishExam={finishExam}
-          />
-        </div>
+        <Container maxWidth="lg" style={{paddingTop: '20px', paddingBottom: '32px'}}>
+          <Grid container spacing={2} direction="row" justify="space-around">
+            <h3>Hora de Inicio: {exam.fecha_inicio}</h3>
+            <h3><ClockIcon style={{color: "black"}}/> {tiempoRestante}</h3>
+            <h3>Hora de Fin: {exam.fecha_fin}</h3>
+          </Grid>
+        </Container>
+        <FormPregunta 
+          pregunta={exam.Preguntas.find(x => x["_id"] == preguntaActual)} 
+          // pregunta={exam.Preguntas.find(x => x["_id"] == exam.Pregunta_Actual)}
+          changeAnswer={changeAnswer} 
+          changeQuestion={changeQuestion}
+          isLastQuestion={preguntaActual === exam["Preguntas"].length}
+          isFirstQuestion={preguntaActual === 1}
+          finishExam={finishExam}
+        />
       </div>
     )
   } else {

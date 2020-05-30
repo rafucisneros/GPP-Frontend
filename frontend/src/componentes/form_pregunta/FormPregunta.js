@@ -11,6 +11,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Checkbox from '@material-ui/core/Checkbox';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import "./FormPregunta.css"
 
 export default function FormPregunta({ 
   pregunta, changeAnswer, changeQuestion, isFirstQuestion, isLastQuestion, finishExam 
@@ -52,12 +53,12 @@ export default function FormPregunta({
   }
 
   return (
-    <Container maxWidth="lg" style={{paddingTop: '20px', paddingBottom: '32px'}}>
-      <Grid container spacing={2} direction="column">
+    <Container maxWidth="lg" className="form-container">
+      <Grid container spacing={2} direction="column" style={{height: "100%"}}>
         <div>
           <h1>Pregunta {pregunta._id}</h1>
         </div>
-        <Grid container spacing={2} direction="row" justify="space-around">
+        <Grid container spacing={2} direction="row" justify="space-around" style={{flex: 1}}>
           {pregunta.tipo === "seleccion_simple" && 
             (<div>              
               <FormControl component="fieldset">
@@ -153,7 +154,6 @@ export default function FormPregunta({
             </div>)
           }
         </Grid>
-        <br />
         <Grid container spacing={2} direction="row" justify="space-around">
           <Box className="div-buttons-respuestas">
             <Button
