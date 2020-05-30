@@ -110,7 +110,7 @@ export default function MakeTestPage(){
   if(exam){
     return (
       <div >
-        <main className="content-main-crear-test">
+        <div className="content-main-crear-test">
         <div className="toolbar-icono"/>
           <Container maxWidth="lg" style={{paddingTop: '20px', paddingBottom: '32px'}}>
             <Grid container spacing={2} direction="row" justify="space-around">
@@ -128,7 +128,7 @@ export default function MakeTestPage(){
             isFirstQuestion={preguntaActual === 1}
             finishExam={finishExam}
           />
-        </main>
+        </div>
       </div>
     )
   } else {

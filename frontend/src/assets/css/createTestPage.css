@@ -46,6 +46,7 @@
     flex-wrap: wrap;
     align-content: space-between;
     align-items: center;
+    width: 100%
 }
 
 .flex-box-titulo > div:first-child{

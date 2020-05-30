@@ -24,12 +24,13 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import AddIcon from '@material-ui/icons/Add';
 
 // contexts
-import { CreateTestPageProvider } from '../../context/createTestPageContext.js';
+import { useCreateTestPage } from '../../context/createTestPageContext.js';
 import { useTipoPreguntaRespuesta } from '../../context/createTestContext'
 
 export default function MenuCreateTest({step}) {
 
   const {handleOpcionExamen, itemSeleccionado, subMenuTipoPregunta, setSubMenuTipoPregunta, setItemSeleccionado} = useTipoPreguntaRespuesta();
+  const {destroyData} = useCreateTestPage();
   const [open, setOpen] = useState();
 
   const handleModal = () => {
@@ -130,6 +131,7 @@ export default function MenuCreateTest({step}) {
           <ListItem
             button
             selected={itemSeleccionado === '3'}
+            onClick={ () => destroyData()}
           >
             <ListItemIcon>
               <MenuBookIcon />
@@ -152,13 +154,11 @@ export default function MenuCreateTest({step}) {
           />
         </ListItem>
       </List>
-      <CreateTestPageProvider>
-        <ModalAddAreaSubAreaTema
-          open={open}
-          handleModal={handleModal}
-        >
-        </ModalAddAreaSubAreaTema>
-      </CreateTestPageProvider>
+      <ModalAddAreaSubAreaTema
+        open={open}
+        handleModal={handleModal}
+      >
+      </ModalAddAreaSubAreaTema>
     </div>
   )
 }

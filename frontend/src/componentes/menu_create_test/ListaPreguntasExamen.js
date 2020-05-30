@@ -39,8 +39,6 @@ const ListaPreguntasExamen = () => {
     const [ lista, setLista ] = useState([]);
 
     useEffect(() => {
-        let aux = [];
-        console.log(listaPreguntasExamen)
         if (listaPreguntasExamen && listaPreguntasExamen.length > 0){
             let aux = listaPreguntasExamen.map( (pregunta, index)  => {
                 return {color : 'rgb(209, 213, 238)', texto : `Pregunta ${index + 1}`, posicion : index}
@@ -67,8 +65,6 @@ const ListaPreguntasExamen = () => {
 
         setLista(items);
     }
-
-    console.log(lista)
 
     return (
         // <Grid className = "contenedor-lista-preguntas" >

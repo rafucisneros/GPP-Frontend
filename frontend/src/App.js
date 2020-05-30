@@ -11,9 +11,11 @@ import CreateTestPage from './vistas/CreateTestPage.js';
 import HomePage from './vistas/HomePage.js';
 import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
+import GraphicPage from './vistas/GraphicPage.js';
 
 // componentes
-import NavBar from './componentes/navbar/NavBar.js';
+// import NavBar from './componentes/layouts/NavBar.js';
+import Layout from './componentes/layouts/Layout.js';
 import Loading from './componentes/loading/Loading.js';
 
 // proveedores
@@ -46,9 +48,9 @@ const App = () => {
                 <MakeTestProvider>
                   <CreateTestPageProvider>
                     <GeneralProvider>
-                      <NavBar > 
+                      <Layout > 
                         <Comp {...props}/>
-                      </NavBar>
+                      </Layout>
                     </GeneralProvider>
                   </CreateTestPageProvider>
                 </MakeTestProvider>
@@ -111,6 +113,11 @@ const App = () => {
           exact
           path='/perfil'
           render={(props) => <MantenimientoPage {...props} />}
+        />
+        <Route
+          exact
+          path='/grafica'
+          render={(props) => <GraphicPage {...props} />}
         />
         <Redirect strict from="/" to="/login" />
       </Switch>

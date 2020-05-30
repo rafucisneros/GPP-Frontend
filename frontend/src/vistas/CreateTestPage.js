@@ -8,9 +8,9 @@ import StepConfiguracionBasica from '../componentes/steps/StepConfiguracionBasic
 import StepCrearPreguntas from '../componentes/steps/StepCrearPreguntas.js';
 import StepConfiguracionDinamica from '../componentes/steps/StepConfiguracionDinamica.js';
 import StepSecciones from '../componentes/steps/StepSecciones.js';
+import StepFinish from '../componentes/steps/StepFinish.js';
 
 // contexts
-import { CreateTestPageProvider } from '../context/createTestPageContext.js';
 import { useCreateTestPage } from '../context/createTestPageContext.js';
 import { useGeneral } from '../context/generalContext';
 
@@ -41,8 +41,10 @@ const CreateTestPage = () => {
                             <StepCrearPreguntas/>
                         : step === 'step_2' ?
                             <StepConfiguracionDinamica/>
-                        : step === 'step_3' &&
+                        : step === 'step_3' ?
                             <StepSecciones/>
+                        : step === 'step_4' &&
+                            <StepFinish/>
                     }
                 </Grid>
             </Container>
