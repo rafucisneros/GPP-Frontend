@@ -12,13 +12,16 @@ import HomePage from './vistas/HomePage.js';
 import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
 import TestDetailsPage from './vistas/TestDetailsPage.js';
+import GraphicPage from './vistas/GraphicPage.js';
 
 // componentes
-import NavBar from './componentes/navbar/NavBar.js';
+// import NavBar from './componentes/layouts/NavBar.js';
+import Layout from './componentes/layouts/Layout.js';
 import Loading from './componentes/loading/Loading.js';
 
 // proveedores
 import { TipoPreguntaRespuestaProvider } from './context/createTestContext';
+import { CreateTestPageProvider } from './context/createTestPageContext';
 import { UsuarioProvider, useUsuario } from './context/usuarioContext.js';
 import { GeneralProvider } from './context/generalContext.js';
 import { MakeTestProvider } from './context/makeTestContext.js';
@@ -44,11 +47,13 @@ const App = () => {
           <div>
               <TipoPreguntaRespuestaProvider>
                 <MakeTestProvider>
-                  <GeneralProvider>
-                    <NavBar > 
-                      <Comp {...props}/>
-                    </NavBar>
-                  </GeneralProvider>
+                  <CreateTestPageProvider>
+                    <GeneralProvider>
+                      <Layout > 
+                        <Comp {...props}/>
+                      </Layout>
+                    </GeneralProvider>
+                  </CreateTestPageProvider>
                 </MakeTestProvider>
               </TipoPreguntaRespuestaProvider> 
           </div>
@@ -113,6 +118,11 @@ const App = () => {
         <Route
           path='/test_details/:id'
           render={(props) => requireAuth(TestDetailsPage, props, TipoPreguntaRespuestaProvider)}
+        />
+        <Route
+          exact
+          path='/grafica'
+          render={(props) => <GraphicPage {...props} />}
         />
         <Redirect strict from="/" to="/login" />
       </Switch>

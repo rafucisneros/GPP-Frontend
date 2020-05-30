@@ -1,17 +1,24 @@
 import Axios from 'axios';
 import auth from './helpers/auth.js'
 
-const SERVER_NAME = 'http://192.168.1.103:8000';
+const SERVER_NAME = 'http://192.168.1.106:8000';
+// const SERVER_NAME = 'http://salty-ridge-87460.herokuapp.com';
 // const SERVER_NAME = 'http://localhost:8000';
 
 export const global = {
     SERVER_NAME : SERVER_NAME,
-    API_GET_MENSAJE: `${SERVER_NAME}/mensajito`,
-    API_GET_USUARIO: `${SERVER_NAME}/user/info`,
+    GET_MENSAJE: `${SERVER_NAME}/mensajito`,
+    GET_USUARIO: `${SERVER_NAME}/user/info`,
 
-    API_POST_REGISTRO: `${SERVER_NAME}/user/signup`,
-    API_POST_LOGIN: `${SERVER_NAME}/user/login`,
+    POST_REGISTRO: `${SERVER_NAME}/user/signup`,
+    POST_LOGIN: `${SERVER_NAME}/user/login`,
 
+    POST_CREATE_TEST: `${SERVER_NAME}/exam/create_exam/`,
+    POST_SECTION: `${SERVER_NAME}/exam/_id_/section/`,
+    PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
+
+    GET_STUDENTS: `${SERVER_NAME}/users/`,
+    TOPICS: `${SERVER_NAME}/approach/`
 };
 
 Axios.interceptors.request
@@ -19,8 +26,6 @@ Axios.interceptors.request
         const token = auth.getToken();
         request.headers['Content-Type'] = 'application/json';
         if (token) request.headers.Authorization = `Bearer ${token}`;
-        console.log(request)
-        // debugger
         return request;
 });
 

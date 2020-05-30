@@ -14,12 +14,12 @@
 }
 
 .paper-crear-test.section-paper-crear-test{
-    height: 240px;
+    height: 160px;
 }
 
 .paper-crear-test.section-paper-crear-test.ultima-seccion{
     height: auto;
-    max-height: 300px;
+    max-height: 320px;
 }
 
 /* Toolbar*/
@@ -46,6 +46,7 @@
     flex-wrap: wrap;
     align-content: space-between;
     align-items: center;
+    width: 100%
 }
 
 .flex-box-titulo > div:first-child{
