@@ -24,15 +24,15 @@ const StepFinish = () => {
     return( 
         <Fragment>
             <Grid container spacing={3} style={{textAlign : 'center', display: 'flex', width : '100%', paddingTop: '25vh'}}>
-                <Grid item  xs={12}>
+                <Grid item xs={12}>
                     <CheckCircleOutlinedIcon style={{ color: 'green', fontSize : 100 }}/>
                 </Grid>
-                <Grid item  xs={12}>
+                <Grid item xs={12}>
                     <Typography variant="h5" >
                         {`Se ha creado satisfactoriamente el examen ${titulo ? titulo : ''}`}
                     </Typography>
                 </Grid>
-                <Grid item  xs={12}>
+                <Grid item xs={12} style={{marginTop: '32px'}}>
                     <Link to={"home"} className="link" onClick={handleStep}>
                         <Button
                             // type="submit"

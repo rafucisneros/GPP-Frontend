@@ -1,4 +1,5 @@
 import React from 'react';
+import { Bar, defaults } from 'react-chartjs-2';
 
 // assets
 import '../assets/css/mantenimientoPage.css';

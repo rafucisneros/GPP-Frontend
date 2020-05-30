@@ -51,6 +51,7 @@ const Footer = props => {
             >
                 Rafael Cisneros
             </Link>
+            {'.'}
         </Typography>
         </div>
     );
