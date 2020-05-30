@@ -11,6 +11,7 @@ import CreateTestPage from './vistas/CreateTestPage.js';
 import HomePage from './vistas/HomePage.js';
 import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
+import TestDetailsPage from './vistas/TestDetailsPage.js';
 
 // componentes
 import NavBar from './componentes/navbar/NavBar.js';
@@ -108,6 +109,10 @@ const App = () => {
           exact
           path='/perfil'
           render={(props) => <MantenimientoPage {...props} />}
+        />
+        <Route
+          path='/test_details/:id'
+          render={(props) => requireAuth(TestDetailsPage, props, TipoPreguntaRespuestaProvider)}
         />
         <Redirect strict from="/" to="/login" />
       </Switch>

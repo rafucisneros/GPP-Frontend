@@ -272,6 +272,22 @@ const NavBar = ({children}) => {
                 </List>
               </Fragment>
             }
+
+            { contentMenu === 'test_details' &&
+                <Fragment>
+                    <div className="toolbar-icono">
+                        Menú del Examen
+                        <IconButton onClick={handleBarClose}>
+                            <ChevronLeftIcon />
+                        </IconButton>
+                    </div>
+                    <Divider/>
+                    <ListaTipoPregunta/>
+    
+                    <Divider/>
+                    <ListaPreguntasExamen/>
+                </Fragment>
+            }
             </Drawer>
             
             <main className="content-main" >

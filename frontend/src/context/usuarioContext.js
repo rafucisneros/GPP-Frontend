@@ -10,7 +10,7 @@ export function UsuarioProvider(props) {
         'first_name': '',
         'last_name' : '',
     });
-    const [cargandoUsuario, setCargandoUsuario] = useState(true);
+    const [cargandoUsuario, setCargandoUsuario] = useState(false);
 
     useEffect(() => {
         async function cargarUsuario(){
