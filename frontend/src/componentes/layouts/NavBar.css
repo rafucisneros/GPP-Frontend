@@ -1,7 +1,5 @@
 .content-main{
-    flex-grow: 1;
-    height: 100vh;
-    overflow: auto;
+    flex : 1
 }
 
 .link{

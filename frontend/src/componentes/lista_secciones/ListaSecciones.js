@@ -71,7 +71,7 @@ const ListaSecciones = (props) => {
             />
             <Divider />
             <CardContent className={classes.content}>
-                <Box style={{maxHeight: '60vh', overflow: 'auto'}}>
+                <Box style={{maxHeight: '43vh', overflow: 'auto'}}>
                     <List>
                     {secciones.map((item, index) => (
                         <ListItem

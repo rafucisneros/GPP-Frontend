@@ -67,7 +67,6 @@ export function CreateTestPageProvider(props) {
         .then( res => {
             if (res.data){
                 let data = res.data;
-                console.log(data)
                 setAreas(data.areas);
                 setSubareas(data.subareas);
                 setTemas(data.topics);
@@ -126,6 +125,42 @@ export function CreateTestPageProvider(props) {
         else if (type === 'esudiantes') setEstudiantes(item); 
     }
 
+    // Step Finish
+    const destroyData = () => {
+        setStep('step_0')
+        setTipoConfiguracion("Configuración Dinámica")
+        SetExamId(null)
+        setSwitchChecked(true)
+        setDuracion(null)
+        setValorFechaInicio(moment().toDate())
+        setValorFechaFin( moment().add(1, 'd').toDate())
+        setTitulo(null)
+        setComentarios(null)
+        setAreas([])
+        setSubareas({})
+        setTemas({})
+        setListaFiltradoSubArea([])
+        setListaFiltradoTema([])
+        setPermitirSubArea(false)
+        setPermitirTarea(false)
+        setPregunta(null)
+        setPonderacion(null)
+        setDificultad(null)
+        setAreaSeleccionada(null)
+        setSubareaSeleccionada(null)
+        setTemaSeleccionado(null)
+        setListaPreguntasExamen([])
+        setRespuestas([])
+        setSelectedRespuesta('verdadero')
+        setTipoPreguntaSeleccionado(null)
+        setListaTipoPregunta([])
+        setCountPreguntas(0)
+        setMaxPreguntas(0)
+        setEstudiantes([])
+        setSecciones([])
+        setSeccionSeleccionada(null)
+    }
+
     const value = useMemo( () => {
         return({
             areas,
@@ -175,6 +210,7 @@ export function CreateTestPageProvider(props) {
             setListaPreguntasExamen,
             setRespuestas,
             setSelectedRespuesta,
+            destroyData,
         })
     }, [
         areas, 

@@ -74,6 +74,11 @@ const StepSecciones = (props) => {
         data.splice(index, 1);
         handleChangeComp(data, 'secciones');
     }
+
+    const finishStep = () => {
+        sendSectionsData();
+        handleChangeStep('step_4');
+    }
     
     return( 
         <Fragment>
@@ -111,7 +116,7 @@ const StepSecciones = (props) => {
                             type="submit"
                             variant="contained"
                             color="red"
-                            onClick={ () => sendSectionsData()}
+                            onClick={ () => finishStep()}
                             endIcon={<PublishIcon/>}
                         >
                             Publicar Examen
