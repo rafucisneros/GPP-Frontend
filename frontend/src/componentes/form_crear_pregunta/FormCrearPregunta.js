@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import validator from 'validator';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import Paper from '@material-ui/core/Paper';
@@ -10,7 +11,6 @@ import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 import Box from '@material-ui/core/Box';
 import RadioGroup from '@material-ui/core/RadioGroup';
-
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -77,8 +77,6 @@ export default function FormCrearPregunta() {
 
     const handleChangeRadio = (e) => setSelectedRespuesta(e.target.value);
 
-
-
     const reorder = (list, startIndex, endIndex) => {
 		const result = Array.from(list);
 		const [removed] = result.splice(startIndex, 1);
@@ -106,6 +104,7 @@ export default function FormCrearPregunta() {
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test section-paper-crear-test">
                     <TextField
+                        error={false}
                         id="pregunta"
                         margin="normal"
                         label="Pregunta"
@@ -118,6 +117,7 @@ export default function FormCrearPregunta() {
                         multiline
                         rows={3}
                         rowsMax={5}
+                        helperText="El campo es requerido"
                     />
                 </Paper>
             </Grid>

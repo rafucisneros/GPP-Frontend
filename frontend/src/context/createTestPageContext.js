@@ -54,6 +54,18 @@ export function CreateTestPageProvider(props) {
     const [secciones, setSecciones] = useState([]);
     const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
 
+    // Errores
+    const [errores, setErrores] = useState({
+        duracionError: false,
+        tituloError : false,
+        comentariosError : false,
+        preguntaError : false,
+        ponderacionError : false,
+        dificultadError : false,
+        areaSeleccionadaError : false,
+        tipoPreguntaSeleccionadoError : false,
+    });
+
     // GET requests y componentes de montaje
     useEffect(() => {
         getStudents()
@@ -194,6 +206,7 @@ export function CreateTestPageProvider(props) {
             maxPreguntas,
             listaPreguntasExamen,
             respuestas,
+            errores,
             selectedRespuesta,
             handleChangeStep,
             handleCambiarValor,
@@ -210,6 +223,7 @@ export function CreateTestPageProvider(props) {
             setListaPreguntasExamen,
             setRespuestas,
             setSelectedRespuesta,
+            setErrores,
             destroyData,
         })
     }, [
@@ -245,6 +259,7 @@ export function CreateTestPageProvider(props) {
         listaPreguntasExamen,
         respuestas,
         selectedRespuesta,
+        errores,
     ]);
 
     return <CreateTestPageContext.Provider value = {value} {...props} />

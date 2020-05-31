@@ -1,5 +1,6 @@
-import React, {Fragment} from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import validator from 'validator';
 
 // material
 import { makeStyles } from '@material-ui/core/styles';
@@ -22,6 +23,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import Tooltip from '@material-ui/core/Tooltip';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import MomentUtils from '@date-io/moment';
 import {
     DateTimePicker,
@@ -89,28 +91,69 @@ const StepConfiguracionBasica = () => {
         valorFechaFin,
         comentarios,
         switchChecked,
-        tipoConfiguracion
+        tipoConfiguracion,
+        errores,
+        setErrores
     } = useCreateTestPage();
+    const [auxTitulo, setAuxTitulo] = useState(null)
+
+    const verifyData = (flag) => {
+        let error = false;
+        let listError = {};
+
+        if(flag === 'all' || flag === 'titulo' ) {
+            if( !titulo || validator.isEmpty(titulo)){
+                error = true;
+                listError.tituloError = true;
+            } 
+            else listError.tituloError = false;
+        }
+
+        if (flag === 'all' || flag === 'duracion' ){
+            if(!duracion || validator.isEmpty(String(duracion))){
+                error = true;
+                listError.duracionError = true;
+            } 
+            else listError.duracionError = false;
+        }
+
+        setErrores({...errores, ...listError});
+        return error;
+    }
+
+    useEffect(() => {
+        if(titulo && !duracion) verifyData('titulo');
+        else if (!titulo && duracion) verifyData('duracion');
+        else if (titulo && duracion) verifyData('all');
+    }, [titulo, duracion])
+
+    const handleChangeTitulo = (e) =>{
+        handleCambiarValor(e);
+        setAuxTitulo(e.target.value);
+    }
 
     const sendInitialData = (step) => {
-        // let request = {
-        //     name : titulo,
-        //     start_date : moment(valorFechaInicio).toISOString(),
-        //     finish_date : moment(valorFechaFin).toISOString(),
-        //     duration : duracion,
-        //     description : comentarios,
-        //     static : switchChecked,
-        //     email : usuario.email,
-        //     status : true
-        // }
-        // createTest(request)
-        // .then( res => {
-        //     console.log(res)
-        //     if (res) {
-        //         SetExamId(res.data.id);
+        let error = verifyData('all');
+        if(!error){
+            // let request = {
+            //     name : titulo,
+            //     start_date : moment(valorFechaInicio).toISOString(),
+            //     finish_date : moment(valorFechaFin).toISOString(),
+            //     duration : duracion,
+            //     description : comentarios,
+            //     static : switchChecked,
+            //     email : usuario.email,
+            //     status : true
+            // }
+            // createTest(request)
+            // .then( res => {
+            //     console.log(res)
+            //     if (res) {
+            //         SetExamId(res.data.id);
             handleChangeStep(step);
-        //     }
-        // })
+            //     }
+            // })
+        }
     }
 
     return (
@@ -166,14 +209,16 @@ const StepConfiguracionBasica = () => {
                         <Grid container spacing={2}>
                             <Grid item xs={6} md={6} lg={6}>
                                 <TextField
+                                    error={errores && errores.tituloError}
+                                    helperText={errores && errores.tituloError ? "El campo es requerido" : null}
                                     id='titulo'
                                     name='titulo'
                                     type="text"
                                     margin="normal"
                                     label="Título del Examen"
                                     required
-                                    value={titulo}
-                                    onChange={handleCambiarValor}
+                                    value={auxTitulo}
+                                    onChange={handleChangeTitulo}
                                     variant="outlined"
                                     fullWidth
                                     autoFocus
@@ -183,9 +228,11 @@ const StepConfiguracionBasica = () => {
                                 />
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
-                                <FormControl required variant="outlined" style={{textAlignLast: 'center'}} className={classes.formControl}>
+                                <FormControl required variant="outlined" error={errores && errores.duracionError} className={classes.formControl}>
                                     <InputLabel>Duracion del examen</InputLabel>
                                     <Select
+                                        error={errores && errores.duracionError}
+                                        helperText="El campo es requerido"
                                         label="Duracion del examen"
                                         id='duracion'
                                         name='duracion'
@@ -199,6 +246,7 @@ const StepConfiguracionBasica = () => {
                                         </MenuItem>
                                     ))}
                                     </Select>
+                                    { errores && errores.duracionError && <FormHelperText>El campo es requerido</FormHelperText>}
                                 </FormControl>
                             </Grid>
                         </Grid>

@@ -1,4 +1,4 @@
-import React, { Fragment }  from 'react';
+import React, { Fragment, useState }  from 'react';
 
 // componentes
 import FormCrearPregunta from '../../componentes/form_crear_pregunta/FormCrearPregunta.js';
@@ -18,6 +18,12 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const StepCrearPreguntas = () => {
 
@@ -41,6 +47,8 @@ const StepCrearPreguntas = () => {
         setSelectedRespuesta,
         exam_id
     } = useCreateTestPage();
+
+    const [ sucess, setSucess ] = useState(false);
 
     const handleCrearPregunta = () => {
         const auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
@@ -73,7 +81,13 @@ const StepCrearPreguntas = () => {
 
         // Clean Form
         handleCleanForm();
+        setSucess(true);
     }
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setSucess(false);
+    };
 
     const handleCleanForm = () => {
         const event_pond = { target : { name : 'ponderacion', value : ''}};
@@ -135,14 +149,14 @@ const StepCrearPreguntas = () => {
                 </Paper>
             </Grid>
 
-            <Grid item lg={9} sm={9} xl={9} xs={9}>
+            <Grid item lg={8} sm={8} xl={8} xs={8}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
                     Enfoque
                     <SeleccionarAreaTema/>
                 </Paper>
             </Grid>
 
-            <Grid item lg={3} sm={3} xl={3} xs={3}>
+            <Grid item lg={4} sm={4} xl={4} xs={4}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
                     Evaluación
                     <PonderacionDificultad/>
@@ -174,6 +188,17 @@ const StepCrearPreguntas = () => {
                     </Box>
                 </Paper>
             </Grid> 
+            <Snackbar open={sucess} autoHideDuration={3000} onClose={handleCloseAlert} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleCloseAlert} severity="success">
+                    Pregunta Creada exitosamente
+                </Alert>
+            </Snackbar>
+            {/* <Snackbar open={sucess} autoHideDuration={3000} onClose={handleCloseAlert} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleCloseAlert} severity="error">
+                    {errorMessage}
+                    Hubo un error
+                </Alert>
+            </Snackbar> */}
         </Fragment>
     )
 }
