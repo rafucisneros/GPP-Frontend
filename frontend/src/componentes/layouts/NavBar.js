@@ -325,10 +325,12 @@ const NavBar = () => {
                         </IconButton>
                     </div>
                     <Divider/>
-                    <ListaTipoPregunta/>
+                    <MenuCreateTest step = {contentMenu.split(' ')[1]}/>
     
                     <Divider/>
-                    <ListaPreguntasExamen/>
+                    {
+                        contentMenu.split(' ')[1] === 'step_1' && <ListaPreguntasExamen/>
+                    }
                 </Fragment>
             }
             </Drawer>
