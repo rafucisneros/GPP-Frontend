@@ -18,7 +18,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
-export default function FormCrearPregunta() {
+export default function FormCrearPregunta(props) {
     const { tipoPregunta } = useTipoPreguntaRespuesta();
     const {  
         handleChangeInput,
@@ -104,7 +104,7 @@ export default function FormCrearPregunta() {
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test section-paper-crear-test">
                     <TextField
-                        error={false}
+                        error={props.errores && props.errores.preguntaError}
                         id="pregunta"
                         margin="normal"
                         label="Pregunta"
@@ -117,7 +117,7 @@ export default function FormCrearPregunta() {
                         multiline
                         rows={3}
                         rowsMax={5}
-                        helperText="El campo es requerido"
+                        helperText={props.errores && props.errores.preguntaError ? "El campo es requerido" : ""}
                     />
                 </Paper>
             </Grid>

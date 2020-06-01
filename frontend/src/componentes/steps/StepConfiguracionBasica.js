@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import validator from 'validator';
 
@@ -85,23 +85,22 @@ const StepConfiguracionBasica = () => {
         handleCambiarValor,
         handleChangeStartDate,
         handleChangeFinishDate,
-        titulo,
-        duracion,
         valorFechaInicio,
         valorFechaFin,
-        comentarios,
         switchChecked,
         tipoConfiguracion,
-        errores,
-        setErrores
+        titulo,
+        comentarios,
+        duracion
     } = useCreateTestPage();
-    const [auxTitulo, setAuxTitulo] = useState(null)
+
+    const [errores, setErrores] = useState({tituloError : false, duracionError : false});
 
     const verifyData = (flag) => {
         let error = false;
         let listError = {};
 
-        if(flag === 'all' || flag === 'titulo' ) {
+        if(flag === 'all' || flag === 'titulo'){
             if( !titulo || validator.isEmpty(titulo)){
                 error = true;
                 listError.tituloError = true;
@@ -109,8 +108,8 @@ const StepConfiguracionBasica = () => {
             else listError.tituloError = false;
         }
 
-        if (flag === 'all' || flag === 'duracion' ){
-            if(!duracion || validator.isEmpty(String(duracion))){
+        if(flag === 'all' || flag === 'duracion'){
+            if( !duracion || validator.isEmpty(String(duracion))){
                 error = true;
                 listError.duracionError = true;
             } 
@@ -121,16 +120,13 @@ const StepConfiguracionBasica = () => {
         return error;
     }
 
-    useEffect(() => {
-        if(titulo && !duracion) verifyData('titulo');
-        else if (!titulo && duracion) verifyData('duracion');
-        else if (titulo && duracion) verifyData('all');
-    }, [titulo, duracion])
+    useMemo( () => {
+        if (titulo) verifyData('titulo');
+    }, [titulo])
 
-    const handleChangeTitulo = (e) =>{
-        handleCambiarValor(e);
-        setAuxTitulo(e.target.value);
-    }
+    useMemo(() => {
+        if (duracion) verifyData('duracion');
+    }, [duracion])
 
     const sendInitialData = (step) => {
         let error = verifyData('all');
@@ -217,8 +213,8 @@ const StepConfiguracionBasica = () => {
                                     margin="normal"
                                     label="Título del Examen"
                                     required
-                                    value={auxTitulo}
-                                    onChange={handleChangeTitulo}
+                                    value={titulo}
+                                    onChange={handleCambiarValor}
                                     variant="outlined"
                                     fullWidth
                                     autoFocus

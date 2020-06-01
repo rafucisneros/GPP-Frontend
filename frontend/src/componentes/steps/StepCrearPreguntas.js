@@ -1,4 +1,5 @@
-import React, { Fragment, useState }  from 'react';
+import React, { Fragment, useState, useMemo }  from 'react';
+import validator from 'validator';
 
 // componentes
 import FormCrearPregunta from '../../componentes/form_crear_pregunta/FormCrearPregunta.js';
@@ -49,6 +50,7 @@ const StepCrearPreguntas = () => {
     } = useCreateTestPage();
 
     const [ sucess, setSucess ] = useState(false);
+    const [ errores, setErrores ] = useState({preguntaError : false, duracionError : false});
 
     const handleCrearPregunta = () => {
         const auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
@@ -89,6 +91,45 @@ const StepCrearPreguntas = () => {
         setSucess(false);
     };
 
+    const verifyData = (flag) => {
+        let error = false;
+        let listError = {};
+
+        if(flag === 'all' || flag === 'pregunta'){
+            if( !pregunta || validator.isEmpty(pregunta)){
+                error = true;
+                listError.preguntaError = true;
+            } 
+            else listError.preguntaError = false;
+        }
+
+        // if(flag === 'all' || flag === 'duracion'){
+        //     if( !duracion || validator.isEmpty(String(duracion))){
+        //         error = true;
+        //         listError.duracionError = true;
+        //     } 
+        //     else listError.duracionError = false;
+        // }
+
+        setErrores({...errores, ...listError});
+        return error;
+    }
+
+    // useMemo( () => {
+    //     if (titulo) verifyData('titulo');
+    // }, [titulo])
+
+    // useMemo(() => {
+    //     if (duracion) verifyData('duracion');
+    // }, [duracion])
+
+    const nextStep = () => {
+        let error = verifyData('all');
+        if(!error){
+            handleChangeStep(tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_3' );
+        }
+    }
+
     const handleCleanForm = () => {
         const event_pond = { target : { name : 'ponderacion', value : ''}};
         const event_diff = { target : { name : 'dificultad', value : ''}};
@@ -115,7 +156,7 @@ const StepCrearPreguntas = () => {
                             </Typography>
                         </Box>
                         <Box >
-                            <Button
+                            {/* <Button
                                 style={{background:"#7e5ca8", color : "white", marginRight: '8px'}}
                                 type="submit"
                                 variant="contained"
@@ -123,7 +164,7 @@ const StepCrearPreguntas = () => {
                                 endIcon={<SaveIcon/>}
                             >
                                 Guardado Manual
-                            </Button>
+                            </Button> */}
                             <Button
                                 type="submit"
                                 variant="contained"
@@ -139,7 +180,7 @@ const StepCrearPreguntas = () => {
                                 type="submit"
                                 variant="contained"
                                 color="red"
-                                onClick={ () => handleChangeStep(tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_3' )}
+                                onClick={ () => nextStep()}
                                 endIcon={<NavigateNextIcon/>}
                             >
                                 Siguiente Paso
@@ -152,18 +193,18 @@ const StepCrearPreguntas = () => {
             <Grid item lg={8} sm={8} xl={8} xs={8}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
                     Enfoque
-                    <SeleccionarAreaTema/>
+                    <SeleccionarAreaTema errores={errores}/>
                 </Paper>
             </Grid>
 
             <Grid item lg={4} sm={4} xl={4} xs={4}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
                     Evaluación
-                    <PonderacionDificultad/>
+                    <PonderacionDificultad errores={errores}/>
                 </Paper>
             </Grid>
 
-            <FormCrearPregunta/>
+            <FormCrearPregunta errores={errores}/>
 
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test">
