@@ -130,14 +130,6 @@ const StepConfiguracionDinamica = (props) => {
         return error;
     }
 
-    useMemo( () => {
-        if (tipoPreguntaSeleccionado) verifyData('tipoPreguntaSeleccionado');
-    }, [tipoPreguntaSeleccionado])
-
-    useMemo( () => {
-        if (maxPreguntas) verifyData('maxPreguntas');
-    }, [maxPreguntas])
-
     const handleTipoPregunta = (e) => {
         let preguntas;
         if (e.target.value === 'area') preguntas = areas;
@@ -237,6 +229,14 @@ const StepConfiguracionDinamica = (props) => {
             // })
         }
     }
+
+    useMemo( () => {
+        if (tipoPreguntaSeleccionado) verifyData('tipoPreguntaSeleccionado');
+    }, [tipoPreguntaSeleccionado])
+
+    useMemo( () => {
+        if (maxPreguntas) verifyData('maxPreguntas');
+    }, [maxPreguntas])
     
     return( 
         <Fragment>

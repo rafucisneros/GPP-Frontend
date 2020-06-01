@@ -86,17 +86,15 @@ export default function FormCrearPregunta(props) {
     };
 
     const onDragEnd = (result) => {
-        if (!result.destination) {
-        return;
-    }
+        if (!result.destination) return;
 
-    const items = reorder(
-        respuestas,
-        result.source.index,
-        result.destination.index
-    );
+        const items = reorder(
+            respuestas,
+            result.source.index,
+            result.destination.index
+        );
 
-    setRespuestas(items)
+        setRespuestas(items);
     }
 
     return (

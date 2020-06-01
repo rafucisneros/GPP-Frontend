@@ -120,14 +120,6 @@ const StepConfiguracionBasica = () => {
         return error;
     }
 
-    useMemo( () => {
-        if (titulo) verifyData('titulo');
-    }, [titulo])
-
-    useMemo(() => {
-        if (duracion) verifyData('duracion');
-    }, [duracion])
-
     const sendInitialData = (step) => {
         let error = verifyData('all');
         if(!error){
@@ -151,6 +143,14 @@ const StepConfiguracionBasica = () => {
             // })
         }
     }
+
+    useMemo( () => {
+        if (titulo) verifyData('titulo');
+    }, [titulo])
+
+    useMemo(() => {
+        if (duracion) verifyData('duracion');
+    }, [duracion])
 
     return (
         <Fragment>

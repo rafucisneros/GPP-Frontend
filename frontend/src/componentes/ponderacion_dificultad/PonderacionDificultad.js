@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
-export default function PonderacionDificultad() {
+export default function PonderacionDificultad(props) {
     const { 
         handleChangeInput,
         dificultad,
@@ -19,6 +19,8 @@ export default function PonderacionDificultad() {
         <Box style={{display: 'flex'}}>
             <Box style={{float: 'left', width : '50%', paddingRight: '3px'}}>
                 <TextField
+                    error={props.errores && props.errores.dificultadError}
+                    helperText={props.errores && props.errores.dificultadError ? "El campo es requerido" : null}
                     id="dificultad"
                     type="number"
                     margin="normal"
@@ -41,6 +43,8 @@ export default function PonderacionDificultad() {
             </Box>
             <Box style={{float: 'rigth', width : '50%', paddingLeft: '3px'}}>
                 <TextField
+                    error={props.errores && props.errores.ponderacionError}
+                    helperText={props.errores && props.errores.ponderacionError ? "El campo es requerido" : null}
                     id="ponderacion"
                     type="number"
                     margin="normal"

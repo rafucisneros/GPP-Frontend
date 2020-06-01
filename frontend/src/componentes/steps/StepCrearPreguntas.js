@@ -13,6 +13,9 @@ import { useCreateTestPage } from '../../context/createTestPageContext';
 // material
 import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import PostAddIcon from '@material-ui/icons/PostAdd';
+import UpdateIcon from '@material-ui/icons/Update';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Grid from '@material-ui/core/Grid';
@@ -49,47 +52,25 @@ const StepCrearPreguntas = () => {
         exam_id
     } = useCreateTestPage();
 
-    const [ sucess, setSucess ] = useState(false);
-    const [ errores, setErrores ] = useState({preguntaError : false, duracionError : false});
+    const [ alertSucess, setAlertSucess ] = useState(false);
+    const [ alertError, setAlertError ] = useState(false);
+    const [ msgError, setMsgError ] = useState('');
+    const [ errores, setErrores ] = useState({
+        preguntaError : false, 
+        areaSeleccionadaError : false,
+        subareaSeleccionadaError : false,
+        temaSeleccionadoError : false,
+        ponderacionError : false,
+        dificultadError : false,
+    });
 
-    const handleCrearPregunta = () => {
-        const auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
-        const form = {};
-        const answer = [];
-
-        respuestas.forEach( (respuesta, index) => {
-            answer.push({
-                content : tipoPregunta === 'verdadero_falso' ? '' : respuesta.respuesta,
-                correct : tipoPregunta === 'verdadero_falso' ? selectedRespuesta : tipoPregunta === 'ordenamiento' ? index : respuesta.checked
-            })
-        })
-
-        form.content = pregunta;
-        form.q_type = tituloRespuesta;
-        form.exam = exam_id;
-        form.position = auxListaExamen.length + 1;
-        form.difficulty = Number(dificultad);
-        form.approach = {
-            topic : temaSeleccionado,
-            area : areaSeleccionada,
-            subarea : subareaSeleccionada,
-        }
-        form.answers = answer;
-        form.weighing = Number(ponderacion);
-        auxListaExamen.push(form);
-
-        // Agregar Nueva Pregunta
-        setListaPreguntasExamen(auxListaExamen);
-
-        // Clean Form
-        handleCleanForm();
-        setSucess(true);
+    const verifyDataListaPregunta = () => {
+        let error = true;
+        if (listaPreguntasExamen.length > 0) error = false;
+        setAlertError(error);
+        setMsgError('Debe haber al menos una pregunta creada.');
+        return error;
     }
-
-    const handleCloseAlert = (event, reason) => {
-        if (reason === 'clickaway') return;
-        setSucess(false);
-    };
 
     const verifyData = (flag) => {
         let error = false;
@@ -103,32 +84,104 @@ const StepCrearPreguntas = () => {
             else listError.preguntaError = false;
         }
 
-        // if(flag === 'all' || flag === 'duracion'){
-        //     if( !duracion || validator.isEmpty(String(duracion))){
-        //         error = true;
-        //         listError.duracionError = true;
-        //     } 
-        //     else listError.duracionError = false;
-        // }
+        if(flag === 'all' || flag === 'areaSeleccionada'){
+            if( !areaSeleccionada || validator.isEmpty(areaSeleccionada)){
+                error = true;
+                listError.areaSeleccionadaError = true;
+            } 
+            else listError.areaSeleccionadaError = false;
+        }
+
+        if(flag === 'all' || flag === 'subareaSeleccionada'){
+            if( !subareaSeleccionada || validator.isEmpty(subareaSeleccionada)){
+                error = true;
+                listError.subareaSeleccionadaError = true;
+            } 
+            else listError.subareaSeleccionadaError = false;
+        }
+
+        if(flag === 'all' || flag === 'temaSeleccionado'){
+            if( !temaSeleccionado || validator.isEmpty(temaSeleccionado)){
+                error = true;
+                listError.temaSeleccionadoError = true;
+            } 
+            else listError.temaSeleccionadoError = false;
+        }
+
+        if(flag === 'all' || flag === 'ponderacion'){
+            if( !ponderacion || validator.isEmpty(ponderacion)){
+                error = true;
+                listError.ponderacionError = true;
+            } 
+            else listError.ponderacionError = false;
+        }
+
+        if(flag === 'all' || flag === 'dificultad'){
+            if( !dificultad || validator.isEmpty(dificultad)){
+                error = true;
+                listError.dificultadError = true;
+            } 
+            else listError.dificultadError = false;
+        }
+
+        if(flag === 'all' || flag === 'respuesta'){
+            if (tipoPregunta !== 'verdadero_falso' && respuestas.length < 2){
+                error = true;
+                setAlertError(error);
+                setMsgError('Debe haber al menos dos respuestas creadas.');
+            }
+        }
 
         setErrores({...errores, ...listError});
         return error;
     }
 
-    // useMemo( () => {
-    //     if (titulo) verifyData('titulo');
-    // }, [titulo])
-
-    // useMemo(() => {
-    //     if (duracion) verifyData('duracion');
-    // }, [duracion])
-
-    const nextStep = () => {
+    const handleCrearPregunta = () => {
         let error = verifyData('all');
         if(!error){
-            handleChangeStep(tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_3' );
+            const auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
+            const form = {};
+            const answer = [];
+
+            respuestas.forEach( (respuesta, index) => {
+                answer.push({
+                    content : tipoPregunta === 'verdadero_falso' ? '' : respuesta.respuesta,
+                    correct : tipoPregunta === 'verdadero_falso' ? selectedRespuesta : tipoPregunta === 'ordenamiento' ? index : respuesta.checked
+                })
+            })
+
+            form.content = pregunta;
+            form.q_type = tituloRespuesta;
+            form.exam = exam_id;
+            form.position = auxListaExamen.length + 1;
+            form.difficulty = Number(dificultad);
+            form.approach = {
+                topic : temaSeleccionado,
+                area : areaSeleccionada,
+                subarea : subareaSeleccionada,
+            }
+            form.answers = answer;
+            form.weighing = Number(ponderacion);
+            auxListaExamen.push(form);
+
+            // Agregar Nueva Pregunta
+            setListaPreguntasExamen(auxListaExamen);
+
+            // Clean Form
+            handleCleanForm();
+            setAlertSucess(true);
         }
     }
+
+    const handleCloseAlertSuccess = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setAlertSucess(false);
+    };
+
+    const handleCloseAlertError = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setAlertError(false);
+    };
 
     const handleCleanForm = () => {
         const event_pond = { target : { name : 'ponderacion', value : ''}};
@@ -144,6 +197,37 @@ const StepCrearPreguntas = () => {
         setSelectedRespuesta(true);
         setRespuestas([]);
     }
+
+    const nextStep = () => {
+        let error = verifyDataListaPregunta();
+        if(!error){
+            handleChangeStep(tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_3' );
+        }
+    }
+
+    useMemo( () => {
+        if (pregunta) verifyData('pregunta');
+    }, [pregunta])
+
+    useMemo(() => {
+        if (ponderacion) verifyData('ponderacion');
+    }, [ponderacion])
+
+    useMemo( () => {
+        if (dificultad) verifyData('dificultad');
+    }, [dificultad])
+
+    useMemo(() => {
+        if (temaSeleccionado) verifyData('temaSeleccionado');
+    }, [temaSeleccionado])
+
+    useMemo( () => {
+        if (areaSeleccionada) verifyData('areaSeleccionada');
+    }, [areaSeleccionada])
+
+    useMemo(() => {
+        if (subareaSeleccionada) verifyData('subareaSeleccionada');
+    }, [subareaSeleccionada])
     
     return( 
         <Fragment>
@@ -212,9 +296,19 @@ const StepCrearPreguntas = () => {
                         <Button
                             type="submit"
                             variant="contained"
+                            style={{marginRight: '8px', backgroundColor : 'orange'}}
+                            disable={true}
+                            startIcon={<UpdateIcon/>}
+                        >
+                            Actualizar Pregunta
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
                             color="primary"
                             style={{marginRight: '8px'}}
                             onClick={() => handleCrearPregunta()}
+                            startIcon={<PostAddIcon/>}
                         >
                             Crear Pregunta
                         </Button>
@@ -223,23 +317,23 @@ const StepCrearPreguntas = () => {
                             variant="contained"
                             color="secondary"
                             disable={true}
+                            startIcon={<DeleteForeverIcon/>}
                         >
                             Eliminar Pregunta
                         </Button>
                     </Box>
                 </Paper>
             </Grid> 
-            <Snackbar open={sucess} autoHideDuration={3000} onClose={handleCloseAlert} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                <Alert onClose={handleCloseAlert} severity="success">
-                    Pregunta Creada exitosamente
+            <Snackbar open={alertSucess} autoHideDuration={3000} onClose={handleCloseAlertSuccess} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleCloseAlertSuccess} severity="success">
+                    Pregunta Creada exitosamente.
                 </Alert>
             </Snackbar>
-            {/* <Snackbar open={sucess} autoHideDuration={3000} onClose={handleCloseAlert} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
-                <Alert onClose={handleCloseAlert} severity="error">
-                    {errorMessage}
-                    Hubo un error
+            <Snackbar open={alertError} autoHideDuration={3000} onClose={handleCloseAlertError} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleCloseAlertError} severity="error">
+                    {msgError}
                 </Alert>
-            </Snackbar> */}
+            </Snackbar>
         </Fragment>
     )
 }
