@@ -13,6 +13,7 @@ import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
 import TestDetailsPage from './vistas/TestDetailsPage.js';
 import GraphicPage from './vistas/GraphicPage.js';
+import ExamFinishedPage from './vistas/ExamFinishedPage.js';
 
 // componentes
 // import NavBar from './componentes/layouts/NavBar.js';
@@ -123,6 +124,10 @@ const App = () => {
           exact
           path='/grafica'
           render={(props) => <GraphicPage {...props} />}
+        />
+        <Route
+          path='/exam_finished/:id'
+          render={(props) => requireAuth(ExamFinishedPage, props)}
         />
         <Redirect strict from="/" to="/login" />
       </Switch>

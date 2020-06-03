@@ -287,26 +287,20 @@ const NavBar = () => {
                         <ListItem 
                             key={index}
                             onClick={()=>{
-                                exam.changeQuestion(pregunta._id)
+                                exam.changeQuestion(pregunta["index"])
                             }}
                             style={{cursor: "pointer"}}
                         >
                         <ListItemIcon>
-                            {["ordenamiento", "seleccion_multiple"].includes(pregunta.tipo) ?
-                            (pregunta.respuesta.length ? 
+                            {pregunta.respuesta ? 
                                 <CheckIcon style={{color: "green"}}/> : 
-                                <CloseIcon style={{color: "red"}}/>) : 
-                            (pregunta.respuesta ? 
-                                <CheckIcon style={{color: "green"}}/> : 
-                                <CloseIcon style={{color: "red"}}/>)
+                                <CloseIcon style={{color: "red"}}/>
                             }
                         </ListItemIcon>
                         <ListItemText 
-                            primary={`Pregunta ${pregunta._id}`} 
+                            primary={`Pregunta ${pregunta["index"]}`} 
                             style={{
-                            color: ["ordenamiento", "seleccion_multiple"].includes(pregunta.tipo) ?
-                                (pregunta.respuesta.length ? "green" : "red") : 
-                                (pregunta.respuesta ? "green" : "red")
+                            color: pregunta.respuesta ? "green" : "red"
                             }} 
                         />
                         </ListItem>
