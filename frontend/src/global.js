@@ -1,8 +1,8 @@
 import Axios from 'axios';
 import auth from './helpers/auth.js'
 
-const SERVER_NAME = 'http://192.168.1.106:8000';
-// const SERVER_NAME = 'http://salty-ridge-87460.herokuapp.com';
+// const SERVER_NAME = 'http://192.168.1.106:8000';
+const SERVER_NAME = 'http://salty-ridge-87460.herokuapp.com';
 // const SERVER_NAME = 'http://localhost:8000';
 
 export const global = {
@@ -18,7 +18,11 @@ export const global = {
     PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
 
     GET_STUDENTS: `${SERVER_NAME}/users/`,
-    TOPICS: `${SERVER_NAME}/approach/`
+    TOPICS: `${SERVER_NAME}/approach/`,
+
+    GET_EXAM:  `${SERVER_NAME}/exam/_id_`,
+    GET_EXAM_QUESTIONS:  `${SERVER_NAME}/exam/_id_/questions/`,
+    POST_STUDENT_EXAM_QUESTIONS: `${SERVER_NAME}/student/_sid_/exam/_eid_/answers/`
 };
 
 Axios.interceptors.request
