@@ -43,6 +43,7 @@ export default function MakeTestPage(props){
   const [tiempoRestante, setTiempoRestante] = useState("00:00");
   // Finish Exam Alert
   const [open, setOpen] = React.useState(false);
+  const [timeoutAlert, setTimeoutAlert] = React.useState(false);
 
   const confirmFinishExam = async () => {
     try {
@@ -138,10 +139,13 @@ export default function MakeTestPage(props){
     let restante = time([Math.floor(restanteMinutos / 60), restanteMinutos % 60], "HH:mm").format("HH:mm")
     setTiempoRestante(restante)
     if(restante === "00:00"){
-      SaveExam()
-      alert("Termino Examen")
-      window.location = "/exam_finished/1"
+      SaveExam();
+      setTimeoutAlert(true);
     } 
+  }
+
+  const timeoutFinish = () => {
+    window.location = "/exam_finished/1"
   }
 
   useEffect(() => {
@@ -224,7 +228,7 @@ export default function MakeTestPage(props){
           <DialogTitle id="alert-dialog-slide-title">{"Terminar Examen"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              ¿Seguro que desea terminar el examen?.
+              ¿Seguro que desea terminar el examen?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -233,6 +237,25 @@ export default function MakeTestPage(props){
             </Button>
             <Button onClick={confirmFinishExam} color="primary">
               Si
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={timeoutAlert}
+          TransitionComponent={Transition}
+          keepMounted
+          aria-labelledby="alert-dialog-slide-title"
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle id="alert-dialog-slide-title">{"Terminar Examen"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              ¿Seguro que desea terminar el examen?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={timeoutFinish} color="primary">
+              Ok
             </Button>
           </DialogActions>
         </Dialog>
