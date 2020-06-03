@@ -25,7 +25,11 @@ export default function FormPregunta({
   // Cambio de respuesta en seleccion multiple
   const handleChangeMultiple = event => {
     if(event.target.checked){
-      changeAnswer([...pregunta.respuesta, event.target.value]);
+      if(pregunta.respuesta){
+        changeAnswer([...pregunta.respuesta, event.target.value]);
+      } else {
+        changeAnswer([event.target.value]);
+      }
     } else {
       changeAnswer(pregunta.respuesta.filter(x => x !== event.target.value));
     }
@@ -36,78 +40,81 @@ export default function FormPregunta({
     if (!result.destination) {
       return;
     }
-    let nuevoOrden = pregunta.respuesta.length ? [...pregunta.respuesta] : [...pregunta.opciones]
-    let elementoCambiado = nuevoOrden.splice(result.source.index, 1)[0]
-    nuevoOrden.splice(result.destination.index, 0, elementoCambiado)
-    changeAnswer(nuevoOrden)
+    if(!pregunta.respuesta){
+      pregunta.respuesta = [...pregunta.answers];
+    }
+    let nuevoOrden = [...pregunta.respuesta];
+    let elementoCambiado = nuevoOrden.splice(result.source.index, 1)[0];
+    nuevoOrden.splice(result.destination.index, 0, elementoCambiado);
+    changeAnswer(nuevoOrden);
   }
 
   // Cambiar a siguiente pregunta
   const handlePreviousQuestion = ()=>{
-    changeQuestion(pregunta["_id"] - 1)
+    changeQuestion(pregunta["id"] - 1);
   }
 
   // Cambiar a pregunta anterior
   const handleNextQuestion = ()=>{
-    changeQuestion(pregunta["_id"] + 1)
+    changeQuestion(pregunta["id"] + 1);
   }
 
   return (
     <Container maxWidth="lg" className="form-container">
       <Grid container spacing={2} direction="column" style={{height: "100%"}}>
         <div>
-          <h1>Pregunta {pregunta._id}</h1>
+          <h1>Pregunta {pregunta["id"]}</h1>
         </div>
         <Grid container spacing={2} direction="row" justify="space-around" style={{flex: 1}}>
-          {pregunta.tipo === "seleccion_simple" && 
+          {pregunta.type === "seleccion simple" && 
             (<div>              
               <FormControl component="fieldset">
-                <FormLabel component="legend">{pregunta.pregunta}</FormLabel>
+                <FormLabel component="legend">{pregunta["content"]}</FormLabel>
                 <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={pregunta.respuesta}>
-                  {pregunta.opciones.map((opcion, index) => {
-                    return <FormControlLabel value={opcion.toString()} control={<Radio />} label={opcion} key={index} />
+                  {pregunta.answers.map((opcion, index) => {
+                    return <FormControlLabel value={opcion["id"].toString()} control={<Radio />} label={opcion["content"]} key={index} />
                   })}
                 </RadioGroup>
               </FormControl>
             </div>)
           }
-          {pregunta.tipo === "seleccion_multiple" && 
+          {pregunta.type === "seleccion multiple" && 
             (<div>   
               <FormGroup >
-                <FormLabel component="legend">{pregunta.pregunta}</FormLabel>
-                  {pregunta.opciones.map((opcion, index) => {
+                <FormLabel component="legend">{pregunta["content"]}</FormLabel>
+                  {pregunta.answers.map((opcion, index) => {
                     return  (
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={pregunta.respuesta.find(x => x === opcion.toString()) ? true : false}
+                            checked={pregunta.respuesta && pregunta.respuesta.find(x => x === opcion["id"].toString()) ? true : false}
                             onChange={handleChangeMultiple}
                             name="checkedB"
                             color="primary"
-                            value={opcion}
+                            value={opcion["id"]}
                           />
                         }
-                        label={opcion}
+                        label={opcion["content"]}
                         key={index}
                       />)
                   })}
               </FormGroup>           
             </div>)
           }
-          {pregunta.tipo === "verdadero_falso" && 
+          {pregunta.type === "verdadero o falso" && 
             (<div>              
               <FormControl component="fieldset">
-                <FormLabel component="legend">{pregunta.pregunta}</FormLabel>
+                <FormLabel component="legend">{pregunta["content"]}</FormLabel>
                 <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={pregunta.respuesta}>
-                  <FormControlLabel value={"Verdadero"} control={<Radio />} label="Verdadero"/>
-                  <FormControlLabel value={"Falso"} control={<Radio />} label="Falso"/>
+                  <FormControlLabel value={"1"} control={<Radio />} label="Verdadero"/>
+                  <FormControlLabel value={"0"} control={<Radio />} label="Falso"/>
                 </RadioGroup>
               </FormControl>
             </div>)
           }
-          {pregunta.tipo === "ordenamiento" && 
+          {pregunta.type === "ordenamiento" && 
             (<div>
-              <FormLabel component="legend">{pregunta.pregunta}</FormLabel>
+              <FormLabel component="legend">{pregunta["content"]}</FormLabel>
               <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="droppable">
                   {(provided, snapshot) => (
@@ -115,32 +122,32 @@ export default function FormPregunta({
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      {pregunta.respuesta.length ? pregunta.respuesta.map((opcion, index) => (
+                      {pregunta.respuesta && pregunta.respuesta.length ? pregunta.respuesta.map((opcion, index) => (
                         <Draggable key={`opcion-${index}`} draggableId={`opcion-${index}`} index={index}>
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              key={`${opcion}-${index}`}
+                              key={`${opcion["id"]}-${index}`}
                               className="flex-box-opcions"
                             >
-                              {opcion}
+                              {opcion["content"]}
                             </div>
                           )}
                         </Draggable>
                       ))
-                      : pregunta.opciones.map((opcion, index) => (
+                      : pregunta.answers.map((opcion, index) => (
                         <Draggable key={`opcion-${index}`} draggableId={`opcion-${index}`} index={index}>
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
-                              key={`${opcion}-${index}`}
+                              key={`${opcion["id"]}-${index}`}
                               className="flex-box-opcions"
                             >
-                              {opcion}
+                              {opcion["content"]}
                             </div>
                           )}
                         </Draggable>

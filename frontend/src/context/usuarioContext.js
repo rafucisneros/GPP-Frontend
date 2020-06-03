@@ -6,6 +6,7 @@ const UsuarioContext = React.createContext();
 
 export function UsuarioProvider(props) {
     const [usuario, setUsuario] = useState({
+        'id': '',
         'email' : '',
         'first_name': '',
         'last_name' : '',
