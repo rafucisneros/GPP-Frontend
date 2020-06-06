@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { Fragment } from 'react';
 import { Bar, defaults, Doughnut, Pie, Polar, Radar } from 'react-chartjs-2';
 
@@ -7,10 +6,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
-=======
-import React from 'react';
-// import { Bar, defaults } from 'react-chartjs-2';
->>>>>>> 593cd0523dc89d228095dd8cd2186d667ea72314
 
 // assets
 import '../assets/css/mantenimientoPage.css';
