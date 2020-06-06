@@ -98,12 +98,12 @@ const App = () => {
         />
         <Route
           path='/make_test/:id'
-          render={(props) => requireAuth(MakeTestPage, props, MakeTestProvider)}
+          render={(props) => requireAuth(MakeTestPage, props)}
         />
         <Route
           exact
           path='/create_test'
-          render={(props) => requireAuth(CreateTestPage, props, TipoPreguntaRespuestaProvider)}
+          render={(props) => requireAuth(CreateTestPage, props)}
         />
         <Route
           exact
@@ -118,7 +118,7 @@ const App = () => {
         <Route
           exact
           path='/grafica'
-          render={(props) => <GraphicPage {...props} />}
+          render={(props) => requireAuth(GraphicPage, props)}
         />
         <Route
           path='/exam_finished/:id'

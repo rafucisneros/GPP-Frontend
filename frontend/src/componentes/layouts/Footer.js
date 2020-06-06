@@ -44,7 +44,7 @@ const Footer = props => {
             >
                 Miguel Canedo
             </Link>
-            {', '}
+            {' y '}
             <Link
                 // component="a"
                 href="#"

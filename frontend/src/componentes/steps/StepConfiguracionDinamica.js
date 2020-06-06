@@ -1,4 +1,5 @@
-import React, { useState, Fragment }  from 'react';
+import React, { useState, useMemo, Fragment }  from 'react';
+import validator from 'validator';
 
 // material
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import {
     Card,
     CardHeader,
@@ -102,6 +104,33 @@ const StepConfiguracionDinamica = (props) => {
         setMaxPreguntas,
     } = useCreateTestPage();
 
+    const [ errores, setErrores ] = useState({tipoPreguntaSeleccionadoError : false, maxPreguntasError : false});
+
+    const verifyData = (flag) => {
+        let error = false;
+        let listError = {};
+
+        if(flag === 'all' || flag === 'tipoPreguntaSeleccionado'){
+            if( !tipoPreguntaSeleccionado || validator.isEmpty(tipoPreguntaSeleccionado)){
+                error = true;
+                listError.tipoPreguntaSeleccionadoError = true;
+            } 
+            else listError.tipoPreguntaSeleccionadoError = false;
+        }
+
+        if(flag === 'all' || flag === 'maxPreguntas'){
+            console.log(maxPreguntas, validator.isNumeric(String(maxPreguntas)))
+            if( !maxPreguntas || (validator.isEmpty(String(maxPreguntas)) && maxPreguntas > 0)){
+                error = true;
+                listError.maxPreguntasError = true;
+            } 
+            else listError.maxPreguntasError = false;
+        }
+
+        setErrores({...errores, ...listError});
+        return error;
+    }
+
     const handleTipoPregunta = (e) => {
         let preguntas;
         if (e.target.value === 'area') preguntas = areas;
@@ -176,28 +205,39 @@ const StepConfiguracionDinamica = (props) => {
     }
 
     const sendConfDinamica = (step) => {
-        let request = {
-            total_quantity : maxPreguntas,
-            count : countPreguntas,
-            approach : tipoPreguntaSeleccionado,
-        }
-        let divisions = listaTipoPreguntas.map( topic => {
-            return {
-                name : topic.label,
-                quantity : topic.valor,
-                max_quantity : topic.max
+        let error = verifyData('all');
+        if(!error){
+            let request = {
+                total_quantity : maxPreguntas,
+                count : countPreguntas,
+                approach : tipoPreguntaSeleccionado,
             }
-        })
-        request.divisions = divisions;
-        handleChangeStep(step);
-        // createTest(request)
-        // .then( res => {
-        //     console.log(res)
-        //     if (res) {
-        //         SetExamId(res.data.id);
-        //     }
-        // })
+            let divisions = listaTipoPreguntas.map( topic => {
+                return {
+                    name : topic.label,
+                    quantity : topic.valor,
+                    max_quantity : topic.max
+                }
+            })
+            request.divisions = divisions;
+            handleChangeStep(step);
+            // createTest(request)
+            // .then( res => {
+            //     console.log(res)
+            //     if (res) {
+            //         SetExamId(res.data.id);
+            //     }
+            // })
+        }
     }
+
+    useMemo( () => {
+        if (tipoPreguntaSeleccionado) verifyData('tipoPreguntaSeleccionado');
+    }, [tipoPreguntaSeleccionado])
+
+    useMemo( () => {
+        if (maxPreguntas) verifyData('maxPreguntas');
+    }, [maxPreguntas])
     
     return( 
         <Fragment>
@@ -245,7 +285,7 @@ const StepConfiguracionDinamica = (props) => {
                 <CardContent>
                     <Grid container spacing={2}>
                             <Grid item xs={6} md={6} lg={6}>
-                                <FormControl required variant="outlined" style={{textAlignLast: 'center'}} className={classes.formControl}>
+                                <FormControl required error={errores && errores.tipoPreguntaSeleccionadoError} variant="outlined" style={{textAlignLast: 'center'}} className={classes.formControl}>
                                     <InputLabel>Enfoque de las preguntas</InputLabel>
                                     <Select
                                         label="Enfoque de las preguntas "
@@ -259,10 +299,13 @@ const StepConfiguracionDinamica = (props) => {
                                         </MenuItem>
                                     ))}
                                     </Select>
+                                    { errores && errores.tipoPreguntaSeleccionadoError && <FormHelperText>El campo es requerido</FormHelperText>}
                                 </FormControl>
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <TextField
+                                    error={errores && errores.maxPreguntasError}
+                                    helperText={errores && errores.maxPreguntasError ? "El campo deber ser número mayor a 0" : null}
                                     id="numero_preguntas"
                                     type="number"
                                     margin="normal"
@@ -353,15 +396,6 @@ const StepConfiguracionDinamica = (props) => {
                         </Grid>
                     </Grid>
                 </CardContent>
-                <Divider />
-                <CardActions>
-                    <Button
-                        color="primary"
-                        variant="outlined"
-                    >
-                        Guardar
-                    </Button>
-                </CardActions>
             </Card>
         </Fragment>
     )
