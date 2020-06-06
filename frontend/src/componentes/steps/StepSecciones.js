@@ -17,6 +17,17 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const StepSecciones = (props) => {
 
@@ -26,6 +37,26 @@ const StepSecciones = (props) => {
         secciones,
         tipoConfiguracion
     } = useCreateTestPage();
+
+    const [open, setOpen] = useState(false);
+    const [alertModal, setAlertModal] = useState(false);
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setAlertModal(false);
+    };
+
+    const verifyData = () => {
+        let error = true;
+        secciones.forEach( seccion => {
+            if (seccion) {
+                let len = seccion.estudiantes.length
+                if (len > 0) error = false;
+            }
+        })
+        setAlertModal(error);
+        return error;
+    }
 
     const sendSectionsData = () => {
         let data = {};
@@ -44,7 +75,6 @@ const StepSecciones = (props) => {
         //     if (res) {
         //         console.log("Update Secciones")
         //     }
-        // })
     }
 
     const handleAgregarEstudiante = (estudiante) => handleChangeComp(estudiante, 'estudiantes');
@@ -76,9 +106,14 @@ const StepSecciones = (props) => {
     }
 
     const finishStep = () => {
-        sendSectionsData();
-        handleChangeStep('step_4');
+        let error = verifyData();
+        if (!error){
+            sendSectionsData();
+            handleChangeStep('step_4');
+        } else handleWarning();
     }
+
+    const handleWarning = () => setOpen(!open);
     
     return( 
         <Fragment>
@@ -116,7 +151,7 @@ const StepSecciones = (props) => {
                             type="submit"
                             variant="contained"
                             color="red"
-                            onClick={ () => finishStep()}
+                            onClick={handleWarning}
                             endIcon={<PublishIcon/>}
                         >
                             Publicar Examen
@@ -125,20 +160,47 @@ const StepSecciones = (props) => {
                     </Box>
                 </Paper>
             </Grid>
-                <Grid container spacing={4} style={{marginTop : '4px'}}>
-                    <Grid item lg={4} md={4} xl={4} xs={12}>
-                        <ListaSecciones 
-                            handleAgregarSecciones = {handleAgregarSecciones}
-                            handleEliminarSecciones = {handleEliminarSecciones}
-                            handleSeleccionarSeccion = {handleSeleccionarSeccion}
-                        />
-                    </Grid>
-                    <Grid item lg={8} md={8} xl={8} xs={12}>
-                        <ListaEstudiantes 
-                            handleAgregarEstudiante = {handleAgregarEstudiante}
-                        />
-                    </Grid>
+            <Grid container spacing={4} style={{marginTop : '4px'}}>
+                <Grid item lg={4} md={4} xl={4} xs={12}>
+                    <ListaSecciones 
+                        handleAgregarSecciones = {handleAgregarSecciones}
+                        handleEliminarSecciones = {handleEliminarSecciones}
+                        handleSeleccionarSeccion = {handleSeleccionarSeccion}
+                    />
                 </Grid>
+                <Grid item lg={8} md={8} xl={8} xs={12}>
+                    <ListaEstudiantes 
+                        handleAgregarEstudiante = {handleAgregarEstudiante}
+                    />
+                </Grid>
+            </Grid>
+            <Dialog
+                open={open}
+                onClose={handleWarning}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Advertencia"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            ¿Está seguro de querer terminar la creación del examen?
+                            Una vez terminado, no se puede regresar en los pasos anteriores.
+                        </DialogContentText>
+                    </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleWarning} color="secondary">
+                        No, aún no
+                    </Button>
+                    <Button onClick={() => finishStep()} color="primary" autoFocus>
+                        Sí, estoy seguro
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Snackbar open={alertModal} autoHideDuration={3000} onClose={handleCloseAlert} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleCloseAlert} severity="error">
+                    Debe heber al menos una sección con al menos un estudiante
+                </Alert>
+            </Snackbar>
         </Fragment>
     )
 }

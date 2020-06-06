@@ -16,7 +16,6 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import SettingsIcon from '@material-ui/icons/Settings';
 import ForwardIcon from '@material-ui/icons/Forward';
 import Typography from '@material-ui/core/Typography';
 import PostAddIcon from '@material-ui/icons/PostAdd';

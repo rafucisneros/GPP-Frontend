@@ -36,6 +36,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ListItem from '@material-ui/core/ListItem';
 import Grid from '@material-ui/core/Grid';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 import EditIcon from '@material-ui/icons/Edit';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -95,7 +96,8 @@ const NavBar = () => {
     const { setSubMenuTipoPregunta } = useTipoPreguntaRespuesta();
     const { exam } = useMakeTest();
     const { usuario } = useUsuario();
-    
+
+    const [ clickItem, setClickItem ] = useState(false);
     const [ bar, setBar ] = useState(true);
     const classes = useStyle();
     
@@ -254,6 +256,35 @@ const NavBar = () => {
                     {
                         contentMenu.split(' ')[1] === 'step_1' && <ListaPreguntasExamen/>
                     }
+                </Fragment>
+            }
+
+            { contentMenu === 'general' && 
+                <Fragment>
+                    <div className="toolbar-icono">
+                        Menú del Examen
+                        <IconButton onClick={handleBarClose}>
+                            <ChevronLeftIcon />
+                        </IconButton>
+                    </div>
+                    <Divider/>
+                    <List>
+                        <Link to="home" className="link">
+                            <ListItem
+                                button
+                                selected={clickItem}
+                                onClick={ () => setClickItem(!clickItem)}
+                            >
+                            <ListItemIcon>
+                                <MenuBookIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Menú Principal</Typography>}
+                            />
+                            </ListItem>
+                        </Link>
+                    </List>
+                    <Divider/>
                 </Fragment>
             }
 
