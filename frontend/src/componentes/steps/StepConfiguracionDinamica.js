@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import Skeleton from '@material-ui/lab/Skeleton';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -241,20 +242,6 @@ const StepConfiguracionDinamica = (props) => {
                     title="Configuraciones Dinámica"
                 />
                 <Divider />
-                <Grid
-                    className="items-configuracion-examen"
-                    item
-                    lg={12}
-                    md={12}
-                    sm={12}
-                    xs={12}
-                    style = {{'display' : 'block', 'padding': '16px', 'width' : '100%'}}
-                >
-                <Typography component="body1" variant="body1" >
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                </Typography>
-                </Grid>
-                <Divider />
                 <CardContent>
                     <Grid container spacing={2}>
                             <Grid item xs={6} md={6} lg={6}>
@@ -300,7 +287,9 @@ const StepConfiguracionDinamica = (props) => {
                         </Grid>
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={12} lg={12}>
-                            {listaTipoPreguntas && Number(maxPreguntas) > 0 && listaTipoPreguntas.length > 0 &&
+
+
+                            {listaTipoPreguntas && Number(maxPreguntas) > 0 && listaTipoPreguntas.length > 0 ?
                                 <Fragment>
                                     <Box style={{margin : '16px'}}>
                                         {listaTipoPreguntas.map( (item, index) => (
@@ -354,7 +343,12 @@ const StepConfiguracionDinamica = (props) => {
                                             </Box>
                                         </Grid>
                                     </Grid>
-                                </Fragment>
+                                </Fragment> :
+                                    <Fragment>
+                                        <Skeleton height={30}/> 
+                                        <Skeleton height={30}/> 
+                                        <Skeleton height={30}/> 
+                                    </Fragment>
                             }
                         </Grid>
                     </Grid>
