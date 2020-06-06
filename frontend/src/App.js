@@ -118,7 +118,7 @@ const App = () => {
         />
         <Route
           path='/test_details/:id'
-          render={(props) => requireAuth(TestDetailsPage, props, TipoPreguntaRespuestaProvider)}
+          render={(props) => requireAuth(TestDetailsPage, props)}
         />
         <Route
           exact

@@ -22,7 +22,9 @@ export const global = {
 
     GET_EXAM:  `${SERVER_NAME}/exam/_id_`,
     GET_EXAM_QUESTIONS:  `${SERVER_NAME}/exam/_id_/questions/`,
-    POST_STUDENT_EXAM_QUESTIONS: `${SERVER_NAME}/student/_sid_/exam/_eid_/answers/`
+    POST_STUDENT_EXAM_QUESTIONS: `${SERVER_NAME}/student/_sid_/exam/_eid_/answers/`,
+
+    GET_EXAM_CONFIGURATION: `${SERVER_NAME}/exam/_id_/configuration/`
 };
 
 Axios.interceptors.request
