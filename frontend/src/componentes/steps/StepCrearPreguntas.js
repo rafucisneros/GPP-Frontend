@@ -293,7 +293,7 @@ const StepCrearPreguntas = () => {
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test">
                     <Box className="div-buttons-respuestas">
-                        <Button
+                        {/* <Button
                             type="submit"
                             variant="contained"
                             style={{marginRight: '8px', backgroundColor : 'orange'}}
@@ -301,7 +301,7 @@ const StepCrearPreguntas = () => {
                             startIcon={<UpdateIcon/>}
                         >
                             Actualizar Pregunta
-                        </Button>
+                        </Button> */}
                         <Button
                             type="submit"
                             variant="contained"

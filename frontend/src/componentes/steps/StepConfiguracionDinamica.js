@@ -1,4 +1,4 @@
-import React, { useState, useMemo, Fragment }  from 'react';
+import React, { useState, useMemo, useEffect, Fragment }  from 'react';
 import validator from 'validator';
 
 // material
@@ -17,7 +17,6 @@ import {
     Card,
     CardHeader,
     CardContent,
-    CardActions,
     Divider,
     FormControl,
     InputLabel,
@@ -33,41 +32,6 @@ const tipoPreguntas = [
     {valor : 'area', label: 'Área'},
     {valor : 'subarea', label: 'Subárea'},
     {valor : 'tema', label: 'Tema'},
-]
-
-const areas = [
-    {label : 'Area 1' , max : 5 },
-    {label : 'Area 2' , max : 1 },
-    {label : 'Area 3' , max : 1 },
-    {label : 'Area 4' , max : 1 },
-    {label : 'Area 5' , max : 1 },
-    {label : 'Area 6' , max : 1 }
-];
-
-const subareas = [
-    {label : 'Subarea 1', max : 5 },
-    {label : 'Subarea 2', max : 3 },
-    {label : 'Subarea 3', max : 1 },
-    {label : 'Subarea 4', max : 1 }
-]
-
-const temas = [
-    {label : 'Tema 1' , max : 5 },
-    {label : 'Tema 2' , max : 1 },
-    {label : 'Tema 3' , max : 1 },
-    {label : 'Tema 4' , max : 1 },
-    {label : 'Tema 5' , max : 1 },
-    {label : 'Tema 6' , max : 1 },
-    {label : 'Tema 7' , max : 1 },
-    {label : 'Tema 8' , max : 1 },
-    {label : 'Tema 9' , max : 1 },
-    {label : 'Tema 10', max : 1 },
-    {label : 'Tema 11', max : 1 },
-    {label : 'Tema 12', max : 1 },
-    {label : 'Tema 13', max : 1 },
-    {label : 'Tema 14', max : 1 },
-    {label : 'Tema 15', max : 1 },
-    {label : 'Tema 16', max : 1 },
 ]
 
 const useStyles = makeStyles(theme => ({
@@ -102,46 +66,75 @@ const StepConfiguracionDinamica = (props) => {
         setListaTipoPregunta,
         setCountPreguntas,
         setMaxPreguntas,
+        listaPreguntasExamen,
     } = useCreateTestPage();
 
     const [ errores, setErrores ] = useState({tipoPreguntaSeleccionadoError : false, maxPreguntasError : false});
+    const [ areas, setAreas ] = useState([]);
+    const [ subareas, setSubareas ] = useState([]);
+    const [ temas, setTemas ] = useState([]);
 
-    const verifyData = (flag) => {
-        let error = false;
-        let listError = {};
-
-        if(flag === 'all' || flag === 'tipoPreguntaSeleccionado'){
-            if( !tipoPreguntaSeleccionado || validator.isEmpty(tipoPreguntaSeleccionado)){
-                error = true;
-                listError.tipoPreguntaSeleccionadoError = true;
-            } 
-            else listError.tipoPreguntaSeleccionadoError = false;
+    useEffect( () => {
+        let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
+        let obj_areas = {};
+        let obj_subareas = {};
+        let obj_temas = {};
+        if (auxListaExamen && auxListaExamen.length > 0){
+            auxListaExamen.forEach( item => {
+                let content = item.approach;
+                if(content['area']) contarTemarios(obj_areas, content['area']);
+                if(content['topic']) contarTemarios(obj_temas, content['topic']);
+                if(content['subarea']) contarTemarios(obj_subareas, content['subarea']);
+            })
         }
+        let array_areas = Object.keys(obj_areas).map( key => { return obj_areas[key] } );
+        let array_subareas = Object.keys(obj_subareas).map( key => { return obj_subareas[key] } );
+        let array_temas = Object.keys(obj_temas).map( key => { return obj_temas[key] } );
 
-        if(flag === 'all' || flag === 'maxPreguntas'){
-            console.log(maxPreguntas, validator.isNumeric(String(maxPreguntas)))
-            if( !maxPreguntas || (validator.isEmpty(String(maxPreguntas)) && maxPreguntas > 0)){
-                error = true;
-                listError.maxPreguntasError = true;
-            } 
-            else listError.maxPreguntasError = false;
-        }
+        setAreas(array_areas);
+        setSubareas(array_subareas);
+        setTemas(array_temas);
 
-        setErrores({...errores, ...listError});
-        return error;
+        if (tipoPreguntaSeleccionado === 'area') setListaTipoPregunta(array_areas);
+        else if (tipoPreguntaSeleccionado === 'subarea') setListaTipoPregunta(array_subareas);
+        else if (tipoPreguntaSeleccionado === 'tema') setListaTipoPregunta(array_temas);
+    }, [listaPreguntasExamen])
+
+    const contarTemarios = (obj, especialidad) => {
+        if (obj[especialidad]) obj[especialidad].max = obj[especialidad].max + 1;
+        else obj[especialidad] = {label: especialidad, max: 1};
     }
 
     const handleTipoPregunta = (e) => {
         let preguntas;
         if (e.target.value === 'area') preguntas = areas;
         else if (e.target.value === 'subarea') preguntas = subareas;
-        else preguntas = temas;
+        else preguntas = temas;   
 
         if ( !listaTipoPreguntas ) setListaTipoPregunta(preguntas);
         else resetCountPreguntas(preguntas);
 
         setTipoPreguntaSeleccionado(e.target.value);
     };
+
+    const verifyData = (flag) => {
+        let error = false;
+        let listError = {};
+        if(flag === 'all' || flag === 'tipoPreguntaSeleccionado'){
+            if( !tipoPreguntaSeleccionado || validator.isEmpty(tipoPreguntaSeleccionado)){
+                error = true;
+                listError.tipoPreguntaSeleccionadoError = true;
+            } else listError.tipoPreguntaSeleccionadoError = false;
+        }
+        if(flag === 'all' || flag === 'maxPreguntas'){
+            if( !maxPreguntas || (validator.isEmpty(String(maxPreguntas)) && maxPreguntas > 0)){
+                error = true;
+                listError.maxPreguntasError = true;
+            } else listError.maxPreguntasError = false;
+        }
+        setErrores({...errores, ...listError});
+        return error;
+    }
 
     const nuevoPosibleCantidadPreguntas = (e) => {
         if (listaTipoPreguntas && listaTipoPreguntas.length > 0 ){
@@ -331,8 +324,7 @@ const StepConfiguracionDinamica = (props) => {
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={12} lg={12}>
 
-
-                            {listaTipoPreguntas && Number(maxPreguntas) > 0 && listaTipoPreguntas.length > 0 ?
+                            {Number(maxPreguntas) > 0 && listaTipoPreguntas && listaTipoPreguntas.length > 0 ?
                                 <Fragment>
                                     <Box style={{margin : '16px'}}>
                                         {listaTipoPreguntas.map( (item, index) => (
