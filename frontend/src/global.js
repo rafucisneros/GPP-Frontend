@@ -15,6 +15,8 @@ export const global = {
 
     POST_CREATE_TEST: `${SERVER_NAME}/exam/create_exam/`,
     POST_SECTION: `${SERVER_NAME}/exam/_id_/section/`,
+    POST_QUESTION_EXAM: `${SERVER_NAME}/exam/_id_/question/`,
+    PATCH_CONF_DINAMICA: `${SERVER_NAME}/exam/_id_/configuration/`,
     PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
 
     GET_STUDENTS: `${SERVER_NAME}/users/`,

@@ -28,6 +28,9 @@ import {
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
+// servicios
+import { patchConfigDinamica } from '../../servicios/servicioCrearExamen.js';
+
 const tipoPreguntas = [
     {valor : 'area', label: 'Área'},
     {valor : 'subarea', label: 'Subárea'},
@@ -67,6 +70,7 @@ const StepConfiguracionDinamica = (props) => {
         setCountPreguntas,
         setMaxPreguntas,
         listaPreguntasExamen,
+        exam_id
     } = useCreateTestPage();
 
     const [ errores, setErrores ] = useState({tipoPreguntaSeleccionadoError : false, maxPreguntasError : false});
@@ -202,7 +206,6 @@ const StepConfiguracionDinamica = (props) => {
         if(!error){
             let request = {
                 total_quantity : maxPreguntas,
-                count : countPreguntas,
                 approach : tipoPreguntaSeleccionado,
             }
             let divisions = listaTipoPreguntas.map( topic => {
@@ -212,14 +215,13 @@ const StepConfiguracionDinamica = (props) => {
                     max_quantity : topic.max
                 }
             })
-            request.divisions = divisions;
-            handleChangeStep(step);
-            // createTest(request)
+            request.distribution = divisions;
+            // patchConfigDinamica(request, exam_id)
             // .then( res => {
             //     console.log(res)
             //     if (res) {
-            //         SetExamId(res.data.id);
-            //     }
+                    handleChangeStep(step);
+                // }
             // })
         }
     }
