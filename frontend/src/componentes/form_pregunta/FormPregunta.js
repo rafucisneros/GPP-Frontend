@@ -11,10 +11,11 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Checkbox from '@material-ui/core/Checkbox';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import Typography from '@material-ui/core/Typography';
 import "./FormPregunta.css"
 
 export default function FormPregunta({ 
-  pregunta, changeAnswer, changeQuestion, isFirstQuestion, isLastQuestion, finishExam 
+  pregunta, changeAnswer, changeQuestion, isFirstQuestion, isLastQuestion, finishExam, ultimoGuardado 
   }){
 
   // Cambio de respuesta en seleccion simple/verdadero y falso
@@ -62,9 +63,14 @@ export default function FormPregunta({
   return (
     <Container maxWidth="lg" className="form-container">
       <Grid container spacing={2} direction="column" style={{height: "100%"}}>
-        <div>
-          <h1>Pregunta {pregunta["id"]}</h1>
-        </div>
+        <Grid>
+          <div>
+            <h1>Pregunta {pregunta["id"]}</h1>
+          </div>
+          <div>
+            <h3>{pregunta.type[0].toUpperCase() + pregunta.type.substr(1)}</h3>
+          </div>
+        </Grid>
         <Grid container spacing={2} direction="row" justify="space-around" style={{flex: 1}}>
           {pregunta.type === "seleccion simple" && 
             (<div>              
@@ -114,50 +120,56 @@ export default function FormPregunta({
           }
           {pregunta.type === "ordenamiento" && 
             (<div>
-              <FormLabel component="legend">{pregunta["content"]}</FormLabel>
-              <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="droppable">
-                  {(provided, snapshot) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                    >
-                      {pregunta.respuesta && pregunta.respuesta.length ? pregunta.respuesta.map((opcion, index) => (
-                        <Draggable key={`opcion-${index}`} draggableId={`opcion-${index}`} index={index}>
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              key={`${opcion["id"]}-${index}`}
-                              className="flex-box-opcions"
-                            >
-                              {opcion["content"]}
-                            </div>
-                          )}
-                        </Draggable>
-                      ))
-                      : pregunta.answers.map((opcion, index) => (
-                        <Draggable key={`opcion-${index}`} draggableId={`opcion-${index}`} index={index}>
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              key={`${opcion["id"]}-${index}`}
-                              className="flex-box-opcions"
-                            >
-                              {opcion["content"]}
-                            </div>
-                          )}
-                        </Draggable>
-                      ))
-                      }
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">{pregunta["content"]}</FormLabel>
+                <DragDropContext onDragEnd={onDragEnd}>
+                  <Droppable droppableId="droppable">
+                    {(provided, snapshot) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}                       
+                      >
+                        {pregunta.respuesta && pregunta.respuesta.length ? pregunta.respuesta.map((opcion, index) => (
+                          <Draggable key={`opcion-${index}`} draggableId={`opcion-${index}`} index={index}>
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                key={`${opcion["id"]}-${index}`}
+                                className="flex-box-opcions"
+                              >
+                                <Typography style={{padding: "5px 0px"}}>
+                                  {opcion["content"]}
+                                </Typography> 
+                              </div>
+                            )}
+                          </Draggable>
+                        ))
+                        : pregunta.answers.map((opcion, index) => (
+                          <Draggable key={`opcion-${index}`} draggableId={`opcion-${index}`} index={index}>
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                key={`${opcion["id"]}-${index}`}
+                                className="flex-box-opcions"
+                              >
+                                <Typography style={{padding: "5px 0px"}}>
+                                  {opcion["content"]}
+                                </Typography>
+                              </div>
+                            )}
+                          </Draggable>
+                        ))
+                        }
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              </FormControl>
             </div>)
           }
         </Grid>
@@ -190,6 +202,10 @@ export default function FormPregunta({
             Terminar Examen
             </Button>
           </Box>
+        </Grid>
+        <br/>
+        <Grid container direction="row-reverse">
+          Ultima vez guardado: {ultimoGuardado}
         </Grid>
       </Grid>
     </Container>
