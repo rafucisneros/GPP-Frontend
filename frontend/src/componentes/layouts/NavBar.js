@@ -5,6 +5,7 @@ import clsx from 'clsx';
 // componentes
 import MenuCreateTest from '../menu_create_test/MenuCreateTest.js';
 import ListaPreguntasExamen from '../menu_create_test/ListaPreguntasExamen.js';
+import MenuGrafica from '../graficas/MenuGrafica.js';
 
 // contexts
 import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
@@ -42,8 +43,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import CheckIcon from '@material-ui/icons/Check';
@@ -261,7 +260,7 @@ const NavBar = () => {
                 </Fragment>
             }
 
-            { contentMenu === 'graficas' && 
+            { contentMenu.split(' ')[0] === 'grafica' &&
                 <Fragment>
                     <div className="toolbar-icono">
                         Menú del Examen
@@ -270,47 +269,7 @@ const NavBar = () => {
                         </IconButton>
                     </div>
                     <Divider/>
-                    <List>
-                        <ListItem
-                            button
-                            selected={clickItem === 'dashboard'}
-                            onClick={ () => setClickItem('dashboard')}
-                        >
-                        <ListItemIcon>
-                            <DashboardIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                            primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Datos Generales</Typography>}
-                        />
-                        </ListItem>
-                        <ListItem
-                            button
-                            selected={clickItem === 'compare'}
-                            onClick={ () => setClickItem('compare')}
-                        >
-                        <ListItemIcon>
-                            <CompareArrowsIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                            primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Comparar Secciones</Typography>}
-                        />
-                        </ListItem>
-                        <Link to="home" className="link">
-                            <ListItem
-                                button
-                                selected={clickItem === 'menu'}
-                                onClick={ () => setClickItem('menu')}
-                            >
-                            <ListItemIcon>
-                                <MenuBookIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Menú Principal</Typography>}
-                            />
-                            </ListItem>
-                        </Link>
-                    </List>
-                    <Divider/>
+                    <MenuGrafica/>
                 </Fragment>
             }
 
