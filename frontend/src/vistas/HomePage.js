@@ -74,7 +74,7 @@ export default function HomePage(){
                   </CardContent>
                   <CardActions>
                     {/* <Link to={`/makeTest/${id}`}> */}
-                    <Link to={`/make_test/1`}>
+                    <Link className='link' to={`/make_test/1`}>
                       <Button size="small">Ver detalles</Button>
                     </Link>
                   </CardActions>

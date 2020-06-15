@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
@@ -47,6 +47,10 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import Collapse from "@material-ui/core/Collapse";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 // constants
 const drawerWidth = 240;
@@ -100,6 +104,7 @@ const NavBar = () => {
 
     const [ clickItem, setClickItem ] = useState(false);
     const [ bar, setBar ] = useState(true);
+    const [ collapse, setCollapse ] = useState(false);
     const classes = useStyle();
     
     const handleBarOpen = () => {
@@ -110,6 +115,11 @@ const NavBar = () => {
         setSubMenuTipoPregunta();
         setBar(false);
     };
+
+    const handleClickItem = () => {
+        setClickItem(!clickItem);
+        setCollapse(!collapse);
+    }
 
     // <ListItem
     //       button
@@ -123,6 +133,11 @@ const NavBar = () => {
     //         primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Muy pronto...</Typography>}
     //       />
     //     </ListItem>
+
+    useEffect( () => {
+        setCollapse(false);
+        setClickItem(false)
+    }, [contentMenu])
 
     return(
         <div style={{display: 'flex'}}>
@@ -178,7 +193,7 @@ const NavBar = () => {
                     </div>
                     <Divider />
                     <List>
-                    <Link to={"perfil"} className='link'>
+                        <Link to={"perfil"} className='link'>
                             <ListItem
                                 button  
                             >
@@ -190,30 +205,51 @@ const NavBar = () => {
                                 />
                             </ListItem>
                         </Link>
-                        <Link to={"create_test"} className='link'>
-                            <ListItem
-                                button  
-                            >
-                                <ListItemIcon>
-                                    <AssignmentIcon />
-                                </ListItemIcon>
-                                <ListItemText 
-                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Crear Exámen </Typography>}
-                                />
-                            </ListItem>
-                        </Link>
-                        <Link to={"create_classroom"} className='link'>
-                            <ListItem
-                                button  
-                            >
-                                <ListItemIcon>
-                                    <EditIcon />
-                                </ListItemIcon>
-                                <ListItemText 
-                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Editar Examenes </Typography>}
-                                />
-                            </ListItem>
-                        </Link>
+                        <ListItem
+                            button
+                            onClick={() => handleClickItem()}
+                            selected={clickItem}
+                        >
+                            <ListItemIcon>
+                                <AssignmentIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Examenes </Typography>}
+                            />
+                            {collapse ? <ExpandLess /> : <ExpandMore />}
+                        </ListItem>
+                        <Collapse
+                            in={collapse}
+                            timeout="auto"
+                            unmountOnExit
+                        >
+                            <Link to={"create_test"} className='link'>
+                                <ListItem
+                                    button 
+                                    style={{paddingLeft : '38px'}} 
+                                >
+                                    <ListItemIcon>
+                                        <AddCircleOutlineIcon />
+                                    </ListItemIcon>
+                                    <ListItemText 
+                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Crear Examen </Typography>}
+                                    />
+                                </ListItem>
+                            </Link>
+                            <Link to={"edit_test"} className='link'>
+                                <ListItem
+                                    button 
+                                    style={{paddingLeft : '38px'}} 
+                                >
+                                    <ListItemIcon>
+                                        <EditIcon />
+                                    </ListItemIcon>
+                                    <ListItemText 
+                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Editar Examen </Typography>}
+                                    />
+                                </ListItem>
+                            </Link>
+                        </Collapse>
                         <Link to={"grafica"} className='link'>
                             <ListItem
                                 button  
@@ -222,7 +258,7 @@ const NavBar = () => {
                                     <BarChartIcon />
                                 </ListItemIcon>
                                 <ListItemText 
-                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Ver Gráficas </Typography>}
+                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Resultados </Typography>}
                                 />
                             </ListItem>
                         </Link>
@@ -273,7 +309,7 @@ const NavBar = () => {
                 </Fragment>
             }
 
-            { contentMenu === 'general' && 
+            { (contentMenu === 'general' || contentMenu.split(' ')[0] === 'edit_test') && 
                 <Fragment>
                     <div className="toolbar-icono">
                         Menú del Examen
@@ -286,8 +322,6 @@ const NavBar = () => {
                         <Link to="home" className="link">
                             <ListItem
                                 button
-                                selected={clickItem}
-                                onClick={ () => setClickItem(!clickItem)}
                             >
                             <ListItemIcon>
                                 <MenuBookIcon />

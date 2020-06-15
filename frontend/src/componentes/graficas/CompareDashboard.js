@@ -18,7 +18,6 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { Divider } from '@material-ui/core';
 
 // context
 import { useGeneral } from '../../context/generalContext';
@@ -79,7 +78,7 @@ export default function GraphicPage(){
             <div className="toolbar-icono"/>
             <Container maxWidth={false} style={{paddingTop: '32px'}}>
                 <Grid container spacing={3} >
-                    <Box style={{display: 'flex', marginBottom : '12px', paddingLeft : '12px', paddingRight : '12px', width : '100%'}}>
+                    <Box style={{display: 'flex', paddingLeft : '12px', paddingRight : '12px', width : '100%'}}>
                         <Grid item style={{display: 'flex', alignSelf: 'center'}}>
                             <Typography variant="h6">
                             Comparación por Sección
@@ -98,8 +97,8 @@ export default function GraphicPage(){
                     </Box>
                 </Grid>
                 <Grid container spacing={3} >
-                    <Grid item xs={6} md={6} lg={6} style={{left : '16px'}}>
-                        <Grid container spacing={3} >
+                    <Grid item xs={6} md={6} lg={6} style={{ borderRight: '1px solid black'}}>
+                        <Grid container spacing={3} style={{padding : '12px', paddingRight: '24px'}}>
                             <Grid item xs={12} md={12} lg={12} style={{textAlignLast : 'center'}}>
                                 <FormControl className={classes.formControl}>
                                     <InputLabel>Sección</InputLabel>
@@ -182,9 +181,8 @@ export default function GraphicPage(){
                             </Grid>
                         </Grid>
                     </Grid>
-                    {/* <Divider orientation='vertical' /> */}
                     <Grid item xs={6} md={6} lg={6}>
-                        <Grid container spacing={3} >
+                        <Grid container spacing={3}  style={{padding : '12px', paddingLeft : '24px'}}>
                             <Grid item xs={12} md={12} lg={12} style={{textAlignLast : 'center'}}>
                                 <FormControl className={classes.formControl}>
                                     <InputLabel>Sección</InputLabel>

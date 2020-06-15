@@ -15,8 +15,8 @@ export default function GraphicPage(props){
             // hidden: true,
             data: [numeroAleatorio(0, 100), numeroAleatorio(0, 100)],
             backgroundColor: [
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(255, 99, 132, 0.2)',
+                'rgba(75, 192, 192, 0.4)',
+                'rgba(255, 99, 132, 0.4)',
             ],
             borderColor: [
                 'rgba(75, 192, 192, 1)',
