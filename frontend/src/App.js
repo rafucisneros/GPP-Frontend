@@ -8,6 +8,7 @@ import LoginPage from './vistas/LoginPage.js';
 import RegisterPage from './vistas/RegisterPage.js';
 import MensajitoPage from './vistas/MensajitoPage.js';
 import CreateTestPage from './vistas/CreateTestPage.js';
+import EditTestPage from './vistas/EditTestPage';
 import HomePage from './vistas/HomePage.js';
 import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
@@ -104,6 +105,11 @@ const App = () => {
           exact
           path='/create_test'
           render={(props) => requireAuth(CreateTestPage, props)}
+        />
+        <Route
+          exact
+          path='/edit_test'
+          render={(props) => requireAuth(EditTestPage, props)}
         />
         <Route
           exact

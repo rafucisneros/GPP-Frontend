@@ -10,6 +10,9 @@ import PonderacionDificultad from '../../componentes/ponderacion_dificultad/Pond
 import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
+// servicios
+import { postPreguntasExamen } from '../../servicios/servicioCrearExamen.js';
+
 // material
 import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
@@ -143,13 +146,19 @@ const StepCrearPreguntas = () => {
             const form = {};
             const answer = [];
 
-            respuestas.forEach( (respuesta, index) => {
+            if (tipoPregunta === 'verdadero_falso'){
                 answer.push({
-                    content : tipoPregunta === 'verdadero_falso' ? '' : respuesta.respuesta,
-                    correct : tipoPregunta === 'verdadero_falso' ? selectedRespuesta : tipoPregunta === 'ordenamiento' ? index : respuesta.checked
+                    content : '',
+                    correct : selectedRespuesta === 'verdadero' ? 1 : 0
                 })
-            })
-
+            } else {
+                respuestas.forEach( (respuesta, index) => {
+                    answer.push({
+                        content : respuesta.respuesta,
+                        correct : tipoPregunta === 'ordenamiento' ? index : respuesta.checked
+                    })
+                })
+            }
             form.content = pregunta;
             form.q_type = tituloRespuesta;
             form.exam = exam_id;
@@ -161,15 +170,20 @@ const StepCrearPreguntas = () => {
                 subarea : subareaSeleccionada,
             }
             form.answers = answer;
-            form.weighing = Number(ponderacion);
+            form.value = Number(ponderacion);
             auxListaExamen.push(form);
 
-            // Agregar Nueva Pregunta
-            setListaPreguntasExamen(auxListaExamen);
-
             // Clean Form
-            handleCleanForm();
-            setAlertSucess(true);
+            // postPreguntasExamen(form, exam_id)
+            // .then( res => {
+            //     console.log(res)
+            //     if (res) {
+                    // Agregar Nueva Pregunta
+                    setListaPreguntasExamen(auxListaExamen);
+                    handleCleanForm();
+                    setAlertSucess(true);
+            //     }
+            // })
         }
     }
 
@@ -293,7 +307,7 @@ const StepCrearPreguntas = () => {
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test">
                     <Box className="div-buttons-respuestas">
-                        <Button
+                        {/* <Button
                             type="submit"
                             variant="contained"
                             style={{marginRight: '8px', backgroundColor : 'orange'}}
@@ -301,7 +315,7 @@ const StepCrearPreguntas = () => {
                             startIcon={<UpdateIcon/>}
                         >
                             Actualizar Pregunta
-                        </Button>
+                        </Button> */}
                         <Button
                             type="submit"
                             variant="contained"

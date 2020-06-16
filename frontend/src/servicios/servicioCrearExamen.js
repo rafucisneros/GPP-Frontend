@@ -35,6 +35,30 @@ export function postSecciones(req, id){
     });
 }
 
+export function postPreguntasExamen(req, id){
+    let url = global.POST_QUESTION_EXAM.replace("_id_", id);
+
+    return Axios.post(url, req)
+    .then((response) => {
+        return response;
+    })
+    .catch( (error) => {
+        return Promise.reject(error);
+    });
+}
+
+export function patchConfigDinamica(req, id){
+    let url = global.PATCH_CONF_DINAMICA.replace("_id_", id);
+
+    return Axios.patch(url, req)
+    .then((response) => {
+        return response;
+    })
+    .catch( (error) => {
+        return Promise.reject(error);
+    });
+}
+
 export function getTopics(){
     return Axios.get(global.TOPICS)
     .then((response) => {
