@@ -13,6 +13,7 @@ import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
 import GraphicPage from './vistas/GraphicPage.js';
 import ExamFinishedPage from './vistas/ExamFinishedPage.js';
+import AdminPage from './vistas/AdminPage.js';
 
 // componentes
 // import NavBar from './componentes/layouts/NavBar.js';
@@ -107,8 +108,8 @@ const App = () => {
         />
         <Route
           exact
-          path='/create_classroom'
-          render={(props) => <MantenimientoPage {...props} />}
+          path='/admin'
+          render={(props) => requireAuth(AdminPage, props)}
         />
         <Route
           exact
