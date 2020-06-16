@@ -12,6 +12,7 @@ import EditTestPage from './vistas/EditTestPage';
 import HomePage from './vistas/HomePage.js';
 import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
+import TestDetailsPage from './vistas/TestDetailsPage.js';
 import GraphicPage from './vistas/GraphicPage.js';
 import ExamFinishedPage from './vistas/ExamFinishedPage.js';
 import AdminPage from './vistas/AdminPage.js';
@@ -121,6 +122,10 @@ const App = () => {
           exact
           path='/perfil'
           render={(props) => <MantenimientoPage {...props} />}
+        />
+        <Route
+          path='/test_details/:id'
+          render={(props) => requireAuth(TestDetailsPage, props)}
         />
         <Route
           exact

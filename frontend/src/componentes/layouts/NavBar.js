@@ -388,6 +388,24 @@ const NavBar = () => {
                 </List>
             </Fragment>
             }
+
+            { contentMenu === 'test_details' &&
+                <Fragment>
+                    <div className="toolbar-icono">
+                        Menú del Examen
+                        <IconButton onClick={handleBarClose}>
+                            <ChevronLeftIcon />
+                        </IconButton>
+                    </div>
+                    <Divider/>
+                    <MenuCreateTest step = {contentMenu.split(' ')[1]}/>
+    
+                    <Divider/>
+                    {
+                        contentMenu.split(' ')[1] === 'step_1' && <ListaPreguntasExamen/>
+                    }
+                </Fragment>
+            }
             </Drawer>
         </div>
     )
