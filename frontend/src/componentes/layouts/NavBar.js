@@ -44,7 +44,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import BuildIcon from '@material-ui/icons/Build';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import Collapse from "@material-ui/core/Collapse";
@@ -262,15 +262,15 @@ const NavBar = () => {
                                 />
                             </ListItem>
                         </Link>
-                        <Link to={"create_classroom"} className='link'>
+                        <Link to={"admin"} className='link'>
                             <ListItem
                                 button  
                             >
                                 <ListItemIcon>
-                                    <GroupAddIcon />
+                                    <BuildIcon />
                                 </ListItemIcon>
                                 <ListItemText 
-                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Crear Salón </Typography>}
+                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Administración </Typography>}
                                 />
                             </ListItem>
                         </Link>
