@@ -366,7 +366,7 @@ const NavBar = () => {
                         <ListItem 
                             key={index}
                             onClick={()=>{
-                                exam.changeQuestion(pregunta["index"])
+                                exam.changeQuestion(pregunta["index"], exam)
                             }}
                             style={{cursor: "pointer"}}
                         >

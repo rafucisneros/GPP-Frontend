@@ -25,12 +25,12 @@ export function getExam(req, id){
   });
 }
 
-export function saveExamAnswers(req, studentId, examId){
+export function saveExamAnswers(req, studentId, attemp){
   let url = global.POST_STUDENT_EXAM_QUESTIONS
                   .replace("_sid_", studentId)
-                  .replace("_eid_", examId);
+                  .replace("_eid_", attemp);
 
-  return Axios.post(url, req)
+  return Axios.patch(url, req)
   .then((response) => {
       return response;
   })

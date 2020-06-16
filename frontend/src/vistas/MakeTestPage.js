@@ -45,6 +45,8 @@ export default function MakeTestPage(props){
   const [open, setOpen] = React.useState(false);
   const [timeoutAlert, setTimeoutAlert] = React.useState(false);
 
+  const [ultimoGuardado, setUltimoGuardado] = useState("Nunca");
+
   const confirmFinishExam = async () => {
     try {
       await SaveExam()
@@ -65,8 +67,9 @@ export default function MakeTestPage(props){
     setExam(nuevoExamen)
   }
 
-  const changeQuestion = (idQuestion) => {
+  const changeQuestion = (idQuestion, exam) => {
     setPreguntaActual(idQuestion)
+    SaveExam(exam)    
   }
 
   // Finish Exam Button
@@ -74,10 +77,17 @@ export default function MakeTestPage(props){
     setOpen(true);
   }
 
-  const SaveExam = async () => {
-    let savingExam = {
-      ...exam
-    };
+  const SaveExam = async (examCache) => {
+    let savingExam;
+    if(examCache){
+      savingExam = {
+        ...examCache
+      };
+    } else {
+      savingExam = {
+        ...exam
+      };
+    }
     let request = savingExam.Preguntas.map( pregunta => {
       let answers = [];
       switch(pregunta["type"]){
@@ -129,7 +139,8 @@ export default function MakeTestPage(props){
         answers 
       }
     })
-    let guardando = await saveExamAnswers(request, usuario["id"], examID)
+    let guardando = await saveExamAnswers(request, usuario["id"], savingExam.attempt)
+    setUltimoGuardado(time().format("DD/MM/YYYY - HH:mmA"))
   }
 
   const timer = (horaFin) => {
@@ -139,7 +150,6 @@ export default function MakeTestPage(props){
     let restante = time([Math.floor(restanteMinutos / 60), restanteMinutos % 60], "HH:mm").format("HH:mm")
     setTiempoRestante(restante)
     if(restante === "00:00"){
-      SaveExam();
       setTimeoutAlert(true);
     } 
   }
@@ -157,7 +167,7 @@ export default function MakeTestPage(props){
       let { data: examData } = await getExam({}, examID);
       // Obtenemos las preguntas del examen
       let { data: preguntas } = await getExamQuestions({}, examID);
-      examData["Preguntas"] = preguntas;
+      examData["Preguntas"] = preguntas["questions"];
       // Asignamos contador para saber cual es el orden de las preguntas
       let i = 1;
       examData["Preguntas"].forEach(x => {
@@ -174,7 +184,8 @@ export default function MakeTestPage(props){
       fin = examData["fecha_fin"]
       setExam({
         ...examData,
-        changeQuestion
+        changeQuestion,
+        attempt: preguntas["attempt"]
       })
       runTimer = true;
       setContentMenu('make_test');
@@ -205,7 +216,7 @@ export default function MakeTestPage(props){
         <Container maxWidth="lg" style={{paddingTop: '20px', paddingBottom: '32px'}}>
           <Grid container spacing={2} direction="row" justify="space-around">
             <h3>Hora de Inicio: {exam.fecha_inicio}</h3>
-            <h3><ClockIcon style={{color: "black"}}/> {tiempoRestante}</h3>
+            <h3 style={{display: "flex"}}><ClockIcon style={{color: "black"}}/> {tiempoRestante}</h3>
             <h3>Hora de Fin: {exam.fecha_fin}</h3>
           </Grid>
         </Container>
@@ -216,6 +227,7 @@ export default function MakeTestPage(props){
           isLastQuestion={preguntaActual === exam["Preguntas"].length}
           isFirstQuestion={preguntaActual === 1}
           finishExam={finishExam}
+          ultimoGuardado={ultimoGuardado}
         />
         {/* Finish Exam Alert */}
         <Dialog
@@ -250,7 +262,7 @@ export default function MakeTestPage(props){
           <DialogTitle id="alert-dialog-slide-title">{"Terminar Examen"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              ¿Seguro que desea terminar el examen?
+              Se terminó el tiempo del examen.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
