@@ -1,4 +1,5 @@
-import React, { useState, Fragment }  from 'react';
+import React, { useState, useMemo, useEffect, Fragment }  from 'react';
+import validator from 'validator';
 
 // material
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,15 +7,16 @@ import Typography from '@material-ui/core/Typography';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import Skeleton from '@material-ui/lab/Skeleton';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import {
     Card,
     CardHeader,
     CardContent,
-    CardActions,
     Divider,
     FormControl,
     InputLabel,
@@ -26,45 +28,13 @@ import {
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
+// servicios
+import { patchConfigDinamica } from '../../servicios/servicioCrearExamen.js';
+
 const tipoPreguntas = [
     {valor : 'area', label: 'Área'},
     {valor : 'subarea', label: 'Subárea'},
     {valor : 'tema', label: 'Tema'},
-]
-
-const areas = [
-    {label : 'Area 1' , max : 5 },
-    {label : 'Area 2' , max : 1 },
-    {label : 'Area 3' , max : 1 },
-    {label : 'Area 4' , max : 1 },
-    {label : 'Area 5' , max : 1 },
-    {label : 'Area 6' , max : 1 }
-];
-
-const subareas = [
-    {label : 'Subarea 1', max : 5 },
-    {label : 'Subarea 2', max : 3 },
-    {label : 'Subarea 3', max : 1 },
-    {label : 'Subarea 4', max : 1 }
-]
-
-const temas = [
-    {label : 'Tema 1' , max : 5 },
-    {label : 'Tema 2' , max : 1 },
-    {label : 'Tema 3' , max : 1 },
-    {label : 'Tema 4' , max : 1 },
-    {label : 'Tema 5' , max : 1 },
-    {label : 'Tema 6' , max : 1 },
-    {label : 'Tema 7' , max : 1 },
-    {label : 'Tema 8' , max : 1 },
-    {label : 'Tema 9' , max : 1 },
-    {label : 'Tema 10', max : 1 },
-    {label : 'Tema 11', max : 1 },
-    {label : 'Tema 12', max : 1 },
-    {label : 'Tema 13', max : 1 },
-    {label : 'Tema 14', max : 1 },
-    {label : 'Tema 15', max : 1 },
-    {label : 'Tema 16', max : 1 },
 ]
 
 const useStyles = makeStyles(theme => ({
@@ -99,19 +69,76 @@ const StepConfiguracionDinamica = (props) => {
         setListaTipoPregunta,
         setCountPreguntas,
         setMaxPreguntas,
+        listaPreguntasExamen,
+        exam_id
     } = useCreateTestPage();
+
+    const [ errores, setErrores ] = useState({tipoPreguntaSeleccionadoError : false, maxPreguntasError : false});
+    const [ areas, setAreas ] = useState([]);
+    const [ subareas, setSubareas ] = useState([]);
+    const [ temas, setTemas ] = useState([]);
+
+    useEffect( () => {
+        let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
+        let obj_areas = {};
+        let obj_subareas = {};
+        let obj_temas = {};
+        if (auxListaExamen && auxListaExamen.length > 0){
+            auxListaExamen.forEach( item => {
+                let content = item.approach;
+                if(content['area']) contarTemarios(obj_areas, content['area']);
+                if(content['topic']) contarTemarios(obj_temas, content['topic']);
+                if(content['subarea']) contarTemarios(obj_subareas, content['subarea']);
+            })
+        }
+        let array_areas = Object.keys(obj_areas).map( key => { return obj_areas[key] } );
+        let array_subareas = Object.keys(obj_subareas).map( key => { return obj_subareas[key] } );
+        let array_temas = Object.keys(obj_temas).map( key => { return obj_temas[key] } );
+
+        setAreas(array_areas);
+        setSubareas(array_subareas);
+        setTemas(array_temas);
+
+        if (tipoPreguntaSeleccionado === 'area') setListaTipoPregunta(array_areas);
+        else if (tipoPreguntaSeleccionado === 'subarea') setListaTipoPregunta(array_subareas);
+        else if (tipoPreguntaSeleccionado === 'tema') setListaTipoPregunta(array_temas);
+    }, [listaPreguntasExamen])
+
+    const contarTemarios = (obj, especialidad) => {
+        if (obj[especialidad]) obj[especialidad].max = obj[especialidad].max + 1;
+        else obj[especialidad] = {label: especialidad, max: 1};
+    }
 
     const handleTipoPregunta = (e) => {
         let preguntas;
         if (e.target.value === 'area') preguntas = areas;
         else if (e.target.value === 'subarea') preguntas = subareas;
-        else preguntas = temas;
+        else preguntas = temas;   
 
         if ( !listaTipoPreguntas ) setListaTipoPregunta(preguntas);
         else resetCountPreguntas(preguntas);
 
         setTipoPreguntaSeleccionado(e.target.value);
     };
+
+    const verifyData = (flag) => {
+        let error = false;
+        let listError = {};
+        if(flag === 'all' || flag === 'tipoPreguntaSeleccionado'){
+            if( !tipoPreguntaSeleccionado || validator.isEmpty(tipoPreguntaSeleccionado)){
+                error = true;
+                listError.tipoPreguntaSeleccionadoError = true;
+            } else listError.tipoPreguntaSeleccionadoError = false;
+        }
+        if(flag === 'all' || flag === 'maxPreguntas'){
+            if( !maxPreguntas || (validator.isEmpty(String(maxPreguntas)) && maxPreguntas > 0)){
+                error = true;
+                listError.maxPreguntasError = true;
+            } else listError.maxPreguntasError = false;
+        }
+        setErrores({...errores, ...listError});
+        return error;
+    }
 
     const nuevoPosibleCantidadPreguntas = (e) => {
         if (listaTipoPreguntas && listaTipoPreguntas.length > 0 ){
@@ -175,28 +202,37 @@ const StepConfiguracionDinamica = (props) => {
     }
 
     const sendConfDinamica = (step) => {
-        let request = {
-            total_quantity : maxPreguntas,
-            count : countPreguntas,
-            approach : tipoPreguntaSeleccionado,
-        }
-        let divisions = listaTipoPreguntas.map( topic => {
-            return {
-                name : topic.label,
-                quantity : topic.valor,
-                max_quantity : topic.max
+        let error = verifyData('all');
+        if(!error){
+            let request = {
+                total_quantity : maxPreguntas,
+                approach : tipoPreguntaSeleccionado,
             }
-        })
-        request.divisions = divisions;
-        handleChangeStep(step);
-        // createTest(request)
-        // .then( res => {
-        //     console.log(res)
-        //     if (res) {
-        //         SetExamId(res.data.id);
-        //     }
-        // })
+            let divisions = listaTipoPreguntas.map( topic => {
+                return {
+                    name : topic.label,
+                    quantity : topic.valor,
+                    max_quantity : topic.max
+                }
+            })
+            request.distribution = divisions;
+            // patchConfigDinamica(request, exam_id)
+            // .then( res => {
+            //     console.log(res)
+            //     if (res) {
+                    handleChangeStep(step);
+                // }
+            // })
+        }
     }
+
+    useMemo( () => {
+        if (tipoPreguntaSeleccionado) verifyData('tipoPreguntaSeleccionado');
+    }, [tipoPreguntaSeleccionado])
+
+    useMemo( () => {
+        if (maxPreguntas) verifyData('maxPreguntas');
+    }, [maxPreguntas])
     
     return( 
         <Fragment>
@@ -241,24 +277,10 @@ const StepConfiguracionDinamica = (props) => {
                     title="Configuraciones Dinámica"
                 />
                 <Divider />
-                <Grid
-                    className="items-configuracion-examen"
-                    item
-                    lg={12}
-                    md={12}
-                    sm={12}
-                    xs={12}
-                    style = {{'display' : 'block', 'padding': '16px', 'width' : '100%'}}
-                >
-                <Typography component="body1" variant="body1" >
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                </Typography>
-                </Grid>
-                <Divider />
                 <CardContent>
                     <Grid container spacing={2}>
                             <Grid item xs={6} md={6} lg={6}>
-                                <FormControl required variant="outlined" style={{textAlignLast: 'center'}} className={classes.formControl}>
+                                <FormControl required error={errores && errores.tipoPreguntaSeleccionadoError} variant="outlined" style={{textAlignLast: 'center'}} className={classes.formControl}>
                                     <InputLabel>Enfoque de las preguntas</InputLabel>
                                     <Select
                                         label="Enfoque de las preguntas "
@@ -272,10 +294,13 @@ const StepConfiguracionDinamica = (props) => {
                                         </MenuItem>
                                     ))}
                                     </Select>
+                                    { errores && errores.tipoPreguntaSeleccionadoError && <FormHelperText>El campo es requerido</FormHelperText>}
                                 </FormControl>
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <TextField
+                                    error={errores && errores.maxPreguntasError}
+                                    helperText={errores && errores.maxPreguntasError ? "El campo deber ser número mayor a 0" : null}
                                     id="numero_preguntas"
                                     type="number"
                                     margin="normal"
@@ -300,7 +325,8 @@ const StepConfiguracionDinamica = (props) => {
                         </Grid>
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={12} lg={12}>
-                            {listaTipoPreguntas && Number(maxPreguntas) > 0 && listaTipoPreguntas.length > 0 &&
+
+                            {Number(maxPreguntas) > 0 && listaTipoPreguntas && listaTipoPreguntas.length > 0 ?
                                 <Fragment>
                                     <Box style={{margin : '16px'}}>
                                         {listaTipoPreguntas.map( (item, index) => (
@@ -354,20 +380,16 @@ const StepConfiguracionDinamica = (props) => {
                                             </Box>
                                         </Grid>
                                     </Grid>
-                                </Fragment>
+                                </Fragment> :
+                                    <Fragment>
+                                        <Skeleton height={30}/> 
+                                        <Skeleton height={30}/> 
+                                        <Skeleton height={30}/> 
+                                    </Fragment>
                             }
                         </Grid>
                     </Grid>
                 </CardContent>
-                <Divider />
-                <CardActions>
-                    <Button
-                        color="primary"
-                        variant="outlined"
-                    >
-                        Guardar
-                    </Button>
-                </CardActions>
             </Card>
         </Fragment>
     )
