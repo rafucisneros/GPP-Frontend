@@ -2,8 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import moment from 'moment';
 
 // servicios
-import { getTopics } from '../servicios/servicioCrearExamen.js';
-import { createTest, getStudents, postSecciones } from '../servicios/servicioCrearExamen.js';
+import { getTopics, getStudents } from '../servicios/servicioCrearExamen.js';
 
 const CreateTestPageContext = React.createContext();
 
@@ -17,6 +16,8 @@ export function CreateTestPageProvider(props) {
     // Step Configuracion Basica (Variables de estados)
     const [switchChecked, setSwitchChecked] = useState(true);
     const [duracion, setDuracion] = useState(null); 
+    const [nroIntentos, SetNroIntentos] = useState(null); 
+    const [openExam, setOpenExam] = useState(null); 
     const [valorFechaInicio, setValorFechaInicio] = useState( moment().toDate() );
     const [valorFechaFin, setValorFechaFin] = useState( moment().add(1, 'd').toDate() );
     const [titulo, setTitulo] = useState(null);
@@ -93,6 +94,8 @@ export function CreateTestPageProvider(props) {
     // Step Conguracion Basica
     const handleCambiarValor = (e) => {
         if (e.target.name === 'duracion') setDuracion(e.target.value);
+        else if (e.target.name === 'open_exam') setOpenExam(e.target.value);
+        else if (e.target.name === 'nro_intentos') SetNroIntentos(e.target.value);
         else if (e.target.name === 'comentarios') setComentarios(e.target.value);
         else if (e.target.name === 'titulo') setTitulo(e.target.value); 
     };
@@ -194,6 +197,8 @@ export function CreateTestPageProvider(props) {
             maxPreguntas,
             listaPreguntasExamen,
             respuestas,
+            nroIntentos,
+            openExam,
             selectedRespuesta,
             handleChangeStep,
             handleCambiarValor,
@@ -211,6 +216,7 @@ export function CreateTestPageProvider(props) {
             setRespuestas,
             setSelectedRespuesta,
             destroyData,
+            SetExamId
         })
     }, [
         areas, 
@@ -245,6 +251,8 @@ export function CreateTestPageProvider(props) {
         listaPreguntasExamen,
         respuestas,
         selectedRespuesta,
+        nroIntentos,
+        openExam
     ]);
 
     return <CreateTestPageContext.Provider value = {value} {...props} />

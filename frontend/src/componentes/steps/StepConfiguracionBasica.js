@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useMemo } from 'react';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import validator from 'validator';
 
@@ -34,6 +35,9 @@ import {
 import { useCreateTestPage } from '../../context/createTestPageContext';
 import { useUsuario } from '../../context/usuarioContext';
 
+// servicios
+import { createTest } from '../../servicios/servicioCrearExamen.js';
+
 const tituloTooltip = "El modo estático le permitirá mostrar el examen en el orden que usted desee. En el modo dinámico el examen será mostrado de manera aleatoria de acuerdo a las configuraciones introucidas."
 
 const useStyles = makeStyles(theme => ({
@@ -61,6 +65,20 @@ const duracionExamen = [
     {valor : 240, label: '4 horas'},
     {valor : 270, label: '4 horas y 30 minutos'},
     {valor : 300, label: '5 horas'}
+]
+
+const nroIntentosLista = [
+    {valor : 'infinito', label: 'No hay límite'},
+    {valor : 1, label: '1 Intento'},
+    {valor : 2, label: '2 Intentos'},
+    {valor : 3, label: '3 Intentos'},
+    {valor : 4, label: '4 Intentos'},
+    {valor : 5, label: '5 Intentos'},
+]
+
+const openExamLista = [
+    {valor : true, label: 'Todos'},
+    {valor : false, label: 'Por Secciones'},
 ]
 
 const ITEM_HEIGHT = 48;
@@ -91,10 +109,13 @@ const StepConfiguracionBasica = () => {
         tipoConfiguracion,
         titulo,
         comentarios,
-        duracion
+        duracion,
+        nroIntentos,
+        SetExamId,
+        openExam
     } = useCreateTestPage();
 
-    const [errores, setErrores] = useState({tituloError : false, duracionError : false});
+    const [errores, setErrores] = useState({tituloError : false, duracionError : false, nroIntentosError: false, openExamError : false});
 
     const verifyData = (flag) => {
         let error = false;
@@ -104,16 +125,28 @@ const StepConfiguracionBasica = () => {
             if( !titulo || validator.isEmpty(titulo)){
                 error = true;
                 listError.tituloError = true;
-            } 
-            else listError.tituloError = false;
+            } else listError.tituloError = false;
         }
 
         if(flag === 'all' || flag === 'duracion'){
             if( !duracion || validator.isEmpty(String(duracion))){
                 error = true;
                 listError.duracionError = true;
-            } 
-            else listError.duracionError = false;
+            } else listError.duracionError = false;
+        }
+
+        if(flag === 'all' || flag === 'nro_intentos'){
+            if( !nroIntentos || validator.isEmpty(String(nroIntentos))){
+                error = true;
+                listError.nroIntentosError = true;
+            } else listError.nroIntentosError = false;
+        }
+
+        if(flag === 'all' || flag === 'open_exam'){
+            if( !openExam || validator.isEmpty(String(openExam))){
+                error = true;
+                listError.openExamError = true;
+            } else listError.openExamError = false;
         }
 
         setErrores({...errores, ...listError});
@@ -123,22 +156,23 @@ const StepConfiguracionBasica = () => {
     const sendInitialData = (step) => {
         let error = verifyData('all');
         if(!error){
-            // let request = {
-            //     name : titulo,
-            //     start_date : moment(valorFechaInicio).toISOString(),
-            //     finish_date : moment(valorFechaFin).toISOString(),
-            //     duration : duracion,
-            //     description : comentarios,
-            //     static : switchChecked,
-            //     email : usuario.email,
-            //     status : true
-            // }
+            let request = {
+                name : titulo,
+                start_date : moment(valorFechaInicio).toISOString(),
+                finish_date : moment(valorFechaFin).toISOString(),
+                duration : duracion,
+                attempt : Number(nroIntentos),
+                description : comentarios,
+                static : switchChecked,
+                email : usuario.email,
+                status : true
+            }
             // createTest(request)
             // .then( res => {
             //     console.log(res)
             //     if (res) {
             //         SetExamId(res.data.id);
-            handleChangeStep(step);
+                    handleChangeStep(step);
             //     }
             // })
         }
@@ -151,6 +185,14 @@ const StepConfiguracionBasica = () => {
     useMemo(() => {
         if (duracion) verifyData('duracion');
     }, [duracion])
+
+    useMemo(() => {
+        if (nroIntentos) verifyData('nro_intentos');
+    }, [nroIntentos])
+
+    useMemo(() => {
+        if (openExam) verifyData('open_exam');
+    }, [openExam])
 
     return (
         <Fragment>
@@ -243,6 +285,52 @@ const StepConfiguracionBasica = () => {
                                     ))}
                                     </Select>
                                     { errores && errores.duracionError && <FormHelperText>El campo es requerido</FormHelperText>}
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6} md={6} lg={6}>
+                                <FormControl required variant="outlined" error={errores && errores.openExamError} className={classes.formControl}>
+                                    <InputLabel>Público dirigido</InputLabel>
+                                    <Select
+                                        error={errores && errores.openExamError}
+                                        helperText="El campo es requerido"
+                                        label="Duracion del examen"
+                                        id='open_exam'
+                                        name='open_exam'
+                                        value={openExam}
+                                        MenuProps={MenuProps}
+                                        onChange={handleCambiarValor} 
+                                    >
+                                    {openExamLista.map(item => (
+                                        <MenuItem key={item.valor} value={item.valor} >
+                                            {item.label}
+                                        </MenuItem>
+                                    ))}
+                                    </Select>
+                                    { errores && errores.openExamError && <FormHelperText>El campo es requerido</FormHelperText>}
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={6} md={6} lg={6}>
+                                <FormControl required variant="outlined" error={errores && errores.nroIntentosError} className={classes.formControl}>
+                                    <InputLabel>Número de intentos</InputLabel>
+                                    <Select
+                                        error={errores && errores.nroIntentosError}
+                                        helperText="El campo es requerido"
+                                        label="Número de intentos"
+                                        id='nro_intentos'
+                                        name='nro_intentos'
+                                        value={nroIntentos}
+                                        MenuProps={MenuProps}
+                                        onChange={handleCambiarValor} 
+                                    >
+                                    {nroIntentosLista.map(item => (
+                                        <MenuItem key={item.valor} value={item.valor} >
+                                            {item.label}
+                                        </MenuItem>
+                                    ))}
+                                    </Select>
+                                    { errores && errores.nroIntentosError && <FormHelperText>El campo es requerido</FormHelperText>}
                                 </FormControl>
                             </Grid>
                         </Grid>

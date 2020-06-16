@@ -23,7 +23,7 @@ import { useCreateTestPage } from '../../context/createTestPageContext';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        height: '100%',
+        height: '600px',
     },
     content: {
         padding: 0
@@ -71,7 +71,7 @@ const ListaSecciones = (props) => {
             />
             <Divider />
             <CardContent className={classes.content}>
-                <Box style={{maxHeight: '43vh', overflow: 'auto'}}>
+                <Box style={{maxHeight: '600px', overflow: 'auto'}}>
                     <List>
                     {secciones.map((item, index) => (
                         <ListItem
