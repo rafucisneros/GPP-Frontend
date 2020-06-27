@@ -33,7 +33,30 @@ export default function EditTestPage(){
             "duration": 166,
             "attempt": null,
             "static": true
+        },
+        {
+            "id": 2,
+            "name": "Segundo examen",
+            "status": true,
+            "start_date": "2020-02-20T21:00:26Z",
+            "finish_date": "2020-02-20T23:00:38Z",
+            "author": 2,
+            "duration": 43,
+            "attempt": null,
+            "static": true
+        },
+        {
+            "id": 3,
+            "name": "Tercer examen",
+            "status": true,
+            "start_date": "2020-02-20T21:00:26Z",
+            "finish_date": "2020-02-20T23:00:38Z",
+            "author": 3,
+            "duration": 56,
+            "attempt": null,
+            "static": true
         }
+
     ]);
     setContentMenu(`edit_test`);
 
@@ -45,25 +68,28 @@ export default function EditTestPage(){
     <Fragment>
         <div className="toolbar-icono"/>
         <Container maxWidth={false} style={{paddingTop: '32px'}}>
-            <Grid container spacing={3} >
+            {/* <Grid container spacing={3} >
                 <Box style={{display: 'flex', marginBottom : '12px', paddingLeft : '12px', paddingRight : '12px', width : '100%'}}>
                     <Grid item style={{display: 'flex', alignSelf: 'center'}}>
                         <Typography variant="h6">
-                            Examenes Creados
+                            Lista de Examenes
                         </Typography>
                     </Grid>
                 </Box>
-            </Grid>
+            </Grid> */}
             <Grid container spacing={3}>
                 {/* <Card style={{width: "100%"}}> */}
                     <CardContent style={{width: "100%"}}>
                         <DataTable 
-                            title="Lista de Examenes Creados" 
+                            title="Lista de Examenes" 
                             data={[...examanes]} 
                             columns={columns} 
                             onRowAdd={()=>{}}
                             onRowDelete={()=>{}}
                             onRowUpdate={()=>{}}
+                            isCalificacion={true}
+                            isEstadistica={true}
+                            selection={false}
                         />
                     </CardContent>
                 {/* </Card> */}

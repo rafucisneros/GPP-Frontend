@@ -12,7 +12,7 @@ import { Divider } from '@material-ui/core';
 
 import ListaProfesores from '../componentes/lista_profesores/ListaProfesores.js'
 
-export default function HomePage(){
+export default function AdminPage(){
   let [profesoresExpanded, setProfesoresExpanded] = useState(true)
   const handleProfesoresExpanded = () => {
     setProfesoresExpanded(!profesoresExpanded)
@@ -25,7 +25,6 @@ export default function HomePage(){
       <div className="toolbar-icono"/>
       <Container style={{paddingTop: '32px', paddingBottom: '32px'}}>
         <Grid container spacing={2}>                               
-          {/* Profesores */}
           <ExpansionPanel expanded={profesoresExpanded} onChange={handleProfesoresExpanded} style={{width: "100%"}}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}

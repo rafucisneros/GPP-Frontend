@@ -143,7 +143,7 @@ const StepConfiguracionBasica = () => {
         }
 
         if(flag === 'all' || flag === 'open_exam'){
-            if( !openExam || validator.isEmpty(String(openExam))){
+            if( openExam === undefined || openExam === null || validator.isEmpty(String(openExam))){
                 error = true;
                 listError.openExamError = true;
             } else listError.openExamError = false;
@@ -191,7 +191,7 @@ const StepConfiguracionBasica = () => {
     }, [nroIntentos])
 
     useMemo(() => {
-        if (openExam) verifyData('open_exam');
+        if (openExam === true || openExam === false) verifyData('open_exam');
     }, [openExam])
 
     return (

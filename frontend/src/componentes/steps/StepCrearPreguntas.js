@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useMemo }  from 'react';
+import React, { Fragment, useState, useMemo, }  from 'react';
 import validator from 'validator';
 
 // componentes
@@ -52,7 +52,8 @@ const StepCrearPreguntas = () => {
         setRespuestas,
         selectedRespuesta,
         setSelectedRespuesta,
-        exam_id
+        exam_id,
+        step
     } = useCreateTestPage();
 
     const [ alertSucess, setAlertSucess ] = useState(false);
@@ -222,6 +223,10 @@ const StepCrearPreguntas = () => {
     useMemo( () => {
         if (pregunta) verifyData('pregunta');
     }, [pregunta])
+
+    useMemo( () => {
+        if (step === 'step_1') handleCleanForm();
+    }, [step])
 
     useMemo(() => {
         if (ponderacion) verifyData('ponderacion');

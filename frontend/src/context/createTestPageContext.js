@@ -135,6 +135,7 @@ export function CreateTestPageProvider(props) {
         SetExamId(null)
         setSwitchChecked(true)
         setDuracion(null)
+        
         setValorFechaInicio(moment().toDate())
         setValorFechaFin( moment().add(1, 'd').toDate())
         setTitulo(null)
@@ -145,6 +146,8 @@ export function CreateTestPageProvider(props) {
         setListaFiltradoSubArea([])
         setListaFiltradoTema([])
         setPermitirSubArea(false)
+        setOpenExam(null)
+        SetNroIntentos(null)
         setPermitirTarea(false)
         setPregunta(null)
         setPonderacion(null)
