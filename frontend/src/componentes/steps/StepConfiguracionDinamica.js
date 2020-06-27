@@ -216,7 +216,7 @@ const StepConfiguracionDinamica = (props) => {
                 return {
                     name : topic.label,
                     quantity : topic.valor,
-                    max_quantity : topic.max
+                    // max_quantity : topic.max
                 }
             })
             request.distribution = divisions;
