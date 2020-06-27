@@ -28,6 +28,7 @@ import { CreateTestPageProvider } from './context/createTestPageContext';
 import { UsuarioProvider, useUsuario } from './context/usuarioContext.js';
 import { GeneralProvider } from './context/generalContext.js';
 import { MakeTestProvider } from './context/makeTestContext.js';
+import ProfilePage from './vistas/ProfilePage';
 
 export default () => <UsuarioProvider>
   <App></App>
@@ -121,7 +122,7 @@ const App = () => {
         <Route
           exact
           path='/perfil'
-          render={(props) => <MantenimientoPage {...props} />}
+          render={(props) => requireAuth(ProfilePage, props)}
         />
         <Route
           path='/test_details/:id'
