@@ -3,6 +3,9 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import validator from 'validator';
 
+// componentes
+import Loading from '../loading/Loading.js';
+
 // material
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -116,6 +119,7 @@ const StepConfiguracionBasica = () => {
     } = useCreateTestPage();
 
     const [errores, setErrores] = useState({tituloError : false, duracionError : false, nroIntentosError: false, openExamError : false});
+    const [loading, setLoading] = useState(false);
 
     const verifyData = (flag) => {
         let error = false;
@@ -165,8 +169,10 @@ const StepConfiguracionBasica = () => {
                 description : comentarios,
                 static : switchChecked,
                 email : usuario.email,
-                status : true
+                status : true,
+                open : openExam
             }
+            setLoading(true)
             createTest(request)
             .then( res => {
                 console.log(res)
@@ -397,6 +403,7 @@ const StepConfiguracionBasica = () => {
                     <Divider />
                 </form>
             </Card>
+            { loading && <Loading/>}
         </Fragment>
     )
 }

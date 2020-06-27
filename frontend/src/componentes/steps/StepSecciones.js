@@ -2,11 +2,15 @@ import React, { useState, Fragment }  from 'react';
 import uuid from 'uuid/v1';
 
 // componentes
+import Loading from '../loading/Loading.js';
 import ListaSecciones from '../../componentes/lista_secciones/ListaSecciones.js';
 import ListaEstudiantes from '../../componentes/lista_estudiantes/ListaEstudiantes.js';
 
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
+
+// servicios 
+import { postSecciones } from '../../servicios/servicioCrearExamen.js';
 
 // material
 import Typography from '@material-ui/core/Typography';
@@ -36,11 +40,12 @@ const StepSecciones = (props) => {
         handleChangeComp,
         secciones,
         tipoConfiguracion,
-        destroyData
+        exam_id
     } = useCreateTestPage();
 
     const [open, setOpen] = useState(false);
     const [alertModal, setAlertModal] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') return;

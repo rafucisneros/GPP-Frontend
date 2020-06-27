@@ -2,6 +2,7 @@ import React, { Fragment, useState, useMemo, }  from 'react';
 import validator from 'validator';
 
 // componentes
+import Loading from '../loading/Loading.js';
 import FormCrearPregunta from '../../componentes/form_crear_pregunta/FormCrearPregunta.js';
 import SeleccionarAreaTema from '../../componentes/seleccionar_tema/SeleccionarAreaTema.js';
 import PonderacionDificultad from '../../componentes/ponderacion_dificultad/PonderacionDificultad.js';
@@ -59,6 +60,7 @@ const StepCrearPreguntas = () => {
     const [ alertSucess, setAlertSucess ] = useState(false);
     const [ alertError, setAlertError ] = useState(false);
     const [ msgError, setMsgError ] = useState('');
+    const [ loading, setLoading ] = useState(false);
     const [ errores, setErrores ] = useState({
         preguntaError : false, 
         areaSeleccionadaError : false,
