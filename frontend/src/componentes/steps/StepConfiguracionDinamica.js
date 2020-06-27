@@ -216,13 +216,13 @@ const StepConfiguracionDinamica = (props) => {
                 }
             })
             request.distribution = divisions;
-            // patchConfigDinamica(request, exam_id)
-            // .then( res => {
-            //     console.log(res)
-            //     if (res) {
+            patchConfigDinamica(request, exam_id)
+            .then( res => {
+                console.log(res)
+                if (res) {
                     handleChangeStep(step);
-                // }
-            // })
+                }
+            })
         }
     }
 

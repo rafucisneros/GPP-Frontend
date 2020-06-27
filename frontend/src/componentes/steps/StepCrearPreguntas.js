@@ -175,16 +175,16 @@ const StepCrearPreguntas = () => {
             auxListaExamen.push(form);
 
             // Clean Form
-            // postPreguntasExamen(form, exam_id)
-            // .then( res => {
-            //     console.log(res)
-            //     if (res) {
+            postPreguntasExamen(form, exam_id)
+            .then( res => {
+                console.log(res)
+                if (res) {
                     // Agregar Nueva Pregunta
                     setListaPreguntasExamen(auxListaExamen);
                     handleCleanForm();
                     setAlertSucess(true);
-            //     }
-            // })
+                }
+            })
         }
     }
 

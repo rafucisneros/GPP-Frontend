@@ -70,12 +70,13 @@ const StepSecciones = (props) => {
             }
         })
         let request = { sections : data }
-        // postSecciones(request, exam_id)
-        // .then( res => {
-        //     console.log(res)
-        //     if (res) {
-        //         console.log("Update Secciones")
-        //     }
+        postSecciones(request, exam_id)
+        .then( res => {
+            console.log(res)
+            if (res) {
+                console.log("Update Secciones")
+            }
+        })
     }
 
     const handleAgregarEstudiante = (estudiante) => handleChangeComp(estudiante, 'estudiantes');
