@@ -1,7 +1,8 @@
-import React, { Fragment, useState, useMemo }  from 'react';
+import React, { Fragment, useState, useMemo, }  from 'react';
 import validator from 'validator';
 
 // componentes
+import Loading from '../loading/Loading.js';
 import FormCrearPregunta from '../../componentes/form_crear_pregunta/FormCrearPregunta.js';
 import SeleccionarAreaTema from '../../componentes/seleccionar_tema/SeleccionarAreaTema.js';
 import PonderacionDificultad from '../../componentes/ponderacion_dificultad/PonderacionDificultad.js';
@@ -52,12 +53,14 @@ const StepCrearPreguntas = () => {
         setRespuestas,
         selectedRespuesta,
         setSelectedRespuesta,
-        exam_id
+        exam_id,
+        step
     } = useCreateTestPage();
 
     const [ alertSucess, setAlertSucess ] = useState(false);
     const [ alertError, setAlertError ] = useState(false);
     const [ msgError, setMsgError ] = useState('');
+    const [ loading, setLoading ] = useState(false);
     const [ errores, setErrores ] = useState({
         preguntaError : false, 
         areaSeleccionadaError : false,
@@ -174,16 +177,16 @@ const StepCrearPreguntas = () => {
             auxListaExamen.push(form);
 
             // Clean Form
-            // postPreguntasExamen(form, exam_id)
-            // .then( res => {
-            //     console.log(res)
-            //     if (res) {
+            postPreguntasExamen(form, exam_id)
+            .then( res => {
+                console.log(res)
+                if (res) {
                     // Agregar Nueva Pregunta
                     setListaPreguntasExamen(auxListaExamen);
                     handleCleanForm();
                     setAlertSucess(true);
-            //     }
-            // })
+                }
+            })
         }
     }
 
@@ -222,6 +225,10 @@ const StepCrearPreguntas = () => {
     useMemo( () => {
         if (pregunta) verifyData('pregunta');
     }, [pregunta])
+
+    useMemo( () => {
+        if (step === 'step_1') handleCleanForm();
+    }, [step])
 
     useMemo(() => {
         if (ponderacion) verifyData('ponderacion');

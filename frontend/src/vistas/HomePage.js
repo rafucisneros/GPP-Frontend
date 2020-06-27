@@ -72,10 +72,10 @@ export default function HomePage(){
                     <CardActions>
                       {
                         false ? // user == student
-                        <Link to={`/make_test/${exam.id}`}>
+                        <Link to={`/make_test/${exam.id}`} className='link'>
                           <Button size="small">Presentar Exámen</Button>
                         </Link> :
-                        <Link to={`/test_details/${exam.id}`}>
+                        <Link to={`/test_details/${exam.id}`} className='link'>
                           <Button size="small">Ver detalles</Button>
                         </Link> 
                       }

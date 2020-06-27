@@ -30,7 +30,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import PersonIcon from '@material-ui/icons/Person';
 import Box from '@material-ui/core/Box';
-import BarChartIcon from '@material-ui/icons/BarChart';
+import PeopleIcon from '@material-ui/icons/People';
 import Avatar from '@material-ui/core/Avatar';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -201,7 +201,7 @@ const NavBar = () => {
                                     <AccountCircleIcon />
                                 </ListItemIcon>
                                 <ListItemText 
-                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Mi Perfil </Typography>}
+                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Perfil </Typography>}
                                 />
                             </ListItem>
                         </Link>
@@ -245,24 +245,24 @@ const NavBar = () => {
                                         <EditIcon />
                                     </ListItemIcon>
                                     <ListItemText 
-                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Editar Examen </Typography>}
+                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Ver Examenes </Typography>}
                                     />
                                 </ListItem>
                             </Link>
                         </Collapse>
-                        <Link to={"grafica"} className='link'>
+                        <Link to={"admin"} className='link'>
                             <ListItem
                                 button  
                             >
                                 <ListItemIcon>
-                                    <BarChartIcon />
+                                    <PeopleIcon />
                                 </ListItemIcon>
                                 <ListItemText 
-                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Resultados </Typography>}
+                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Administración </Typography>}
                                 />
                             </ListItem>
                         </Link>
-                        <Link to={"admin"} className='link'>
+                        <Link to={"mantenimiento"} className='link'>
                             <ListItem
                                 button  
                             >
@@ -270,7 +270,7 @@ const NavBar = () => {
                                     <BuildIcon />
                                 </ListItemIcon>
                                 <ListItemText 
-                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Administración </Typography>}
+                                    primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Próximamente </Typography>}
                                 />
                             </ListItem>
                         </Link>

@@ -31,6 +31,9 @@ import { useCreateTestPage } from '../../context/createTestPageContext';
 // servicios
 import { patchConfigDinamica } from '../../servicios/servicioCrearExamen.js';
 
+// componentes
+import Loading from '../loading/Loading.js';
+
 const tipoPreguntas = [
     {valor : 'area', label: 'Área'},
     {valor : 'subarea', label: 'Subárea'},
@@ -77,6 +80,7 @@ const StepConfiguracionDinamica = (props) => {
     const [ areas, setAreas ] = useState([]);
     const [ subareas, setSubareas ] = useState([]);
     const [ temas, setTemas ] = useState([]);
+    const [ loading, setLoading ] = useState(false);
 
     useEffect( () => {
         let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
@@ -216,13 +220,13 @@ const StepConfiguracionDinamica = (props) => {
                 }
             })
             request.distribution = divisions;
-            // patchConfigDinamica(request, exam_id)
-            // .then( res => {
-            //     console.log(res)
-            //     if (res) {
+            patchConfigDinamica(request, exam_id)
+            .then( res => {
+                console.log(res)
+                if (res) {
                     handleChangeStep(step);
-                // }
-            // })
+                }
+            })
         }
     }
 

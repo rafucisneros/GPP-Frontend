@@ -12,6 +12,7 @@ import EditTestPage from './vistas/EditTestPage';
 import HomePage from './vistas/HomePage.js';
 import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
+import CalificacionesPage from './vistas/CalificacionesPage.js';
 import TestDetailsPage from './vistas/TestDetailsPage.js';
 import GraphicPage from './vistas/GraphicPage.js';
 import ExamFinishedPage from './vistas/ExamFinishedPage.js';
@@ -111,6 +112,11 @@ const App = () => {
         />
         <Route
           exact
+          path='/exam/:id/calificaciones'
+          render={(props) => requireAuth(CalificacionesPage, props)}
+        />
+        <Route
+          exact
           path='/edit_test'
           render={(props) => requireAuth(EditTestPage, props)}
         />
@@ -127,6 +133,10 @@ const App = () => {
         <Route
           path='/test_details/:id'
           render={(props) => requireAuth(TestDetailsPage, props)}
+        />
+        <Route
+          path='/mantenimiento'
+          render={(props) => <MantenimientoPage></MantenimientoPage>}
         />
         <Route
           exact

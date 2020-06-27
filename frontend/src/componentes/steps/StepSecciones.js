@@ -2,11 +2,15 @@ import React, { useState, Fragment }  from 'react';
 import uuid from 'uuid/v1';
 
 // componentes
+import Loading from '../loading/Loading.js';
 import ListaSecciones from '../../componentes/lista_secciones/ListaSecciones.js';
 import ListaEstudiantes from '../../componentes/lista_estudiantes/ListaEstudiantes.js';
 
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
+
+// servicios 
+import { postSecciones } from '../../servicios/servicioCrearExamen.js';
 
 // material
 import Typography from '@material-ui/core/Typography';
@@ -35,11 +39,13 @@ const StepSecciones = (props) => {
         handleChangeStep,
         handleChangeComp,
         secciones,
-        tipoConfiguracion
+        tipoConfiguracion,
+        exam_id
     } = useCreateTestPage();
 
     const [open, setOpen] = useState(false);
     const [alertModal, setAlertModal] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') return;
@@ -69,12 +75,13 @@ const StepSecciones = (props) => {
             }
         })
         let request = { sections : data }
-        // postSecciones(request, exam_id)
-        // .then( res => {
-        //     console.log(res)
-        //     if (res) {
-        //         console.log("Update Secciones")
-        //     }
+        postSecciones(request, exam_id)
+        .then( res => {
+            console.log(res)
+            if (res) {
+                console.log("Update Secciones")
+            }
+        })
     }
 
     const handleAgregarEstudiante = (estudiante) => handleChangeComp(estudiante, 'estudiantes');
@@ -183,8 +190,8 @@ const StepSecciones = (props) => {
                 <DialogTitle id="alert-dialog-title">{"Advertencia"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            ¿Está seguro de querer terminar la creación del examen?
-                            Una vez terminado, no se puede regresar en los pasos anteriores.
+                            ¿Está seguro que desea terminar la creación del examen?
+                            Esta opción es irreversible.
                         </DialogContentText>
                     </DialogContent>
                 <DialogActions>
@@ -198,7 +205,7 @@ const StepSecciones = (props) => {
             </Dialog>
             <Snackbar open={alertModal} autoHideDuration={3000} onClose={handleCloseAlert} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleCloseAlert} severity="error">
-                    Debe heber al menos una sección con al menos un estudiante
+                    Debe heber al menos una sección con al menos un estudiante.
                 </Alert>
             </Snackbar>
         </Fragment>
