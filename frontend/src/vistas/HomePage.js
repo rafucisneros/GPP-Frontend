@@ -15,7 +15,7 @@ import Button from '@material-ui/core/Button';
 const sections = {
     "sections": [
       {
-        "id": 30,
+        "id": 1,
         "name": "Section 3",
         "exam": {
           "id": 1,
@@ -27,7 +27,7 @@ const sections = {
         }
       },
       {
-        "id": 31,
+        "id": 1,
         "name": "Section 4",
         "exam": {
           "id": 1,

@@ -188,6 +188,7 @@ const StepConfiguracionDinamica = (props) => {
     }
 
     const handleMaxPreguntas = (e) => {
+        if (e && e.target.value > listaPreguntasExamen.length) e.target.value = listaPreguntasExamen.length;
         if (Number(e.target.value) < maxPreguntas) resetCountPreguntas();
         setMaxPreguntas(Number(e.target.value));
     }
@@ -322,7 +323,7 @@ const StepConfiguracionDinamica = (props) => {
                                     }}
                                     InputProps={{
                                         inputProps: { 
-                                            max: 100, min: 0, step : 1
+                                            max: listaPreguntasExamen.length, min: 0, step : 1
                                     }}}
                                 />
                             </Grid>

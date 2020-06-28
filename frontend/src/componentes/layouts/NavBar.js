@@ -57,6 +57,7 @@ const drawerWidth = 240;
 const useStyle = makeStyles(theme => ({
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
+        height: 'auto',
         transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -64,6 +65,7 @@ const useStyle = makeStyles(theme => ({
     },
     appBarShift: {
         marginLeft: drawerWidth,
+        height: 'auto',
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -143,7 +145,7 @@ const NavBar = () => {
         <div style={{display: 'flex'}}>
             <CssBaseline />
             <AppBar position="absolute" className={clsx(classes.appBar, bar && classes.appBarShift)}>
-                <Toolbar style={{paddingRight : '24px'}}>
+                <Toolbar style={{paddingRight : '24px', width: '100%'}}>
                     <IconButton
                         edge="start"
                         color="inherit"
@@ -193,7 +195,7 @@ const NavBar = () => {
                     </div>
                     <Divider />
                     <List>
-                        <Link to={"perfil"} className='link'>
+                        <Link to={"/perfil"} className='link'>
                             <ListItem
                                 button  
                             >
@@ -223,7 +225,7 @@ const NavBar = () => {
                             timeout="auto"
                             unmountOnExit
                         >
-                            <Link to={"create_test"} className='link'>
+                            <Link to={"/create_test"} className='link'>
                                 <ListItem
                                     button 
                                     style={{paddingLeft : '38px'}} 
@@ -236,7 +238,7 @@ const NavBar = () => {
                                     />
                                 </ListItem>
                             </Link>
-                            <Link to={"edit_test"} className='link'>
+                            <Link to={"/edit_test"} className='link'>
                                 <ListItem
                                     button 
                                     style={{paddingLeft : '38px'}} 
@@ -250,7 +252,7 @@ const NavBar = () => {
                                 </ListItem>
                             </Link>
                         </Collapse>
-                        <Link to={"admin"} className='link'>
+                        <Link to={"/admin"} className='link'>
                             <ListItem
                                 button  
                             >
@@ -262,7 +264,7 @@ const NavBar = () => {
                                 />
                             </ListItem>
                         </Link>
-                        <Link to={"mantenimiento"} className='link'>
+                        <Link to={"/mantenimiento"} className='link'>
                             <ListItem
                                 button  
                             >
@@ -319,7 +321,7 @@ const NavBar = () => {
                     </div>
                     <Divider/>
                     <List>
-                        <Link to="home" className="link">
+                        <Link to="/home" className="link">
                             <ListItem
                                 button
                             >
