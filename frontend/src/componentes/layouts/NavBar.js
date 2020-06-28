@@ -145,7 +145,7 @@ const NavBar = () => {
         <div style={{display: 'flex'}}>
             <CssBaseline />
             <AppBar position="absolute" className={clsx(classes.appBar, bar && classes.appBarShift)}>
-                <Toolbar style={{paddingRight : '24px'}}>
+                <Toolbar style={{paddingRight : '24px', width: '100%'}}>
                     <IconButton
                         edge="start"
                         color="inherit"
