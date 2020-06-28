@@ -176,10 +176,10 @@ const StepConfiguracionBasica = () => {
             createTest(request)
             .then( res => {
                 console.log(res)
-                // if (res) {
-                //     SetExamId(res.data.id);
-                //     handleChangeStep(step);
-                // }
+                if (res) {
+                    SetExamId(res.data.id);
+                    handleChangeStep(step);
+                }
             })
         }
     }
