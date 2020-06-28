@@ -6,7 +6,7 @@ import { Card, CardContent, Grid, Typography, Avatar, Box } from '@material-ui/c
 import SpeakerNotesOffIcon from '@material-ui/icons/SpeakerNotesOff';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 
 const StylesSuccess = makeStyles(theme => ({
     root: {
@@ -17,7 +17,7 @@ const StylesSuccess = makeStyles(theme => ({
         display: 'flex'
     },
     title: {
-        fontWeight: 700
+        heigth: 'auto'
     },
     avatar: {
         backgroundColor: '#388e3c',
@@ -51,7 +51,7 @@ const StylesWarning = makeStyles(theme => ({
         display: 'flex'
     },
     title: {
-        fontWeight: 700
+        heigth: 'auto'
     },
     avatar: {
         backgroundColor: '#f57c00',
@@ -85,7 +85,7 @@ const StylesError = makeStyles(theme => ({
         display: 'flex'
     },
     title: {
-        fontWeight: 700
+        heigth: 'auto'
     },
     avatar: {
         backgroundColor: '#d32f2f',
@@ -119,7 +119,7 @@ const StylesNormal = makeStyles(theme => ({
         display: 'flex'
     },
     title: {
-        fontWeight: 700
+        heigth: 'auto'
     },
     avatar: {
         backgroundColor: '#115293',
@@ -187,7 +187,7 @@ const EstadisticaResumen = props => {
                         <Grid item style={{ display : 'flex', paddingLeft : '8px'}}>
                             <Avatar className={classes.avatar}>
                                 {   
-                                    datos.type === 'correcto' ? <EventAvailableIcon className={classes.icon} /> :
+                                    datos.type === 'correcto' ? <PlaylistAddCheckIcon className={classes.icon} /> :
                                     datos.type === 'incorrecto' ? <ClearIcon className={classes.icon} /> :
                                     datos.type === 'NA' ? <SpeakerNotesOffIcon className={classes.icon} /> :
                                     <DoneAllIcon className={classes.icon} />

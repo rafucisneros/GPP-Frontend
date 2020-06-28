@@ -57,6 +57,7 @@ const drawerWidth = 240;
 const useStyle = makeStyles(theme => ({
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
+        height: 'auto',
         transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -64,6 +65,7 @@ const useStyle = makeStyles(theme => ({
     },
     appBarShift: {
         marginLeft: drawerWidth,
+        height: 'auto',
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,

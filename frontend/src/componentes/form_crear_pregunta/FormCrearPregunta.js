@@ -13,6 +13,7 @@ import Box from '@material-ui/core/Box';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import CloseIcon from '@material-ui/icons/Close';
 import AddIcon from '@material-ui/icons/Add';
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 
 // contexts
 import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
@@ -194,19 +195,24 @@ export default function FormCrearPregunta(props) {
                                                         key={`${respuesta}-${index}`}
                                                         className="flex-box-respuestas"
                                                     >
-                                                        <Box >
-                                                            <TextField
-                                                                variant="outlined"
-                                                                margin="normal"
-                                                                required
-                                                                fullWidth
-                                                                value={respuesta.respuesta}
-                                                                id={`respuesta${index}`}
-                                                                label="Escribe una respuesta"
-                                                                name={`respuesta`}
-                                                                autoFocus
-                                                                onChange={(e) => handleCambiarRespuesta(e, index)}
-                                                            />
+                                                        <Box style={{display: 'flex'}}>
+                                                            <Box style={{display : 'flex', paddingRight : '5px', alignSelf: 'center'}}>
+                                                                <DragIndicatorIcon/>
+                                                            </Box>
+                                                            <Box style={{display: 'flex', width: '100%', paddingRight : '8px'}}>
+                                                                <TextField
+                                                                    variant="outlined"
+                                                                    margin="normal"
+                                                                    required
+                                                                    fullWidth
+                                                                    value={respuesta.respuesta}
+                                                                    id={`respuesta${index}`}
+                                                                    label="Escribe una respuesta"
+                                                                    name={`respuesta`}
+                                                                    autoFocus
+                                                                    onChange={(e) => handleCambiarRespuesta(e, index)}
+                                                                />
+                                                            </Box>
                                                         </Box>
                                                         <Box >
                                                             <Tooltip title="Eliminar respuesta" aria-label="delete">

@@ -123,7 +123,7 @@ const StepCrearPreguntas = () => {
         }
 
         if(flag === 'all' || flag === 'dificultad'){
-            if( !dificultad || validator.isEmpty(dificultad)){
+            if( !dificultad || validator.isEmpty(String(dificultad))){
                 error = true;
                 listError.dificultadError = true;
             } 

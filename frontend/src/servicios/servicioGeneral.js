@@ -11,3 +11,14 @@ export function postTopics(data){
         return Promise.reject(error);
     });
 }
+
+export function getExams(){
+
+    return Axios.get(global.GET_EXAMS)
+    .then((response) => {
+        return response;
+    })
+    .catch( (error) => {
+        return Promise.reject(error);
+    });
+}
