@@ -195,7 +195,7 @@ const NavBar = () => {
                     </div>
                     <Divider />
                     <List>
-                        <Link to={"perfil"} className='link'>
+                        <Link to={"/perfil"} className='link'>
                             <ListItem
                                 button  
                             >
@@ -225,7 +225,7 @@ const NavBar = () => {
                             timeout="auto"
                             unmountOnExit
                         >
-                            <Link to={"create_test"} className='link'>
+                            <Link to={"/create_test"} className='link'>
                                 <ListItem
                                     button 
                                     style={{paddingLeft : '38px'}} 
@@ -238,7 +238,7 @@ const NavBar = () => {
                                     />
                                 </ListItem>
                             </Link>
-                            <Link to={"edit_test"} className='link'>
+                            <Link to={"/edit_test"} className='link'>
                                 <ListItem
                                     button 
                                     style={{paddingLeft : '38px'}} 
@@ -252,7 +252,7 @@ const NavBar = () => {
                                 </ListItem>
                             </Link>
                         </Collapse>
-                        <Link to={"admin"} className='link'>
+                        <Link to={"/admin"} className='link'>
                             <ListItem
                                 button  
                             >
@@ -264,7 +264,7 @@ const NavBar = () => {
                                 />
                             </ListItem>
                         </Link>
-                        <Link to={"mantenimiento"} className='link'>
+                        <Link to={"/mantenimiento"} className='link'>
                             <ListItem
                                 button  
                             >
@@ -321,7 +321,7 @@ const NavBar = () => {
                     </div>
                     <Divider/>
                     <List>
-                        <Link to="home" className="link">
+                        <Link to="/home" className="link">
                             <ListItem
                                 button
                             >
