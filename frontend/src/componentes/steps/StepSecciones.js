@@ -75,13 +75,13 @@ const StepSecciones = (props) => {
             }
         })
         let request = { sections : data }
-        postSecciones(request, exam_id)
-        .then( res => {
-            console.log(res)
-            if (res) {
-                console.log("Update Secciones")
-            }
-        })
+        // postSecciones(request, exam_id)
+        // .then( res => {
+        //     console.log(res)
+            // if (res) {
+        //         console.log("Update Secciones")
+        //     }
+        // })
     }
 
     const handleAgregarEstudiante = (estudiante) => handleChangeComp(estudiante, 'estudiantes');
@@ -126,44 +126,35 @@ const StepSecciones = (props) => {
         <Fragment>
             <Grid item xs={12}>
                 <Paper className="paper-crear-test" style={{display : 'contents'}}>
-                    <Box className="flex-box-titulo">
-                        <Box style={{height : 'auto'}}>
+                    <Box style={{display: 'flex', AlignItems: 'center'}}>
+                        <Grid item lg={3} sm={3} xl={3} xs={3}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                style={{background:"#6a3df3", color : "white", marginRight: '8px'}}
+                                onClick={ () => handleChangeStep( tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_1')}
+                                endIcon={<NavigateBeforeIcon/>}
+                            >
+                                Paso Anterior
+                            </Button>
+                        </Grid>
+                        <Grid item lg={6} sm={6} xl={6} xs={6}  style={{textAlign : 'center'}}>
                             <Typography variant="h6">
                                 Paso - Asignar Secciones e Invitaciones
                             </Typography>
-                        </Box>
-                    <Box >
-                        <Button
-                            style={{background:"#7e5ca8", color : "white", marginRight: '8px'}}
-                            type="submit"
-                            variant="contained"
-                            color="red"
-                            endIcon={<SaveIcon/>}
-                            onClick={ () => sendSectionsData()}
-                        >
-                            Guardado Manual
-                        </Button>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            style={{marginRight: '8px'}}
-                            onClick={ () => handleChangeStep( tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_1')}
-                            endIcon={<NavigateBeforeIcon/>}
-                        >
-                            Paso Anterior
-                        </Button>
-                        <Button
-                            style={{background:"#ff4949", color : "white"}}
-                            type="submit"
-                            variant="contained"
-                            color="red"
-                            onClick={handleWarning}
-                            endIcon={<PublishIcon/>}
-                        >
-                            Publicar Examen
-                        </Button>
-                    </Box>
+                        </Grid>
+                        <Grid item lg={3} sm={3} xl={3} xs={3}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="red"
+                                style={{background : "#ff4949", color : "white"}}
+                                onClick={handleWarning}
+                                endIcon={<PublishIcon/>}
+                            >
+                                Publicar Examen
+                            </Button>
+                        </Grid>
                     </Box>
                 </Paper>
             </Grid>
@@ -203,7 +194,7 @@ const StepSecciones = (props) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Snackbar open={alertModal} autoHideDuration={3000} onClose={handleCloseAlert} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Snackbar open={alertModal} autoHideDuration={5000} onClose={handleCloseAlert} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleCloseAlert} severity="error">
                     Debe heber al menos una sección con al menos un estudiante.
                 </Alert>

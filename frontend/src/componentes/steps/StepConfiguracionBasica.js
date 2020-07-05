@@ -9,7 +9,9 @@ import Loading from '../loading/Loading.js';
 // material
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import MuiAlert from '@material-ui/lab/Alert';
 import {
     Card,
     CardHeader,
@@ -41,7 +43,11 @@ import { useUsuario } from '../../context/usuarioContext';
 // servicios
 import { createTest } from '../../servicios/servicioCrearExamen.js';
 
-const tituloTooltip = "El modo estático le permitirá mostrar el examen en el orden que usted desee. En el modo dinámico el examen será mostrado de manera aleatoria de acuerdo a las configuraciones introucidas."
+const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const tituloTooltip = "El modo estático le permitirá mostrar el examen en el orden que usted desee. En el modo dinámico el examen será mostrado de manera aleatoria de acuerdo a las configuraciones introducidas."
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -115,7 +121,11 @@ const StepConfiguracionBasica = () => {
         duracion,
         nroIntentos,
         SetExamId,
-        openExam
+        openExam,
+        msgAlert,
+        setMsgAlert,
+        alertError,
+        setAlertError
     } = useCreateTestPage();
 
     const [errores, setErrores] = useState({tituloError : false, duracionError : false, nroIntentosError: false, openExamError : false});
@@ -167,21 +177,25 @@ const StepConfiguracionBasica = () => {
                 duration : duracion,
                 attempt : Number(nroIntentos),
                 description : comentarios,
-                static : switchChecked,
+                static : !switchChecked,
                 email : usuario.email,
                 status : true,
                 open : openExam
             }
             setLoading(true)
-            createTest(request)
-            .then( res => {
-                console.log(res)
-                if (res) {
-                    SetExamId(res.data.id);
+            // createTest(request)
+            // .then( res => {
+            //     console.log(res)
+            //     if (res) {
+                    // SetExamId(res.data.id);
                     handleChangeStep(step);
-                }
-            })
+            //     }
+            // })
         }
+    }
+
+    const handleCloseErrorMsg = () => {
+        setAlertError(false);
     }
 
     useMemo( () => {
@@ -212,10 +226,9 @@ const StepConfiguracionBasica = () => {
                         </Box>
                         <Box >
                             <Button
-                                style={{background:"#ff4949", color : "white"}}
                                 type="submit"
                                 variant="contained"
-                                color="red"
+                                color="primary"
                                 onClick={ () => sendInitialData('step_1')}
                                 endIcon={<NavigateNextIcon/>}
                             >
@@ -241,9 +254,9 @@ const StepConfiguracionBasica = () => {
                         style = {{'display' : 'block', 'padding': '16px'}}
                     >
                         <Box style={{display: 'flex'}}>
-                            <Switch checked={switchChecked} onClick={() => handleCambiarSwitch()} color="primary"/>
+                            <Switch checked={switchChecked} onClick={() => handleCambiarSwitch()} color="secondary"/>
                             <Tooltip title={tituloTooltip} placement="right" arrow>
-                                <Box style={{alignSelf: 'center'}}>{tipoConfiguracion}</Box>
+                                <Box style={{alignSelf: 'center'}}><span style={{fontWeight: 800}}>{tipoConfiguracion}</span></Box>
                             </Tooltip>
                         </Box>
                     </Grid>
@@ -404,6 +417,11 @@ const StepConfiguracionBasica = () => {
                 </form>
             </Card>
             { loading && <Loading/>}
+            <Snackbar open={alertError} autoHideDuration={7000} onClose={() => handleCloseErrorMsg()} onExited={() => handleCloseErrorMsg()} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={() => handleCloseErrorMsg()} severity="error">
+                    {msgAlert}
+                </Alert>
+            </Snackbar>
         </Fragment>
     )
 }

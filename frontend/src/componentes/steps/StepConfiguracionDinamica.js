@@ -3,9 +3,15 @@ import validator from 'validator';
 
 // material
 import { makeStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import PublishIcon from '@material-ui/icons/Publish';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Grid from '@material-ui/core/Grid';
@@ -73,7 +79,8 @@ const StepConfiguracionDinamica = (props) => {
         setCountPreguntas,
         setMaxPreguntas,
         listaPreguntasExamen,
-        exam_id
+        exam_id,
+        openExam
     } = useCreateTestPage();
 
     const [ errores, setErrores ] = useState({tipoPreguntaSeleccionadoError : false, maxPreguntasError : false});
@@ -81,6 +88,7 @@ const StepConfiguracionDinamica = (props) => {
     const [ subareas, setSubareas ] = useState([]);
     const [ temas, setTemas ] = useState([]);
     const [ loading, setLoading ] = useState(false);
+    const [ open, setOpen ] = useState(false);
 
     useEffect( () => {
         let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
@@ -221,15 +229,23 @@ const StepConfiguracionDinamica = (props) => {
                 }
             })
             request.distribution = divisions;
-            patchConfigDinamica(request, exam_id)
-            .then( res => {
-                console.log(res)
-                if (res) {
-                    handleChangeStep(step);
-                }
-            })
+            // patchConfigDinamica(request, exam_id)
+            // .then( res => {
+            //     console.log(res)
+            //     if (res) {
+                    let paso = openExam ? 'step_4' : 'step_3';
+                    if (paso === 'step_4') handleWarning();
+                    else handleChangeStep(paso);
+            //     }
+            // })
         }
     }
+
+    const finishStep = () => {
+        handleChangeStep('step_4');
+    }
+
+    const handleWarning = () => setOpen(!open);
 
     useMemo( () => {
         if (tipoPreguntaSeleccionado) verifyData('tipoPreguntaSeleccionado');
@@ -243,34 +259,48 @@ const StepConfiguracionDinamica = (props) => {
         <Fragment>
             <Grid item xs={12}>
                 <Paper className="paper-crear-test" style={{display : 'contents'}}>
-                    <Box className="flex-box-titulo">
-                        <Box style={{height : 'auto'}}>
-                            <Typography variant="h6">
-                                Paso - Configuración Dinámica
-                            </Typography>
-                        </Box>
-                        <Box >
+                    <Box style={{display: 'flex', AlignItems: 'center'}}>
+                        <Grid item lg={3} sm={3} xl={3} xs={3}>
                             <Button
                                 type="submit"
                                 variant="contained"
                                 color="primary"
-                                style={{marginRight: '8px'}}
+                                style={{background:"#6a3df3", color : "white", marginRight: '8px'}}
                                 onClick={ () => handleChangeStep('step_1')}
                                 endIcon={<NavigateBeforeIcon/>}
                             >
                                 Paso Anterior
                             </Button>
-                            <Button
-                                style={{background:"#ff4949", color : "white"}}
-                                type="submit"
-                                variant="contained"
-                                color="red"
-                                onClick={ () => sendConfDinamica('step_3')}
-                                endIcon={<NavigateNextIcon/>}
-                            >
-                                Siguiente Paso
-                        </Button>
-                        </Box>
+                        </Grid>
+                        <Grid item lg={6} sm={6} xl={6} xs={6}  style={{textAlign : 'center'}}>
+                            <Typography variant="h6">
+                                Paso - Configuración Dinámica
+                            </Typography>
+                        </Grid>
+                        <Grid item lg={3} sm={3} xl={3} xs={3} style={{textAlignLast : 'right'}}>
+                            {
+                                openExam ?
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    style={{background : "#ff4949", color : "white"}}
+                                    color="red"
+                                    onClick={ () => sendConfDinamica()}
+                                    endIcon={<PublishIcon/>}
+                                >
+                                    Publicar Examen
+                                </Button> :
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={ () => sendConfDinamica()}
+                                    endIcon={<NavigateNextIcon/>}
+                                >
+                                    Siguiente Paso
+                                </Button>
+                            }
+                        </Grid>
                     </Box>
                 </Paper>
             </Grid>
@@ -396,6 +426,28 @@ const StepConfiguracionDinamica = (props) => {
                     </Grid>
                 </CardContent>
             </Card>
+            <Dialog
+                open={open}
+                onClose={handleWarning}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Advertencia"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            ¿Está seguro que desea terminar la creación del examen?
+                            Esta opción es irreversible.
+                        </DialogContentText>
+                    </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleWarning} color="secondary">
+                        No, aún no
+                    </Button>
+                    <Button onClick={() => finishStep()} color="primary" autoFocus>
+                        Sí, estoy seguro
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Fragment>
     )
 }

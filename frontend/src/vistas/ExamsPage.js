@@ -36,6 +36,7 @@ const columns = [
         if (rowData.open) return 'Público'
         else return 'Secciones'
     }  },
+    { title: 'ID', field: 'id', hidden: true},
 ]
 
 export default function ExamsPage(){

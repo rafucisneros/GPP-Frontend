@@ -35,14 +35,6 @@ export default function GraphicPage(props){
             display: true,
             text: 'Gráfica'
         }
-        // scales: {
-        //     xAxes: [{
-        //         stacked: true
-        //     }],
-        //     yAxes: [{
-        //         stacked: true
-        //     }]
-        // }
     };
 
     return(
@@ -54,32 +46,6 @@ export default function GraphicPage(props){
                 // height={3.5}
                 // ref={(reference) => this.chart = reference}
             />
-            {/* <Grid item xs={6} md={6} lg={6}>
-                <Paper>
-                    <Box style={{padding : '16px'}}>
-                        <Polar 
-                            data={dataDoughnut}
-                            options={options}
-                            // width={4}
-                            // height={3.5}
-                            // ref={(reference) => this.chart = reference}
-                        />
-                    </Box>
-                </Paper>
-            </Grid>
-            <Grid item xs={6} md={6} lg={6}>
-                <Paper>
-                    <Box style={{padding : '16px'}}>
-                        <Pie 
-                            data={dataDoughnut}
-                            options={options}
-                            // width={4}
-                            // height={3.5}
-                            // ref={(reference) => this.chart = reference}
-                        />
-                    </Box>
-                </Paper>
-            </Grid> */}
         </Fragment>
         
     )

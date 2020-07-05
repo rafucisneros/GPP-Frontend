@@ -10,14 +10,17 @@ const DataTable = ({
 }) => {
 
   const [ redirectEstadistica, setRedirectEstadistica ] = useState(false);
-  const [ redirectCalificaciones, setRedirectCalificaciones ] = useState(false);
-  const handleRedirectEstadistica = () => setRedirectEstadistica(true);
+  const [ redirectCalificaciones, setRedirectCalificaciones ] = useState(null);
+  const [ idExam, setIdExam ] = useState(null);
+  const handleRedirectEstadistica = (rowData) => {
+    setRedirectEstadistica(`estadisticas/exam/${rowData.id}`);
+  }
   const handleRedirectCalificaciones = () => setRedirectCalificaciones(true);
 
     return (
       <Fragment>
         {
-          redirectEstadistica && <Redirect push to={"grafica"}/>
+          redirectEstadistica && <Redirect push to={redirectEstadistica}/>
         }
         {
           redirectCalificaciones && <Redirect push to={"exam/1/calificaciones"}/>
@@ -102,7 +105,7 @@ const DataTable = ({
             {
               icon: 'bar_chart',
               tooltip: 'Estadísticas',
-              onClick: (event, rowData) => handleRedirectEstadistica(),
+              onClick: (event, rowData) => handleRedirectEstadistica(rowData),
               hidden: !isEstadistica
             }
           ]}

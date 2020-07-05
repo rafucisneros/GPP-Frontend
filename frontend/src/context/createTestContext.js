@@ -9,10 +9,9 @@ export function TipoPreguntaRespuestaProvider(props) {
     const [subMenuTipoPregunta, setSubMenuTipoPregunta] = useState(true);
 
     const handleOpcionExamen = (tipo, key) => {
-        console.log(key)
         if (tipo === "seleccion_simple") setTituloRespuesta("Selección Simple");
         else if (tipo === "seleccion_multiple") setTituloRespuesta("Selección Múltiple");
-        else if (tipo === "verdadero_falso") setTituloRespuesta("Verdadero y Falso");
+        else if (tipo === "verdadero_falso") setTituloRespuesta("Verdadero o Falso");
         else if (tipo === "ordenamiento") setTituloRespuesta("Ordenamiento");
         else if (tipo === "configuracion") setTituloRespuesta("Configuración del Examen");
         setTipoPregunta(tipo);

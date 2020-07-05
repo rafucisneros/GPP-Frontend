@@ -69,20 +69,24 @@ export default function SeleccionarAreaTema(props) {
     useEffect(() => {
         if (areaSeleccionada){
             let areasSeleccionadas = []; 
-            subareas[areaSeleccionada].forEach(item => {
-                areasSeleccionadas.push(item);
-            })
-            handleChangeAreaSubAreaTema(areasSeleccionadas, 'lista_filtrado_subarea');
+            if (subareas[areaSeleccionada]){
+                subareas[areaSeleccionada].forEach(item => {
+                    areasSeleccionadas.push(item);
+                })
+                handleChangeAreaSubAreaTema(areasSeleccionadas, 'lista_filtrado_subarea');
+            }
         }
     }, [areaSeleccionada])
     
     useEffect(() => {
         if (subareaSeleccionada){
             let subAreasSeleccionadas = [];
-            temas[subareaSeleccionada].forEach(item => {
-                subAreasSeleccionadas.push(item);
-            })
-            handleChangeAreaSubAreaTema(subAreasSeleccionadas, 'lista_filtrado_tema');
+            if(temas[subareaSeleccionada]){
+                temas[subareaSeleccionada].forEach(item => {
+                    subAreasSeleccionadas.push(item);
+                })
+                handleChangeAreaSubAreaTema(subAreasSeleccionadas, 'lista_filtrado_tema');
+            }
         }
     }, [subareaSeleccionada])
 

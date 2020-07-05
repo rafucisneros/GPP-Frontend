@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 // componentes
@@ -14,8 +14,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import Button from '@material-ui/core/Button';
+// import GetAppIcon from '@material-ui/icons/GetApp';
+// import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
@@ -39,37 +39,83 @@ const listaSecciones = [
     { valor : 'Sección 4', label: 'Sección 4' },
 ]
 
-export default function GraphicPage(){
+export default function GraphicPage(props){
 
-    const [ seccion1, setSeccion1 ] = useState('');
-    const [ seccion2, setSeccion2 ] = useState('');
-    const [ datosCorrectos, setDatosCorrectos ] = useState({
+    const [ seccion_1, setSeccion_1 ] = useState('');
+    const [ seccion_2, setSeccion_2 ] = useState('');
+
+    const [correctAnswers_1, setCorrectAnswers_1] = useState(0);
+    const [incorrectAnswers_1, setIncorrectAnswers_1] = useState(0);
+    const [naAnswers_1, setNaAnswers_1] = useState(0);
+    const [average_1, setAverage_1] = useState(0);
+
+    const [correctAnswers_2, setCorrectAnswers_2] = useState(0);
+    const [incorrectAnswers_2, setIncorrectAnswers_2] = useState(0);
+    const [naAnswers_2, setNaAnswers_2] = useState(0);
+    const [average_2, setAverage_2] = useState(0);
+
+    const [ datosCorrectos_1, setDatosCorrectos_1 ] = useState({
         title : 'Porcentaje de respuestas correctas',
         value : '62%',
         type : 'correcto',
         color : 'success'
     });
-    const [ datosInCorrectos, setDatosInCorrectos ] = useState({
+    const [ datosInCorrectos_1, setDatosInCorrectos_1 ] = useState({
         title : 'Porcentaje de respuestas incorrectas',
         value : '11%',
         type : 'incorrecto',
         color : 'error'
     });
-    const [ datosNA, setDatosNA ] = useState({
+    const [ datosNA_1, setDatosNA_1 ] = useState({
         title : 'Porcentaje de preguntas no contestadas',
         value : '27%',
         type : 'NA',
         color : 'warning'
     });
-    const [ datosPromed, setDatosPromed ] = useState({
+    const [ datosPromed_1, setDatosPromed_1 ] = useState({
         title : 'Promedio de notas',
         value : '16.2',
         type : 'promedio',
         color : 'normal'
     });
 
+    const [ datosCorrectos_2, setDatosCorrectos_2 ] = useState({
+        title : 'Porcentaje de respuestas correctas',
+        value : '62%',
+        type : 'correcto',
+        color : 'success'
+    });
+    const [ datosInCorrectos_2, setDatosInCorrectos_2 ] = useState({
+        title : 'Porcentaje de respuestas incorrectas',
+        value : '11%',
+        type : 'incorrecto',
+        color : 'error'
+    });
+    const [ datosNA_2, setDatosNA_2 ] = useState({
+        title : 'Porcentaje de preguntas no contestadas',
+        value : '27%',
+        type : 'NA',
+        color : 'warning'
+    });
+    const [ datosPromed_2, setDatosPromed_2 ] = useState({
+        title : 'Promedio de notas',
+        value : '16.2',
+        type : 'promedio',
+        color : 'normal'
+    });
+
+    useEffect(() => {
+        // if (props.estadisticas){
+        //     props.estadisticas.total_ans > 0 ? setCorrectAnswers_1(props.estadisticas.total_ans_correct / props.estadisticas.total_ans) : setCorrectAnswers_1(0);
+        //     props.estadisticas.total_ans > 0 ? setIncorrectAnswers_1(props.estadisticas.total_ans_incorrect / props.estadisticas.total_ans) : setIncorrectAnswers_1(0);
+        //     props.estadisticas.total_ans > 0 ? setNaAnswers_1(props.estadisticas.total_ans_empty / props.estadisticas.total_ans) : setNaAnswers_1(0);
+        //     setAverage(props.estadisticas.average_score);
+        // }
+    }, [])
+
     const { setContentMenu } = useGeneral();
     setContentMenu(`grafica compare`);
+    // debugger
 
     const classes = useStyles();
 
@@ -84,7 +130,7 @@ export default function GraphicPage(){
                             Comparación por Sección
                             </Typography>
                         </Grid>
-                        <Grid item style={{display: 'flex', flex: 1, justifyContent: 'flex-end'}}>
+                        {/* <Grid item style={{display: 'flex', flex: 1, justifyContent: 'flex-end'}}>
                             <Button
                                     type="submit"
                                     variant="contained"
@@ -93,7 +139,7 @@ export default function GraphicPage(){
                                 >
                                     Exportar CSV
                             </Button>
-                        </Grid>
+                        </Grid> */}
                     </Box>
                 </Grid>
                 <Grid container spacing={3} >
@@ -105,8 +151,8 @@ export default function GraphicPage(){
                                     <Select
                                         // labelId="demo-simple-select-label"
                                         // id="demo-simple-select"
-                                        value={seccion1}
-                                        onChange={ (e) => setSeccion1(e.target.value)}
+                                        value={seccion_1}
+                                        onChange={ (e) => setSeccion_1(e.target.value)}
                                     >
                                         {listaSecciones.map(item => (
                                             <MenuItem key={item.valor} value={item.valor} >
@@ -118,23 +164,23 @@ export default function GraphicPage(){
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen
-                                    datos = {datosCorrectos} 
+                                    datos = {datosCorrectos_1} 
                                 />
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen
-                                    datos = {datosInCorrectos} 
+                                    datos = {datosInCorrectos_1} 
                                 />
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen
-                                    datos = {datosNA} 
+                                    datos = {datosNA_1} 
                                 />
                             </Grid>
 
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen
-                                    datos = {datosPromed} 
+                                    datos = {datosPromed_1} 
                                 />
                             </Grid>
                             <Grid item xs={12} md={12} lg={12}>
@@ -153,6 +199,7 @@ export default function GraphicPage(){
                                             title = {'Desemepeño por Áreas'}
                                             type = {'Área'}
                                             stack = {false}
+                                            createDataBar = {props.createDataBar}
                                         />
                                     </Box>
                                 </Paper>
@@ -164,6 +211,7 @@ export default function GraphicPage(){
                                             title = {'Desemepeño por Subareas'}
                                             type = {'Subarea'}
                                             stack = {true}
+                                            createDataBar = {props.createDataBar}
                                         />
                                     </Box>
                                 </Paper>
@@ -175,6 +223,7 @@ export default function GraphicPage(){
                                             title = {'Desemepeño por Temas'}
                                             type = {'Tema'}
                                             stack = {true}
+                                            createDataBar = {props.createDataBar}
                                         />
                                     </Box>
                                 </Paper>
@@ -189,8 +238,8 @@ export default function GraphicPage(){
                                     <Select
                                         // labelId="demo-simple-select-label"
                                         // id="demo-simple-select"
-                                        value={seccion2}
-                                        onChange={ (e) => setSeccion2(e.target.value)}
+                                        value={seccion_2}
+                                        onChange={ (e) => setSeccion_2(e.target.value)}
                                     >
                                         {listaSecciones.map(item => (
                                             <MenuItem key={item.valor} value={item.valor} >
@@ -202,23 +251,23 @@ export default function GraphicPage(){
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen
-                                    datos = {datosCorrectos} 
+                                    datos = {datosCorrectos_2} 
                                 />
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen
-                                    datos = {datosInCorrectos} 
+                                    datos = {datosInCorrectos_2} 
                                 />
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen
-                                    datos = {datosNA} 
+                                    datos = {datosNA_2} 
                                 />
                             </Grid>
 
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen
-                                    datos = {datosPromed} 
+                                    datos = {datosPromed_2} 
                                 />
                             </Grid>
                             <Grid item xs={12} md={12} lg={12}>
@@ -237,6 +286,7 @@ export default function GraphicPage(){
                                             title = {'Desemepeño por Áreas'}
                                             type = {'Área'}
                                             stack = {false}
+                                            createDataBar = {props.createDataBar}
                                         />
                                     </Box>
                                 </Paper>
@@ -248,6 +298,7 @@ export default function GraphicPage(){
                                             title = {'Desemepeño por Subareas'}
                                             type = {'Subarea'}
                                             stack = {true}
+                                            createDataBar = {props.createDataBar}
                                         />
                                     </Box>
                                 </Paper>
@@ -259,6 +310,7 @@ export default function GraphicPage(){
                                             title = {'Desemepeño por Temas'}
                                             type = {'Tema'}
                                             stack = {true}
+                                            createDataBar = {props.createDataBar}
                                         />
                                     </Box>
                                 </Paper>

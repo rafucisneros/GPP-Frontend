@@ -8,6 +8,10 @@ const CreateTestPageContext = React.createContext();
 
 export function CreateTestPageProvider(props) {
 
+    // Mensajes, errores y exitos
+    const [msgAlert, setMsgAlert] = useState(null);
+    const [alertError, setAlertError] = useState(false);
+
     // Página
     const [ step, setStep ] = useState('step_0');
     const [ tipoConfiguracion, setTipoConfiguracion ] = useState("Configuración Dinámica");
@@ -64,10 +68,12 @@ export function CreateTestPageProvider(props) {
     }, [])
 
     useEffect(() => {
+        // console.log("LLAMANDO ENDPOINT")
         getTopics()
         .then( res => {
             if (res.data){
                 let data = res.data;
+                // console.log(data)
                 setAreas(data.areas);
                 setSubareas(data.subareas);
                 setTemas(data.topics);
@@ -103,12 +109,24 @@ export function CreateTestPageProvider(props) {
     const handleCambiarSwitch = () => setSwitchChecked(!switchChecked);
     const handleChangeStartDate = (e) => {
         let now = moment();
-        if ( e < now ) e = now;
-        else if (e > moment(valorFechaFin)) e = moment(valorFechaFin);
+        if ( e < now ) {
+            e = now;
+            setMsgAlert('Fecha Incorrecta. Se ajustará automáticamente a la fecha actual');
+            setAlertError(true);
+        }
+        else if (e > moment(valorFechaFin)) {
+            e = moment(valorFechaFin);
+            setMsgAlert('Fecha Incorrecta. Se ajustará automáticamente a la fecha de culminación actual');
+            setAlertError(true);
+        }
         setValorFechaInicio(e.toDate());
     };
     const handleChangeFinishDate = (e) => {
-        if (e < moment(valorFechaInicio)) e = moment(valorFechaInicio);
+        if (e < moment(valorFechaInicio)) {
+            e = moment(valorFechaInicio);
+            setMsgAlert('Fecha Incorrecta. Se ajustará automáticamente a la fecha de comienzo actual');
+            setAlertError(true);
+        }
         setValorFechaFin(e.toDate());
     };
 
@@ -143,14 +161,10 @@ export function CreateTestPageProvider(props) {
         SetExamId(null)
         setSwitchChecked(true)
         setDuracion(null)
-        
         setValorFechaInicio(moment().toDate())
         setValorFechaFin( moment().add(1, 'd').toDate())
         setTitulo(null)
         setComentarios(null)
-        setAreas([])
-        setSubareas({})
-        setTemas({})
         setListaFiltradoSubArea([])
         setListaFiltradoTema([])
         setPermitirSubArea(false)
@@ -227,7 +241,15 @@ export function CreateTestPageProvider(props) {
             setRespuestas,
             setSelectedRespuesta,
             destroyData,
-            SetExamId
+            SetExamId,
+            msgAlert,
+            setMsgAlert,
+            alertError,
+            setAlertError,
+            setAreas,
+            setSubareas,
+            setTemas,
+            setAreaSeleccionada
         })
     }, [
         areas, 
@@ -263,7 +285,9 @@ export function CreateTestPageProvider(props) {
         respuestas,
         selectedRespuesta,
         nroIntentos,
-        openExam
+        openExam,
+        msgAlert,
+        alertError
     ]);
 
     return <CreateTestPageContext.Provider value = {value} {...props} />

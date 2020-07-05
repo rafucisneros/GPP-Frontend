@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,6 +7,7 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import ListItemText from '@material-ui/core/ListItemText';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import TextField from '@material-ui/core/TextField';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
   Grid,
@@ -84,12 +85,24 @@ const DialogActions = withStyles(theme => ({
 
 export default function ModalAddAreaSubAreaTema(props) {
 
+  const [ areasAux, setAreasAux ] = useState([]);
+  const [ subareasAux, setSubareasAux ] = useState({});
+  const [ temasAux, setTemasAux ] = useState({});
+
   const [ seleccionado, setSeleccionado ] = useState(null)
   const [ elemento, setElemento ] = useState(null);
   const [ arraySubareas, setArraySubareas ] = useState([]);
-  const [ areaSeleccionada, setAreaSeleccionada ] = useState(null);
+  const [ areaSeleccionada, setAreaSeleccionadaAux ] = useState(null);
   const [ subareaSeleccionada, setSubareaSeleccionada ] = useState(null);
-  const { areas, subareas } = useCreateTestPage();
+  const { 
+    areas, 
+    subareas, 
+    temas,
+    setAreas,
+    setSubareas,
+    setTemas,
+    setAreaSeleccionada
+  } = useCreateTestPage();
   const classes = useStyles();
 
   const sendTopics = () => {
@@ -105,33 +118,92 @@ export default function ModalAddAreaSubAreaTema(props) {
     postTopics(data)
     .then( res => {
       if (res) {
-          console.log("Update Secciones");
+        let auxTopics = temasAux;
+        let auxSubareas = subareasAux;
+        let auxAreas = areasAux;
+        if (seleccionado === 'tema'){
+          if(auxTopics[data.subarea]) {
+            if(!auxTopics[data.subarea].includes(data.topic)) auxTopics[data.subarea].push(data.topic);
+          }
+          if(auxSubareas[data.area]){
+            if(!auxSubareas[data.area].includes(data.subarea)) auxSubareas[data.area].push(data.subarea);
+          } 
+          if(!auxAreas.includes(data.area)) auxAreas.push(data.area);
+        } else if (seleccionado === 'subarea'){
+          if(auxSubareas[data.area]) auxSubareas[data.area].push(data.subarea);
+          if(!auxAreas.includes(data.area)) auxAreas.push(data.area);
+          if(!auxTopics[data.subarea]) auxTopics[data.subarea] = [];
+        } else {
+          if(!auxAreas.includes(data.area)) auxAreas.push(data.area);
+          if(!auxSubareas[data.area]) auxSubareas[data.area] = [];
+        }
+        console.log(auxTopics)
+        console.log(auxSubareas)
+        console.log(auxAreas)
+
+        setAreasAux(auxAreas);
+        setSubareasAux(auxSubareas);
+        setTemasAux(auxTopics);
+
+        setAreas(auxAreas);
+        setSubareas(auxSubareas);
+        setTemas(auxTopics);
+        setAreaSeleccionada(null);
+
+        updateArraySubareas(auxSubareas);
       }
     })
     handleCloseModal();
 }
+  useEffect(() => {
+    if (areas) setAreasAux(areas);
+  }, [areas])
 
   useEffect(() => {
     if (subareas){
-      let keys = Object.keys(subareas)
-      let data = [];
-      keys.map( key => {
-        subareas[`${key}`].forEach( sub => {
-          data.push(sub);
-        })
-      })
-      setArraySubareas(data);
-    }
+      updateArraySubareas(subareas);
+      setSubareasAux(subareas);
+    } 
   }, [subareas])
 
   useEffect(() => {
+    if (temas) setTemasAux(temas);
+  }, [temas])
+
+  const updateArraySubareas = (updateData) => {
+    let keys = Object.keys(updateData)
+    let data = [];
+    keys.map( key => {
+      updateData[`${key}`].forEach( sub => {
+        data.push(sub);
+      })
+    })
+    setArraySubareas(data);
+  }
+
+  // useEffect(() => {
+  //   if (subareas){
+  //     console.log(subareas)
+  //     let keys = Object.keys(subareas)
+  //     let data = [];
+  //     keys.map( key => {
+  //       subareas[`${key}`].forEach( sub => {
+  //         data.push(sub);
+  //       })
+  //     })
+  //     setArraySubareas(data);
+  //   }
+  // }, [subareas])
+
+  useEffect(() => {
     if (subareaSeleccionada){
-      let keys = Object.keys(subareas)
+      let keys = Object.keys(subareasAux)
+      console.log(keys, subareaSeleccionada)
       let select;
       keys.map( key => {
-        if (subareas[`${key}`].includes(subareaSeleccionada)) select = key;
+        if (subareasAux[`${key}`].includes(subareaSeleccionada)) select = key;
       })
-      setAreaSeleccionada(select);
+      setAreaSeleccionadaAux(select);
     }
   }, [subareaSeleccionada])
 
@@ -141,14 +213,14 @@ export default function ModalAddAreaSubAreaTema(props) {
   };
 
   const handleChange = (e, flag) => {
-    if (flag === 'area') setAreaSeleccionada(e.target.value);
+    if (flag === 'area') setAreaSeleccionadaAux(e.target.value);
     else if (flag === 'subarea') setSubareaSeleccionada(e.target.value);
   }
 
   const handleCloseModal = () => {
     setSeleccionado(null);
     setElemento(null);
-    setAreaSeleccionada(null);
+    setAreaSeleccionadaAux(null);
     setSubareaSeleccionada(null);
     props.handleModal();
   };
@@ -161,86 +233,82 @@ export default function ModalAddAreaSubAreaTema(props) {
           <DialogContentText>
             Seleccionar un elemento de la lista y luego escribir el título del tipo de contenido seleccionado
           </DialogContentText>
-          <Grid item xs={12} style={{margin :'0px 5vw 0px 5vw'}}>
-            <FormControl required style={{textAlignLast: 'center'}} className={classes.formControl}>
-              <InputLabel>Tipo de contenido</InputLabel>
-              <Select
-                  label="Escoja un elemento de la lista"
-                  value={seleccionado}
-                  MenuProps={MenuProps}
-                  onChange={ (e) => handleCambiarSeleccionado(e, 'select')} 
-              >
-              {contenido.map(item => (
-                  <MenuItem key={item.valor} value={item.valor} >
-                      {item.label}
-                  </MenuItem>
-              ))}
-              </Select>
-            </FormControl>
-            <Grid style={{ display: 'flex', width : '100%'}}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControl required variant="outlined" className={classes.formControl}>
+                <InputLabel>Enfoque de las preguntas</InputLabel>
+                <Select
+                    label="Escoja un elemento de la lista"
+                    value={seleccionado}
+                    MenuProps={MenuProps}
+                    style={{textAlignLast: 'center'}}
+                    onChange={ (e) => handleCambiarSeleccionado(e, 'select')} 
+                >
+                {contenido.map(item => (
+                    <MenuItem key={item.valor} value={item.valor} >
+                        {item.label}
+                    </MenuItem>
+                ))}
+                </Select>
+              </FormControl>
+            </Grid>
               { seleccionado &&
-                <Box style={{ display: 'grid', margin: '8px', width : '100%'}}>
+                <Grid item xs={12}>
                   <TextField
                     id="elemento"
-                    // type="number"
+                    margin="small"
                     label="Título"
-                    placeholder="Título"
-                    margin="normal"
-                    required
-                    autoFocus
+                    variant="outlined"
                     fullWidth
-                    name="elemento"
+                    value={elemento}
+                    name="numero_preguntas"
+                    autoFocus
+                    style={{textAlignLast: 'center'}}
                     onChange={(e) => handleCambiarSeleccionado(e)} 
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    InputProps={{
-                      inputProps: { 
-                          max: 100, min: 0, step : 1, style: { textAlign: 'center' }
-                    }}}
                   />
-                </Box>
+                </Grid>
               }
               { seleccionado === 'tema' &&
-              <Box style={{ display: 'grid', margin: '8px', marginBottom: '16px', width : '100%'}}>
-                <FormControl required style={{textAlignLast: 'center'}} >
+              <Grid item xs={12}>
+                <FormControl required variant="outlined"  style={{width: '100%'}}>
                   <InputLabel>Subarea</InputLabel>
                   <Select
                     label="Subarea"
                     value={subareaSeleccionada}
                     onChange={(e) => handleChange(e, 'subarea')}
                     MenuProps={MenuProps}
+                    style={{textAlignLast: 'center'}}
                     >
                     {arraySubareas.map(item => (
                       <MenuItem key={item} value={item}>
-                          <ListItemText primary={item} />
+                        {item}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
-              </Box>
+              </Grid>
             }
             { (seleccionado === 'tema' || seleccionado === 'subarea')  &&
-              <Box style={{ display: 'grid', margin: '8px', marginBottom: '16px', width : '100%'}}>
-                <FormControl required style={{textAlignLast: 'center'}} >
+              <Grid item xs={12}>
+                <FormControl required variant="outlined" style={{width: '100%'}}>
                   <InputLabel>Área</InputLabel>
                   <Select
                     label="Área"
                     value={areaSeleccionada}
                     onChange={(e) => handleChange(e, 'area')}
-                    disabled={seleccionado === 'tema' ? true : false}
+                    disabled={ (seleccionado === 'tema' && subareaSeleccionada) || (seleccionado === 'subarea') ? false : true}
                     MenuProps={MenuProps}
+                    style={{textAlignLast: 'center'}}
                     >
-                    {areas.map(item => (
+                    {areasAux.map(item => (
                       <MenuItem key={item} value={item}>
-                          <ListItemText primary={item} />
+                        {item}
                       </MenuItem>
                     ))}
                   </Select>
                   </FormControl>
-              </Box>
+              </Grid>
             }
-            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
