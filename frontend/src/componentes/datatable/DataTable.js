@@ -42,7 +42,7 @@ const DataTable = ({
               editRow : {
                 cancelTooltip : 'Cancelar',
                 saveTooltip : 'Guardar',
-                deleteText: '¿Está seguro que desea eliminar este estudiante?',
+                deleteText: '¿Está seguro que desea eliminar este registro?',
                 deleteTooltip: 'Eliminar'
               }
             },
@@ -70,22 +70,6 @@ const DataTable = ({
               lastTooltip: 'Última Página'
             }
           }}
-          // onSelectionChange={(rows) => {
-          //     new Promise((resolve) => {
-          //         setTimeout(() => {
-          //             let nuevaSeccion = [...secciones];
-          //             for( let seccion of nuevaSeccion){
-          //                 if (seccion.id === seccionSeleccionada.id) {
-          //                     seccion.estudiantes = rows;
-          //                     break;
-          //                 }    
-          //             }
-          //             resolve();
-          //             handleChangeComp(nuevaSeccion, 'secciones');
-
-          //         }, 600);
-          //     })
-          // }}
           editable={{
             onRowAdd: onRowAdd,
             onRowUpdate: onRowUpdate,                   
