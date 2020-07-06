@@ -72,7 +72,28 @@ export default function ProfilePage(){
   }
  
   const changePassword = async () => {
-
+    try{
+      if(!contraseñaNuevaConfirmar || !contraseñaNueva || !contraseñaActual){
+        setErrorMsg("Por favor complete todos los campos")
+        setAlertOpen(true)
+        return
+      }
+      if(contraseñaNuevaConfirmar !== contraseñaNueva){
+        setErrorMsg("Las contraseñas no coinciden")
+        setAlertOpen(true)
+        return
+      }
+      let req = {
+        oldPassword: contraseñaActual,
+        newPassword: contraseñaNueva
+      }
+      // let modificandoContraseña = await patchUser(usuario.id, req)
+      setSuccessMsg("Modificado Exitosamente")
+      setAlertSuccessOpen(true)
+    } catch {
+      setErrorMsg("Ocurrio un error modificando el perfil")
+      setAlertOpen(true)
+    }
   }
 
   useEffect(() => {
@@ -191,7 +212,7 @@ export default function ProfilePage(){
                     helperText={errores && errores.tituloError ? "El campo es requerido" : null}
                     id='contraseña_nueva'
                     name='contraseña_nueva'
-                    type="text"
+                    type="password"
                     margin="normal"
                     label="Contraseña Nueva"
                     required
@@ -211,7 +232,7 @@ export default function ProfilePage(){
                     helperText={errores && errores.tituloError ? "El campo es requerido" : null}
                     id='contraseñaActual'
                     name='contraseñaActual'
-                    type="text"
+                    type="password"
                     margin="normal"
                     label="Contraseña Actual"
                     required
@@ -231,7 +252,7 @@ export default function ProfilePage(){
                     helperText={errores && errores.tituloError ? "El campo es requerido" : null}
                     id='contraseñaNuevaConfirmacion'
                     name='contraseñaNuevaConfirmacion'
-                    type="text"
+                    type="password"
                     margin="normal"
                     label="Confirmación Contraseña Nueva"
                     required
