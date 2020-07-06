@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import DataTable from '../datatable/DataTable.js';
-import { getTeachers, postSignUp, deleteUser, postUser, patchUser } from '../../servicios/servicioAdmin.js';
+import { getStudents, postSignUp, deleteUser, postUser, patchUser } from '../../servicios/servicioAdmin.js';
 import { Alert } from '../alert/Alert.js';
 
 const columns = [
@@ -10,7 +10,7 @@ const columns = [
     { title: 'Correo Electrónico', field: 'email' },
 ]
 
-const ListaProfesores = (props) => {
+const ListaEstudiantes = (props) => {
     const [ data, setData ] = useState([]);
     const [ alertOpen, setAlertOpen] = useState(false)
     const [ errorMsg, setErrorMsg] = useState("")
@@ -20,52 +20,51 @@ const ListaProfesores = (props) => {
     useEffect(() => {
       let fetchData = async () => {
         try {
-          let response = await getTeachers();
-          setData(response.data.professor)
+          let response = await getStudents();
+          setData(response.data.student)
         } catch {
-          alert("Error cargando Profesores")
+          alert("Error Cargando Estudiantes")
         }
       }
       fetchData()
     }, [])
 
-    const handleAgregarProfesor = (profesor) => {
+    const handleAgregarEstudiante = (estudiante) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            profesor["password"] = "123456789"
-            profesor["role"] = "Professor"
-            let addingUser = await postSignUp(profesor)
+            estudiante["password"] = "123456789"
+            estudiante["role"] = "Student"
+            let addingUser = await postSignUp(estudiante)
             let newData = [...data]
             newData.push(addingUser.data)
             setData(newData)
             setSuccessMsg("Agregado Exitosamente")
-            setAlertSuccessOpen(true)
-            resolve()
+            setAlertSuccessOpen(true)            
+            resolve();
           } catch {
-            setErrorMsg("Error agregando profesor")
+            setErrorMsg("Error agregando estudiante")
             setAlertOpen(true)
-            alert("")
             reject()
           }
         }, 1000);
       })
     }
       
-    const handleBorrarProfesor = (profesor) => {
+    const handleBorrarEstudiante = (Estudiante) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            let deletingUser = await deleteUser(profesor.id)
+            let deletingUser = await deleteUser(Estudiante.id)
             let newData = [...data]
-            let index = newData.indexOf(profesor)
+            let index = newData.indexOf(Estudiante)
             newData.splice(index, 1)
             setData(newData)
             setSuccessMsg("Eliminado Exitosamente")
-            setAlertSuccessOpen(true)
+            setAlertSuccessOpen(true)            
             resolve();
           } catch {
-            setErrorMsg("Error borrando el profesor")
+            setErrorMsg("Error borrando el estudiante")
             setAlertOpen(true)
             reject()
           }
@@ -73,22 +72,22 @@ const ListaProfesores = (props) => {
       })
     }
       
-    const handleModificarProfesor = (profesor) => {
+    const handleModificarEstudiante = (estudiante) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            let newProfe = {...profesor}
-            delete newProfe["groups"]
-            let editingUser = await patchUser(profesor.id, newProfe)
+            let newEstudiante = {...estudiante}
+            delete newEstudiante["groups"]
+            let editingUser = await patchUser(estudiante.id, newEstudiante)
             let newData = [...data]
-            let index = newData.indexOf(profesor)
-            newData.splice(index, 1, profesor)
+            let index = newData.indexOf(estudiante)
+            newData.splice(index, 1, estudiante)
             setData(newData)
             setSuccessMsg("Modificado Exitosamente")
             setAlertSuccessOpen(true)
             resolve();
           } catch {
-            setErrorMsg("Error modificando el profesor")
+            setErrorMsg("Error modificando el estudiante")
             setAlertOpen(true)
             reject()
           }
@@ -99,12 +98,12 @@ const ListaProfesores = (props) => {
     return (
       <Fragment>
         <DataTable 
-          title="Lista de Profesores" 
+          title="Lista de Estudiantes" 
           data={data} 
           columns={columns} 
-          onRowAdd={handleAgregarProfesor}
-          onRowDelete={handleBorrarProfesor}
-          onRowUpdate={handleModificarProfesor}
+          onRowAdd={handleAgregarEstudiante}
+          onRowDelete={handleBorrarEstudiante}
+          onRowUpdate={handleModificarEstudiante}
         />
         <Alert 
           open={alertOpen}
@@ -118,12 +117,13 @@ const ListaProfesores = (props) => {
           severity="success"
         />
       </Fragment>
+      
     );
 };
 
-ListaProfesores.propTypes = {
+ListaEstudiantes.propTypes = {
     className: PropTypes.string,
     // estudiantes: PropTypes.array.isRequired
 };
 
-export default ListaProfesores;
+export default ListaEstudiantes;

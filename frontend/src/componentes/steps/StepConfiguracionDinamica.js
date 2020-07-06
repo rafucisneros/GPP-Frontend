@@ -229,15 +229,15 @@ const StepConfiguracionDinamica = (props) => {
                 }
             })
             request.distribution = divisions;
-            // patchConfigDinamica(request, exam_id)
-            // .then( res => {
-            //     console.log(res)
-            //     if (res) {
+            patchConfigDinamica(request, exam_id)
+            .then( res => {
+                console.log(res)
+                if (res) {
                     let paso = openExam ? 'step_4' : 'step_3';
                     if (paso === 'step_4') handleWarning();
                     else handleChangeStep(paso);
-            //     }
-            // })
+                }
+            })
         }
     }
 

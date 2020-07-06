@@ -2,7 +2,7 @@ import Axios from 'axios';
 import auth from './helpers/auth.js'
 
 const SERVER_NAME = 'http://192.168.1.129:8000';
-// const SERVER_NAME = 'https://gpiback.herokuapp.com';
+// const SERVER_NAME = 'http://gpiback.herokuapp.com';
 // const SERVER_NAME = 'http://localhost:8000';
 
 export const global = {
@@ -20,8 +20,8 @@ export const global = {
     PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
 
     GET_STUDENTS: `${SERVER_NAME}/users/`,
-    GET_EXAMS: `${SERVER_NAME}/exams/`,
     GET_RESULTADOS_ESTADISTICAS: `${SERVER_NAME}/resultados/_eid_`,
+    GET_EXAMS: `${SERVER_NAME}/exams/`,
     TOPICS: `${SERVER_NAME}/approach/`,
 
     GET_EXAM:  `${SERVER_NAME}/exam/_id_`,
@@ -29,7 +29,16 @@ export const global = {
     POST_STUDENT_EXAM_QUESTIONS: `${SERVER_NAME}/student/_sid_/exam/_eid_/answers/`,
 
     GET_EXAM_CONFIGURATION: `${SERVER_NAME}/exam/_id_/configuration/`,
-    GET_EXAM_SECTIONS: `${SERVER_NAME}/exam/_id_/section/`
+    GET_EXAM_SECTIONS: `${SERVER_NAME}/exam/_id_/section/`,
+
+    POST_USER:  `${SERVER_NAME}/users/`,
+    DELETE_USER:  `${SERVER_NAME}/users/_id_/`,
+    PATCH_USER:  `${SERVER_NAME}/users/_id_/`,
+    GET_TEACHERS:  `${SERVER_NAME}/teachers`,
+    GET_STUDENTSS:  `${SERVER_NAME}/students`,
+    GET_ADMINS:  `${SERVER_NAME}/admins`,
+    // POST_USER:  `${SERVER_NAME}/`,
+
 };
 
 Axios.interceptors.request
