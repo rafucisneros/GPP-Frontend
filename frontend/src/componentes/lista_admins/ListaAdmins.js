@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import DataTable from '../datatable/DataTable.js';
-import { getTeachers, postSignUp, deleteUser, postUser, putUser } from '../../servicios/servicioAdmin.js';
+import { getAdmins, deleteUser, postSignUp, putUser } from '../../servicios/servicioAdmin.js';
 import { Alert } from '../alert/Alert.js';
 
 const columns = [
@@ -10,56 +10,57 @@ const columns = [
     { title: 'Correo Electrónico', field: 'email' },
 ]
 
-const ListaProfesores = (props) => {
+const ListaAdmins = (props) => {
     const [ data, setData ] = useState([]);
+
     const [ alertOpen, setAlertOpen] = useState(false)
     const [ errorMsg, setErrorMsg] = useState("")
-
+ 
     useEffect(() => {
       let fetchData = async () => {
         try {
-          let response = await getTeachers();
-          setData(response.data.professor)
+          let response = await getAdmins();
+          setData(response.data.admin)
         } catch {
-          alert("Error cargando Profesores")
+          setErrorMsg("Error cargando administradores")
+          setAlertOpen(true)
         }
       }
       fetchData()
     }, [])
 
-    const handleAgregarProfesor = (profesor) => {
+    const handleAgregarAdmin = (admin) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            profesor["password"] = "123456789"
-            profesor["role"] = "Professor"
-            let addingUser = await postSignUp(profesor)
+            admin["password"] = "123456789"
+            admin["role"] = "Admin"
+            let addingUser = await postSignUp(admin)
             let newData = [...data]
-            newData.push(profesor)
+            newData.push(admin)
             setData(newData)
-            resolve()
+            resolve();
           } catch {
-            setErrorMsg("Error agregando profesor")
+            setErrorMsg("Error agregando el admin")
             setAlertOpen(true)
-            alert("")
             reject()
           }
         }, 1000);
       })
     }
       
-    const handleBorrarProfesor = (profesor) => {
+    const handleBorrarAdmin = (admin) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            let deletingUser = await deleteUser(profesor.id)
+            let deletingUser = await deleteUser(admin.id)
             let newData = [...data]
-            let index = newData.indexOf(profesor)
+            let index = newData.indexOf(admin)
             newData.splice(index, 1)
             setData(newData)
             resolve();
           } catch {
-            setErrorMsg("Error borrando el profesor")
+            setErrorMsg("Error borrando el admin")
             setAlertOpen(true)
             reject()
           }
@@ -67,19 +68,19 @@ const ListaProfesores = (props) => {
       })
     }
       
-    const handleModificarProfesor = (profesor) => {
+    const handleModificarAdmin = (admin) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
             debugger
-            let editingUser = await putUser(profesor.id, profesor)
+            let editingUser = await putUser(admin.id, admin)
             let newData = [...data]
-            let index = newData.indexOf(profesor)
-            newData.splice(index, 1, profesor)
+            let index = newData.indexOf(admin)
+            newData.splice(index, 1, admin)
             setData(newData)
             resolve();
           } catch {
-            setErrorMsg("Error modificando el profesor")
+            setErrorMsg("Error modificando el admin")
             setAlertOpen(true)
             reject()
           }
@@ -90,12 +91,12 @@ const ListaProfesores = (props) => {
     return (
       <Fragment>
         <DataTable 
-          title="Lista de Profesores" 
+          title="Lista de Administradores" 
           data={data} 
           columns={columns} 
-          onRowAdd={handleAgregarProfesor}
-          onRowDelete={handleBorrarProfesor}
-          onRowUpdate={handleModificarProfesor}
+          onRowAdd={handleAgregarAdmin}
+          onRowDelete={handleBorrarAdmin}
+          onRowUpdate={handleModificarAdmin}
         />
         <Alert 
           open={alertOpen}
@@ -106,9 +107,9 @@ const ListaProfesores = (props) => {
     );
 };
 
-ListaProfesores.propTypes = {
+ListaAdmins.propTypes = {
     className: PropTypes.string,
     // estudiantes: PropTypes.array.isRequired
 };
 
-export default ListaProfesores;
+export default ListaAdmins;

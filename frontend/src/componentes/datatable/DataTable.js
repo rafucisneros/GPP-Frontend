@@ -27,7 +27,7 @@ const DataTable = ({
             editRow : {
               cancelTooltip : 'Cancelar',
               saveTooltip : 'Guardar',
-              deleteText: '¿Está seguro que desea eliminar este estudiante?',
+              deleteText: '¿Está seguro que desea eliminar este registro?',
               deleteTooltip: 'Eliminar'
             }
           },
