@@ -36,27 +36,31 @@ export default function GraphicPage(props){
 
     }, [])
 
-    const createDataBar = (data) => {
+    const createDataBar = (data, flag) => {
+        console.log(data, flag)
         let correctAnswers = [];
         let incorrectAnswers = [];
         let naAnswers = [];
         let labels = [];
 
         Object.keys(data).forEach( key => {
-            labels.push(data[key]);
-            correctAnswers.push(data[key].correct /  data[key].total);
-            incorrectAnswers.push(data[key].incorrect /  data[key].total);
-            naAnswers.push(data[key].empty /  data[key].total);
+            labels.push(key);
+            if (flag && flag === 'secciones'){
+                correctAnswers.push(Number(( data[key].total_ans_correct / (data[key].total_ans / 100)).toFixed(2) ));
+                incorrectAnswers.push(Number(( data[key].total_ans_incorrect / (data[key].total_ans / 100)).toFixed(2) ));
+                naAnswers.push(Number(( data[key].total_ans_empty /(data[key].total_ans / 100)).toFixed(2) ));
+            } else {
+                correctAnswers.push(Number(( data[key].correct / (data[key].total / 100)).toFixed(2) ));
+                incorrectAnswers.push(Number(( data[key].incorrect / (data[key].total / 100)).toFixed(2) ));
+                naAnswers.push(Number(( data[key].empty /(data[key].total / 100)).toFixed(2) ));
+            }
         })
         return [correctAnswers, incorrectAnswers, naAnswers, labels];
     }
 
     const createDataDoughnut = (data) => {
-        console.log("Doughnut")
+        return [data.passed, data.failed];
     }
-
-    console.log(contentMenu)
-    // debugger
 
     return(
         <Fragment>

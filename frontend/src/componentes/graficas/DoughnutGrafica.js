@@ -1,11 +1,20 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
 const numeroAleatorio = (min, max) => {
     return Math.round(Math.random() * (max - min) + min);
 }
 
-export default function GraphicPage(props){
+export default function DoughnutGrafica(props){
+
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        if (props.createDataDoughnut && props.data){
+            let [data1, data2] = props.createDataDoughnut(props.data);
+            setData([data1, data2]);
+        }
+    }, [props.createDataDoughnut, props.data])
 
     const dataDoughnut = {
         // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -13,7 +22,8 @@ export default function GraphicPage(props){
             borderWidth: 1,
             label: props.title,
             // hidden: true,
-            data: [numeroAleatorio(0, 100), numeroAleatorio(0, 100)],
+            // data: [numeroAleatorio(0, 100), numeroAleatorio(0, 100)],
+            data: data,
             backgroundColor: [
                 'rgba(75, 192, 192, 0.4)',
                 'rgba(255, 99, 132, 0.4)',
@@ -33,7 +43,7 @@ export default function GraphicPage(props){
     const options = {
         title: {
             display: true,
-            text: 'Gráfica'
+            text: props.title
         }
     };
 

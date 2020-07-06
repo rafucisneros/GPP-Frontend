@@ -16,6 +16,8 @@ import { useGeneral } from '../context/generalContext';
 import { getExams } from '../servicios/servicioGeneral';
 
 const columns = [
+    { title: 'ID', field: 'id'},
+    // { title: 'ID', field: 'id', hidden: true},
     { title: 'Nombre', field: 'name', defaultSort : 'asc' },
     { title: 'Fecha Inicio', field: 'start_date', render: rowData => {
         return moment(rowData.start_date).format('DD/MM/YYYY hh:mm a');
@@ -35,8 +37,7 @@ const columns = [
     { title: 'Público o Secciones', field: 'open', render: rowData => {
         if (rowData.open) return 'Público'
         else return 'Secciones'
-    }  },
-    { title: 'ID', field: 'id', hidden: true},
+    }  }
 ]
 
 export default function ExamsPage(){

@@ -75,7 +75,6 @@ export default function MenuGrafica({}) {
                 <Link to={"/exams"} className='link'>
                     <ListItem
                         button 
-                        style={{paddingLeft : '38px'}} 
                     >
                         <ListItemIcon>
                             <EditIcon />
