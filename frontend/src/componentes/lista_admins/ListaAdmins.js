@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import DataTable from '../datatable/DataTable.js';
-import { getAdmins, deleteUser, postSignUp, putUser } from '../../servicios/servicioAdmin.js';
+import { getAdmins, deleteUser, postSignUp, patchUser } from '../../servicios/servicioAdmin.js';
 import { Alert } from '../alert/Alert.js';
 
 const columns = [
@@ -15,6 +15,8 @@ const ListaAdmins = (props) => {
 
     const [ alertOpen, setAlertOpen] = useState(false)
     const [ errorMsg, setErrorMsg] = useState("")
+    const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
+    const [ successMsg, setSuccessMsg] = useState("")
  
     useEffect(() => {
       let fetchData = async () => {
@@ -37,8 +39,10 @@ const ListaAdmins = (props) => {
             admin["role"] = "Admin"
             let addingUser = await postSignUp(admin)
             let newData = [...data]
-            newData.push(admin)
+            newData.push(addingUser.data)
             setData(newData)
+            setSuccessMsg("Agregado Exitosamente")
+            setAlertSuccessOpen(true)
             resolve();
           } catch {
             setErrorMsg("Error agregando el admin")
@@ -58,6 +62,8 @@ const ListaAdmins = (props) => {
             let index = newData.indexOf(admin)
             newData.splice(index, 1)
             setData(newData)
+            setSuccessMsg("Eliminado Exitosamente")
+            setAlertSuccessOpen(true)
             resolve();
           } catch {
             setErrorMsg("Error borrando el admin")
@@ -72,12 +78,15 @@ const ListaAdmins = (props) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            debugger
-            let editingUser = await putUser(admin.id, admin)
+            let newAdmin = {...admin}
+            delete newAdmin["groups"]
+            let editingUser = await patchUser(admin.id, newAdmin)
             let newData = [...data]
             let index = newData.indexOf(admin)
             newData.splice(index, 1, admin)
             setData(newData)
+            setSuccessMsg("Modificado Exitosamente")
+            setAlertSuccessOpen(true)
             resolve();
           } catch {
             setErrorMsg("Error modificando el admin")
@@ -100,8 +109,14 @@ const ListaAdmins = (props) => {
         />
         <Alert 
           open={alertOpen}
-          setAlertError={setAlertOpen}
-          errorMsg={errorMsg}
+          setAlert={setAlertOpen}
+          message={errorMsg}
+        />
+        <Alert 
+          open={alertSuccessOpen}
+          setAlert={setAlertSuccessOpen}
+          message={successMsg}
+          severity="success"
         />
       </Fragment>
     );

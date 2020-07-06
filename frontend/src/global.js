@@ -32,7 +32,7 @@ export const global = {
 
     POST_USER:  `${SERVER_NAME}/users/`,
     DELETE_USER:  `${SERVER_NAME}/users/_id_/`,
-    PUT_USER:  `${SERVER_NAME}/users/_id_/`,
+    PATCH_USER:  `${SERVER_NAME}/users/_id_/`,
     GET_TEACHERS:  `${SERVER_NAME}/teachers`,
     GET_STUDENTSS:  `${SERVER_NAME}/students`,
     GET_ADMINS:  `${SERVER_NAME}/admins`,

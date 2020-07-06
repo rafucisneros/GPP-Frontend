@@ -44,8 +44,8 @@ export function postUser(data){
   });
 }
 
-export function putUser(id, data){
-  let url = global.PUT_USER.replace("_id_", id);
+export function patchUser(id, data){
+  let url = global.PATCH_USER.replace("_id_", id);
   return Axios.patch(url, data)
   .then((response) => {
       return response;
