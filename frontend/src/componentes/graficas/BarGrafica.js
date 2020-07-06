@@ -1,11 +1,60 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 const numeroAleatorio = (min, max) => {
     return Math.round(Math.random() * (max - min) + min);
 }
 
-export default function GraphicPage(props){
+export default function BarGrafica(props){
+
+    const [correctAnswers, setCorrectAnswers] = useState([]);
+    const [incorrectAnswers, setIncorrectAnswers] = useState([]);
+    const [naAnswers, setNaAnswers] = useState([]);
+    const [labels, setLabels] = useState([]);
+
+    useEffect(() => {
+        if (props.createDataBar && props.data){
+            console.log(props.data)
+            let [correctAnswersAux, incorrectAnswersAux, naAnswersAux, labelsAux] = props.createDataBar(props.data, props.flag);
+            console.log(correctAnswersAux, incorrectAnswersAux, naAnswersAux, labelsAux)
+            setCorrectAnswers(correctAnswersAux);
+            setIncorrectAnswers(incorrectAnswersAux);
+            setNaAnswers(naAnswersAux);
+            setLabels(labelsAux);
+        }
+    }, [props.createDataBar, props.data, props.flag])
+
+    // useMemo(() => {
+    //     if (correctAnswers){
+    //         let datosCorrectosAux = datosCorrectos;
+    //         datosCorrectosAux.value = `${correctAnswers}%`;
+    //         setDatosCorrectos(datosCorrectosAux);
+    //     }
+    // }, [correctAnswers])
+
+    // useMemo(() => {
+    //     if (incorrectAnswers){
+    //         let datosInCorrectosAux = datosInCorrectos;
+    //         datosInCorrectosAux.value = `${incorrectAnswers}%`;
+    //         setDatosInCorrectos(datosInCorrectosAux);
+    //     }
+    // }, [incorrectAnswers])
+
+    // useMemo(() => {
+    //     if (naAnswers){
+    //         let datosNAAux = datosNA;
+    //         datosNAAux.value = `${naAnswers}%`;
+    //         setDatosNA(datosNAAux);
+    //     }
+    // }, [naAnswers])
+
+    // useMemo(() => {
+    //     if (labels){
+    //         let datosNAAux = datosNA;
+    //         datosNAAux.value = `${naAnswers}%`;
+    //         setDatosNA(datosNAAux);
+    //     }
+    // }, [labels])
 
     const count = props.stack ? 33 : 100
     const dataBar = {
@@ -15,7 +64,8 @@ export default function GraphicPage(props){
                 label: 'Respuestas Correctas',
                 // yAxisID: "y-LastWeekData",
                 // hidden: true,
-                data: [numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count)],
+                data: correctAnswers,
+                // data: [numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count)],
                 backgroundColor: [
                     'rgba(75, 192, 192, 0.4)',
                     'rgba(75, 192, 192, 0.4)',
@@ -45,7 +95,8 @@ export default function GraphicPage(props){
                 label: 'Respuestas Incorrectas',
                 // yAxisID: "y-LastWeekData",
                 // hidden: true,
-                data: [numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count)],
+                // data: [numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count)],
+                data: incorrectAnswers,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.4)',
                     'rgba(255, 99, 132, 0.4)',
@@ -75,7 +126,8 @@ export default function GraphicPage(props){
                 label: 'N/A',
                 // yAxisID: "y-LastWeekData",
                 // hidden: true,
-                data: [numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count)],
+                // data: [numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count), numeroAleatorio(0, count)],
+                data: naAnswers,
                 backgroundColor: [
                     'rgba(255, 159, 64, 0.4)',
                     'rgba(255, 159, 64, 0.4)',
@@ -102,7 +154,8 @@ export default function GraphicPage(props){
                 ]
             }
         ],
-        labels: [`${props.type} 1`, `${props.type} 2`, `${props.type} 3`, `${props.type} 4`, `${props.type} 5`, `${props.type} 6`],
+        // labels: [`${props.type} 1`, `${props.type} 2`, `${props.type} 3`, `${props.type} 4`, `${props.type} 5`, `${props.type} 6`],
+        labels: labels,
     };
     
     const optionsBar = {

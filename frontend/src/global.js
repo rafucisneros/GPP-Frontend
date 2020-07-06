@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import auth from './helpers/auth.js'
 
-// const SERVER_NAME = 'http://192.168.1.106:8000';
+// const SERVER_NAME = 'http://192.168.1.129:8000';
 const SERVER_NAME = 'http://gpiback.herokuapp.com';
 // const SERVER_NAME = 'http://localhost:8000';
 
@@ -20,6 +20,7 @@ export const global = {
     PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
 
     GET_STUDENTS: `${SERVER_NAME}/users/`,
+    GET_RESULTADOS_ESTADISTICAS: `${SERVER_NAME}/resultados/_eid_`,
     GET_EXAMS: `${SERVER_NAME}/exams/`,
     TOPICS: `${SERVER_NAME}/approach/`,
 

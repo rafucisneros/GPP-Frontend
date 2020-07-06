@@ -64,6 +64,20 @@ export default function MenuCreateTest({step}) {
   return(
     <div>
       <List>
+        <Link to="home" className="link">
+          <ListItem
+            button
+            selected={itemSeleccionado === '3'}
+            onClick={ () => destroyData()}
+          >
+            <ListItemIcon>
+              <MenuBookIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Menú Principal</Typography>}
+            />
+          </ListItem>
+        </Link>
         {
           step === 'step_1' &&
             <Fragment>
@@ -126,21 +140,7 @@ export default function MenuCreateTest({step}) {
               </ListItem>
             </Fragment>
         }
-        <Link to="home" className="link">
-          <ListItem
-            button
-            selected={itemSeleccionado === '3'}
-            onClick={ () => destroyData()}
-          >
-            <ListItemIcon>
-              <MenuBookIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Menú Principal</Typography>}
-            />
-          </ListItem>
-        </Link>
-        <ListItem
+        {/* <ListItem
           button
           onClick={ () => handleCloseSubMenuTipoPregunta('4')}
           selected={itemSeleccionado === '4'}
@@ -151,7 +151,7 @@ export default function MenuCreateTest({step}) {
           <ListItemText
             primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Muy pronto...</Typography>}
           />
-        </ListItem>
+        </ListItem> */}
       </List>
       <ModalAddAreaSubAreaTema
         open={open}

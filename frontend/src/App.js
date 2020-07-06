@@ -17,9 +17,11 @@ import TestDetailsPage from './vistas/TestDetailsPage.js';
 import GraphicPage from './vistas/GraphicPage.js';
 import ExamFinishedPage from './vistas/ExamFinishedPage.js';
 import AdminPage from './vistas/AdminPage.js';
+import NonResponsivePage from './vistas/NonResponsivePage.js';
 
 // componentes
 // import NavBar from './componentes/layouts/NavBar.js';
+import { isMobile } from 'react-device-detect';
 import Layout from './componentes/layouts/Layout.js';
 import Loading from './componentes/loading/Loading.js';
 
@@ -43,26 +45,30 @@ const App = () => {
     if( !getToken() ){
       return (<Redirect to="/login" />);
     } else{
-      if (cargandoUsuario){
-        return (
-          <Loading/>
-        )
+      if (isMobile){
+        return(<NonResponsivePage/>)
       } else {
-        return (
-          <div>
-              <TipoPreguntaRespuestaProvider>
-                <MakeTestProvider>
-                  <CreateTestPageProvider>
-                    <GeneralProvider>
-                      <Layout > 
-                        <Comp {...props}/>
-                      </Layout>
-                    </GeneralProvider>
-                  </CreateTestPageProvider>
-                </MakeTestProvider>
-              </TipoPreguntaRespuestaProvider> 
-          </div>
-        )
+        if (cargandoUsuario){
+          return (
+            <Loading/>
+          )
+        } else {
+          return (
+            <div>
+                <TipoPreguntaRespuestaProvider>
+                  <MakeTestProvider>
+                    <CreateTestPageProvider>
+                      <GeneralProvider>
+                        <Layout > 
+                          <Comp {...props}/>
+                        </Layout>
+                      </GeneralProvider>
+                    </CreateTestPageProvider>
+                  </MakeTestProvider>
+                </TipoPreguntaRespuestaProvider> 
+            </div>
+          )
+        }
       }
     }
   }
@@ -117,7 +123,7 @@ const App = () => {
         />
         <Route
           exact
-          path='/edit_test'
+          path='/exams'
           render={(props) => requireAuth(ExamsPage, props)}
         />
         <Route
@@ -140,7 +146,7 @@ const App = () => {
         />
         <Route
           exact
-          path='/grafica'
+          path='/estadisticas/exam/:id'
           render={(props) => requireAuth(GraphicPage, props)}
         />
         <Route

@@ -28,6 +28,12 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import PublishIcon from '@material-ui/icons/Publish';
 
 const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -54,13 +60,15 @@ const StepCrearPreguntas = () => {
         selectedRespuesta,
         setSelectedRespuesta,
         exam_id,
-        step
+        step,
+        openExam
     } = useCreateTestPage();
 
     const [ alertSucess, setAlertSucess ] = useState(false);
     const [ alertError, setAlertError ] = useState(false);
     const [ msgError, setMsgError ] = useState('');
     const [ loading, setLoading ] = useState(false);
+    const [ open, setOpen ] = useState(false);
     const [ errores, setErrores ] = useState({
         preguntaError : false, 
         areaSeleccionadaError : false,
@@ -98,21 +106,21 @@ const StepCrearPreguntas = () => {
             else listError.areaSeleccionadaError = false;
         }
 
-        if(flag === 'all' || flag === 'subareaSeleccionada'){
-            if( !subareaSeleccionada || validator.isEmpty(subareaSeleccionada)){
-                error = true;
-                listError.subareaSeleccionadaError = true;
-            } 
-            else listError.subareaSeleccionadaError = false;
-        }
+        // if(flag === 'all' || flag === 'subareaSeleccionada'){
+        //     if( !subareaSeleccionada || validator.isEmpty(subareaSeleccionada)){
+        //         error = true;
+        //         listError.subareaSeleccionadaError = true;
+        //     } 
+        //     else listError.subareaSeleccionadaError = false;
+        // }
 
-        if(flag === 'all' || flag === 'temaSeleccionado'){
-            if( !temaSeleccionado || validator.isEmpty(temaSeleccionado)){
-                error = true;
-                listError.temaSeleccionadoError = true;
-            } 
-            else listError.temaSeleccionadoError = false;
-        }
+        // if(flag === 'all' || flag === 'temaSeleccionado'){
+        //     if( !temaSeleccionado || validator.isEmpty(temaSeleccionado)){
+        //         error = true;
+        //         listError.temaSeleccionadoError = true;
+        //     } 
+        //     else listError.temaSeleccionadoError = false;
+        // }
 
         if(flag === 'all' || flag === 'ponderacion'){
             if( !ponderacion || validator.isEmpty(ponderacion)){
@@ -218,9 +226,17 @@ const StepCrearPreguntas = () => {
     const nextStep = () => {
         let error = verifyDataListaPregunta();
         if(!error){
-            handleChangeStep(tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : 'step_3' );
+            let paso = tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : openExam ? 'step_4' : 'step_3';
+            if (paso === 'step_4') handleWarning();
+            else handleChangeStep(paso);
         }
     }
+
+    const finishStep = () => {
+        handleChangeStep('step_4');
+    }
+
+    const handleWarning = () => setOpen(!open);
 
     useMemo( () => {
         if (pregunta) verifyData('pregunta');
@@ -238,59 +254,62 @@ const StepCrearPreguntas = () => {
         if (dificultad) verifyData('dificultad');
     }, [dificultad])
 
-    useMemo(() => {
-        if (temaSeleccionado) verifyData('temaSeleccionado');
-    }, [temaSeleccionado])
+    // useMemo(() => {
+    //     if (temaSeleccionado) verifyData('temaSeleccionado');
+    // }, [temaSeleccionado])
 
     useMemo( () => {
         if (areaSeleccionada) verifyData('areaSeleccionada');
     }, [areaSeleccionada])
 
-    useMemo(() => {
-        if (subareaSeleccionada) verifyData('subareaSeleccionada');
-    }, [subareaSeleccionada])
+    // useMemo(() => {
+    //     if (subareaSeleccionada) verifyData('subareaSeleccionada');
+    // }, [subareaSeleccionada])
     
     return( 
         <Fragment>
             <Grid item xs={12}>
                 <Paper className="paper-crear-test" style={{display : 'contents'}}>
-                    <Box className="flex-box-titulo">
-                        <Box style={{height : 'auto'}}>
-                            <Typography variant="h6">
-                                Paso - Creación Examen ({tipoConfiguracion}) - {tituloRespuesta}
-                            </Typography>
-                        </Box>
-                        <Box >
-                            {/* <Button
-                                style={{background:"#7e5ca8", color : "white", marginRight: '8px'}}
-                                type="submit"
-                                variant="contained"
-                                color="red"
-                                endIcon={<SaveIcon/>}
-                            >
-                                Guardado Manual
-                            </Button> */}
+                    <Box style={{display: 'flex', AlignItems: 'center'}}>
+                        <Grid item lg={3} sm={3} xl={3} xs={3}>
                             <Button
+                                style={{background:"#6a3df3", color : "white", marginRight: '8px'}}
                                 type="submit"
                                 variant="contained"
-                                color="primary"
-                                style={{marginRight: '8px'}}
                                 onClick={ () => handleChangeStep('step_0')}
                                 endIcon={<NavigateBeforeIcon/>}
                             >
                                 Paso Anterior
                             </Button>
-                            <Button
-                                style={{background:"#ff4949", color : "white"}}
-                                type="submit"
-                                variant="contained"
-                                color="red"
-                                onClick={ () => nextStep()}
-                                endIcon={<NavigateNextIcon/>}
-                            >
-                                Siguiente Paso
-                            </Button>
-                        </Box>
+                        </Grid>
+                        <Grid item lg={6} sm={6} xl={6} xs={6}  style={{textAlign : 'center'}}>
+                            <Typography variant="h6">
+                                Paso - Creación Examen ({tipoConfiguracion}) - {tituloRespuesta}
+                            </Typography>
+                        </Grid>
+                        <Grid item lg={3} sm={3} xl={3} xs={3} style={{textAlignLast : 'right'}}>
+                            { !(tipoConfiguracion === 'Configuración Dinámica') && openExam ?
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="red"
+                                    style={{background : "#ff4949", color : "white"}}
+                                    onClick={ () => nextStep()}
+                                    endIcon={<PublishIcon/>}
+                                >
+                                    Publicar Examen
+                                </Button> :
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={ () => nextStep()}
+                                    endIcon={<NavigateNextIcon/>}
+                                >
+                                    Siguiente Paso
+                                </Button>
+                            }
+                        </Grid>
                     </Box>
                 </Paper>
             </Grid>
@@ -345,16 +364,38 @@ const StepCrearPreguntas = () => {
                     </Box>
                 </Paper>
             </Grid> 
-            <Snackbar open={alertSucess} autoHideDuration={3000} onClose={handleCloseAlertSuccess} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Snackbar open={alertSucess} autoHideDuration={5000} onClose={handleCloseAlertSuccess} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleCloseAlertSuccess} severity="success">
                     Pregunta Creada exitosamente.
                 </Alert>
             </Snackbar>
-            <Snackbar open={alertError} autoHideDuration={3000} onClose={handleCloseAlertError} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Snackbar open={alertError} autoHideDuration={5000} onClose={handleCloseAlertError} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleCloseAlertError} severity="error">
                     {msgError}
                 </Alert>
             </Snackbar>
+            <Dialog
+                open={open}
+                onClose={handleWarning}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Advertencia"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            ¿Está seguro que desea terminar la creación del examen?
+                            Esta opción es irreversible.
+                        </DialogContentText>
+                    </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleWarning} color="secondary">
+                        No, aún no
+                    </Button>
+                    <Button onClick={() => finishStep()} color="primary" autoFocus>
+                        Sí, estoy seguro
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Fragment>
     )
 }

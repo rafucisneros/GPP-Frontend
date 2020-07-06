@@ -57,8 +57,8 @@ export default function PonderacionDificultad(props) {
     };
 
     return (
-        <Box style={{display: 'flex'}}>
-            <Grid item lg={6} sm={6} xl={6} xs={6} style={{paddingRight : '4px'}}>
+        <Box style={{display: 'flex', textAlign : 'center', width : '100%'}}>
+            <Grid item lg={6} sm={6} xl={6} xs={6} md={6} style={{paddingRight : '4px'}}>
                 <FormControl required variant="outlined" error={props.errores && props.errores.dificultadError} className={classes.formControl}>
                     <InputLabel>Dificultad</InputLabel>
                     <Select
@@ -82,7 +82,7 @@ export default function PonderacionDificultad(props) {
                         { props.errores && props.errores.dificultadError && <FormHelperText>El campo es requerido</FormHelperText> }
                 </FormControl>
             </Grid>
-            <Grid item lg={6} sm={6} xl={6} xs={6} style={{paddingLeft : '4px'}}>
+            <Grid item lg={6} sm={6} xl={6} xs={6} md={6} style={{paddingLeft : '4px'}}>
                 <TextField
                     error={props.errores && props.errores.ponderacionError}
                     helperText={props.errores && props.errores.ponderacionError ? "El campo es requerido" : null}

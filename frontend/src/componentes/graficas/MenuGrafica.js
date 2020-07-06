@@ -11,6 +11,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import CompareArrowsIcon from '@material-ui/icons/CompareArrows';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import Divider from '@material-ui/core/Divider';
+import EditIcon from '@material-ui/icons/Edit';
 
 // context
 import { useGeneral } from '../../context/generalContext';
@@ -33,6 +34,20 @@ export default function MenuGrafica({}) {
     return(
         <Fragment>
             <List>
+                <Link to="/home" className="link">
+                    <ListItem
+                        button
+                        selected={clickItem === 'menu'}
+                        onClick={ () => setClickItem('menu')}
+                    >
+                    <ListItemIcon>
+                        <MenuBookIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Menú Principal</Typography>}
+                    />
+                    </ListItem>
+                </Link>
                 <ListItem
                     button
                     selected={clickItem === 'dashboard'}
@@ -57,18 +72,16 @@ export default function MenuGrafica({}) {
                     primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Comparar Secciones</Typography>}
                 />
                 </ListItem>
-                <Link to="home" className="link">
+                <Link to={"/exams"} className='link'>
                     <ListItem
-                        button
-                        selected={clickItem === 'menu'}
-                        onClick={ () => setClickItem('menu')}
+                        button 
                     >
-                    <ListItemIcon>
-                        <MenuBookIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Menú Principal</Typography>}
-                    />
+                        <ListItemIcon>
+                            <EditIcon />
+                        </ListItemIcon>
+                        <ListItemText 
+                            primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Ver Examenes </Typography>}
+                        />
                     </ListItem>
                 </Link>
             </List>
