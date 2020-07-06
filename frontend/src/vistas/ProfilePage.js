@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   CardHeader,
   CardContent,
   Grid,
   Divider,
-  Container
+  Container,
+  Button
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 
 import { useUsuario } from '../context/usuarioContext.js'
+import { patchUser } from '../servicios/servicioAdmin.js'
+import { Alert } from '../componentes/alert/Alert.js'
 
 export default function ProfilePage(){
 
@@ -18,17 +21,26 @@ export default function ProfilePage(){
   const [contraseñaNueva, setContraseñaNueva] = useState("");
   const [contraseñaNuevaConfirmar, setContraseñaNuevaConfirmar] = useState("");
   const [contraseñaActual, setContraseñaActual] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [email, setEmail] = useState("");
 
-  const handleCambiarNombre = () => {
+  // Para el Alert
+  const [ alertOpen, setAlertOpen] = useState(false)
+  const [ errorMsg, setErrorMsg] = useState("")
+  const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
+  const [ successMsg, setSuccessMsg] = useState("")
 
+  const handleCambiarNombre = (event) => {
+    setNombre(event.target.value)
   }
 
-  const handleCambiarApellido = () => {
-
+  const handleCambiarApellido = (event) => {
+    setApellido(event.target.value)
   }
-
-  const handleCambiarEmail = () => {
-
+  
+  const handleCambiarEmail = (event) => {
+    setEmail(event.target.value)
   }
 
   const handleCambiarContraseñaNueva = (event) => {
@@ -42,6 +54,32 @@ export default function ProfilePage(){
   const handleCambiarContraseñaActual = (event) => {
     setContraseñaActual(event.target.value)
   }
+
+  const changeProfile = async () => {
+    try{
+      debugger
+      let newUser = {...usuario}
+      newUser["first_name"] =  nombre
+      newUser["last_name"] = apellido
+      newUser["email"] = email 
+      let modificandoPerfil = await patchUser(usuario.id, newUser)
+      setSuccessMsg("Modificado Exitosamente")
+      setAlertSuccessOpen(true)
+    } catch {
+      setErrorMsg("Ocurrio un error modificando el perfil")
+      setAlertOpen(true)
+    }
+  }
+ 
+  const changePassword = async () => {
+
+  }
+
+  useEffect(() => {
+    setNombre(usuario.first_name)
+    setApellido(usuario.last_name)
+    setEmail(usuario.email)
+  }, [usuario])
 
   return(
     <div>
@@ -67,7 +105,7 @@ export default function ProfilePage(){
                       margin="normal"
                       label="Nombre"
                       required
-                      value={usuario.first_name}
+                      value={nombre}
                       onChange={handleCambiarNombre}
                       variant="outlined"
                       fullWidth
@@ -87,7 +125,7 @@ export default function ProfilePage(){
                       margin="normal"
                       label="Apellido"
                       required
-                      value={usuario.last_name}
+                      value={apellido}
                       onChange={handleCambiarApellido}
                       variant="outlined"
                       fullWidth
@@ -107,7 +145,7 @@ export default function ProfilePage(){
                       margin="normal"
                       label="Email"
                       required
-                      value={usuario.email}
+                      value={email}
                       onChange={handleCambiarEmail}
                       variant="outlined"
                       fullWidth
@@ -117,6 +155,23 @@ export default function ProfilePage(){
                       }}
                     />
                   </Grid> 
+                  <Grid item xs={6} md={6} lg={6}>
+                    <Grid
+                      container
+                      direction="row"
+                      justify="flex-end"
+                      alignItems="flex-end"
+                      style={{height: "100%"}}
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={changeProfile}
+                      >
+                        Cambiar Perfil
+                      </Button> 
+                    </Grid>
+                  </Grid>
                 </Grid>
               </CardContent>
               <Divider />
@@ -189,12 +244,40 @@ export default function ProfilePage(){
                       shrink: true,
                     }}
                   />
-                </Grid> 
+                </Grid>
+                <Grid item xs={6} md={6} lg={6}>
+                  <Grid
+                    container
+                    direction="row"
+                    justify="flex-end"
+                    alignItems="flex-end"
+                    style={{height: "100%"}}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={changePassword}
+                    >
+                      Cambiar contraseña
+                    </Button> 
+                  </Grid>
+                </Grid>
               </Grid>
             </CardContent>
           </Card>
         </Grid>
       </Container>
+      <Alert 
+          open={alertOpen}
+          setAlert={setAlertOpen}
+          message={errorMsg}
+        />
+      <Alert 
+          open={alertSuccessOpen}
+          setAlert={setAlertSuccessOpen}
+          message={successMsg}
+          severity="success"
+        />
     </div>
   )
 }

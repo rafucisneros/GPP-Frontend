@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import DataTable from '../datatable/DataTable.js';
-import { getStudents, postSignUp, deleteUser, postUser, putUser } from '../../servicios/servicioAdmin.js';
+import { getStudents, postSignUp, deleteUser, postUser, patchUser } from '../../servicios/servicioAdmin.js';
 import { Alert } from '../alert/Alert.js';
 
 const columns = [
@@ -14,6 +14,8 @@ const ListaEstudiantes = (props) => {
     const [ data, setData ] = useState([]);
     const [ alertOpen, setAlertOpen] = useState(false)
     const [ errorMsg, setErrorMsg] = useState("")
+    const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
+    const [ successMsg, setSuccessMsg] = useState("")
 
     useEffect(() => {
       let fetchData = async () => {
@@ -35,8 +37,10 @@ const ListaEstudiantes = (props) => {
             estudiante["role"] = "Student"
             let addingUser = await postSignUp(estudiante)
             let newData = [...data]
-            newData.push(estudiante)
+            newData.push(addingUser.data)
             setData(newData)
+            setSuccessMsg("Agregado Exitosamente")
+            setAlertSuccessOpen(true)            
             resolve();
           } catch {
             setErrorMsg("Error agregando estudiante")
@@ -56,6 +60,8 @@ const ListaEstudiantes = (props) => {
             let index = newData.indexOf(Estudiante)
             newData.splice(index, 1)
             setData(newData)
+            setSuccessMsg("Eliminado Exitosamente")
+            setAlertSuccessOpen(true)            
             resolve();
           } catch {
             setErrorMsg("Error borrando el estudiante")
@@ -70,12 +76,15 @@ const ListaEstudiantes = (props) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            debugger
-            let editingUser = await putUser(estudiante.id, estudiante)
+            let newEstudiante = {...estudiante}
+            delete newEstudiante["groups"]
+            let editingUser = await patchUser(estudiante.id, newEstudiante)
             let newData = [...data]
             let index = newData.indexOf(estudiante)
             newData.splice(index, 1, estudiante)
             setData(newData)
+            setSuccessMsg("Modificado Exitosamente")
+            setAlertSuccessOpen(true)
             resolve();
           } catch {
             setErrorMsg("Error modificando el estudiante")
@@ -98,8 +107,14 @@ const ListaEstudiantes = (props) => {
         />
         <Alert 
           open={alertOpen}
-          setAlertError={setAlertOpen}
-          errorMsg={errorMsg}
+          setAlert={setAlertOpen}
+          message={errorMsg}
+        />
+        <Alert 
+          open={alertSuccessOpen}
+          setAlert={setAlertSuccessOpen}
+          message={successMsg}
+          severity="success"
         />
       </Fragment>
       

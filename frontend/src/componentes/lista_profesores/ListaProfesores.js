@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import DataTable from '../datatable/DataTable.js';
-import { getTeachers, postSignUp, deleteUser, postUser, putUser } from '../../servicios/servicioAdmin.js';
+import { getTeachers, postSignUp, deleteUser, postUser, patchUser } from '../../servicios/servicioAdmin.js';
 import { Alert } from '../alert/Alert.js';
 
 const columns = [
@@ -14,6 +14,8 @@ const ListaProfesores = (props) => {
     const [ data, setData ] = useState([]);
     const [ alertOpen, setAlertOpen] = useState(false)
     const [ errorMsg, setErrorMsg] = useState("")
+    const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
+    const [ successMsg, setSuccessMsg] = useState("")
 
     useEffect(() => {
       let fetchData = async () => {
@@ -35,8 +37,10 @@ const ListaProfesores = (props) => {
             profesor["role"] = "Professor"
             let addingUser = await postSignUp(profesor)
             let newData = [...data]
-            newData.push(profesor)
+            newData.push(addingUser.data)
             setData(newData)
+            setSuccessMsg("Agregado Exitosamente")
+            setAlertSuccessOpen(true)
             resolve()
           } catch {
             setErrorMsg("Error agregando profesor")
@@ -57,6 +61,8 @@ const ListaProfesores = (props) => {
             let index = newData.indexOf(profesor)
             newData.splice(index, 1)
             setData(newData)
+            setSuccessMsg("Eliminado Exitosamente")
+            setAlertSuccessOpen(true)
             resolve();
           } catch {
             setErrorMsg("Error borrando el profesor")
@@ -71,12 +77,15 @@ const ListaProfesores = (props) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            debugger
-            let editingUser = await putUser(profesor.id, profesor)
+            let newProfe = {...profesor}
+            delete newProfe["groups"]
+            let editingUser = await patchUser(profesor.id, newProfe)
             let newData = [...data]
             let index = newData.indexOf(profesor)
             newData.splice(index, 1, profesor)
             setData(newData)
+            setSuccessMsg("Modificado Exitosamente")
+            setAlertSuccessOpen(true)
             resolve();
           } catch {
             setErrorMsg("Error modificando el profesor")
@@ -99,8 +108,14 @@ const ListaProfesores = (props) => {
         />
         <Alert 
           open={alertOpen}
-          setAlertError={setAlertOpen}
-          errorMsg={errorMsg}
+          setAlert={setAlertOpen}
+          message={errorMsg}
+        />
+        <Alert 
+          open={alertSuccessOpen}
+          setAlert={setAlertSuccessOpen}
+          message={successMsg}
+          severity="success"
         />
       </Fragment>
     );
