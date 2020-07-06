@@ -8,10 +8,11 @@ import LoginPage from './vistas/LoginPage.js';
 import RegisterPage from './vistas/RegisterPage.js';
 import MensajitoPage from './vistas/MensajitoPage.js';
 import CreateTestPage from './vistas/CreateTestPage.js';
-import EditTestPage from './vistas/EditTestPage';
+import ExamsPage from './vistas/ExamsPage';
 import HomePage from './vistas/HomePage.js';
 import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
+import CalificacionesPage from './vistas/CalificacionesPage.js';
 import TestDetailsPage from './vistas/TestDetailsPage.js';
 import GraphicPage from './vistas/GraphicPage.js';
 import ExamFinishedPage from './vistas/ExamFinishedPage.js';
@@ -111,8 +112,13 @@ const App = () => {
         />
         <Route
           exact
+          path='/exam/:id/calificaciones'
+          render={(props) => requireAuth(CalificacionesPage, props)}
+        />
+        <Route
+          exact
           path='/edit_test'
-          render={(props) => requireAuth(EditTestPage, props)}
+          render={(props) => requireAuth(ExamsPage, props)}
         />
         <Route
           exact
@@ -127,6 +133,10 @@ const App = () => {
         <Route
           path='/test_details/:id'
           render={(props) => requireAuth(TestDetailsPage, props)}
+        />
+        <Route
+          path='/mantenimiento'
+          render={(props) => <MantenimientoPage></MantenimientoPage>}
         />
         <Route
           exact

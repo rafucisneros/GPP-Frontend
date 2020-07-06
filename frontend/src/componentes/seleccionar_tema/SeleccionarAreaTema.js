@@ -7,6 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Box from '@material-ui/core/Box';
+import Grid from '@material-ui/core/Grid';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
 // contexts
@@ -15,7 +16,7 @@ import { useCreateTestPage } from '../../context/createTestPageContext';
 const useStyles = makeStyles(theme => ({
     formControl: {
         marginTop: theme.spacing(2),
-        minWidth: 120,
+        width: '100%',
     }
 }));
 
@@ -101,63 +102,69 @@ export default function SeleccionarAreaTema(props) {
     }, [areaSeleccionada])
 
     return (
-        <Box style={{textAlign : 'center', width : '100%'}}>
-            <Box style={{float : 'left'}}>
-                <FormControl required error={props.errores && props.errores.areaSeleccionadaError} className={classes.formControl}>
+        <Box style={{textAlign : 'center', width : '100%', display: 'flex'}}>
+            <Grid item lg={4} sm={4} xl={4} xs={4} style={{paddingRight : '8px'}}>
+                <FormControl required variant="outlined" error={props.errores && props.errores.areaSeleccionadaError} className={classes.formControl}>
                     <InputLabel>Áreas</InputLabel>
                     <Select
                         error={props.errores && props.errores.areaSeleccionadaError}
                         value={areaSeleccionada}
+                        label="Áreas"
                         onChange={(e) => handleChange(e, 'area')}
+                        style={{lineHeight : '1.5'}}
                     >
                         {areas.map(item => (
                             <MenuItem key={item} value={item}>
-                            <ListItemText primary={item} />
+                                <ListItemText primary={item} style={{margin : '0px'}}/>
                             </MenuItem>
                         ))}
                     </Select>
                     { props.errores && props.errores.areaSeleccionadaError && <FormHelperText>El campo es requerido</FormHelperText>}
                 </FormControl>
-            </Box>
+            </Grid>
 
-            <Box style={{display: 'inline-block'}}>
-                <FormControl required error={props.errores && props.errores.subareaSeleccionadaError} className={classes.formControl}>
+            <Grid item lg={4} sm={4} xl={4} xs={4} style={{paddingRight : '8px'}}>
+                <FormControl required variant="outlined" error={props.errores && props.errores.subareaSeleccionadaError} className={classes.formControl}>
                     <InputLabel>Sub Áreas</InputLabel>
                     <Select
                         error={props.errores && props.errores.subareaSeleccionadaError}
                         value={subareaSeleccionada}
                         onChange={(e) => handleChange(e, 'subarea')}
+                        label="Sub Áreas"
                         disabled={permitirSubArea && listaFiltradoSubArea.length > 0 ? false : true}
                         MenuProps={MenuProps}
+                        style={{lineHeight : '1.5'}}
                     >
                         {listaFiltradoSubArea.map(item => (
                             <MenuItem key={item} value={item}>
-                            <ListItemText primary={item} />
+                                <ListItemText primary={item} style={{margin : '0px'}}/>
                             </MenuItem>
                         ))}
                     </Select>
                     { props.errores && props.errores.subareaSeleccionadaError && <FormHelperText>El campo es requerido</FormHelperText>}
                 </FormControl>
-            </Box>
+            </Grid>
 
-            <Box style={{float : 'right'}}>
-                <FormControl required error={props.errores && props.errores.temaSeleccionadoError} className={classes.formControl}>
+            <Grid item lg={4} sm={4} xl={4} xs={4}>
+                <FormControl required variant="outlined" error={props.errores && props.errores.temaSeleccionadoError} className={classes.formControl}>
                     <InputLabel>Temas</InputLabel>
                     <Select
                         error={props.errores && props.errores.temaSeleccionadoError}
                         value={temaSeleccionado}
                         onChange={(e) => handleChange(e, 'tema')}
+                        label="Temas"
+                        style={{lineHeight : '1.5'}}
                         disabled={permitirTarea && listaFiltradoTema.length > 0 && listaFiltradoSubArea.length > 0 ? false : true}
                     >
                         {listaFiltradoTema.map(item => (
                             <MenuItem key={item} value={item}>
-                            <ListItemText primary={item} />
+                                <ListItemText primary={item} style={{margin : '0px'}}/>
                             </MenuItem>
                         ))}
                     </Select>
                     { props.errores && props.errores.temaSeleccionadoError && <FormHelperText>El campo es requerido</FormHelperText>}
                 </FormControl>
-            </Box>
+            </Grid>
         </Box>
     )
 }

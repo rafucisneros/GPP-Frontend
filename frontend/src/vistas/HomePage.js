@@ -15,7 +15,7 @@ import Button from '@material-ui/core/Button';
 const sections = {
     "sections": [
       {
-        "id": 30,
+        "id": 1,
         "name": "Section 3",
         "exam": {
           "id": 1,
@@ -27,7 +27,7 @@ const sections = {
         }
       },
       {
-        "id": 31,
+        "id": 1,
         "name": "Section 4",
         "exam": {
           "id": 1,
@@ -72,10 +72,10 @@ export default function HomePage(){
                     <CardActions>
                       {
                         false ? // user == student
-                        <Link to={`/make_test/${exam.id}`}>
+                        <Link to={`/make_test/${exam.id}`} className='link'>
                           <Button size="small">Presentar Exámen</Button>
                         </Link> :
-                        <Link to={`/test_details/${exam.id}`}>
+                        <Link to={`/test_details/${exam.id}`} className='link'>
                           <Button size="small">Ver detalles</Button>
                         </Link> 
                       }

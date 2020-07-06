@@ -3,6 +3,9 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import validator from 'validator';
 
+// componentes
+import Loading from '../loading/Loading.js';
+
 // material
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -116,6 +119,7 @@ const StepConfiguracionBasica = () => {
     } = useCreateTestPage();
 
     const [errores, setErrores] = useState({tituloError : false, duracionError : false, nroIntentosError: false, openExamError : false});
+    const [loading, setLoading] = useState(false);
 
     const verifyData = (flag) => {
         let error = false;
@@ -143,7 +147,7 @@ const StepConfiguracionBasica = () => {
         }
 
         if(flag === 'all' || flag === 'open_exam'){
-            if( !openExam || validator.isEmpty(String(openExam))){
+            if( openExam === undefined || openExam === null || validator.isEmpty(String(openExam))){
                 error = true;
                 listError.openExamError = true;
             } else listError.openExamError = false;
@@ -165,16 +169,18 @@ const StepConfiguracionBasica = () => {
                 description : comentarios,
                 static : switchChecked,
                 email : usuario.email,
-                status : true
+                status : true,
+                open : openExam
             }
-            // createTest(request)
-            // .then( res => {
-            //     console.log(res)
-            //     if (res) {
-            //         SetExamId(res.data.id);
+            setLoading(true)
+            createTest(request)
+            .then( res => {
+                console.log(res)
+                if (res) {
+                    SetExamId(res.data.id);
                     handleChangeStep(step);
-            //     }
-            // })
+                }
+            })
         }
     }
 
@@ -191,7 +197,7 @@ const StepConfiguracionBasica = () => {
     }, [nroIntentos])
 
     useMemo(() => {
-        if (openExam) verifyData('open_exam');
+        if (openExam === true || openExam === false) verifyData('open_exam');
     }, [openExam])
 
     return (
@@ -397,6 +403,7 @@ const StepConfiguracionBasica = () => {
                     <Divider />
                 </form>
             </Card>
+            { loading && <Loading/>}
         </Fragment>
     )
 }

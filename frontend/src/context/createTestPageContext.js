@@ -101,8 +101,16 @@ export function CreateTestPageProvider(props) {
     };
 
     const handleCambiarSwitch = () => setSwitchChecked(!switchChecked);
-    const handleChangeStartDate = (e) => setValorFechaInicio(e.toDate());
-    const handleChangeFinishDate = (e) => setValorFechaFin(e.toDate());
+    const handleChangeStartDate = (e) => {
+        let now = moment();
+        if ( e < now ) e = now;
+        else if (e > moment(valorFechaFin)) e = moment(valorFechaFin);
+        setValorFechaInicio(e.toDate());
+    };
+    const handleChangeFinishDate = (e) => {
+        if (e < moment(valorFechaInicio)) e = moment(valorFechaInicio);
+        setValorFechaFin(e.toDate());
+    };
 
     // Step Crear Preguntas
     const handleChangeAreaSubAreaTema = (value, type) => {
@@ -135,6 +143,7 @@ export function CreateTestPageProvider(props) {
         SetExamId(null)
         setSwitchChecked(true)
         setDuracion(null)
+        
         setValorFechaInicio(moment().toDate())
         setValorFechaFin( moment().add(1, 'd').toDate())
         setTitulo(null)
@@ -145,6 +154,8 @@ export function CreateTestPageProvider(props) {
         setListaFiltradoSubArea([])
         setListaFiltradoTema([])
         setPermitirSubArea(false)
+        setOpenExam(null)
+        SetNroIntentos(null)
         setPermitirTarea(false)
         setPregunta(null)
         setPonderacion(null)

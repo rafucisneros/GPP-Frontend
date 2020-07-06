@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import moment from 'moment';
 
 // material
 import Grid from '@material-ui/core/Grid';
@@ -11,59 +12,76 @@ import { Card, CardContent } from '@material-ui/core';
 // context
 import { useGeneral } from '../context/generalContext';
 
+// servicios
+import { getExams } from '../servicios/servicioGeneral';
+
 const columns = [
     { title: 'Nombre', field: 'name', defaultSort : 'asc' },
-    { title: 'Fecha Inicio', field: 'start_date' },
-    { title: 'Fecha Fin', field: 'finish_date' },
-    { title: 'Duracion', field: 'duration' },
+    { title: 'Fecha Inicio', field: 'start_date', render: rowData => {
+        return moment(rowData.start_date).format('DD/MM/YYYY hh:mm a');
+    } },
+    { title: 'Fecha Fin', field: 'finish_date', render: rowData => {
+        return moment(rowData.finish_date).format('DD/MM/YYYY hh:mm a');
+    } },
+    { title: 'Duracion', field: 'duration', render: rowData => {
+        let hora = parseInt(rowData.duration / 60);
+        if (hora >= 1) return `${hora} h ${rowData.duration % 60} min`
+        else return `${rowData.duration % 60} min`
+    }  },
+    { title: 'Estático o Dinámico', field: 'static', render: rowData => {
+        if (rowData.static) return 'Dinámico'
+        else return 'Estático'
+    } },
+    { title: 'Público o Secciones', field: 'open', render: rowData => {
+        if (rowData.open) return 'Público'
+        else return 'Secciones'
+    }  },
 ]
 
-export default function EditTestPage(){
+export default function ExamsPage(){
 
     const { setContentMenu } = useGeneral();
     // const [examanes, setExamanes] = useState([]);
-    const [examanes, setExamanes] = useState([
-        {
-            "id": 1,
-            "name": "Primer examen",
-            "status": true,
-            "start_date": "2020-02-20T21:00:26Z",
-            "finish_date": "2020-02-20T23:00:38Z",
-            "author": 1,
-            "duration": 166,
-            "attempt": null,
-            "static": true
-        }
-    ]);
+    const [examanes, setExamanes] = useState([]);
     setContentMenu(`edit_test`);
 
+    // GET requests y componentes de montaje
     useEffect(() => {
-
-    },[])
+        getExams()
+        .then( res => {
+            if (res.data) {
+                console.log(res)
+                setExamanes(res.data.results);
+            }
+        })
+    }, [])
 
     return (
     <Fragment>
         <div className="toolbar-icono"/>
         <Container maxWidth={false} style={{paddingTop: '32px'}}>
-            <Grid container spacing={3} >
+            {/* <Grid container spacing={3} >
                 <Box style={{display: 'flex', marginBottom : '12px', paddingLeft : '12px', paddingRight : '12px', width : '100%'}}>
                     <Grid item style={{display: 'flex', alignSelf: 'center'}}>
                         <Typography variant="h6">
-                            Examenes Creados
+                            Lista de Examenes
                         </Typography>
                     </Grid>
                 </Box>
-            </Grid>
+            </Grid> */}
             <Grid container spacing={3}>
                 {/* <Card style={{width: "100%"}}> */}
                     <CardContent style={{width: "100%"}}>
                         <DataTable 
-                            title="Lista de Examenes Creados" 
+                            title="Lista de Examenes" 
                             data={[...examanes]} 
                             columns={columns} 
                             onRowAdd={()=>{}}
                             onRowDelete={()=>{}}
                             onRowUpdate={()=>{}}
+                            isCalificacion={true}
+                            isEstadistica={true}
+                            selection={false}
                         />
                     </CardContent>
                 {/* </Card> */}

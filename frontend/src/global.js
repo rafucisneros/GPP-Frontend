@@ -20,6 +20,7 @@ export const global = {
     PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
 
     GET_STUDENTS: `${SERVER_NAME}/users/`,
+    GET_EXAMS: `${SERVER_NAME}/exams/`,
     TOPICS: `${SERVER_NAME}/approach/`,
 
     GET_EXAM:  `${SERVER_NAME}/exam/_id_`,
