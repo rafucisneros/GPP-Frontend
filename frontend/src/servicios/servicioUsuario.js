@@ -36,3 +36,13 @@ export function getDataUsuario(){
         return Promise.reject(error);
       });
 }
+
+export function postUserPassword(data){
+  return Axios.post(global.POST_USER_PASSWORD, data)
+  .then((response) => {
+    return response;
+  })
+  .catch( (error) => {
+    return Promise.reject(error);
+  });
+}

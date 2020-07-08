@@ -52,30 +52,27 @@ export default function FormPregunta({
 
   // Cambiar a siguiente pregunta
   const handlePreviousQuestion = ()=>{
-    changeQuestion(pregunta["id"] - 1);
+    changeQuestion(pregunta["index"] - 1);
   }
 
   // Cambiar a pregunta anterior
   const handleNextQuestion = ()=>{
-    changeQuestion(pregunta["id"] + 1);
+    changeQuestion(pregunta["index"] + 1);
   }
 
   return (
-    <Container maxWidth="lg" className="form-container">
+    <Container maxWidth="lg" className="form-container" style={{height: "100%", paddingTop: "0px"}}>
       <Grid container spacing={2} direction="column" style={{height: "100%"}}>
         <Grid>
           <div>
-            <h1>Pregunta {pregunta["id"]}</h1>
-          </div>
-          <div>
-            <h3>{pregunta.type[0].toUpperCase() + pregunta.type.substr(1)}</h3>
+            <h1>Pregunta {pregunta["index"]} - ({pregunta.type[0].toUpperCase() + pregunta.type.substr(1)})</h1>
           </div>
         </Grid>
         <Grid container spacing={2} direction="row" justify="space-around" style={{flex: 1}}>
-          {pregunta.type === "seleccion simple" && 
+          {pregunta.type === "selección simple" && 
             (<div>              
               <FormControl component="fieldset">
-                <FormLabel component="legend">{pregunta["content"]}</FormLabel>
+                <FormLabel component="legend" style={{marginBottom: "20px"}}>{pregunta["content"]}</FormLabel>
                 <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={pregunta.respuesta}>
                   {pregunta.answers.map((opcion, index) => {
                     return <FormControlLabel value={opcion["id"].toString()} control={<Radio />} label={opcion["content"]} key={index} />
@@ -84,10 +81,10 @@ export default function FormPregunta({
               </FormControl>
             </div>)
           }
-          {pregunta.type === "seleccion multiple" && 
+          {pregunta.type === "selección múltiple" && 
             (<div>   
-              <FormGroup >
-                <FormLabel component="legend">{pregunta["content"]}</FormLabel>
+              <FormGroup>
+                <FormLabel component="legend" style={{marginBottom: "20px"}}>{pregunta["content"]}</FormLabel>
                   {pregunta.answers.map((opcion, index) => {
                     return  (
                       <FormControlLabel
@@ -110,7 +107,7 @@ export default function FormPregunta({
           {pregunta.type === "verdadero o falso" && 
             (<div>              
               <FormControl component="fieldset">
-                <FormLabel component="legend">{pregunta["content"]}</FormLabel>
+                <FormLabel component="legend" style={{marginBottom: "20px"}}>{pregunta["content"]}</FormLabel>
                 <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={pregunta.respuesta}>
                   <FormControlLabel value={"1"} control={<Radio />} label="Verdadero"/>
                   <FormControlLabel value={"0"} control={<Radio />} label="Falso"/>
@@ -121,7 +118,7 @@ export default function FormPregunta({
           {pregunta.type === "ordenamiento" && 
             (<div>
               <FormControl component="fieldset">
-                <FormLabel component="legend">{pregunta["content"]}</FormLabel>
+                <FormLabel component="legend" style={{marginBottom: "20px"}}>{pregunta["content"]}</FormLabel>
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable">
                     {(provided, snapshot) => (

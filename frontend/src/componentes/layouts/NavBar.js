@@ -45,8 +45,8 @@ import List from '@material-ui/core/List';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import BuildIcon from '@material-ui/icons/Build';
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
+import TripOriginIcon from '@material-ui/icons/TripOrigin';
+import MinimizeIcon from '@material-ui/icons/Minimize';
 import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
@@ -185,7 +185,7 @@ const NavBar = () => {
                 open={bar}
             >
 
-            { contentMenu === 'home' &&
+            { (contentMenu === 'home' || contentMenu === 'profile') &&
                 <Fragment>
                     <div className="toolbar-icono">
                     Menú
@@ -195,6 +195,18 @@ const NavBar = () => {
                     </div>
                     <Divider />
                     <List>
+                        <Link to="/home" className="link">
+                            <ListItem
+                                button
+                            >
+                            <ListItemIcon>
+                                <MenuBookIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Menú Principal</Typography>}
+                            />
+                            </ListItem>
+                        </Link>
                         <Link to={"/perfil"} className='link'>
                             <ListItem
                                 button  
@@ -252,6 +264,7 @@ const NavBar = () => {
                                 </ListItem>
                             </Link>
                         </Collapse>
+                        { usuario.groups.find(x => x.name === "Admin") && (
                         <Link to={"/admin"} className='link'>
                             <ListItem
                                 button  
@@ -264,6 +277,8 @@ const NavBar = () => {
                                 />
                             </ListItem>
                         </Link>
+                            )
+                        }
                         <Link to={"/mantenimiento"} className='link'>
                             <ListItem
                                 button  
@@ -350,15 +365,15 @@ const NavBar = () => {
                 <List>
                     <ListItem>
                         <ListItemIcon>
-                            <CheckIcon style={{color: "green"}}/>
+                            <TripOriginIcon style={{color: "#3f51b5"}}/>
                         </ListItemIcon>
-                        <ListItemText primary="Respondida" style={{color: 'green' }} />
+                        <ListItemText primary="Respondida" style={{color: '#3f51b5' }} />
                     </ListItem>
                         <ListItem>
                         <ListItemIcon>
-                            <CloseIcon style={{color: "red"}}/>
+                            <MinimizeIcon style={{color: "grey"}}/>
                         </ListItemIcon>
-                        <ListItemText primary="No Respondida" style={{color: 'red' }} />
+                        <ListItemText primary="No Respondida" style={{color: 'grey' }} />
                     </ListItem>
                 </List>
                 <Divider />
@@ -374,14 +389,14 @@ const NavBar = () => {
                         >
                         <ListItemIcon>
                             {pregunta.respuesta ? 
-                                <CheckIcon style={{color: "green"}}/> : 
-                                <CloseIcon style={{color: "red"}}/>
+                                <TripOriginIcon style={{color: "#3f51b5"}}/> : 
+                                <MinimizeIcon style={{color: "grey"}}/>
                             }
                         </ListItemIcon>
                         <ListItemText 
                             primary={`Pregunta ${pregunta["index"]}`} 
                             style={{
-                            color: pregunta.respuesta ? "green" : "red"
+                            color: pregunta.respuesta ? "#3f51b5" : "grey"
                             }} 
                         />
                         </ListItem>

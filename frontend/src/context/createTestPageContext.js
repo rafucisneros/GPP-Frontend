@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import moment from 'moment';
+import { useUsuario } from '../context/usuarioContext';
 
 // servicios
 import { getTopics, getStudents } from '../servicios/servicioCrearExamen.js';
@@ -58,6 +59,7 @@ export function CreateTestPageProvider(props) {
     const [estudiantes, setEstudiantes] = useState([]);
     const [secciones, setSecciones] = useState([]);
     const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
+    const { usuario, setUsuario } = useUsuario();
 
     // GET requests y componentes de montaje
     useEffect(() => {
@@ -69,17 +71,19 @@ export function CreateTestPageProvider(props) {
 
     useEffect(() => {
         // console.log("LLAMANDO ENDPOINT")
-        getTopics()
-        .then( res => {
-            if (res.data){
-                let data = res.data;
-                // console.log(data)
-                setAreas(data.areas);
-                setSubareas(data.subareas);
-                setTemas(data.topics);
-            } 
-        })
-    }, [])
+        if(usuario.groups.find(x => x.name === "Professor")){
+            getTopics()
+            .then( res => {
+                if (res.data){
+                    let data = res.data;
+                    // console.log(data)
+                    setAreas(data.areas);
+                    setSubareas(data.subareas);
+                    setTemas(data.topics);
+                } 
+            })
+        }
+    }, [usuario])
 
     useEffect(() => {
         if (switchChecked) setTipoConfiguracion("Configuración Dinámica");
