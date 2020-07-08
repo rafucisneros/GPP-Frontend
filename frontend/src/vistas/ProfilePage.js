@@ -11,7 +11,9 @@ import {
 import TextField from '@material-ui/core/TextField';
 
 import { useUsuario } from '../context/usuarioContext.js'
+import { useGeneral } from '../context/generalContext'
 import { patchUser } from '../servicios/servicioAdmin.js'
+import { postUserPassword } from '../servicios/servicioUsuario.js'
 import { Alert } from '../componentes/alert/Alert.js'
 
 export default function ProfilePage(){
@@ -31,33 +33,11 @@ export default function ProfilePage(){
   const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
   const [ successMsg, setSuccessMsg] = useState("")
 
-  const handleCambiarNombre = (event) => {
-    setNombre(event.target.value)
-  }
-
-  const handleCambiarApellido = (event) => {
-    setApellido(event.target.value)
-  }
-  
-  const handleCambiarEmail = (event) => {
-    setEmail(event.target.value)
-  }
-
-  const handleCambiarContraseñaNueva = (event) => {
-    setContraseñaNueva(event.target.value)
-  }
-  
-  const handleCambiarContraseñaNuevaConfirmar = (event) => {
-    setContraseñaNuevaConfirmar(event.target.value)
-  }
-
-  const handleCambiarContraseñaActual = (event) => {
-    setContraseñaActual(event.target.value)
-  }
+  const { setContentMenu } = useGeneral();
+  setContentMenu('profile');
 
   const changeProfile = async () => {
     try{
-      debugger
       let newUser = {...usuario}
       newUser["first_name"] =  nombre
       newUser["last_name"] = apellido
@@ -84,10 +64,11 @@ export default function ProfilePage(){
         return
       }
       let req = {
-        oldPassword: contraseñaActual,
-        newPassword: contraseñaNueva
+        email: usuario.email,
+        password: contraseñaActual,
+        new_password: contraseñaNueva
       }
-      // let modificandoContraseña = await patchUser(usuario.id, req)
+      let modificandoContraseña = await postUserPassword(req)
       setSuccessMsg("Modificado Exitosamente")
       setAlertSuccessOpen(true)
     } catch {
@@ -127,7 +108,7 @@ export default function ProfilePage(){
                       label="Nombre"
                       required
                       value={nombre}
-                      onChange={handleCambiarNombre}
+                      onChange={(event) => setNombre(event.target.value)}
                       variant="outlined"
                       fullWidth
                       autoFocus
@@ -147,7 +128,7 @@ export default function ProfilePage(){
                       label="Apellido"
                       required
                       value={apellido}
-                      onChange={handleCambiarApellido}
+                      onChange={(event) => setApellido(event.target.value)}
                       variant="outlined"
                       fullWidth
                       autoFocus
@@ -167,7 +148,7 @@ export default function ProfilePage(){
                       label="Email"
                       required
                       value={email}
-                      onChange={handleCambiarEmail}
+                      onChange={(event) => setEmail(event.target.value)}
                       variant="outlined"
                       fullWidth
                       autoFocus
@@ -217,7 +198,7 @@ export default function ProfilePage(){
                     label="Contraseña Nueva"
                     required
                     value={contraseñaNueva}
-                    onChange={handleCambiarContraseñaNueva}
+                    onChange={(event) => setContraseñaNueva(event.target.value)}
                     variant="outlined"
                     fullWidth
                     autoFocus
@@ -237,7 +218,7 @@ export default function ProfilePage(){
                     label="Contraseña Actual"
                     required
                     value={contraseñaActual}
-                    onChange={handleCambiarContraseñaActual}
+                    onChange={(event) => setContraseñaActual(event.target.value)}
                     variant="outlined"
                     fullWidth
                     autoFocus
@@ -257,7 +238,7 @@ export default function ProfilePage(){
                     label="Confirmación Contraseña Nueva"
                     required
                     value={contraseñaNuevaConfirmar}
-                    onChange={handleCambiarContraseñaNuevaConfirmar}
+                    onChange={(event) => setContraseñaNuevaConfirmar(event.target.value)}
                     variant="outlined"
                     fullWidth
                     autoFocus

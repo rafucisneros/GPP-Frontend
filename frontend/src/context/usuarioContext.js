@@ -10,6 +10,7 @@ export function UsuarioProvider(props) {
         'email' : '',
         'first_name': '',
         'last_name' : '',
+        'groups': []
     });
     const [cargandoUsuario, setCargandoUsuario] = useState(false);
 

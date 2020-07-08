@@ -38,6 +38,8 @@ export const global = {
     GET_STUDENTSS:  `${SERVER_NAME}/students`,
     GET_ADMINS:  `${SERVER_NAME}/admins`,
     // POST_USER:  `${SERVER_NAME}/`,
+    POST_USER_PASSWORD:  `${SERVER_NAME}/user/password`,
+    
 
 };
 

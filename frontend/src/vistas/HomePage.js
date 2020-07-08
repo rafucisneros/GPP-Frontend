@@ -12,10 +12,12 @@ import CardActions from '@material-ui/core/CardActions';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Button from '@material-ui/core/Button';
 
+import { useUsuario } from '../context/usuarioContext';
+
 const sections = {
     "sections": [
       {
-        "id": 1,
+        "id": 29,
         "name": "Section 3",
         "exam": {
           "id": 1,
@@ -27,7 +29,7 @@ const sections = {
         }
       },
       {
-        "id": 1,
+        "id": 29,
         "name": "Section 4",
         "exam": {
           "id": 1,
@@ -44,7 +46,7 @@ const sections = {
 export default function HomePage(){
   const { setContentMenu } = useGeneral();
   const [ exams, setExams] = useState([]);
-
+  const { usuario } = useUsuario();
   setContentMenu('home');
 
   useEffect(()=> {
@@ -61,19 +63,49 @@ export default function HomePage(){
                 <h1>Mis Examenes</h1>
               </div>
               <Grid container spacing={2} direction="row" justify="space-around">
-                {exams.map(exam => {
+                {usuario.groups.length > 0 && exams.map((exam, index) => {
                   return (
-                  <Card>
-                    <CardContent>
+                  <Card key={index}>
+                    <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                       <AssignmentIcon style={{fontSize: "5.5rem"}}/>
                       <Divider />
                         Examen 1
                     </CardContent>
                     <CardActions>
                       {
-                        false ? // user == student
+                        usuario.groups.find(x => x.name === "Student")  ? // user == student
                         <Link to={`/make_test/${exam.id}`} className='link'>
-                          <Button size="small">Presentar Exámen</Button>
+                          <Button size="small">Presentar  Examen</Button>
+                        </Link> :
+                        <Link to={`/test_details/${exam.id}`} className='link'>
+                          <Button size="small">Ver detalles</Button>
+                        </Link> 
+                      }
+                    </CardActions>
+                  </Card>
+                  )                
+                })}
+              </Grid>
+          </Grid>
+          <br/>
+          <Grid container spacing={2} direction="column">
+              <div>
+                <h1>Examenes Libres</h1>
+              </div>
+              <Grid container spacing={2} direction="row" justify="space-around">
+                {usuario.groups.length > 0 && exams.map((exam, index) => {
+                  return (
+                  <Card key={index}>
+                    <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                      <AssignmentIcon style={{fontSize: "5.5rem"}}/>
+                      <Divider />
+                        Examen 1
+                    </CardContent>
+                    <CardActions>
+                      {
+                        usuario.groups.find(x => x.name === "Student")  ? // user == student
+                        <Link to={`/make_test/${exam.id}`} className='link'>
+                          <Button size="small">Presentar  Examen</Button>
                         </Link> :
                         <Link to={`/test_details/${exam.id}`} className='link'>
                           <Button size="small">Ver detalles</Button>
