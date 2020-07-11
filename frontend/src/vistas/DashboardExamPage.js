@@ -14,7 +14,7 @@ import { useGeneral } from '../context/generalContext';
 // servicios
 import { getResultadosEstadisticas } from '../servicios/servicioGeneral';
 
-export default function GraphicPage(props){
+export default function DashboardExamPage(props){
 
     const { contentMenu, setContentMenu } = useGeneral();
     const [ redirectExams, setRedirectExams ] = useState(false);
@@ -37,7 +37,6 @@ export default function GraphicPage(props){
     }, [])
 
     const createDataBar = (data, flag) => {
-        console.log(data, flag)
         let correctAnswers = [];
         let incorrectAnswers = [];
         let naAnswers = [];

@@ -279,7 +279,7 @@ const NavBar = () => {
                         </Link>
                             )
                         }
-                        <Link to={"/mantenimiento"} className='link'>
+                        {/* <Link to={"/mantenimiento"} className='link'>
                             <ListItem
                                 button  
                             >
@@ -290,7 +290,7 @@ const NavBar = () => {
                                     primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Próximamente </Typography>}
                                 />
                             </ListItem>
-                        </Link>
+                        </Link> */}
                     </List>
                 </Fragment>
             }

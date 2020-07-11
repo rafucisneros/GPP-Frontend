@@ -30,6 +30,8 @@ import {
     MenuItem,
     TextField,
 } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
@@ -39,6 +41,10 @@ import { patchConfigDinamica } from '../../servicios/servicioCrearExamen.js';
 
 // componentes
 import Loading from '../loading/Loading.js';
+
+const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const tipoPreguntas = [
     {valor : 'area', label: 'Área'},
@@ -84,6 +90,8 @@ const StepConfiguracionDinamica = (props) => {
     } = useCreateTestPage();
 
     const [ errores, setErrores ] = useState({tipoPreguntaSeleccionadoError : false, maxPreguntasError : false});
+    const [ alertModal, setAlertModal ] = useState(false);
+    const [ alertModal2, setAlertModal2 ] = useState(false);
     const [ areas, setAreas ] = useState([]);
     const [ subareas, setSubareas ] = useState([]);
     const [ temas, setTemas ] = useState([]);
@@ -148,6 +156,12 @@ const StepConfiguracionDinamica = (props) => {
                 listError.maxPreguntasError = true;
             } else listError.maxPreguntasError = false;
         }
+
+        if (flag === 'all' && (maxPreguntas <= 0 || (maxPreguntas > 0 && countPreguntas !== maxPreguntas) ) ){
+            error = true;
+            setAlertModal(true);
+        }
+
         setErrores({...errores, ...listError});
         return error;
     }
@@ -196,7 +210,10 @@ const StepConfiguracionDinamica = (props) => {
     }
 
     const handleMaxPreguntas = (e) => {
-        if (e && e.target.value > listaPreguntasExamen.length) e.target.value = listaPreguntasExamen.length;
+        if (e && e.target.value > listaPreguntasExamen.length) {
+            e.target.value = listaPreguntasExamen.length;
+            setAlertModal2(true);
+        }
         if (Number(e.target.value) < maxPreguntas) resetCountPreguntas();
         setMaxPreguntas(Number(e.target.value));
     }
@@ -246,6 +263,16 @@ const StepConfiguracionDinamica = (props) => {
     }
 
     const handleWarning = () => setOpen(!open);
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setAlertModal(false);
+    };
+    
+    const handleCloseAlert2 = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setAlertModal2(false);
+    };
 
     useMemo( () => {
         if (tipoPreguntaSeleccionado) verifyData('tipoPreguntaSeleccionado');
@@ -448,6 +475,16 @@ const StepConfiguracionDinamica = (props) => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar open={alertModal} autoHideDuration={8000} onClose={handleCloseAlert} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleCloseAlert} severity="error">
+                    El número máximo de preguntas permitidas por examen debe ser mayor a cero e igual al número de preguntas escogidas en el enfoque correspondiente.
+                </Alert>
+            </Snackbar>
+            <Snackbar open={alertModal2} autoHideDuration={5000} onClose={handleCloseAlert2} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleCloseAlert2} severity="error">
+                    {`No puede colocar colocar un número mayor a ${listaPreguntasExamen.length} preguntas en el examen.`}
+                </Alert>
+            </Snackbar>
         </Fragment>
     )
 }
