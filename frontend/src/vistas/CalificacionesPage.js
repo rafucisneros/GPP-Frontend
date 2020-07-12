@@ -5,38 +5,48 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import DataTable from '../componentes/datatable/DataTable.js'
 import { Card, CardContent } from '@material-ui/core';
+import Loading from '../componentes/loading/Loading.js';
 
 // context
 import { useGeneral } from '../context/generalContext';
+import { Alert } from '../componentes/alert/Alert.js'
 
+import { getResultsForExam } from '../servicios/servicioGeneral.js'
 const columns = [
-    { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
-    { title: 'Apellidos', field: 'last_name' },
-    { title: 'Nota (100%)', field: 'score_pct' },
-    { title: 'Puntaje (35 ptos)', field: 'score' },
+    { title: 'Alummo', field: 'name', defaultSort : 'asc' },
+    { title: 'Nota (100%)', field: 'total_score' },
+    { title: 'Puntaje', field: 'score' },
+    { title: 'Intentos realizados', field: 'attempts' },
 ]
 
-export default function EditTestPage(){
+export default function EditTestPage(props){
+    const examID = props.match.params.id;
+
+    // Para el Alert
+    const [ alertOpen, setAlertOpen] = useState(false)
+    const [ errorMsg, setErrorMsg] = useState("")
 
     const { setContentMenu } = useGeneral();
-    const [ calificaciones, setCalificaciones ] = useState([
-        {
-            "first_name": "Andrés Alejandro",
-            "last_name": "Buelvas Vergara",
-            "score_pct": "100%",
-            "score": 35,
-        },
-        {
-            "first_name": "Rafael",
-            "last_name": "Cisneros",
-            "score_pct": "0%",
-            "score": 0,
-        }
-    ]);
+    const [ calificaciones, setCalificaciones ] = useState(null);
     setContentMenu(`edit_test`);
 
     useEffect(() => {
-
+        let fetchData = async () => {
+            try {
+                let response = await getResultsForExam(examID)
+                debugger
+                setCalificaciones(response.data.map( x => {
+                    return {
+                        ...x, 
+                        total_score: response.data.total_score
+                    }
+                }))
+            } catch {
+                setErrorMsg("Ocurrio un error cargando las calificaciones")
+                setAlertOpen(true)
+            }
+        }
+        fetchData()
     },[])
 
     return (
@@ -46,18 +56,25 @@ export default function EditTestPage(){
             <Grid container spacing={3}>
                 {/* <Card style={{width: "100%"}}> */}
                     <CardContent style={{width: "100%"}}>
-                        <DataTable 
-                            title="Calificaciones" 
-                            data={[...calificaciones]} 
-                            columns={columns} 
-                            onRowAdd={()=>{}}
-                            onRowDelete={()=>{}}
-                            onRowUpdate={()=>{}}
-                        />
+                        {calificaciones ?
+                            <DataTable 
+                                title="Calificaciones" 
+                                data={[...calificaciones]} 
+                                columns={columns} 
+                                onRowAdd={()=>{}}
+                                onRowDelete={()=>{}}
+                                onRowUpdate={()=>{}}
+                            /> : <Loading/>
+                        }
                     </CardContent>
                 {/* </Card> */}
             </Grid>
         </Container>
+        <Alert 
+            open={alertOpen}
+            setAlert={setAlertOpen}
+            message={errorMsg}
+          />
     </Fragment>
     );
 }

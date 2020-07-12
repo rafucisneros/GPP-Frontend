@@ -237,7 +237,7 @@ const NavBar = () => {
                             timeout="auto"
                             unmountOnExit
                         >
-                            <Link to={"/create_test"} className='link'>
+                            {usuario.groups.find(x => x.name === "Professor") && <Link to={"/create_test"} className='link'>
                                 <ListItem
                                     button 
                                     style={{paddingLeft : '38px'}} 
@@ -249,7 +249,7 @@ const NavBar = () => {
                                         primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Crear Examen </Typography>}
                                     />
                                 </ListItem>
-                            </Link>
+                            </Link>}
                             <Link to={"/exams"} className='link'>
                                 <ListItem
                                     button 

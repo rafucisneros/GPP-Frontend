@@ -11,9 +11,10 @@ import { Card, CardContent } from '@material-ui/core';
 
 // context
 import { useGeneral } from '../context/generalContext';
+import { useUsuario } from '../context/usuarioContext';
 
 // servicios
-import { getExams } from '../servicios/servicioGeneral';
+import { getExamsForTeacher } from '../servicios/servicioGeneral';
 
 const columns = [
     { title: 'ID', field: 'id'},
@@ -46,17 +47,18 @@ export default function ExamsPage(){
     // const [examanes, setExamanes] = useState([]);
     const [examanes, setExamanes] = useState([]);
     setContentMenu(`edit_test`);
+    const { usuario } = useUsuario();
 
     // GET requests y componentes de montaje
     useEffect(() => {
-        getExams()
+        getExamsForTeacher(usuario.id)
         .then( res => {
             if (res.data) {
                 console.log(res)
-                setExamanes(res.data.results);
+                setExamanes(res.data);
             }
         })
-    }, [])
+    }, [usuario])
 
     return (
     <Fragment>
