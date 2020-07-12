@@ -55,7 +55,8 @@ const App = () => {
         } else {
           // Permisologia 
           if(rolesEnabled){
-            if(!usuario.groups.map(x => x.name).some(role => rolesEnabled.includes(role))){
+            if(usuario.groups.length > 0 && !usuario.groups.map(x => x.name).some(role => rolesEnabled.includes(role))){
+              console.log("Redirigiendo por permisos", usuario)
               return (<Redirect to="/home" />);
             } 
           }

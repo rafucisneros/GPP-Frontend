@@ -232,7 +232,7 @@ export default function TestDetailsPage(props){
                                                 <Grid item xs={3} md={3} lg={3}>
                                                     {pregunta.content}
                                                 </Grid>
-                                                {pregunta.type != "verdadero o falso" &&
+                                                {pregunta.q_type.name != "verdadero o falso" &&
                                                 <Fragment>
                                                     <Grid item xs={3} md={3} lg={3}>
                                                         <Typography>
@@ -243,7 +243,7 @@ export default function TestDetailsPage(props){
                                                         {pregunta.answers.map( respuesta => {
                                                             return (
                                                                 <div>
-                                                                    {respuesta.content}
+                                                                    -) {respuesta.content}
                                                                 </div>
                                                             )
                                                         })}

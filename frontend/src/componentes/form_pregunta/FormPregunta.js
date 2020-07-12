@@ -17,7 +17,6 @@ import "./FormPregunta.css"
 export default function FormPregunta({ 
   pregunta, changeAnswer, changeQuestion, isFirstQuestion, isLastQuestion, finishExam, ultimoGuardado 
   }){
-
   // Cambio de respuesta en seleccion simple/verdadero y falso
   const handleChange = event => {
     changeAnswer(event.target.value.toString());
