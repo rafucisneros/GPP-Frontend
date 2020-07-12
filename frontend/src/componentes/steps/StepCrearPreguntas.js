@@ -194,18 +194,18 @@ const StepCrearPreguntas = () => {
             auxListaExamen.push(form);
 
             // Clean Form
-            setLoading(true);
-            postPreguntasExamen(form, exam_id)
-            .then( res => {
-                console.log(res)
-                if (res) {
+            // setLoading(true);
+            // postPreguntasExamen(form, exam_id)
+            // .then( res => {
+            //     console.log(res)
+            //     if (res) {
                     // Agregar Nueva Pregunta
                     setLoading(false);
                     setListaPreguntasExamen(auxListaExamen);
                     handleCleanForm();
                     setAlertSucess(true);
-                }
-            })
+                // }
+            // })
         }
     }
 

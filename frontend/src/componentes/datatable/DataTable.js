@@ -6,25 +6,27 @@ import { Redirect } from 'react-router-dom';
 const DataTable = ({ 
   title, columns, data, grouping, selection, exportButton, toolbar,
   showSelectAllCheckbox, actionsColumnIndex, onRowAdd, onRowUpdate, onRowDelete,
-  isCalificacion, isEstadistica
+  isCalificacion, isEstadistica, customExam
 }) => {
 
   const [ redirectEstadistica, setRedirectEstadistica ] = useState(false);
   const [ redirectCalificaciones, setRedirectCalificaciones ] = useState(null);
   const [ idExam, setIdExam ] = useState(null);
+
   const handleRedirectEstadistica = (rowData) => {
     setRedirectEstadistica(`estadisticas/exam/${rowData.id}`);
   }
+
+  const handleRedirectEditExam = (rowData) => {
+    setRedirectEstadistica(`examen/${rowData.id}`);
+  }
+
   const handleRedirectCalificaciones = () => setRedirectCalificaciones(true);
 
     return (
       <Fragment>
-        {
-          redirectEstadistica && <Redirect push to={redirectEstadistica}/>
-        }
-        {
-          redirectCalificaciones && <Redirect push to={"exam/1/calificaciones"}/>
-        }
+        { redirectEstadistica && <Redirect push to={redirectEstadistica}/> }
+        { redirectCalificaciones && <Redirect push to={"examen/1/calificaciones"}/> }
         <MaterialTable
           style={{width: "100%"}}
           title={title}
@@ -73,7 +75,7 @@ const DataTable = ({
               lastTooltip: 'Última Página'
             }
           }}
-          editable={{
+          editable={ !customExam && {
             onRowAdd: onRowAdd,
             onRowUpdate: onRowUpdate,                   
             onRowDelete: onRowDelete
@@ -91,6 +93,18 @@ const DataTable = ({
               tooltip: 'Estadísticas',
               onClick: (event, rowData) => handleRedirectEstadistica(rowData),
               hidden: !isEstadistica
+            },
+            {
+              icon: 'edit',
+              tooltip: 'Editar Examen',
+              onClick: (event, rowData) => handleRedirectEditExam(rowData),
+              hidden: !customExam
+            },
+            {
+              icon: 'delete_forever',
+              tooltip: 'Eliminar Examen',
+              onClick: (event, rowData) => {alert("Borrar elemento")},
+              hidden: !customExam
             }
           ]}
         />

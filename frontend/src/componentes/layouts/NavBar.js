@@ -185,7 +185,7 @@ const NavBar = () => {
                 open={bar}
             >
 
-            { (contentMenu === 'home' || contentMenu === 'profile') &&
+            { (contentMenu === 'home' || contentMenu === 'perfil') &&
                 <Fragment>
                     <div className="toolbar-icono">
                     Menú
@@ -237,7 +237,7 @@ const NavBar = () => {
                             timeout="auto"
                             unmountOnExit
                         >
-                            <Link to={"/create_test"} className='link'>
+                            <Link to={"/crear_examen"} className='link'>
                                 <ListItem
                                     button 
                                     style={{paddingLeft : '38px'}} 
@@ -250,7 +250,7 @@ const NavBar = () => {
                                     />
                                 </ListItem>
                             </Link>
-                            <Link to={"/exams"} className='link'>
+                            <Link to={"/examenes"} className='link'>
                                 <ListItem
                                     button 
                                     style={{paddingLeft : '38px'}} 
@@ -295,7 +295,7 @@ const NavBar = () => {
                 </Fragment>
             }
             
-            { contentMenu.split(' ')[0] === 'create_test' &&
+            { contentMenu.split(' ')[0] === 'crear_examen' &&
                 <Fragment>
                     <div className="toolbar-icono">
                         Menú del Examen

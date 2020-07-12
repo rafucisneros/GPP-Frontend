@@ -1,8 +1,10 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components'
 
+// material
+import Typography from '@material-ui/core/Typography';
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 
@@ -35,13 +37,24 @@ export default () => <ListaPreguntasExamen></ListaPreguntasExamen>
 
 const ListaPreguntasExamen = () => {
 
-    const { listaPreguntasExamen } = useCreateTestPage();
+    const { 
+        listaPreguntasExamen,
+        indexItemPregunta,
+        setIndexItemPregunta,
+        editarPregunta,
+        setEditarPregunta,
+        handleChangeAreaSubAreaTema,
+        handleChangeInput,
+        setSelectedRespuesta,
+        setRespuestas,
+        setFormats
+    } = useCreateTestPage();
     const [ lista, setLista ] = useState([]);
 
     useEffect(() => {
         if (listaPreguntasExamen && listaPreguntasExamen.length > 0){
             let aux = listaPreguntasExamen.map( (pregunta, index)  => {
-                return {color : 'rgb(209, 213, 238)', texto : `Pregunta ${index + 1}`, posicion : index}
+                return {color : 'rgba(63, 81, 181, 0.6)', texto : `Pregunta ${index + 1}`, posicion : index}
             })
             setLista(aux);
         }
@@ -66,6 +79,28 @@ const ListaPreguntasExamen = () => {
         setLista(items);
     }
 
+    const handleClickItem = (index) => {
+        let pregunta = listaPreguntasExamen[index];
+        console.log(pregunta)
+        
+        let event_pond = { target : { name : 'ponderacion', value : pregunta.value }};
+        let event_diff = { target : { name : 'dificultad', value : pregunta.difficulty }};
+        let event_preg = { target : { name : 'pregunta', value : pregunta.content }};
+        let latex = pregunta.latex ? 'latex' : 'text';
+        
+        setIndexItemPregunta(index)
+        setEditarPregunta(true);
+        handleChangeInput(event_pond);
+        handleChangeInput(event_diff);
+        handleChangeInput(event_preg);
+        handleChangeAreaSubAreaTema(pregunta.approach.area, 'area_seleccionada');
+        handleChangeAreaSubAreaTema(pregunta.approach.subarea, 'subarea_seleccionada');
+        handleChangeAreaSubAreaTema(pregunta.approach.tema, 'tema_seleccionada');
+        // setSelectedRespuesta(true);
+        setRespuestas(pregunta.answers);
+        setFormats(latex);
+    }
+
     return (
         // <Grid className = "contenedor-lista-preguntas" >
         <Fragment>
@@ -86,8 +121,9 @@ const ListaPreguntasExamen = () => {
                             {lista && lista.length > 0 && lista.map( (pregunta, index) => (
                                 <Draggable key={`pregunta-${index}`} draggableId={`pregunta-${index}`} index={index}>
                                     {(provided, snapshot) => (
-                                        // <Button>
+                                        <Box >
                                             <EstilosStartDragging
+                                                onClick={() => handleClickItem(index)}
                                                 ref={provided.innerRef}
                                                 {...provided.draggableProps}
                                                 {...provided.dragHandleProps}
@@ -96,9 +132,16 @@ const ListaPreguntasExamen = () => {
                                                 style={Object.assign({ backgroundColor : pregunta.color, textOverflow: 'ellipsis' }, estilosDropDragging(provided.draggableProps.style, snapshot))}
                                                 className="rectangulo-pregunta" 
                                             >
-                                                {pregunta.texto}
+                                                <Box style={{display: 'flex', alignItems: 'center'}}>
+                                                    <Box style={{display : 'flex', paddingRight : '5px', alignSelf: 'center'}}>
+                                                        <DragIndicatorIcon/>
+                                                    </Box>
+                                                    <Box style={{display: 'flex', width: '100%', justifyContent: 'flex-end'}}>
+                                                        {pregunta.texto}
+                                                    </Box>
+                                                </Box>
                                             </EstilosStartDragging>
-                                        // </Button>
+                                        </Box>
                                     )}
                                 </Draggable>
                             ))}

@@ -84,6 +84,7 @@ export default function ExamsPage(){
                             isCalificacion={true}
                             isEstadistica={true}
                             selection={false}
+                            customExam={true}
                         />
                     </CardContent>
                 {/* </Card> */}

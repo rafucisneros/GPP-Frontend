@@ -25,6 +25,7 @@ export const global = {
     TOPICS: `${SERVER_NAME}/approach/`,
 
     GET_EXAM:  `${SERVER_NAME}/exam/_id_`,
+    GET_ALL_INFO_EXAM:  `${SERVER_NAME}/exam/_id_/complete/`,
     GET_EXAM_QUESTIONS:  `${SERVER_NAME}/exam/_id_/questions/`,
     POST_STUDENT_EXAM_QUESTIONS: `${SERVER_NAME}/student/_sid_/exam/_eid_/answers/`,
 

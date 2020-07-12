@@ -67,7 +67,7 @@ export default function DashboardExamPage(props){
 
     return(
         <Fragment>
-            { redirectExams && <Redirect to={'/exams'}/> }
+            { redirectExams && <Redirect to={'/examenes'}/> }
             { loading && <Loading/> }
             {
                 contentMenu.split(' ')[1] === 'compare' 

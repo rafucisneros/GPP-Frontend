@@ -72,7 +72,7 @@ export default function MenuGrafica({}) {
                     primary={<Typography type="body2" style={{ fontSize: 'inherit' }}>Comparar Secciones</Typography>}
                 />
                 </ListItem>
-                <Link to={"/exams"} className='link'>
+                <Link to={"/examenes"} className='link'>
                     <ListItem
                         button 
                     >

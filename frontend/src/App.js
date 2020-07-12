@@ -94,7 +94,7 @@ const App = () => {
         />
         <Route
           exact
-          path='/register'
+          path='/registro'
           render={(props) => forzarLogin(RegisterPage, props)}
         />
         <Route
@@ -113,17 +113,22 @@ const App = () => {
         />
         <Route
           exact
-          path='/create_test'
+          path='/crear_examen'
           render={(props) => requireAuth(CreateTestPage, props)}
         />
         <Route
           exact
-          path='/exam/:id/calificaciones'
+          path='/examen/:id'
+          render={(props) => requireAuth(CreateTestPage, props)}
+        />
+        <Route
+          exact
+          path='/examen/:id/calificaciones'
           render={(props) => requireAuth(CalificacionesPage, props)}
         />
         <Route
           exact
-          path='/exams'
+          path='/examenes'
           render={(props) => requireAuth(ExamsPage, props)}
         />
         <Route

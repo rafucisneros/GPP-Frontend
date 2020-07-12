@@ -34,3 +34,15 @@ export function getResultadosEstadisticas(id){
         return Promise.reject(error);
     });
 }
+
+export function getAllInfoExamen(id){
+    let url = global.GET_ALL_INFO_EXAM.replace("_id_", id);
+
+    return Axios.get(url)
+    .then((response) => {
+        return response;
+    })
+    .catch( (error) => {
+        return Promise.reject(error);
+    });
+}

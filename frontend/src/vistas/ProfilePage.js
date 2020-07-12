@@ -34,7 +34,7 @@ export default function ProfilePage(){
   const [ successMsg, setSuccessMsg] = useState("")
 
   const { setContentMenu } = useGeneral();
-  setContentMenu('profile');
+  setContentMenu('perfil');
 
   const changeProfile = async () => {
     try{

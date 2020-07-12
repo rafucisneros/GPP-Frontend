@@ -29,6 +29,9 @@ export function CreateTestPageProvider(props) {
     const [comentarios, setComentarios] = useState(null);
     
     // Step Crear Preguntas (Variables de estados)
+    const [indexItemPregunta, setIndexItemPregunta] = useState(null);
+    const [editarPregunta, setEditarPregunta] = useState(false);
+
     const [areas, setAreas] = useState([]);  
     const [subareas, setSubareas] = useState({});  
     const [temas, setTemas] = useState({}); 
@@ -253,7 +256,11 @@ export function CreateTestPageProvider(props) {
             setAreas,
             setSubareas,
             setTemas,
-            setAreaSeleccionada
+            setAreaSeleccionada,
+            indexItemPregunta,
+            setIndexItemPregunta,
+            editarPregunta,
+            setEditarPregunta
         })
     }, [
         areas, 
@@ -291,7 +298,9 @@ export function CreateTestPageProvider(props) {
         nroIntentos,
         openExam,
         msgAlert,
-        alertError
+        alertError,
+        indexItemPregunta,
+        editarPregunta
     ]);
 
     return <CreateTestPageContext.Provider value = {value} {...props} />

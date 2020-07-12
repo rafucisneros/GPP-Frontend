@@ -197,15 +197,15 @@ const StepConfiguracionBasica = () => {
                 status : true,
                 open : openExam
             }
-            setLoading(true);
-            createTest(request)
-            .then( res => {
-                console.log(res)
-                if (res) {
-                    SetExamId(res.data.id);
+            // setLoading(true);
+            // createTest(request)
+            // .then( res => {
+            //     console.log(res)
+            //     if (res) {
+            //         SetExamId(res.data.id);
                     handleChangeStep(step);
-                }
-            })
+            //     }
+            // })
         }
     }
 
