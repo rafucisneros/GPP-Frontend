@@ -175,7 +175,6 @@ export default function MakeTestPage(props){
   }
 
   const timeoutFinish = () => {
-    debugger
     window.location = "/exam_finished/" + examID
   }
 

@@ -40,7 +40,7 @@ const Footer = props => {
             {', '}
             <Link
                 // component="a"
-                href="#"
+                href="https://www.linkedin.com/in/migcanedo/"
             >
                 Miguel Canedo
             </Link>

@@ -14,7 +14,7 @@ import MakeTestPage from './vistas/MakeTestPage.js';
 import MantenimientoPage from './vistas/MantemientoPage.js';
 import CalificacionesPage from './vistas/CalificacionesPage.js';
 import TestDetailsPage from './vistas/TestDetailsPage.js';
-import GraphicPage from './vistas/GraphicPage.js';
+import DashboardExamPage from './vistas/DashboardExamPage.js';
 import ExamFinishedPage from './vistas/ExamFinishedPage.js';
 import AdminPage from './vistas/AdminPage.js';
 import NonResponsivePage from './vistas/NonResponsivePage.js';
@@ -147,7 +147,7 @@ const App = () => {
         <Route
           exact
           path='/estadisticas/exam/:id'
-          render={(props) => requireAuth(GraphicPage, props)}
+          render={(props) => requireAuth(DashboardExamPage, props)}
         />
         <Route
           path='/exam_finished/:id'

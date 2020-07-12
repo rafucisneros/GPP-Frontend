@@ -7,6 +7,7 @@ import validator from 'validator';
 import Loading from '../loading/Loading.js';
 
 // material
+import { withStyles } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -47,6 +48,20 @@ const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
+const GpiSwitch = withStyles({
+    switchBase: {
+        color: '#6a3df3',
+        '&$checked': {
+            color: '#6a3df3',
+        },
+        '&$checked + $track': {
+            backgroundColor: '#6a3df3',
+        },
+    },
+    checked: {},
+    track: {},
+})(Switch);
+
 const tituloTooltip = "El modo estático le permitirá mostrar el examen en el orden que usted desee. En el modo dinámico el examen será mostrado de manera aleatoria de acuerdo a las configuraciones introducidas."
 
 const useStyles = makeStyles(theme => ({
@@ -58,10 +73,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const duracionExamen = [
-    {valor : 2, label: '2 min'},
-    {valor : 5, label: '5 min'},
-    {valor : 8, label: '8 min'},
-    {valor : 10, label: '10 min'},
+    // {valor : 2, label: '2 min'},
+    // {valor : 5, label: '5 min'},
+    // {valor : 8, label: '8 min'},
+    // {valor : 10, label: '10 min'},
     {valor : 15, label: '15 min'},
     {valor : 30, label: '30 min'},
     {valor : 45, label: '45 min'},
@@ -182,7 +197,7 @@ const StepConfiguracionBasica = () => {
                 status : true,
                 open : openExam
             }
-            setLoading(true)
+            setLoading(true);
             createTest(request)
             .then( res => {
                 console.log(res)
@@ -254,7 +269,7 @@ const StepConfiguracionBasica = () => {
                         style = {{'display' : 'block', 'padding': '16px'}}
                     >
                         <Box style={{display: 'flex'}}>
-                            <Switch checked={switchChecked} onClick={() => handleCambiarSwitch()} color="secondary"/>
+                            <GpiSwitch checked={switchChecked} onClick={() => handleCambiarSwitch()} />
                             <Tooltip title={tituloTooltip} placement="right" arrow>
                                 <Box style={{alignSelf: 'center'}}><span style={{fontWeight: 800}}>{tipoConfiguracion}</span></Box>
                             </Tooltip>
@@ -416,7 +431,7 @@ const StepConfiguracionBasica = () => {
                     <Divider />
                 </form>
             </Card>
-            { loading && <Loading/>}
+            { loading && <Loading/> }
             <Snackbar open={alertError} autoHideDuration={7000} onClose={() => handleCloseErrorMsg()} onExited={() => handleCloseErrorMsg()} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={() => handleCloseErrorMsg()} severity="error">
                     {msgAlert}
