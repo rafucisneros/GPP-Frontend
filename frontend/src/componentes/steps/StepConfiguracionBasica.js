@@ -73,10 +73,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const duracionExamen = [
-    {valor : 2, label: '2 min'},
-    {valor : 5, label: '5 min'},
-    {valor : 8, label: '8 min'},
-    {valor : 10, label: '10 min'},
+    // {valor : 2, label: '2 min'},
+    // {valor : 5, label: '5 min'},
+    // {valor : 8, label: '8 min'},
+    // {valor : 10, label: '10 min'},
     {valor : 15, label: '15 min'},
     {valor : 30, label: '30 min'},
     {valor : 45, label: '45 min'},
@@ -197,7 +197,7 @@ const StepConfiguracionBasica = () => {
                 status : true,
                 open : openExam
             }
-            setLoading(true)
+            setLoading(true);
             createTest(request)
             .then( res => {
                 console.log(res)
@@ -431,7 +431,7 @@ const StepConfiguracionBasica = () => {
                     <Divider />
                 </form>
             </Card>
-            { loading && <Loading/>}
+            { loading && <Loading/> }
             <Snackbar open={alertError} autoHideDuration={7000} onClose={() => handleCloseErrorMsg()} onExited={() => handleCloseErrorMsg()} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={() => handleCloseErrorMsg()} severity="error">
                     {msgAlert}

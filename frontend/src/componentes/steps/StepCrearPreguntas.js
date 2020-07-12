@@ -77,6 +77,13 @@ const StepCrearPreguntas = () => {
         ponderacionError : false,
         dificultadError : false,
     });
+    const [formats, setFormats] = useState('text')
+
+    const handleFormat = (event, newFormats) => {
+        let event_preg = { target : { name : 'pregunta', value : ''}};
+        setFormats(newFormats);
+        handleChangeInput(event_preg);
+    };
 
     const verifyDataListaPregunta = () => {
         let error = true;
@@ -176,6 +183,7 @@ const StepCrearPreguntas = () => {
             form.exam = exam_id;
             form.position = auxListaExamen.length + 1;
             form.difficulty = Number(dificultad);
+            form.latex = formats === 'latex' ? true : false;
             form.approach = {
                 topic : temaSeleccionado,
                 area : areaSeleccionada,
@@ -186,11 +194,13 @@ const StepCrearPreguntas = () => {
             auxListaExamen.push(form);
 
             // Clean Form
+            setLoading(true);
             postPreguntasExamen(form, exam_id)
             .then( res => {
                 console.log(res)
                 if (res) {
                     // Agregar Nueva Pregunta
+                    setLoading(false);
                     setListaPreguntasExamen(auxListaExamen);
                     handleCleanForm();
                     setAlertSucess(true);
@@ -222,6 +232,7 @@ const StepCrearPreguntas = () => {
         handleChangeAreaSubAreaTema(null, 'tema_seleccionada');
         setSelectedRespuesta(true);
         setRespuestas([]);
+        setFormats('text');
     }
 
     const nextStep = () => {
@@ -329,7 +340,11 @@ const StepCrearPreguntas = () => {
                 </Paper>
             </Grid>
 
-            <FormCrearPregunta errores={errores}/>
+            <FormCrearPregunta 
+                errores={errores} 
+                handleFormat={handleFormat}
+                formats={formats}
+            />
 
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test">
@@ -397,6 +412,7 @@ const StepCrearPreguntas = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            { loading && <Loading/> }
         </Fragment>
     )
 }

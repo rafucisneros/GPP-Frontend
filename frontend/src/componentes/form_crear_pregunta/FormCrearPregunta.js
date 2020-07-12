@@ -2,6 +2,11 @@ import React, { useState, useEffect, Fragment } from 'react';
 import validator from 'validator';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
+// componentes
+import ToggleButton from './ToggleButtonTool.js'
+
+// materiales
+import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -18,6 +23,8 @@ import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
 // contexts
 import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
 import { useCreateTestPage } from '../../context/createTestPageContext';
+
+const Latex = require('react-latex');
 
 export default function FormCrearPregunta(props) {
     const { tipoPregunta } = useTipoPreguntaRespuesta();
@@ -102,6 +109,10 @@ export default function FormCrearPregunta(props) {
         <Fragment>
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test section-paper-crear-test">
+                    <ToggleButton 
+                        handleFormat = {props.handleFormat}
+                        formats = {props.formats}
+                    />
                     <TextField
                         error={props.errores && props.errores.preguntaError}
                         id="pregunta"
@@ -118,6 +129,16 @@ export default function FormCrearPregunta(props) {
                         rowsMax={5}
                         helperText={props.errores && props.errores.preguntaError ? "El campo es requerido" : ""}
                     />
+                    { props.formats === 'latex' &&
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={12} lg={12} style={{textAlign: 'center'}}>
+                                <Typography variant="subtitle2" style={{fontWeight : 600, paddingBottom: '8px'}}> Visualización del texto en Latex: </Typography>
+                                <Typography variant="h6" >
+                                    <Latex displayMode={true}>{pregunta}</Latex>
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    }
                 </Paper>
             </Grid>
             <Grid item xs={12} md={12} lg={12}>

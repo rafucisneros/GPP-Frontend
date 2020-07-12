@@ -75,10 +75,13 @@ const StepSecciones = (props) => {
             }
         })
         let request = { sections : data }
+        setLoading(true);
         postSecciones(request, exam_id)
         .then( res => {
             console.log(res)
             if (res) {
+                setLoading(false);
+                handleChangeStep('step_4');
                 console.log("Update Secciones")
             }
         })
@@ -115,8 +118,8 @@ const StepSecciones = (props) => {
     const finishStep = () => {
         let error = verifyData();
         if (!error){
+            handleWarning();
             sendSectionsData();
-            handleChangeStep('step_4');
         } else handleWarning();
     }
 
@@ -199,6 +202,7 @@ const StepSecciones = (props) => {
                     Debe heber al menos una sección con al menos un estudiante.
                 </Alert>
             </Snackbar>
+            { loading && <Loading/> }
         </Fragment>
     )
 }

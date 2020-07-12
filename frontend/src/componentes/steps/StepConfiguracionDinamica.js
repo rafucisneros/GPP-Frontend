@@ -246,10 +246,12 @@ const StepConfiguracionDinamica = (props) => {
                 }
             })
             request.distribution = divisions;
+            setLoading(true);
             patchConfigDinamica(request, exam_id)
             .then( res => {
                 console.log(res)
                 if (res) {
+                    setLoading(false);
                     let paso = openExam ? 'step_4' : 'step_3';
                     if (paso === 'step_4') handleWarning();
                     else handleChangeStep(paso);
@@ -485,6 +487,7 @@ const StepConfiguracionDinamica = (props) => {
                     {`No puede colocar colocar un número mayor a ${listaPreguntasExamen.length} preguntas en el examen.`}
                 </Alert>
             </Snackbar>
+            { loading && <Loading/> }
         </Fragment>
     )
 }

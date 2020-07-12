@@ -26,7 +26,6 @@ export default function GeneralDashboard(props){
     const [nEstudiantes, setNEstudiantes] = useState(0);
     const [nIntentos, setNIntentos] = useState(0);
     const [average, setAverage] = useState(0);
-    const [loading, setLoading] = useState(true);
 
     const [ datosCorrectos, setDatosCorrectos ] = useState({
         title : 'Porcentaje de respuestas correctas',

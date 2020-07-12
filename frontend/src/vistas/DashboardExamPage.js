@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 // componentes
 import GeneralDashboard from '../componentes/graficas/GeneralDashboard';
 import CompareDashboard from '../componentes/graficas/CompareDashboard';
+import Loading from '../componentes/loading/Loading.js'
 
 // assets
 import '../assets/css/mantenimientoPage.css';
@@ -19,15 +20,18 @@ export default function DashboardExamPage(props){
     const { contentMenu, setContentMenu } = useGeneral();
     const [ redirectExams, setRedirectExams ] = useState(false);
     const [ estadisticas, setEstadisticas ] = useState(false);
+    const [ loading, setLoading ] = useState(false);
     setContentMenu(`grafica general`);
 
     // GET requests y componentes de montaje
     useEffect(() => {
+        setLoading(true);
         if (props.match && props.match.params && props.match.params.id && !isNaN(props.match.params.id)){
             getResultadosEstadisticas(props.match.params.id)
             .then( res => {
                 if (res.data) {
                     setEstadisticas(res.data);
+                    setLoading(false);
                 }
             })
         } else{
@@ -63,9 +67,8 @@ export default function DashboardExamPage(props){
 
     return(
         <Fragment>
-            {
-                redirectExams && <Redirect to={'/exams'}/>
-            }
+            { redirectExams && <Redirect to={'/exams'}/> }
+            { loading && <Loading/> }
             {
                 contentMenu.split(' ')[1] === 'compare' 
                     ? 
