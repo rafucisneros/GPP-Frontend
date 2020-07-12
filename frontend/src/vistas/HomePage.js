@@ -20,35 +20,6 @@ import { ExamCard } from '../componentes/exam_card/ExamCard.js';
 
 let time = require("moment")
 
-const sections = {
-    "sections": [
-      {
-        "id": 29,
-        "name": "Section 3",
-        "exam": {
-          "id": 1,
-          "name": "Primer Examen de Testeate",
-          "status": true,
-          "start_date": "2020-02-20T21:00:26Z",
-          "finish_date": "2020-02-20T23:00:38Z",
-          "author": 1
-        }
-      },
-      {
-        "id": 29,
-        "name": "Section 4",
-        "exam": {
-          "id": 1,
-          "name": "Segundo Examen de Testeate",
-          "status": true,
-          "start_date": "2020-02-20T21:00:26Z",
-          "finish_date": "2020-02-20T23:00:38Z",
-          "author": 1
-        }
-      }
-    ]
-  }
-
 export default function HomePage(){
   const { setContentMenu } = useGeneral();
   const [ activeExams, setActiveExams ] = useState(null);
