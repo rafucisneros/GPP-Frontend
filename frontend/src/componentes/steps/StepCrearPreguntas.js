@@ -77,6 +77,13 @@ const StepCrearPreguntas = () => {
         ponderacionError : false,
         dificultadError : false,
     });
+    const [formats, setFormats] = useState('text')
+
+    const handleFormat = (event, newFormats) => {
+        let event_preg = { target : { name : 'pregunta', value : ''}};
+        setFormats(newFormats);
+        handleChangeInput(event_preg);
+    };
 
     const verifyDataListaPregunta = () => {
         let error = true;
@@ -106,21 +113,21 @@ const StepCrearPreguntas = () => {
             else listError.areaSeleccionadaError = false;
         }
 
-        // if(flag === 'all' || flag === 'subareaSeleccionada'){
-        //     if( !subareaSeleccionada || validator.isEmpty(subareaSeleccionada)){
-        //         error = true;
-        //         listError.subareaSeleccionadaError = true;
-        //     } 
-        //     else listError.subareaSeleccionadaError = false;
-        // }
+        if(flag === 'all' || flag === 'subareaSeleccionada'){
+            if( !subareaSeleccionada || validator.isEmpty(subareaSeleccionada)){
+                error = true;
+                listError.subareaSeleccionadaError = true;
+            } 
+            else listError.subareaSeleccionadaError = false;
+        }
 
-        // if(flag === 'all' || flag === 'temaSeleccionado'){
-        //     if( !temaSeleccionado || validator.isEmpty(temaSeleccionado)){
-        //         error = true;
-        //         listError.temaSeleccionadoError = true;
-        //     } 
-        //     else listError.temaSeleccionadoError = false;
-        // }
+        if(flag === 'all' || flag === 'temaSeleccionado'){
+            if( !temaSeleccionado || validator.isEmpty(temaSeleccionado)){
+                error = true;
+                listError.temaSeleccionadoError = true;
+            } 
+            else listError.temaSeleccionadoError = false;
+        }
 
         if(flag === 'all' || flag === 'ponderacion'){
             if( !ponderacion || validator.isEmpty(ponderacion)){
@@ -172,9 +179,11 @@ const StepCrearPreguntas = () => {
             }
             form.content = pregunta;
             form.q_type = tituloRespuesta;
+            form.q_type_id = form.q_type;
             form.exam = exam_id;
             form.position = auxListaExamen.length + 1;
             form.difficulty = Number(dificultad);
+            form.latex = formats === 'latex' ? true : false;
             form.approach = {
                 topic : temaSeleccionado,
                 area : areaSeleccionada,
@@ -185,11 +194,13 @@ const StepCrearPreguntas = () => {
             auxListaExamen.push(form);
 
             // Clean Form
+            setLoading(true);
             postPreguntasExamen(form, exam_id)
             .then( res => {
                 console.log(res)
                 if (res) {
                     // Agregar Nueva Pregunta
+                    setLoading(false);
                     setListaPreguntasExamen(auxListaExamen);
                     handleCleanForm();
                     setAlertSucess(true);
@@ -221,6 +232,7 @@ const StepCrearPreguntas = () => {
         handleChangeAreaSubAreaTema(null, 'tema_seleccionada');
         setSelectedRespuesta(true);
         setRespuestas([]);
+        setFormats('text');
     }
 
     const nextStep = () => {
@@ -254,17 +266,17 @@ const StepCrearPreguntas = () => {
         if (dificultad) verifyData('dificultad');
     }, [dificultad])
 
-    // useMemo(() => {
-    //     if (temaSeleccionado) verifyData('temaSeleccionado');
-    // }, [temaSeleccionado])
+    useMemo(() => {
+        if (temaSeleccionado) verifyData('temaSeleccionado');
+    }, [temaSeleccionado])
 
     useMemo( () => {
         if (areaSeleccionada) verifyData('areaSeleccionada');
     }, [areaSeleccionada])
 
-    // useMemo(() => {
-    //     if (subareaSeleccionada) verifyData('subareaSeleccionada');
-    // }, [subareaSeleccionada])
+    useMemo(() => {
+        if (subareaSeleccionada) verifyData('subareaSeleccionada');
+    }, [subareaSeleccionada])
     
     return( 
         <Fragment>
@@ -328,7 +340,11 @@ const StepCrearPreguntas = () => {
                 </Paper>
             </Grid>
 
-            <FormCrearPregunta errores={errores}/>
+            <FormCrearPregunta 
+                errores={errores} 
+                handleFormat={handleFormat}
+                formats={formats}
+            />
 
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test">
@@ -396,6 +412,7 @@ const StepCrearPreguntas = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            { loading && <Loading/> }
         </Fragment>
     )
 }

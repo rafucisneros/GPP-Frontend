@@ -23,34 +23,43 @@ export default function GeneralDashboard(props){
     const [correctAnswers, setCorrectAnswers] = useState(0);
     const [incorrectAnswers, setIncorrectAnswers] = useState(0);
     const [naAnswers, setNaAnswers] = useState(0);
+    const [nEstudiantes, setNEstudiantes] = useState(0);
+    const [nIntentos, setNIntentos] = useState(0);
     const [average, setAverage] = useState(0);
-    const [loading, setLoading] = useState(true);
 
     const [ datosCorrectos, setDatosCorrectos ] = useState({
         title : 'Porcentaje de respuestas correctas',
         value : `${correctAnswers}%`,
-        // value : '62%',
         type : 'correcto',
         color : 'success'
     });
     const [ datosInCorrectos, setDatosInCorrectos ] = useState({
         title : 'Porcentaje de respuestas incorrectas',
         value : `${incorrectAnswers}%`,
-        // value : '11%',
         type : 'incorrecto',
         color : 'error'
     });
     const [ datosNA, setDatosNA ] = useState({
         title : 'Porcentaje de preguntas no contestadas',
         value : `${naAnswers}%`,
-        // value : '27%',
         type : 'NA',
         color : 'warning'
+    });
+    const [ datosNIntentos, setDatosNIntentos] = useState({
+        title : 'Número de Intentos',
+        value : `${nIntentos}`,
+        type : 'replay',
+        color : 'info_1'
+    });
+    const [ datosNEstudiantes, setDatosNEstudiantes ] = useState({
+        title : 'Número de Estudiantes',
+        value : `${nEstudiantes}`,
+        type : 'people',
+        color : 'info_2'
     });
     const [ datosPromed, setDatosPromed ] = useState({
         title : 'Promedio de notas',
         value : `${average}`,
-        // value : '16.2',
         type : 'promedio',
         color : 'normal'
     });
@@ -60,6 +69,8 @@ export default function GeneralDashboard(props){
             props.estadisticas.total_ans > 0 ? setCorrectAnswers((props.estadisticas.total_ans_correct / (props.estadisticas.total_ans / 100 )).toFixed(2)) : setCorrectAnswers(0);
             props.estadisticas.total_ans > 0 ? setIncorrectAnswers((props.estadisticas.total_ans_incorrect / (props.estadisticas.total_ans / 100 )).toFixed(2)): setIncorrectAnswers(0);
             props.estadisticas.total_ans > 0 ? setNaAnswers((props.estadisticas.total_ans_empty / (props.estadisticas.total_ans / 100 )).toFixed(2)) : setNaAnswers(0);
+            setNEstudiantes(props.estadisticas.n_students);
+            setNIntentos(props.estadisticas.n_attempts);
             setAverage(props.estadisticas.average_score.toFixed(2));
         }
     }, [props.estadisticas])
@@ -87,6 +98,22 @@ export default function GeneralDashboard(props){
             setDatosNA(datosNAAux);
         }
     }, [naAnswers])
+    
+    useMemo(() => {
+        if (nIntentos){
+            let datosNIntentosAux = datosNIntentos;
+            datosNIntentosAux.value = `${nIntentos}`;
+            setDatosNIntentos(datosNIntentosAux);
+        }
+    }, [nIntentos])
+
+    useMemo(() => {
+        if (nEstudiantes){
+            let datosNEstudiantesAux = datosNEstudiantes;
+            datosNEstudiantesAux.value = `${nEstudiantes}`;
+            setDatosNEstudiantes(datosNEstudiantesAux);
+        }
+    }, [nEstudiantes])
 
     useMemo(() => {
         if (average){
@@ -123,17 +150,23 @@ export default function GeneralDashboard(props){
                     </Box>
                 </Grid>
                 <Grid container spacing={3} >
-                    <Grid item xs={3} md={3} lg={3}>
+                    <Grid item xs={4} md={4} lg={4}>
                         <EstadisticaResumen datos = {datosCorrectos}/>
                     </Grid>
-                    <Grid item xs={3} md={3} lg={3}>
+                    <Grid item xs={4} md={4} lg={4}>
                         <EstadisticaResumen datos = {datosInCorrectos}/>
                     </Grid>
-                    <Grid item xs={3} md={3} lg={3}>
+                    <Grid item xs={4} md={4} lg={4}>
                         <EstadisticaResumen datos = {datosNA}/>
                     </Grid>
 
-                    <Grid item xs={3} md={3} lg={3}>
+                    <Grid item xs={4} md={4} lg={4}>
+                        <EstadisticaResumen datos = {datosNIntentos} />
+                    </Grid>
+                    <Grid item xs={4} md={4} lg={4}>
+                        <EstadisticaResumen datos = {datosNEstudiantes} />
+                    </Grid>
+                    <Grid item xs={4} md={4} lg={4}>
                         <EstadisticaResumen datos = {datosPromed} />
                     </Grid>
                     <Grid item xs={6} md={6} lg={6}>

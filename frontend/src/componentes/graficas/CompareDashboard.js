@@ -41,13 +41,18 @@ export default function CompareDashboard(props){
     const [correctAnswers_1, setCorrectAnswers_1] = useState(0);
     const [incorrectAnswers_1, setIncorrectAnswers_1] = useState(0);
     const [naAnswers_1, setNaAnswers_1] = useState(0);
+    const [nEstudiantes_1, setNEstudiantes_1] = useState(0);
+    const [nIntentos_1, setNIntentos_1] = useState(0);
     const [average_1, setAverage_1] = useState(0);
 
     const [correctAnswers_2, setCorrectAnswers_2] = useState(0);
     const [incorrectAnswers_2, setIncorrectAnswers_2] = useState(0);
     const [naAnswers_2, setNaAnswers_2] = useState(0);
+    const [nEstudiantes_2, setNEstudiantes_2] = useState(0);
+    const [nIntentos_2, setNIntentos_2] = useState(0);
     const [average_2, setAverage_2] = useState(0);
 
+    // Primera Sección
     const [ datosCorrectos_1, setDatosCorrectos_1 ] = useState({
         title : 'Porcentaje de respuestas correctas',
         value : `${correctAnswers_1}%`,
@@ -66,6 +71,18 @@ export default function CompareDashboard(props){
         type : 'NA',
         color : 'warning'
     });
+    const [ datosNIntentos_1, setDatosNIntentos_1] = useState({
+        title : 'Número de Intentos',
+        value : `${nIntentos_1}`,
+        type : 'replay',
+        color : 'info_1'
+    });
+    const [ datosNEstudiantes_1, setDatosNEstudiantes_1 ] = useState({
+        title : 'Número de Estudiantes',
+        value : `${nEstudiantes_1}`,
+        type : 'people',
+        color : 'info_2'
+    });
     const [ datosPromed_1, setDatosPromed_1 ] = useState({
         title : 'Promedio de notas',
         value : `${average_1}`,
@@ -73,6 +90,7 @@ export default function CompareDashboard(props){
         color : 'normal'
     });
 
+    // Segunda Sección
     const [ datosCorrectos_2, setDatosCorrectos_2 ] = useState({
         title : 'Porcentaje de respuestas correctas',
         value : `${correctAnswers_2}%`,
@@ -91,6 +109,18 @@ export default function CompareDashboard(props){
         type : 'NA',
         color : 'warning'
     });
+    const [ datosNIntentos_2, setDatosNIntentos_2] = useState({
+        title : 'Número de Intentos',
+        value : `${nIntentos_2}`,
+        type : 'replay',
+        color : 'info_1'
+    });
+    const [ datosNEstudiantes_2, setDatosNEstudiantes_2 ] = useState({
+        title : 'Número de Estudiantes',
+        value : `${nEstudiantes_2}`,
+        type : 'people',
+        color : 'info_2'
+    });
     const [ datosPromed_2, setDatosPromed_2 ] = useState({
         title : 'Promedio de notas',
         value : `${average_2}`,
@@ -104,15 +134,6 @@ export default function CompareDashboard(props){
                 return { label : key, valor : key}
             })
             setSecciones(seccionesAux);
-            // props.estadisticas.total_ans > 0 ? setCorrectAnswers((props.estadisticas.total_ans_correct / (props.estadisticas.total_ans / 100 )).toFixed(2)) : setCorrectAnswers(0);
-            // props.estadisticas.total_ans > 0 ? setIncorrectAnswers((props.estadisticas.total_ans_incorrect / (props.estadisticas.total_ans / 100 )).toFixed(2)): setIncorrectAnswers(0);
-            // props.estadisticas.total_ans > 0 ? setNaAnswers((props.estadisticas.total_ans_empty / (props.estadisticas.total_ans / 100 )).toFixed(2)) : setNaAnswers(0);
-            // setAverage(props.estadisticas.average_score.toFixed(2));
-
-            // props.estadisticas.total_ans > 0 ? setCorrectAnswers((props.estadisticas.total_ans_correct / (props.estadisticas.total_ans / 100 )).toFixed(2)) : setCorrectAnswers(0);
-            // props.estadisticas.total_ans > 0 ? setIncorrectAnswers((props.estadisticas.total_ans_incorrect / (props.estadisticas.total_ans / 100 )).toFixed(2)): setIncorrectAnswers(0);
-            // props.estadisticas.total_ans > 0 ? setNaAnswers((props.estadisticas.total_ans_empty / (props.estadisticas.total_ans / 100 )).toFixed(2)) : setNaAnswers(0);
-            // setAverage(props.estadisticas.average_score.toFixed(2));
         }
     }, [props.estadisticas])
 
@@ -123,6 +144,8 @@ export default function CompareDashboard(props){
                 section.total_ans > 0 ? setCorrectAnswers_1((section.total_ans_correct / (section.total_ans / 100 )).toFixed(2)) : setCorrectAnswers_1(0);
                 section.total_ans > 0 ? setIncorrectAnswers_1((section.total_ans_incorrect / (section.total_ans / 100 )).toFixed(2)): setIncorrectAnswers_1(0);
                 section.total_ans > 0 ? setNaAnswers_1((section.total_ans_empty / (section.total_ans / 100 )).toFixed(2)) : setNaAnswers_1(0);
+                setNEstudiantes_1(section.n_students);
+                setNIntentos_1(section.n_attempts);
                 setAverage_1(section.average_score.toFixed(2));
             }
         }
@@ -135,6 +158,8 @@ export default function CompareDashboard(props){
                 section.total_ans > 0 ? setCorrectAnswers_2((section.total_ans_correct / (section.total_ans / 100 )).toFixed(2)) : setCorrectAnswers_2(0);
                 section.total_ans > 0 ? setIncorrectAnswers_2((section.total_ans_incorrect / (section.total_ans / 100 )).toFixed(2)): setIncorrectAnswers_2(0);
                 section.total_ans > 0 ? setNaAnswers_2((section.total_ans_empty / (section.total_ans / 100 )).toFixed(2)) : setNaAnswers_2(0);
+                setNEstudiantes_2(section.n_students);
+                setNIntentos_2(section.n_attempts);
                 setAverage_2(section.average_score.toFixed(2));
             }
         }
@@ -165,12 +190,29 @@ export default function CompareDashboard(props){
     }, [naAnswers_1])
 
     useMemo(() => {
+        if (nIntentos_1){
+            let datosNIntentosAux = datosNIntentos_1;
+            datosNIntentosAux.value = `${nIntentos_1}`;
+            setDatosNIntentos_1(datosNIntentosAux);
+        }
+    }, [nIntentos_1])
+
+    useMemo(() => {
+        if (nEstudiantes_1){
+            let datosNEstudiantesAux = datosNEstudiantes_1;
+            datosNEstudiantesAux.value = `${nEstudiantes_1}`;
+            setDatosNEstudiantes_1(datosNEstudiantesAux);
+        }
+    }, [nEstudiantes_1])
+
+    useMemo(() => {
         if (average_1){
             let datosPromedAux = datosPromed_1;
             datosPromedAux.value = average_1;
             setDatosPromed_1(datosPromedAux);
         }
     }, [average_1])
+
 
     useMemo(() => {
         if (correctAnswers_2){
@@ -197,6 +239,22 @@ export default function CompareDashboard(props){
     }, [naAnswers_2])
 
     useMemo(() => {
+        if (nIntentos_2){
+            let datosNIntentosAux = datosNIntentos_2;
+            datosNIntentosAux.value = `${nIntentos_2}`;
+            setDatosNIntentos_2(datosNIntentosAux);
+        }
+    }, [nIntentos_2])
+
+    useMemo(() => {
+        if (nEstudiantes_2){
+            let datosNEstudiantesAux = datosNEstudiantes_2;
+            datosNEstudiantesAux.value = `${nEstudiantes_2}`;
+            setDatosNEstudiantes_2(datosNEstudiantesAux);
+        }
+    }, [nEstudiantes_2])
+
+    useMemo(() => {
         if (average_2){
             let datosPromedAux = datosPromed_2;
             datosPromedAux.value = average_2;
@@ -206,7 +264,6 @@ export default function CompareDashboard(props){
 
     const { setContentMenu } = useGeneral();
     setContentMenu(`grafica compare`);
-    // debugger
 
     const classes = useStyles();
 
@@ -261,6 +318,12 @@ export default function CompareDashboard(props){
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen datos = {datosNA_1} />
+                            </Grid>
+                            <Grid item xs={6} md={6} lg={6}>
+                                <EstadisticaResumen datos = {datosNIntentos_1} />
+                            </Grid>
+                            <Grid item xs={6} md={6} lg={6}>
+                                <EstadisticaResumen datos = {datosNEstudiantes_1} />
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
                                 <EstadisticaResumen datos = {datosPromed_1} />
@@ -349,25 +412,22 @@ export default function CompareDashboard(props){
                                 </FormControl>
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
-                                <EstadisticaResumen
-                                    datos = {datosCorrectos_2} 
-                                />
+                                <EstadisticaResumen datos = {datosCorrectos_2} />
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
-                                <EstadisticaResumen
-                                    datos = {datosInCorrectos_2} 
-                                />
+                                <EstadisticaResumen datos = {datosInCorrectos_2} />
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>
-                                <EstadisticaResumen
-                                    datos = {datosNA_2} 
-                                />
+                                <EstadisticaResumen datos = {datosNA_2} />
                             </Grid>
-
                             <Grid item xs={6} md={6} lg={6}>
-                                <EstadisticaResumen
-                                    datos = {datosPromed_2} 
-                                />
+                                <EstadisticaResumen datos = {datosNIntentos_2} />
+                            </Grid>
+                            <Grid item xs={6} md={6} lg={6}>
+                                <EstadisticaResumen datos = {datosNEstudiantes_2} />
+                            </Grid>
+                            <Grid item xs={6} md={6} lg={6}>
+                                <EstadisticaResumen datos = {datosPromed_2} />
                             </Grid>
                             <Grid item xs={12} md={12} lg={12}>
                                 <Paper>
