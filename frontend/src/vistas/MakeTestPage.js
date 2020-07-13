@@ -62,7 +62,12 @@ export default function MakeTestPage(props){
 
   const confirmFinishExam = async () => {
     try {
-      await SaveExam()
+      debugger
+      let lastExam = {
+        ...exam,
+        exam_finished: true
+      }
+      await SaveExam(lastExam)
       window.location = "/exam_finished/1"
     } catch {
       alert("No se pudo guardar el examen. Intente nuevamente")
@@ -207,24 +212,24 @@ export default function MakeTestPage(props){
         preguntas.questions.forEach( question => {
           switch(question.type){
             case "selección simple": 
-              if(question.current_answer.length > 0){
+              if(question.current_answer && question.current_answer.length > 0){
                 question["respuesta"] = question.current_answer.find(x => x.option == 1).id.toString()
               }
             break
             case "selección múltiple": 
-              if(question.current_answer.length > 0){
+              if(question.current_answer && question.current_answer.length > 0){
                 question["respuesta"] = question.current_answer.filter(x => x.option == "1").map(x =>{
                   return question.answers.find(y => x.content === y.content).id.toString()
                 })
               }
             break
             case "ordenamiento": 
-              if(question.current_answer.length > 0){
+              if(question.current_answer && question.current_answer.length > 0){
                 question["respuesta"] = question.current_answer.sort((x,y) => x.option > y.option ? 1 : -1)
               }
             break
             case "verdadero o falso": 
-              if(question.current_answer.length > 0){
+              if(question.current_answer && question.current_answer.length > 0){
                 question["respuesta"] = question.current_answer[0].option.toString()
               }
             break

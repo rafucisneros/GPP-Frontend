@@ -155,6 +155,14 @@ export default function TestDetailsPage(props){
                                         <Grid item xs={3} md={3} lg={3}>
                                             {exam.duration} minutos
                                         </Grid>
+                                        <Grid item xs={3} md={3} lg={3}>
+                                            <Typography>
+                                                Intentos Permitidos:
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={3} md={3} lg={3}>
+                                            {exam.attempt}
+                                        </Grid>
                                     </Grid> 
                                 </Grid>
                             </ExpansionPanelDetails>

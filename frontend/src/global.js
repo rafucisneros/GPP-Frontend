@@ -59,6 +59,6 @@ Axios.interceptors.response
     .use( (response) => {
         return response;
     }, (error) => {
-        if (401 === error.response.status) auth.logout();
+        // if (401 === error.response.status) auth.logout();
         return Promise.reject(error.response);
 });

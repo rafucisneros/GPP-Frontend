@@ -34,14 +34,15 @@ export default function EditTestPage(props){
         let fetchData = async () => {
             try {
                 let response = await getResultsForExam(examID)
-                debugger
-                setCalificaciones(response.data.map( x => {
+                let calificaciones = response.data.students.map( x => {
                     return {
                         ...x, 
                         total_score: response.data.total_score
                     }
-                }))
-            } catch {
+                })
+                setCalificaciones(calificaciones)
+            } catch (error) {
+                console.log(error)
                 setErrorMsg("Ocurrio un error cargando las calificaciones")
                 setAlertOpen(true)
             }
