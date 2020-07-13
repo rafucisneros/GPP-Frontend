@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useMemo } from 'react';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import styled from 'styled-components'
 
@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button';
 
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext.js';
+import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
 
 // assets
 import './ListaPreguntasExamen.css';
@@ -41,18 +42,19 @@ const ListaPreguntasExamen = () => {
         listaPreguntasExamen,
         indexItemPregunta,
         setIndexItemPregunta,
-        editarPregunta,
-        setEditarPregunta,
+        flagEditarPregunta,
+        setFlagEditarPregunta,
         handleChangeAreaSubAreaTema,
         handleChangeInput,
         setSelectedRespuesta,
         setRespuestas,
         setFormats
     } = useCreateTestPage();
+    const { tituloRespuesta, tipoPregunta, handleOpcionExamen } = useTipoPreguntaRespuesta();
     const [ lista, setLista ] = useState([]);
 
-    useEffect(() => {
-        if (listaPreguntasExamen && listaPreguntasExamen.length > 0){
+    useMemo(() => {
+        if (listaPreguntasExamen){
             let aux = listaPreguntasExamen.map( (pregunta, index)  => {
                 return {color : 'rgba(63, 81, 181, 0.6)', texto : `Pregunta ${index + 1}`, posicion : index}
             })
@@ -81,23 +83,54 @@ const ListaPreguntasExamen = () => {
 
     const handleClickItem = (index) => {
         let pregunta = listaPreguntasExamen[index];
-        console.log(pregunta)
-        
+        setearDataItemSeleccionado(pregunta);
+        setIndexItemPregunta(index);
+    }
+
+    const setearDataItemSeleccionado = (pregunta) => {
         let event_pond = { target : { name : 'ponderacion', value : pregunta.value }};
         let event_diff = { target : { name : 'dificultad', value : pregunta.difficulty }};
         let event_preg = { target : { name : 'pregunta', value : pregunta.content }};
         let latex = pregunta.latex ? 'latex' : 'text';
+
+        let menu = {};
+        if (pregunta.q_type_id === "Selección Simple"){
+            menu.value = "seleccion_simple";
+            menu.key = '1.1';
+        } 
+        else if (pregunta.q_type_id === "Selección Múltiple"){
+            menu.value = "seleccion_multiple";
+            menu.key = '1.2';
+        }
+        else if (pregunta.q_type_id === "Verdadero o Falso"){
+            menu.value = "verdadero_falso";
+            menu.key = '1.3';
+        }
+        else if (pregunta.q_type_id === "Ordenamiento"){
+            menu.value = "ordenamiento";
+            menu.key = '1.4';
+        }
+
+        if (menu.value === 'verdadero_falso'){
+            let valor = pregunta.answers[0].correct === 1 ? 'verdadero' : 'falso';
+            setSelectedRespuesta(valor);
+        } else {
+            let respuestas = pregunta.answers.map( (respuesta, index) => {
+                return { respuesta : respuesta.content, checked: respuesta.correct, id : respuesta.id }
+            })
+            setRespuestas(respuestas);
+        }
         
-        setIndexItemPregunta(index)
-        setEditarPregunta(true);
+        handleOpcionExamen(menu.value, menu.key);
+        setFlagEditarPregunta(true);
         handleChangeInput(event_pond);
         handleChangeInput(event_diff);
         handleChangeInput(event_preg);
         handleChangeAreaSubAreaTema(pregunta.approach.area, 'area_seleccionada');
         handleChangeAreaSubAreaTema(pregunta.approach.subarea, 'subarea_seleccionada');
-        handleChangeAreaSubAreaTema(pregunta.approach.tema, 'tema_seleccionada');
-        // setSelectedRespuesta(true);
-        setRespuestas(pregunta.answers);
+        handleChangeAreaSubAreaTema(true, 'permitir_subarea');
+        handleChangeAreaSubAreaTema(pregunta.approach.topic, 'tema_seleccionada');
+        handleChangeAreaSubAreaTema(true, 'permitir_tema');
         setFormats(latex);
     }
 

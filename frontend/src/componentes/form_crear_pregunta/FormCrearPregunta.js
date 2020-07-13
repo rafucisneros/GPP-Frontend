@@ -34,12 +34,15 @@ export default function FormCrearPregunta(props) {
         respuestas,
         setRespuestas,
         selectedRespuesta,
-        setSelectedRespuesta
+        setSelectedRespuesta,
+        flagEditarPregunta
     } = useCreateTestPage();
 
     useEffect(() => {
-        setRespuestas([]);
-        setSelectedRespuesta('verdadero');
+        if(!flagEditarPregunta){
+            setRespuestas([]);
+            setSelectedRespuesta('verdadero');
+        }
     }, [tipoPregunta])
 
     const handleCheckedRespuesta = () => {

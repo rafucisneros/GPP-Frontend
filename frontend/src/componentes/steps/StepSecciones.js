@@ -66,6 +66,7 @@ const StepSecciones = (props) => {
 
     const sendSectionsData = () => {
         let data = {};
+        console.log(secciones)
         secciones.forEach( seccion => {
             if (seccion) {
                 let students = seccion.estudiantes.map( estudiante => {
@@ -75,6 +76,7 @@ const StepSecciones = (props) => {
             }
         })
         let request = { sections : data }
+        console.log(request)
         setLoading(true);
         postSecciones(request, exam_id)
         .then( res => {

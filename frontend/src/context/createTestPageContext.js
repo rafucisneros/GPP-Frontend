@@ -6,6 +6,12 @@ import { useUsuario } from '../context/usuarioContext';
 import { getTopics, getStudents } from '../servicios/servicioCrearExamen.js';
 
 const CreateTestPageContext = React.createContext();
+let opciones = {
+    'selección simple' : 'Selección Simple',
+    'selección múltiple' : 'Selección Múltiple',
+    'verdadero o falso' : 'Verdadero o Falso',
+    'ordenamiento' : 'Ordenamiento'
+}
 
 export function CreateTestPageProvider(props) {
 
@@ -17,6 +23,7 @@ export function CreateTestPageProvider(props) {
     const [ step, setStep ] = useState('step_0');
     const [ tipoConfiguracion, setTipoConfiguracion ] = useState("Configuración Dinámica");
     const [ exam_id, SetExamId ] = useState(null);
+    const [ dinamic_id, setDinamicId ] = useState(null);
 
     // Step Configuracion Basica (Variables de estados)
     const [switchChecked, setSwitchChecked] = useState(true);
@@ -30,7 +37,8 @@ export function CreateTestPageProvider(props) {
     
     // Step Crear Preguntas (Variables de estados)
     const [indexItemPregunta, setIndexItemPregunta] = useState(null);
-    const [editarPregunta, setEditarPregunta] = useState(false);
+    const [flagEditarPregunta, setFlagEditarPregunta] = useState(false);
+    const [formats, setFormats] = useState('text');
 
     const [areas, setAreas] = useState([]);  
     const [subareas, setSubareas] = useState({});  
@@ -100,6 +108,87 @@ export function CreateTestPageProvider(props) {
         if (tipo === "Configuración Dinámica") setSwitchChecked(true);
         else setSwitchChecked(false);
     }, [tipoConfiguracion, setTipoConfiguracion])
+
+    const handleColocarData = (data) => {
+        console.log(data);
+
+        // Paso Basico Inicial
+        SetExamId(data.conf_ini.id);
+        setSwitchChecked(!data.conf_ini.static);
+        setDuracion(data.conf_ini.duration);
+        setValorFechaInicio(moment(data.conf_ini.start_date).toDate());
+        setValorFechaFin( moment(data.conf_ini.finish_date).toDate());
+        setTitulo(data.conf_ini.name);
+        setComentarios(data.conf_ini.comments);
+        SetNroIntentos(data.conf_ini.attempt);
+        setOpenExam(data.conf_ini.open);
+
+        // Paso Crear Preguntas
+        let preguntas = [];
+        data.questions.forEach( item => {
+            let aux = {};
+            aux.content = item.content;
+            aux.difficulty = item.difficulty
+            aux.id = item.id
+            aux.latex = item.latex
+            aux.q_type = opciones[item.q_type.name]
+            aux.q_type_id = opciones[item.q_type.name]
+            aux.exam = item.exam;
+            aux.value = item.value;
+            aux.approach =  {
+                topic : item.topic.name,
+                subarea : item.topic.subarea.name,
+                area : item.topic.subarea.area.name
+            }
+            let reversed = [...item.answers].reverse();
+            aux.answers = reversed.map( elem => {
+                return { content : elem.content, correct: elem.option ? true : false, id : elem.id }
+            })
+            preguntas.push(aux);
+        })
+        setListaPreguntasExamen(preguntas);
+
+        // Paso Dinamico
+        setTipoPreguntaSeleccionado(data.dinamic.approach);;
+        if (data.dinamic.distribution){
+            let count = 0;
+            let enfoques = data.dinamic.distribution.map( distri => {
+                count += distri.quantity;
+                return { 
+                    label : distri.name,
+                    valor : distri.quantity,
+                    max : distri.max,
+                    id : distri.id
+                }
+            })
+            setListaTipoPregunta(enfoques);
+            setMaxPreguntas(count);
+            setCountPreguntas(count);
+            setDinamicId(data.dinamic.id);
+        }
+        // setMaxPreguntas(data.dinamic.total_quantity)
+
+        // Paso Secciones
+        let auxSections = [];
+        let keys = Object.keys(data.sections);
+        keys.forEach( key => {
+            let info = {};
+            let id = key.split(' ')[1];
+            info.id = id;
+            info.estudiantes = [];
+            data.sections[key].forEach( email => {
+                let studentInfo = {};
+                console.log(estudiantes)
+                let indexEstudiante = estudiantes.findIndex( est => email === est.email);
+                if (indexEstudiante >= 0) {
+                    studentInfo.email = estudiantes[indexEstudiante].email;
+                    info.estudiantes.push(studentInfo);
+                }
+            })
+            auxSections.push(info);
+        });
+        setSecciones(auxSections);
+    }
 
     // Funciones globales
     const handleChangeStep = (step) =>  setStep(step);
@@ -191,7 +280,6 @@ export function CreateTestPageProvider(props) {
         setListaTipoPregunta([])
         setCountPreguntas(0)
         setMaxPreguntas(0)
-        setEstudiantes([])
         setSecciones([])
         setSeccionSeleccionada(null)
     }
@@ -259,8 +347,14 @@ export function CreateTestPageProvider(props) {
             setAreaSeleccionada,
             indexItemPregunta,
             setIndexItemPregunta,
-            editarPregunta,
-            setEditarPregunta
+            flagEditarPregunta,
+            setFlagEditarPregunta,
+            formats,
+            setFormats,
+            handleColocarData,
+            setEstudiantes,
+            dinamic_id,
+            setDinamicId,
         })
     }, [
         areas, 
@@ -300,7 +394,9 @@ export function CreateTestPageProvider(props) {
         msgAlert,
         alertError,
         indexItemPregunta,
-        editarPregunta
+        flagEditarPregunta,
+        formats,
+        dinamic_id
     ]);
 
     return <CreateTestPageContext.Provider value = {value} {...props} />

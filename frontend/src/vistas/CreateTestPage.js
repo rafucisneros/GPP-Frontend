@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 // assets
 import '../assets/css/createTestPage.css';
@@ -21,12 +21,19 @@ import Grid from '@material-ui/core/Grid';
 
 // servicios
 import { getAllInfoExamen } from '../servicios/servicioGeneral';
+import { getStudents } from '../servicios/servicioCrearExamen.js';
 
 export default (props) => <CreateTestPage {...props} />
 
 const CreateTestPage = (props) => {
     const { setContentMenu } = useGeneral();
-    const { step } = useCreateTestPage();
+    const { 
+        step,
+        exam_id,
+        SetExamId,
+        handleColocarData,
+        setEstudiantes, estudiantes
+    } = useCreateTestPage();
     const [ loading, setLoading ] = useState(false);
     const [ redirectExams ] = useState(false);
 
@@ -35,15 +42,26 @@ const CreateTestPage = (props) => {
     useEffect(() => {
         if (props.match && props.match.params && props.match.params.id && !isNaN(props.match.params.id)){
             setLoading(true);
+            getStudents()
+            .then( res => {
+                if (res.data) setEstudiantes(res.data.results);
+                
+            })
+        }
+    }, [])
+
+    useMemo(() => {
+        if (estudiantes && estudiantes.length > 0){
             getAllInfoExamen(props.match.params.id)
             .then( res => {
                 if (res.data) {
-                    console.log(res.data);
+                    SetExamId(props.match.params.id);
+                    handleColocarData(res.data);
                     setLoading(false);
                 }
             })
         }
-    }, [])
+    }, [estudiantes])
 
     return (
         <div>

@@ -36,6 +36,7 @@ export const global = {
     DELETE_USER:  `${SERVER_NAME}/users/_id_/`,
     PATCH_USER:  `${SERVER_NAME}/users/_id_/`,
     GET_TEACHERS:  `${SERVER_NAME}/teachers`,
+    GET_TEACHER_EXAMS:  `${SERVER_NAME}/exams/teacher/_id_`,
     GET_STUDENTSS:  `${SERVER_NAME}/students`,
     GET_ADMINS:  `${SERVER_NAME}/admins`,
     // POST_USER:  `${SERVER_NAME}/`,
@@ -56,6 +57,6 @@ Axios.interceptors.response
     .use( (response) => {
         return response;
     }, (error) => {
-        if (401 === error.response.status) auth.logout();
+        if (401 === error.response.status || 403 === error.response.status) auth.logout();
         return Promise.reject(error.response);
 });

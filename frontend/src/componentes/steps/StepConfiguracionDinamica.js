@@ -86,7 +86,9 @@ const StepConfiguracionDinamica = (props) => {
         setMaxPreguntas,
         listaPreguntasExamen,
         exam_id,
-        openExam
+        openExam,
+        dinamic_id,
+        setDinamicId,
     } = useCreateTestPage();
 
     const [ errores, setErrores ] = useState({tipoPreguntaSeleccionadoError : false, maxPreguntasError : false});
@@ -246,12 +248,15 @@ const StepConfiguracionDinamica = (props) => {
                 }
             })
             request.distribution = divisions;
+            request.id = dinamic_id;
+            console.log(request)
             setLoading(true);
             patchConfigDinamica(request, exam_id)
             .then( res => {
                 console.log(res)
                 if (res) {
                     setLoading(false);
+                    setDinamicId(res.data.id);
                     let paso = openExam ? 'step_4' : 'step_3';
                     if (paso === 'step_4') handleWarning();
                     else handleChangeStep(paso);
