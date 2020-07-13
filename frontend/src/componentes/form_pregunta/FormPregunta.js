@@ -14,10 +14,11 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import Typography from '@material-ui/core/Typography';
 import "./FormPregunta.css"
 
+const Latex = require('react-latex');
+
 export default function FormPregunta({ 
   pregunta, changeAnswer, changeQuestion, isFirstQuestion, isLastQuestion, finishExam, ultimoGuardado 
   }){
-
   // Cambio de respuesta en seleccion simple/verdadero y falso
   const handleChange = event => {
     changeAnswer(event.target.value.toString());
@@ -72,7 +73,12 @@ export default function FormPregunta({
           {pregunta.type === "selección simple" && 
             (<div>              
               <FormControl component="fieldset">
-                <FormLabel component="legend" style={{marginBottom: "20px"}}>{pregunta["content"]}</FormLabel>
+                <FormLabel component="legend" style={{marginBottom: "20px"}}>
+                  {pregunta.latex ? 
+                    <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                    : pregunta["content"]
+                  }  
+                </FormLabel>
                 <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={pregunta.respuesta}>
                   {pregunta.answers.map((opcion, index) => {
                     return <FormControlLabel value={opcion["id"].toString()} control={<Radio />} label={opcion["content"]} key={index} />
@@ -84,7 +90,12 @@ export default function FormPregunta({
           {pregunta.type === "selección múltiple" && 
             (<div>   
               <FormGroup>
-                <FormLabel component="legend" style={{marginBottom: "20px"}}>{pregunta["content"]}</FormLabel>
+                <FormLabel component="legend" style={{marginBottom: "20px"}}>
+                  {pregunta.latex ? 
+                    <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                    : pregunta["content"]
+                  }
+                </FormLabel>
                   {pregunta.answers.map((opcion, index) => {
                     return  (
                       <FormControlLabel
@@ -107,7 +118,12 @@ export default function FormPregunta({
           {pregunta.type === "verdadero o falso" && 
             (<div>              
               <FormControl component="fieldset">
-                <FormLabel component="legend" style={{marginBottom: "20px"}}>{pregunta["content"]}</FormLabel>
+                <FormLabel component="legend" style={{marginBottom: "20px"}}>
+                  {pregunta.latex ? 
+                    <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                    : pregunta["content"]
+                  }
+                </FormLabel>
                 <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={pregunta.respuesta}>
                   <FormControlLabel value={"1"} control={<Radio />} label="Verdadero"/>
                   <FormControlLabel value={"0"} control={<Radio />} label="Falso"/>
@@ -118,7 +134,12 @@ export default function FormPregunta({
           {pregunta.type === "ordenamiento" && 
             (<div>
               <FormControl component="fieldset">
-                <FormLabel component="legend" style={{marginBottom: "20px"}}>{pregunta["content"]}</FormLabel>
+                <FormLabel component="legend" style={{marginBottom: "20px"}}>
+                  {pregunta.latex ? 
+                    <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                    : pregunta["content"]
+                  }
+                </FormLabel>
                 <DragDropContext onDragEnd={onDragEnd}>
                   <Droppable droppableId="droppable">
                     {(provided, snapshot) => (

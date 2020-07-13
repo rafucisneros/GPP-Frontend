@@ -39,9 +39,9 @@ export default () => <UsuarioProvider>
 
 const App = () => {
 
-  const { cargandoUsuario } = useUsuario();
+  const { usuario, cargandoUsuario } = useUsuario();
 
-  const requireAuth = (Comp, props) => {
+  const requireAuth = (Comp, props, rolesEnabled=null) => {
     if( !getToken() ){
       return (<Redirect to="/login" />);
     } else{
@@ -53,6 +53,13 @@ const App = () => {
             <Loading/>
           )
         } else {
+          // Permisologia 
+          if(rolesEnabled){
+            if(usuario.groups.length > 0 && !usuario.groups.map(x => x.name).some(role => rolesEnabled.includes(role))){
+              console.log("Redirigiendo por permisos", usuario)
+              return (<Redirect to="/home" />);
+            } 
+          }
           return (
             <div>
                 <TipoPreguntaRespuestaProvider>
@@ -109,27 +116,27 @@ const App = () => {
         />
         <Route
           path='/make_test/:id'
-          render={(props) => requireAuth(MakeTestPage, props)}
+          render={(props) => requireAuth(MakeTestPage, props, ["Student"])}
         />
         <Route
           exact
           path='/create_test'
-          render={(props) => requireAuth(CreateTestPage, props)}
+          render={(props) => requireAuth(CreateTestPage, props, ["Professor"])}
         />
         <Route
           exact
           path='/exam/:id/calificaciones'
-          render={(props) => requireAuth(CalificacionesPage, props)}
+          render={(props) => requireAuth(CalificacionesPage, props, ["Professor"])}
         />
         <Route
           exact
           path='/exams'
-          render={(props) => requireAuth(ExamsPage, props)}
+          render={(props) => requireAuth(ExamsPage, props, ["Professor"])}
         />
         <Route
           exact
           path='/admin'
-          render={(props) => requireAuth(AdminPage, props)}
+          render={(props) => requireAuth(AdminPage, props, ["Admin"])}
         />
         <Route
           exact
@@ -138,7 +145,7 @@ const App = () => {
         />
         <Route
           path='/test_details/:id'
-          render={(props) => requireAuth(TestDetailsPage, props)}
+          render={(props) => requireAuth(TestDetailsPage, props, ["Professor"])}
         />
         <Route
           path='/mantenimiento'
@@ -147,11 +154,11 @@ const App = () => {
         <Route
           exact
           path='/estadisticas/exam/:id'
-          render={(props) => requireAuth(DashboardExamPage, props)}
+          render={(props) => requireAuth(DashboardExamPage, props, ["Professor"])}
         />
         <Route
           path='/exam_finished/:id'
-          render={(props) => requireAuth(ExamFinishedPage, props)}
+          render={(props) => requireAuth(ExamFinishedPage, props, ["Student"])}
         />
         <Redirect strict from="/" to="/login" />
       </Switch>

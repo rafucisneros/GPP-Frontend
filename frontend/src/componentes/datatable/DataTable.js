@@ -15,7 +15,7 @@ const DataTable = ({
   const handleRedirectEstadistica = (rowData) => {
     setRedirectEstadistica(`estadisticas/exam/${rowData.id}`);
   }
-  const handleRedirectCalificaciones = () => setRedirectCalificaciones(true);
+  const handleRedirectCalificaciones = (rowData) => setRedirectCalificaciones(rowData.id);
 
     return (
       <Fragment>
@@ -23,7 +23,7 @@ const DataTable = ({
           redirectEstadistica && <Redirect push to={redirectEstadistica}/>
         }
         {
-          redirectCalificaciones && <Redirect push to={"exam/1/calificaciones"}/>
+          redirectCalificaciones && <Redirect push to={`exam/${redirectCalificaciones}/calificaciones`}/>
         }
         <MaterialTable
           style={{width: "100%"}}
@@ -83,7 +83,7 @@ const DataTable = ({
               icon: 'list_alt',
               tooltip: 'Calificaciones',
               // onClick: (event, rowData) => alert("You saved " + rowData.name),
-              onClick: (event, rowData) => handleRedirectCalificaciones(),
+              onClick: (event, rowData) => handleRedirectCalificaciones(rowData),
               hidden: !isCalificacion
             },
             {
