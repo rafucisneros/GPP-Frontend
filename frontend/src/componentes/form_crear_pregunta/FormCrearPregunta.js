@@ -124,7 +124,7 @@ export default function FormCrearPregunta(props) {
                         variant="outlined"
                         fullWidth
                         name="pregunta"
-                        value={pregunta}
+                        value={pregunta ? pregunta : ''}
                         placeholder="Introduzca su pregunta..."
                         onChange={(e) => handleChangeInput(e)}
                         multiline

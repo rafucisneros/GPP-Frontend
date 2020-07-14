@@ -197,7 +197,7 @@ const StepConfiguracionBasica = () => {
                 email : usuario.email,
                 status : true,
                 open : openExam,
-                id : exam_id,
+                exam_id : exam_id,
             }
             console.log(request)
             setLoading(true);
