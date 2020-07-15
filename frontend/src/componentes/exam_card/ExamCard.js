@@ -19,7 +19,7 @@ export const ExamCard = ({title, id, type}) => {
     </CardContent>
     <CardActions style={{justifyContent: "center", flexDirection: "column"}}>
       { type !== "Professor" ? 
-        <Link to={`/make_test/${id}`} className='link'>
+        <Link to={`/resumen_examen/${id}`} className='link'>
           <Button size="small">Ir a Examen</Button>
         </Link> :
         <Fragment>
