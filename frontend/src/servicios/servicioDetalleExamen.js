@@ -34,3 +34,14 @@ export function getExamComplete(id){
       return Promise.reject(error);
   });
 }
+
+export function getExamResultsbyStydent(eid, sid){
+  let url = global.GET_EXAM_RESULTS_STUDENT.replace("_eid_", eid).replace("_sid_", sid);
+  return Axios.get(url)
+  .then((response) => {
+      return response;
+  })
+  .catch( (error) => {
+      return Promise.reject(error);
+  });
+}

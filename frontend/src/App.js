@@ -18,6 +18,7 @@ import DashboardExamPage from './vistas/DashboardExamPage.js';
 import ExamFinishedPage from './vistas/ExamFinishedPage.js';
 import AdminPage from './vistas/AdminPage.js';
 import NonResponsivePage from './vistas/NonResponsivePage.js';
+import TestPreviewPage from './vistas/TestPreviewPage.js';
 
 // componentes
 // import NavBar from './componentes/layouts/NavBar.js';
@@ -60,21 +61,29 @@ const App = () => {
               return (<Redirect to="/home" />);
             } 
           }
-          return (
-            <div>
-                <TipoPreguntaRespuestaProvider>
-                  <MakeTestProvider>
-                    <CreateTestPageProvider>
-                      <GeneralProvider>
-                        <Layout > 
-                          <Comp {...props}/>
-                        </Layout>
-                      </GeneralProvider>
-                    </CreateTestPageProvider>
-                  </MakeTestProvider>
-                </TipoPreguntaRespuestaProvider> 
-            </div>
-          )
+          if(usuario.groups.length){
+            return (
+              <div>
+                  <TipoPreguntaRespuestaProvider>
+                    <MakeTestProvider>
+                      <CreateTestPageProvider>
+                        <GeneralProvider>
+                          <Layout > 
+                            <Comp {...props}/>
+                          </Layout>
+                        </GeneralProvider>
+                      </CreateTestPageProvider>
+                    </MakeTestProvider>
+                  </TipoPreguntaRespuestaProvider> 
+              </div>
+            )
+          } else {
+            return (
+              <div>
+                <Loading/>
+              </div>
+            )
+          }
         }
       }
     }
@@ -131,7 +140,7 @@ const App = () => {
         <Route
           exact
           path='/exams'
-          render={(props) => requireAuth(ExamsPage, props, ["Professor"])}
+          render={(props) => requireAuth(ExamsPage, props, ["Professor", "Student"])}
         />
         <Route
           exact
@@ -157,8 +166,12 @@ const App = () => {
           render={(props) => requireAuth(DashboardExamPage, props, ["Professor"])}
         />
         <Route
-          path='/exam_finished/:id'
+          path='/examen_terminado/:eid/estudiante/:sid'
           render={(props) => requireAuth(ExamFinishedPage, props, ["Student"])}
+        />
+        <Route
+          path='/resumen_examen/:id'
+          render={(props) => requireAuth(TestPreviewPage, props, ["Student"])}
         />
         <Redirect strict from="/" to="/login" />
       </Switch>

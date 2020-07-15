@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { Link } from 'react-router-dom';
 import Loading from '../componentes/loading/Loading.js';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,7 +15,8 @@ import ClockIcon from '@material-ui/icons/AccessTime';
 import { 
   getExamQuestions, 
   getExam,
-  saveExamAnswers 
+  saveExamAnswers,
+  finishExam as finishExamService
 } from '../servicios/servicioPresentarExamen.js';
 import { Alert } from '../componentes/alert/Alert.js'
 import {
@@ -27,6 +29,7 @@ import {
   Button
 } from '@material-ui/core';
 
+import { useHistory } from "react-router-dom"
 
 import "../assets/css/makeTestPage.css";
 
@@ -53,24 +56,24 @@ export default function MakeTestPage(props){
   const [timeoutAlert, setTimeoutAlert] = React.useState(false);
 
   const [ultimoGuardado, setUltimoGuardado] = useState("Nunca");
+  // Para el Alert
+  const [ alertOpen, setAlertOpen] = useState(false)
+  const [ errorMsg, setErrorMsg] = useState("")
+  const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
+  const [ successMsg, setSuccessMsg] = useState("")
 
-    // Para el Alert
-    const [ alertOpen, setAlertOpen] = useState(false)
-    const [ errorMsg, setErrorMsg] = useState("")
-    const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
-    const [ successMsg, setSuccessMsg] = useState("")
+  let history = useHistory();
 
   const confirmFinishExam = async () => {
     try {
       debugger
-      let lastExam = {
-        ...exam,
-        exam_finished: true
-      }
-      await SaveExam(lastExam)
-      window.location = "/exam_finished/1"
+      let response1 = await SaveExam()
+      let response2 = await finishExamService({attempt: exam.attempt}, examID)
+      history.push(`/examen_terminado/${examID}/estudiante/${usuario.id}`)
+      // window.location = `/examen_terminado/${examID}/estudiante/${usuario.id}`
     } catch {
-      alert("No se pudo guardar el examen. Intente nuevamente")
+      setErrorMsg("No se pudo guardar el examen. Intente nuevamente")
+      setAlertOpen(true)
     }
   };
 
@@ -180,7 +183,7 @@ export default function MakeTestPage(props){
   }
 
   const timeoutFinish = () => {
-    window.location = "/exam_finished/" + examID
+    window.location = "/examen_terminado/" + examID
   }
 
   useEffect(() => {
