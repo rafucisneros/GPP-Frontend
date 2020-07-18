@@ -2,11 +2,12 @@ import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import MaterialTable from "material-table";
 import { Redirect } from 'react-router-dom';
+import Switch from '@material-ui/core/Switch';
 
 const DataTable = ({ 
   title, columns, data, grouping, selection, exportButton, toolbar,
   showSelectAllCheckbox, actionsColumnIndex, onRowAdd, onRowUpdate, onRowDelete,
-  isCalificacion, isEstadistica
+  isCalificacion, isEstadistica, isTeachersExamList, handleToggleExamEnabled
 }) => {
 
   const [ redirectEstadistica, setRedirectEstadistica ] = useState(false);
@@ -79,6 +80,19 @@ const DataTable = ({
             onRowDelete: onRowDelete
           }}
           actions={[
+            rowData => ({
+              icon: ()=>{
+                return <Switch
+                  checked={rowData.status}
+                  name="enabled"
+                  color="primary"
+                />
+              },
+              // iconProps: rowdata,
+              tooltip: 'Habilitar/Deshabilitar',
+              onClick: handleToggleExamEnabled,
+              hidden: !isTeachersExamList
+            }),
             {
               icon: 'list_alt',
               tooltip: 'Calificaciones',
@@ -105,14 +119,17 @@ DataTable.propTypes = {
   selection: PropTypes.bool,
   exportButton: PropTypes.bool,
   toolbar: PropTypes.bool,
+  isTeachersExamList: PropTypes.bool,
   showSelectAllCheckbox: PropTypes.bool,
   actionsColumnIndex: PropTypes.number,
   onRowAdd: PropTypes.func,
   onRowUpdate: PropTypes.func,
   onRowDelete: PropTypes.func,
+  handleToggleExamEnabled: PropTypes.func,
 };
 
 DataTable.defaultProps = {
+  isTeachersExamList: false,
   grouping: true, 
   selection: true,
   exportButton: true,
