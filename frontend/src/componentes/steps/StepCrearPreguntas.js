@@ -12,7 +12,7 @@ import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
 // servicios
-import { postPreguntasExamen } from '../../servicios/servicioCrearExamen.js';
+import { postPreguntasExamen, postAllPreguntasExamen } from '../../servicios/servicioCrearExamen.js';
 
 // material
 import Typography from '@material-ui/core/Typography';
@@ -78,6 +78,7 @@ const StepCrearPreguntas = () => {
     const [ loading, setLoading ] = useState(false);
     const [ open, setOpen ] = useState(false);
     const [ openModalEliminarPregunta, setOpenModalEliminarPregunta ] = useState(false);
+    const [ openConfirmacion, setOpenConfirmacion ] = useState(false);
     const [ errores, setErrores ] = useState({
         preguntaError : false, 
         areaSeleccionadaError : false,
@@ -256,15 +257,30 @@ const StepCrearPreguntas = () => {
     const nextStep = () => {
         let error = verifyDataListaPregunta();
         if(!error){
-            let paso = tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : openExam ? 'step_4' : 'step_3';
-            if (paso === 'step_4') handleWarning();
-            else handleChangeStep(paso);
+            handleModalConfirmacion();
         }
+    }
+
+    const handleNextStep = () => {
+        setLoading(true);
+        handleModalConfirmacion();
+        console.log(listaPreguntasExamen)
+        postAllPreguntasExamen(listaPreguntasExamen, exam_id)
+        .then( res => {
+            if (res) {
+                console.log(listaPreguntasExamen)
+                setLoading(false);
+                let paso = tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : openExam ? 'step_4' : 'step_3';
+                if (paso === 'step_4') handleWarning();
+                else handleChangeStep(paso);
+            }
+        })
     }
 
     const finishStep = () => handleChangeStep('step_4');
     const handleWarning = () => setOpen(!open);
     const handleModalEliminarPregunta = () => setOpenModalEliminarPregunta(!openModalEliminarPregunta);
+    const handleModalConfirmacion = () => setOpenConfirmacion(!openConfirmacion);
 
     const handleCrearNuevaPregunta = () => {
         handleOpcionExamen("seleccion_simple", '1.1');
@@ -570,6 +586,27 @@ const StepCrearPreguntas = () => {
                     </Button>
                     <Button onClick={() => handleEliminarPregunta()} color="primary" autoFocus>
                         Sí, estoy seguro
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={openConfirmacion}
+                onClose={handleModalConfirmacion}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Advertencia"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            ¿Desea guardar los cambios realizados?
+                        </DialogContentText>
+                    </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleModalConfirmacion} color="secondary">
+                        No, en verdad no
+                    </Button>
+                    <Button onClick={() => handleNextStep()} color="primary" autoFocus>
+                        Sí, guardar
                     </Button>
                 </DialogActions>
             </Dialog>

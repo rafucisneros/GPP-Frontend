@@ -188,8 +188,10 @@ export function CreateTestPageProvider(props) {
                 if (indexEstudiante === -1 ) {
                     missEmails.push(email);
                 }
-                studentInfo.email = email;
-                info.estudiantes.push(studentInfo);
+                else if (indexEstudiante > 0 ) {
+                    studentInfo.email = email;
+                    info.estudiantes.push(studentInfo);
+                }
             })
             auxSections.push(info);
         });
@@ -246,7 +248,9 @@ export function CreateTestPageProvider(props) {
 
     const handleChangeInput = (e) => {
         if (e.target.name === 'dificultad') setDificultad(e.target.value);
-        else if (e.target.name === 'ponderacion') setPonderacion(e.target.value);
+        else if (e.target.name === 'ponderacion') {
+            if (Number(e.target.value) >= 1) setPonderacion(e.target.value);
+        }
         else if (e.target.name === 'pregunta') setPregunta(e.target.value);
     }
 

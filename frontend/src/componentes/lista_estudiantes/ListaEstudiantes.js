@@ -81,15 +81,15 @@ const ListaEstudiantes = (props) => {
                 for(let seccion of secciones) {
                     if(seccionSeleccionada.id === seccion.id){
                         for( let estudianteSeleccionado of seccionSeleccionada.estudiantes) {
-                            if (missingEstudiantes && missingEstudiantes.length > 0 && missingEstudiantes.includes(estudianteSeleccionado.email)) {
-                                let newStudent = { email : estudianteSeleccionado.email }
-                                newStudent.tableData = {};
-                                newStudent.tableData.checked = true;
-                                finalData.push(newStudent);
-                                encontrado = true;
-                                break;
-                            }
-                            else if(estudianteSeleccionado.email === estudiante.email) {
+                            // if (missingEstudiantes && missingEstudiantes.length > 0 && missingEstudiantes.includes(estudianteSeleccionado.email)) {
+                            //     let newStudent = { email : estudianteSeleccionado.email }
+                            //     newStudent.tableData = {};
+                            //     newStudent.tableData.checked = true;
+                            //     finalData.push(newStudent);
+                            //     encontrado = true;
+                            //     break;
+                            // }
+                            if(estudianteSeleccionado.email === estudiante.email) {
                                 estudiante.tableData = {};
                                 estudiante.tableData.checked = true;
                                 finalData.push(estudiante);
@@ -99,11 +99,11 @@ const ListaEstudiantes = (props) => {
                         }
                     } else if (seccionSeleccionada.id !== seccion.id) {
                         for( let estudianteNoSeleccionado of seccion.estudiantes) {
-                            if (missingEstudiantes && missingEstudiantes.length > 0 && missingEstudiantes.includes(estudianteNoSeleccionado.email)) {
-                                encontrado = true;
-                                break;
-                            }
-                            else if(estudianteNoSeleccionado.email === estudiante.email) {
+                            // if (missingEstudiantes && missingEstudiantes.length > 0 && missingEstudiantes.includes(estudianteNoSeleccionado.email)) {
+                            //     encontrado = true;
+                            //     break;
+                            // }
+                            if(estudianteNoSeleccionado.email === estudiante.email) {
                                 encontrado = true;
                                 break;
                             }

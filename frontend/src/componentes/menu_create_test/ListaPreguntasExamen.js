@@ -31,7 +31,7 @@ const estilosDropDragging = (style, snapshot) => {
 }
 
 const EstilosStartDragging = styled.div`
-    opacity : ${props => props.isDragging ? 0.5 : 1};
+    opacity : ${props => props.isDragging ? 0.4 : 1};
 `
 
 export default () => <ListaPreguntasExamen></ListaPreguntasExamen>
@@ -48,7 +48,8 @@ const ListaPreguntasExamen = () => {
         handleChangeInput,
         setSelectedRespuesta,
         setRespuestas,
-        setFormats
+        setFormats,
+        setListaPreguntasExamen
     } = useCreateTestPage();
     const { tituloRespuesta, tipoPregunta, handleOpcionExamen } = useTipoPreguntaRespuesta();
     const [ lista, setLista ] = useState([]);
@@ -56,16 +57,22 @@ const ListaPreguntasExamen = () => {
     useMemo(() => {
         if (listaPreguntasExamen){
             let aux = listaPreguntasExamen.map( (pregunta, index)  => {
-                return {color : 'rgba(63, 81, 181, 0.6)', texto : `Pregunta ${index + 1}`, posicion : index}
+                return {color : indexItemPregunta === index ? 'rgba(99, 196, 197, 0.4)' : 'rgba(63, 81, 181, 0.4)', texto : `${pregunta.content}`, posicion : index}
             })
             setLista(aux);
         }
-    }, [listaPreguntasExamen])
+    }, [listaPreguntasExamen, indexItemPregunta])
 
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
         result.splice(endIndex, 0, removed);
+
+        let aux = [...listaPreguntasExamen];
+        const [removedAux] = aux.splice(startIndex, 1);
+        aux.splice(endIndex, 0, removedAux);
+        setListaPreguntasExamen(aux);
+
         return result;
     };
 
@@ -169,7 +176,7 @@ const ListaPreguntasExamen = () => {
                                                     <Box style={{display : 'flex', paddingRight : '5px', alignSelf: 'center'}}>
                                                         <DragIndicatorIcon/>
                                                     </Box>
-                                                    <Box style={{display: 'flex', width: '100%', justifyContent: 'flex-end'}}>
+                                                    <Box style={{ overflow: 'hidden', textOverflow: 'ellipsis'}}>
                                                         {pregunta.texto}
                                                     </Box>
                                                 </Box>

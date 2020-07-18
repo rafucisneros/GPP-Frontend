@@ -100,7 +100,7 @@ export default function PonderacionDificultad(props) {
                     onChange={(e) => handleCambiarRespuesta(e)}
                     InputProps={{
                         inputProps: { 
-                            min: 0, step : 0.25
+                            min: 1, step : 0.25
                     }}}
                 />
             </Grid>
