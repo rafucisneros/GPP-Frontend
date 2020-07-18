@@ -32,9 +32,6 @@ export default function ExamsPage(){
     // const [examanes, setExamanes] = useState([]);
     const [examanes, setExamanes] = useState([]);
     setContentMenu(`edit_test`);
-    const { usuario } = useUsuario();
-
-
 
     // GET requests y componentes de montaje
     useEffect(() => {
