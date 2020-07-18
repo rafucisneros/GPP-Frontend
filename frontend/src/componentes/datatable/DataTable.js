@@ -16,7 +16,7 @@ const DataTable = ({
   const [ idExam, setIdExam ] = useState(null);
 
   const handleRedirectEstadistica = (rowData) => {
-    setRedirectEstadistica(`estadisticas/exam/${rowData.id}`);
+    setRedirectEstadistica(`estadisticas/examen/${rowData.id}`);
   }
 
   const handleRedirectEditExam = (rowData) => {
@@ -28,7 +28,7 @@ const DataTable = ({
     return (
       <Fragment>
         { redirectEstadistica && <Redirect push to={redirectEstadistica}/> }
-        { redirectCalificaciones && <Redirect push to={`exam/${redirectCalificaciones}/calificaciones`}/> }
+        { redirectCalificaciones && <Redirect push to={`examen/${redirectCalificaciones}/calificaciones`}/> }
         <MaterialTable
           style={{width: "100%"}}
           title={title}
@@ -116,12 +116,12 @@ const DataTable = ({
               onClick: (event, rowData) => handleRedirectEditExam(rowData),
               hidden: !customExam
             },
-            {
-              icon: 'delete_forever',
-              tooltip: 'Eliminar Examen',
-              onClick: (event, rowData) => {alert("Borrar elemento")},
-              hidden: !customExam
-            }
+            // {
+            //   icon: 'delete_forever',
+            //   tooltip: 'Eliminar Examen',
+            //   onClick: (event, rowData) => {alert("Borrar elemento")},
+            //   hidden: !customExam
+            // }
           ]}
         />
       </Fragment>

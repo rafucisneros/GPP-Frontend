@@ -158,6 +158,7 @@ export default function ExamsPage(){
                                         isTeachersExamList={true}
                                         handleToggleExamEnabled={handleToggleExamEnabled}
                                         onRowClick={onRowClick}
+                                        customExam={true}
                                     /> :
                                     <DataTable 
                                         title="Lista de Examenes" 

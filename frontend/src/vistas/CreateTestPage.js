@@ -46,7 +46,8 @@ const CreateTestPage = (props) => {
             getStudents()
             .then( res => {
                 if (res.data) {
-                    setEstudiantes(res.data.results);
+                    console.log(res.data.student)
+                    setEstudiantes(res.data.student);
                     setFlagGetAllInfo(true);
                 }
                 

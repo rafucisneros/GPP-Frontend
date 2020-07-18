@@ -79,7 +79,7 @@ export function CreateTestPageProvider(props) {
         if(usuario.groups.find(x => x.name === "Professor")){
             getStudents()
             .then( res => {
-                if (res.data) setEstudiantes(res.data.results);
+                if (res.data) setEstudiantes(res.data.student);
             })
         }
     }, [])

@@ -119,27 +119,27 @@ const App = () => {
           render={(props) => requireAuth(HomePage, props)}
         />
         <Route
-          exact
-          path='/home'
-          render={(props) => requireAuth(MensajitoPage, props)}
-        />
-        <Route
           path='/presentar_examen/:id'
           render={(props) => requireAuth(MakeTestPage, props, ["Student"])}
         />
         <Route
           exact
-          path='/create_test'
+          path='/crear_examen'
           render={(props) => requireAuth(CreateTestPage, props, ["Professor"])}
         />
         <Route
           exact
-          path='/exam/:id/calificaciones'
+          path='/examen/:id'
+          render={(props) => requireAuth(CreateTestPage, props, ["Professor"])}
+        />
+        <Route
+          exact
+          path='/examen/:id/calificaciones'
           render={(props) => requireAuth(CalificacionesPage, props, ["Professor"])}
         />
         <Route
           exact
-          path='/exams'
+          path='/examenes'
           render={(props) => requireAuth(ExamsPage, props, ["Professor", "Student"])}
         />
         <Route
