@@ -18,21 +18,24 @@ import {
 
 import { useHistory } from "react-router-dom"
 import { useGeneral } from '../context/generalContext';
+import {useMakeTest} from '../context/makeTestContext';
 
 export default function ExamFinishedPage(props){
   const examID = props.match.params.eid;
   const studentID = props.match.params.sid;
-  const [ exam, setExam] = useState(null)
+  const [ examResults, setExamResults] = useState(null)
   let history = useHistory();
   const { setContentMenu } = useGeneral();
 
+  const { exam, setExam } = useMakeTest();
   setContentMenu(`home`);
 
   useEffect( () => {
+    setExam(null)
     let fetchData= async () => {
-      let { data: examResults } = await getExamResultsbyStydent(examID, studentID);
-      setExam({
-        ...examResults
+      let { data: resultados } = await getExamResultsbyStydent(examID, studentID);
+      setExamResults({
+        ...resultados
       })
     }
     fetchData()
@@ -41,7 +44,7 @@ export default function ExamFinishedPage(props){
   return (
     <div className="content-main-examen-terminado">
       <div className="toolbar-icono"/>
-      { exam ? (
+      { examResults ? (
         <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px', width : '100%'}}>
           <Grid container spacing={2}>
             <Card style={{width : '100%'}}>
@@ -56,7 +59,7 @@ export default function ExamFinishedPage(props){
                       <Typography>Nota obtenida:</Typography>
                     </Grid>  
                     <Grid item xs={9} md={9} lg={9}>
-                      {exam.score} / {exam.total_score_exam}
+                      {examResults.score} / {examResults.total_score_exam}
                     </Grid>   
                   </Grid>
                 </Grid>

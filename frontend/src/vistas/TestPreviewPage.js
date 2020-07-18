@@ -56,7 +56,7 @@ export default function TestPreviewPage(props){
   }, [usuario])
 
   const presentarExamen = () => {
-    history.push("/make_test/" + examID)
+    history.push("/presentar_examen/" + examID)
   }
 
   return (

@@ -124,7 +124,7 @@ const App = () => {
           render={(props) => requireAuth(MensajitoPage, props)}
         />
         <Route
-          path='/make_test/:id'
+          path='/presentar_examen/:id'
           render={(props) => requireAuth(MakeTestPage, props, ["Student"])}
         />
         <Route
@@ -153,7 +153,7 @@ const App = () => {
           render={(props) => requireAuth(ProfilePage, props)}
         />
         <Route
-          path='/test_details/:id'
+          path='/detalles_examen/:id'
           render={(props) => requireAuth(TestDetailsPage, props, ["Professor"])}
         />
         <Route
