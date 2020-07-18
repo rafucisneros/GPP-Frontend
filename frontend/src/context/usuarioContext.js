@@ -36,6 +36,7 @@ export function UsuarioProvider(props) {
         return({
             usuario,
             cargandoUsuario,
+            setUsuario
         })
     }, [usuario, cargandoUsuario]);
 

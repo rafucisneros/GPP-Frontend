@@ -19,7 +19,7 @@ import { Alert } from '../componentes/alert/Alert.js'
 export default function ProfilePage(){
 
   const [errores, setErrores] = useState({tituloError : false, duracionError : false, nroIntentosError: false, openExamError : false});
-  const { usuario } = useUsuario();
+  const { usuario, setUsuario } = useUsuario();
   const [contraseñaNueva, setContraseñaNueva] = useState("");
   const [contraseñaNuevaConfirmar, setContraseñaNuevaConfirmar] = useState("");
   const [contraseñaActual, setContraseñaActual] = useState("");
@@ -42,9 +42,16 @@ export default function ProfilePage(){
       newUser["first_name"] =  nombre
       newUser["last_name"] = apellido
       newUser["email"] = email 
+      delete newUser["groups"]
       let modificandoPerfil = await patchUser(usuario.id, newUser)
       setSuccessMsg("Modificado Exitosamente")
       setAlertSuccessOpen(true)
+      newUser = {...usuario}
+      newUser["first_name"] =  nombre
+      newUser["last_name"] = apellido
+      newUser["email"] = email 
+      setUsuario(newUser)
+
     } catch (error) {
       let mensaje = "Ocurrio un error modificando el perfil"
       if(typeof(error.data.email) === "object"){

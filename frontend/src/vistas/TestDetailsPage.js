@@ -5,9 +5,7 @@ import React, {
  } from 'react';
 import uuid from 'uuid/v1';
 
-import ListaSecciones from '../componentes/lista_secciones/ListaSecciones.js';
-import ListaEstudiantes from '../componentes/lista_estudiantes/ListaEstudiantes.js';
-import { useCreateTestPage } from '../context/createTestPageContext';
+import { ListaEstudiantes } from '../componentes/lista_estudiantes/ListaEstudiantesTeacherPage.js';
 
 // material
 import Container from '@material-ui/core/Container';
@@ -56,43 +54,6 @@ export default function TestDetailsPage(props){
         }
         fetchData()
     }, [])
-
-    // Secciones Andres
-    const {  
-        handleChangeStep,
-        handleChangeComp,
-        secciones,
-        tipoConfiguracion
-    } = useCreateTestPage();
-
-    const handleAgregarEstudiante = (estudiante) => handleChangeComp(estudiante, 'estudiantes');
-
-    const handleSeleccionarSeccion = (id) => {
-        if (secciones.length > 0){
-            for( let seccion of secciones){
-                if(seccion.id === id) {
-                    handleChangeComp(seccion, 'seccion_seleccionada');
-                    break;
-                }    
-            }
-        }
-    }
-
-    const handleAgregarSecciones = () => {
-        let data = [...secciones];
-        data.push({
-            id: uuid(),
-            estudiantes : []
-        });
-        handleChangeComp(data, 'secciones');
-    }
-
-    const handleEliminarSecciones = (index) => {
-        let data = [...secciones];
-        data.splice(index, 1);
-        handleChangeComp(data, 'secciones');
-    }
-    // Fin Secciones Andres
 
     if(exam){
         return (
@@ -279,7 +240,7 @@ export default function TestDetailsPage(props){
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         {/* Lista Secciones */}
-                        {/* <ExpansionPanel expanded={listSectionsExpanded} onChange={handleChangeListSectionsExpanded} style={{width: "100%"}}>
+                        <ExpansionPanel expanded={listSectionsExpanded} onChange={handleChangeListSectionsExpanded} style={{width: "100%"}}>
                             <ExpansionPanelSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1a-content"
@@ -290,23 +251,14 @@ export default function TestDetailsPage(props){
                             <Divider />
                             <ExpansionPanelDetails>
                                 <Grid container>
-                                <Grid container>
-                                    <Grid item lg={4} md={4} xl={4} xs={12}>
-                                        <ListaSecciones 
-                                            handleAgregarSecciones = {handleAgregarSecciones}
-                                            handleEliminarSecciones = {handleEliminarSecciones}
-                                            handleSeleccionarSeccion = {handleSeleccionarSeccion}
-                                        />
-                                    </Grid>
-                                    <Grid item lg={8} md={8} xl={8} xs={12}>
+                                    <Grid item lg={12} md={12} xl={12} xs={12}>
                                         <ListaEstudiantes 
-                                            handleAgregarEstudiante = {handleAgregarEstudiante}
+                                          secciones={exam.Secciones}
                                         />
                                     </Grid>
-                                </Grid>
                                 </Grid>
                             </ExpansionPanelDetails>
-                        </ExpansionPanel> */}
+                        </ExpansionPanel>
                         {/*Estadisticas*/}
                     </Grid>
                 </Container>

@@ -197,6 +197,7 @@ export default function FormPregunta({
               type="submit"
               variant="contained"
               color="primary"
+              style={{background:"#6a3df3", color : "white"}}
               disabled={isFirstQuestion}
               onClick={handlePreviousQuestion}
             >

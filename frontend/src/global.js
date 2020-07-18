@@ -44,7 +44,7 @@ export const global = {
     GET_EXAM_COMPLETE:  `${SERVER_NAME}/exam/_id_/complete/`,
     GET_EXAM_RESULTS_STUDENT:  `${SERVER_NAME}/exam/_eid_/results/student/_sid_`,
     POST_EXAM_FINISH:  `${SERVER_NAME}/exam/_id_/finish/`,
-    
+    GET_STUDENT_RESULTS:  `${SERVER_NAME}/student/_sid_/results`,
     // POST_USER:  `${SERVER_NAME}/`,
 
 };
@@ -61,6 +61,6 @@ Axios.interceptors.response
     .use( (response) => {
         return response;
     }, (error) => {
-        if (401 === error.response.status) auth.logout();
+        // if (401 === error.response.status) auth.logout();
         return Promise.reject(error.response);
 });

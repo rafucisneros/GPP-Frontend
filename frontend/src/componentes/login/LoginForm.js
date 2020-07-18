@@ -106,11 +106,11 @@ export default function LoginForm(props) {
                 Ingresar
               </Button>
               <Grid container>
-                <Grid item xs>
+                {/* <Grid item xs>
                   <Link href="#" variant="body2">
                     ¿Olvidó su Contraseña?
                   </Link>
-                </Grid>
+                </Grid> */}
                 <Grid item>
                   <Link href="/register" variant="body2">
                     {"¿No posee una cuenta? Regístrese"}

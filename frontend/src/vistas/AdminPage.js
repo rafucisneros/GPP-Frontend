@@ -33,10 +33,6 @@ export default function HomePage(){
     setAdministradoresExpanded(!administradoresExpanded)
   }
 
-  const addUser = () => {
-    
-  }
-
   return (
     <div>
       <div className="toolbar-icono"/>    
