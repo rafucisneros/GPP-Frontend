@@ -42,8 +42,14 @@ const ListaEstudiantes = (props) => {
             setSuccessMsg("Agregado Exitosamente")
             setAlertSuccessOpen(true)            
             resolve();
-          } catch {
-            setErrorMsg("Error agregando estudiante")
+          } catch (error) {
+            let mensaje = "Ocurrio un error agregando al estudiante"
+            if(typeof(error.data.email) === "object"){
+              if(error.data.email.includes("Enter a valid email address.")){
+                mensaje += ": Ingrese un correo electrónico válido."
+              }
+            }
+            setErrorMsg(mensaje)
             setAlertOpen(true)
             reject()
           }

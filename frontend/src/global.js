@@ -19,7 +19,7 @@ export const global = {
     PATCH_CONF_DINAMICA: `${SERVER_NAME}/exam/_id_/configuration/`,
     PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
 
-    GET_STUDENTS: `${SERVER_NAME}/users/`,
+    GET_STUDENTS: `${SERVER_NAME}/students`,
     GET_RESULTADOS_ESTADISTICAS: `${SERVER_NAME}/resultados/_eid_`,
     GET_EXAMS: `${SERVER_NAME}/exams/`,
     TOPICS: `${SERVER_NAME}/approach/`,

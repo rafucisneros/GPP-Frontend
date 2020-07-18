@@ -66,7 +66,6 @@ export default function MakeTestPage(props){
 
   const confirmFinishExam = async () => {
     try {
-      debugger
       let response1 = await SaveExam()
       let response2 = await finishExamService({attempt: exam.attempt}, examID)
       history.push(`/examen_terminado/${examID}/estudiante/${usuario.id}`)
@@ -164,7 +163,7 @@ export default function MakeTestPage(props){
     setUltimoGuardado(time().format("DD/MM/YYYY - hh:mm:ss A"))
   }
 
-  const timer = (horaFin) => {
+  const timer = async (horaFin) => {
     let ahora = time()
     let fin = time(horaFin, "DD/MM/YYYY - hh:mm:ss A")
     let restanteSegundos = parseInt(time.duration(fin.diff(ahora)).asSeconds() % 60)
@@ -177,13 +176,19 @@ export default function MakeTestPage(props){
 
     let restante = `${restanteHoras}:${restanteMinutos}:${restanteSegundos}`
     setTiempoRestante(restante)
-    if(restante === "00:00:00"){
+    if(restante === "00:00:00"){      
       setTimeoutAlert(true);
+      try{
+        let response1 = await SaveExam()
+        let response2 = await finishExamService({attempt: exam.attempt}, examID)
+      } catch (error) {
+
+      }
     } 
   }
 
   const timeoutFinish = () => {
-    window.location = "/examen_terminado/" + examID
+    history.push(`/examen_terminado/${examID}/estudiante/${usuario.id}`)
   }
 
   useEffect(() => {

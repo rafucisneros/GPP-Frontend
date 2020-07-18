@@ -15,11 +15,15 @@ import { useUsuario } from '../context/usuarioContext';
 
 // servicios
 import { getExamsForTeacher } from '../servicios/servicioGeneral';
+import { createTest } from '../servicios/servicioCrearExamen.js';
+
+import { Alert } from '../componentes/alert/Alert.js'
+
 
 const columns = [
-    { title: 'ID', field: 'id'},
+    { title: 'ID', field: 'id', defaultSort : 'desc' },
     // { title: 'ID', field: 'id', hidden: true},
-    { title: 'Nombre', field: 'name', defaultSort : 'asc' },
+    { title: 'Nombre', field: 'name'},
     { title: 'Fecha Inicio', field: 'start_date', render: rowData => {
         return moment(rowData.start_date).format('DD/MM/YYYY hh:mm a');
     } },
@@ -43,6 +47,9 @@ const columns = [
 
 export default function ExamsPage(){
 
+    const [ alertOpen, setAlertOpen] = useState(false)
+    const [ errorMsg, setErrorMsg] = useState("")
+
     const { setContentMenu } = useGeneral();
     // const [examanes, setExamanes] = useState([]);
     const [examanes, setExamanes] = useState([]);
@@ -54,11 +61,42 @@ export default function ExamsPage(){
         getExamsForTeacher(usuario.id)
         .then( res => {
             if (res.data) {
-                console.log(res)
                 setExamanes(res.data);
             }
         })
     }, [usuario])
+
+    const handleToggleExamEnabled = async (event, rowData) => {
+        let request = {
+            name: rowData["name"],
+            start_date: rowData["start_date"],
+            finish_date:rowData["finish_date"],
+            duration: rowData["duration"],
+            attempt: rowData["attempt"],
+            description: rowData["description"],
+            static: rowData["static"],
+            email: usuario.email,
+            status: !rowData["status"],
+            open: rowData["open"],
+            exam_id: rowData["id"]
+        }
+        try {
+            let response = await createTest(request)
+            let newData = [...examanes]
+            let newRowData = {
+                ...rowData,
+                status: !rowData["status"]
+            }
+            let index = newData.indexOf(rowData)
+            newData.splice(index, 1, newRowData)
+            setExamanes(newData)
+
+        } catch (error) {
+            console.log(error)
+            setErrorMsg("No se pudo guardar el examen. Intente nuevamente")
+            setAlertOpen(true)
+        }
+    }
 
     return (
     <Fragment>
@@ -81,16 +119,22 @@ export default function ExamsPage(){
                             data={[...examanes]} 
                             columns={columns} 
                             onRowAdd={()=>{}}
-                            onRowDelete={()=>{}}
                             onRowUpdate={()=>{}}
                             isCalificacion={true}
                             isEstadistica={true}
                             selection={false}
+                            isTeachersExamList={true}
+                            handleToggleExamEnabled={handleToggleExamEnabled}
                         />
                     </CardContent>
                 {/* </Card> */}
             </Grid>
         </Container>
+        <Alert 
+            open={alertOpen}
+            setAlert={setAlertOpen}
+            message={errorMsg}
+        />
     </Fragment>
     );
 }

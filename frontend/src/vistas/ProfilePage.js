@@ -45,8 +45,14 @@ export default function ProfilePage(){
       let modificandoPerfil = await patchUser(usuario.id, newUser)
       setSuccessMsg("Modificado Exitosamente")
       setAlertSuccessOpen(true)
-    } catch {
-      setErrorMsg("Ocurrio un error modificando el perfil")
+    } catch (error) {
+      let mensaje = "Ocurrio un error modificando el perfil"
+      if(typeof(error.data.email) === "object"){
+        if(error.data.email.includes("Enter a valid email address.")){
+          mensaje += ": Ingrese un correo electrónico válido."
+        }
+      }
+      setErrorMsg(mensaje)
       setAlertOpen(true)
     }
   }

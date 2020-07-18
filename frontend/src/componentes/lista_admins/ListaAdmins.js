@@ -44,8 +44,14 @@ const ListaAdmins = (props) => {
             setSuccessMsg("Agregado Exitosamente")
             setAlertSuccessOpen(true)
             resolve();
-          } catch {
-            setErrorMsg("Error agregando el admin")
+          } catch (error) {
+            let mensaje = "Ocurrio un agregando al administrador"
+            if(typeof(error.data.email) === "object"){
+              if(error.data.email.includes("Enter a valid email address.")){
+                mensaje += ": Ingrese un correo electrónico válido."
+              }
+            }
+            setErrorMsg(mensaje)
             setAlertOpen(true)
             reject()
           }

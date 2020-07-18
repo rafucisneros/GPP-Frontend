@@ -6,7 +6,7 @@ const Alert2 = (props) => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export const Alert = ({ open, setAlert, message, autoHideDuration=10000, severity="error" }) => {
+export const Alert = ({ open, setAlert, message, autoHideDuration=4000, severity="error" }) => {
   const handleCloseAlert = (event, reason) => {
     if (reason === 'clickaway') return;
     setAlert(false);
@@ -17,8 +17,9 @@ export const Alert = ({ open, setAlert, message, autoHideDuration=10000, severit
     open={open} 
     autoHideDuration={autoHideDuration} 
     anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+    onClose={handleCloseAlert}
   >
-    <Alert2 onClose={handleCloseAlert} severity={severity}>
+    <Alert2 severity={severity}>
         {message}
     </Alert2>
   </Snackbar>

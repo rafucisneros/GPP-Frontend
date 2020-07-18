@@ -22,6 +22,8 @@ import { getExam } from '../servicios/servicioPresentarExamen'
 import Loading from '../componentes/loading/Loading.js';
 import { Divider } from '@material-ui/core';
 
+const Latex = require('react-latex');
+
 export default function TestDetailsPage(props){
     const examID = props.match.params.id;
 
@@ -232,13 +234,18 @@ export default function TestDetailsPage(props){
                                                 <Grid item xs={3} md={3} lg={3}>
                                                     {pregunta.value}
                                                 </Grid>
+                                            </Grid>
+                                            <Grid container style={{marginTop: "15px"}}>
                                                 <Grid item xs={3} md={3} lg={3}>
                                                     <Typography>
                                                         Enunciado:  
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    {pregunta.content}
+                                                    {pregunta.latex ? 
+                                                        <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                                                        : pregunta["content"]
+                                                    }  
                                                 </Grid>
                                                 {pregunta.q_type.name != "verdadero o falso" &&
                                                 <Fragment>
@@ -272,7 +279,7 @@ export default function TestDetailsPage(props){
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         {/* Lista Secciones */}
-                        <ExpansionPanel expanded={listSectionsExpanded} onChange={handleChangeListSectionsExpanded} style={{width: "100%"}}>
+                        {/* <ExpansionPanel expanded={listSectionsExpanded} onChange={handleChangeListSectionsExpanded} style={{width: "100%"}}>
                             <ExpansionPanelSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1a-content"
@@ -299,7 +306,7 @@ export default function TestDetailsPage(props){
                                 </Grid>
                                 </Grid>
                             </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                        </ExpansionPanel> */}
                         {/*Estadisticas*/}
                     </Grid>
                 </Container>

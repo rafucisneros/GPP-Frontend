@@ -42,10 +42,15 @@ const ListaProfesores = (props) => {
             setSuccessMsg("Agregado Exitosamente")
             setAlertSuccessOpen(true)
             resolve()
-          } catch {
-            setErrorMsg("Error agregando profesor")
+          } catch (error) {
+            let mensaje = "Ocurrio un error agregando al profesor"
+            if(typeof(error.data.email) === "object"){
+              if(error.data.email.includes("Enter a valid email address.")){
+                mensaje += ": Ingrese un correo electrónico válido."
+              }
+            }
+            setErrorMsg(mensaje)
             setAlertOpen(true)
-            alert("")
             reject()
           }
         }, 1000);
