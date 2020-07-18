@@ -1,9 +1,10 @@
-import React, { } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 // assets
 import '../assets/css/createTestPage.css';
 
-// Steps
+// componentes
+import Loading from '../componentes/loading/Loading.js';
 import StepConfiguracionBasica from '../componentes/steps/StepConfiguracionBasica.js';
 import StepCrearPreguntas from '../componentes/steps/StepCrearPreguntas.js';
 import StepConfiguracionDinamica from '../componentes/steps/StepConfiguracionDinamica.js';
@@ -18,14 +19,53 @@ import { useGeneral } from '../context/generalContext';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 
-export default () => <CreateTestPage></CreateTestPage>
+// servicios
+import { getAllInfoExamen } from '../servicios/servicioGeneral';
+import { getStudents } from '../servicios/servicioCrearExamen.js';
 
-const CreateTestPage = () => {
+export default (props) => <CreateTestPage {...props} />
 
+const CreateTestPage = (props) => {
     const { setContentMenu } = useGeneral();
-    const { step } = useCreateTestPage();
+    const { 
+        step,
+        SetExamId,
+        handleColocarData,
+        setEstudiantes, 
+        flagGetAllInfo,
+        setFlagGetAllInfo
+    } = useCreateTestPage();
+    const [ loading, setLoading ] = useState(false);
+    const [ redirectExams ] = useState(false);
 
-    setContentMenu(`create_test ${step}`);
+    setContentMenu(`crear_examen ${step}`);
+
+    useEffect(() => {
+        if (props.match && props.match.params && props.match.params.id && !isNaN(props.match.params.id)){
+            setLoading(true);
+            getStudents()
+            .then( res => {
+                if (res.data) {
+                    setEstudiantes(res.data.results);
+                    setFlagGetAllInfo(true);
+                }
+                
+            })
+        }
+    }, [])
+
+    useMemo(() => {
+        if (flagGetAllInfo){
+            getAllInfoExamen(props.match.params.id)
+            .then( res => {
+                if (res.data) {
+                    SetExamId(props.match.params.id);
+                    handleColocarData(res.data);
+                    setLoading(false);
+                }
+            })
+        }
+    }, [flagGetAllInfo])
 
     return (
         <div>
@@ -48,6 +88,7 @@ const CreateTestPage = () => {
                     }
                 </Grid>
             </Container>
+            { loading && <Loading/> }
         </div>
     );
 }

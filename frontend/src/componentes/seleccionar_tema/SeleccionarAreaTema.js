@@ -112,7 +112,7 @@ export default function SeleccionarAreaTema(props) {
                     <InputLabel>Áreas</InputLabel>
                     <Select
                         error={props.errores && props.errores.areaSeleccionadaError}
-                        value={areaSeleccionada}
+                        value={areaSeleccionada ? areaSeleccionada : ''}
                         label="Áreas"
                         onChange={(e) => handleChange(e, 'area')}
                         style={{lineHeight : '1.5'}}
@@ -132,7 +132,7 @@ export default function SeleccionarAreaTema(props) {
                     <InputLabel>Sub Áreas</InputLabel>
                     <Select
                         error={props.errores && props.errores.subareaSeleccionadaError}
-                        value={subareaSeleccionada}
+                        value={subareaSeleccionada ? subareaSeleccionada : ''}
                         onChange={(e) => handleChange(e, 'subarea')}
                         label="Sub Áreas"
                         disabled={permitirSubArea && listaFiltradoSubArea.length > 0 ? false : true}
@@ -154,7 +154,7 @@ export default function SeleccionarAreaTema(props) {
                     <InputLabel>Temas</InputLabel>
                     <Select
                         error={props.errores && props.errores.temaSeleccionadoError}
-                        value={temaSeleccionado}
+                        value={temaSeleccionado ? temaSeleccionado : ''}
                         onChange={(e) => handleChange(e, 'tema')}
                         label="Temas"
                         style={{lineHeight : '1.5'}}

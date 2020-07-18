@@ -12,11 +12,12 @@ import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
 // servicios
-import { postPreguntasExamen } from '../../servicios/servicioCrearExamen.js';
+import { postPreguntasExamen, postAllPreguntasExamen } from '../../servicios/servicioCrearExamen.js';
 
 // material
 import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
+import BackspaceIcon from '@material-ui/icons/Backspace';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import UpdateIcon from '@material-ui/icons/Update';
@@ -41,7 +42,7 @@ const Alert = (props) => {
 
 const StepCrearPreguntas = () => {
 
-    const { tituloRespuesta, tipoPregunta } = useTipoPreguntaRespuesta();
+    const { tituloRespuesta, tipoPregunta, handleOpcionExamen } = useTipoPreguntaRespuesta();
     const {  
         handleChangeStep,
         tipoConfiguracion,
@@ -61,14 +62,23 @@ const StepCrearPreguntas = () => {
         setSelectedRespuesta,
         exam_id,
         step,
-        openExam
+        openExam,
+        formats,
+        setFormats,
+        flagEditarPregunta,
+        indexItemPregunta,
+        setIndexItemPregunta,
+        setFlagEditarPregunta,
     } = useCreateTestPage();
 
     const [ alertSucess, setAlertSucess ] = useState(false);
+    const [ alertSucessUpdate, setAlertSucessUpdate ] = useState(false);
     const [ alertError, setAlertError ] = useState(false);
     const [ msgError, setMsgError ] = useState('');
     const [ loading, setLoading ] = useState(false);
     const [ open, setOpen ] = useState(false);
+    const [ openModalEliminarPregunta, setOpenModalEliminarPregunta ] = useState(false);
+    const [ openConfirmacion, setOpenConfirmacion ] = useState(false);
     const [ errores, setErrores ] = useState({
         preguntaError : false, 
         areaSeleccionadaError : false,
@@ -77,12 +87,9 @@ const StepCrearPreguntas = () => {
         ponderacionError : false,
         dificultadError : false,
     });
-    const [formats, setFormats] = useState('text')
 
     const handleFormat = (event, newFormats) => {
-        let event_preg = { target : { name : 'pregunta', value : ''}};
         setFormats(newFormats);
-        handleChangeInput(event_preg);
     };
 
     const verifyDataListaPregunta = () => {
@@ -130,7 +137,7 @@ const StepCrearPreguntas = () => {
         }
 
         if(flag === 'all' || flag === 'ponderacion'){
-            if( !ponderacion || validator.isEmpty(ponderacion)){
+            if( !ponderacion || validator.isEmpty(String(ponderacion))){
                 error = true;
                 listError.ponderacionError = true;
             } 
@@ -160,10 +167,9 @@ const StepCrearPreguntas = () => {
     const handleCrearPregunta = () => {
         let error = verifyData('all');
         if(!error){
-            const auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
-            const form = {};
-            const answer = [];
-
+            let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
+            let form = {};
+            let answer = [];
             if (tipoPregunta === 'verdadero_falso'){
                 answer.push({
                     content : '',
@@ -191,17 +197,25 @@ const StepCrearPreguntas = () => {
             }
             form.answers = answer;
             form.value = Number(ponderacion);
-            auxListaExamen.push(form);
-
+            
             // Clean Form
+            console.log(form)
             setLoading(true);
             postPreguntasExamen(form, exam_id)
             .then( res => {
-                console.log(res)
                 if (res) {
                     // Agregar Nueva Pregunta
                     setLoading(false);
+
+                    let reversed = [...res.data.answers].reverse();
+                    form.answers = reversed.map( elem => {
+                        return { content : elem.content, correct: elem.option ? true : false, id : elem.id }
+                    })
+                    form.id = res.data.id;
+                    console.log(form)
+                    auxListaExamen.push(form);
                     setListaPreguntasExamen(auxListaExamen);
+
                     handleCleanForm();
                     setAlertSucess(true);
                 }
@@ -214,15 +228,20 @@ const StepCrearPreguntas = () => {
         setAlertSucess(false);
     };
 
+    const handleCloseAlertSuccessUpdate = (event, reason) => {
+        if (reason === 'clickaway') return;
+        setAlertSucessUpdate(false);
+    };
+
     const handleCloseAlertError = (event, reason) => {
         if (reason === 'clickaway') return;
         setAlertError(false);
     };
 
     const handleCleanForm = () => {
-        const event_pond = { target : { name : 'ponderacion', value : ''}};
-        const event_diff = { target : { name : 'dificultad', value : ''}};
-        const event_preg = { target : { name : 'pregunta', value : ''}};
+        let event_pond = { target : { name : 'ponderacion', value : ''}};
+        let event_diff = { target : { name : 'dificultad', value : ''}};
+        let event_preg = { target : { name : 'pregunta', value : ''}};
 
         handleChangeInput(event_pond);
         handleChangeInput(event_diff);
@@ -238,17 +257,107 @@ const StepCrearPreguntas = () => {
     const nextStep = () => {
         let error = verifyDataListaPregunta();
         if(!error){
-            let paso = tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : openExam ? 'step_4' : 'step_3';
-            if (paso === 'step_4') handleWarning();
-            else handleChangeStep(paso);
+            handleModalConfirmacion();
         }
     }
 
-    const finishStep = () => {
-        handleChangeStep('step_4');
+    const handleNextStep = () => {
+        setLoading(true);
+        handleModalConfirmacion();
+        console.log(listaPreguntasExamen)
+        postAllPreguntasExamen(listaPreguntasExamen, exam_id)
+        .then( res => {
+            if (res) {
+                console.log(listaPreguntasExamen)
+                setLoading(false);
+                let paso = tipoConfiguracion === 'Configuración Dinámica' ? 'step_2' : openExam ? 'step_4' : 'step_3';
+                if (paso === 'step_4') handleWarning();
+                else handleChangeStep(paso);
+            }
+        })
     }
 
+    const finishStep = () => handleChangeStep('step_4');
     const handleWarning = () => setOpen(!open);
+    const handleModalEliminarPregunta = () => setOpenModalEliminarPregunta(!openModalEliminarPregunta);
+    const handleModalConfirmacion = () => setOpenConfirmacion(!openConfirmacion);
+
+    const handleCrearNuevaPregunta = () => {
+        handleOpcionExamen("seleccion_simple", '1.1');
+        setIndexItemPregunta(null);
+        setFlagEditarPregunta(false);
+        handleCleanForm();
+    }
+
+    const handleActualizarPregunta = () => {
+        let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
+        let form = {};
+        let answer = [];
+        console.log(auxListaExamen[indexItemPregunta])
+
+        if (tipoPregunta === 'verdadero_falso'){
+            answer.push({
+                content : '',
+                correct : selectedRespuesta === 'verdadero' ? 1 : 0
+            })
+        } else {
+            respuestas.forEach( (respuesta, index) => {
+                answer.push({
+                    content : respuesta.respuesta,
+                    correct : tipoPregunta === 'ordenamiento' ? index : respuesta.checked
+                })
+            })
+        }
+        form.content = pregunta;
+        form.q_type = tituloRespuesta;
+        form.q_type_id = form.q_type;
+        form.exam = exam_id;
+        form.position = auxListaExamen.length + 1;
+        form.difficulty = Number(dificultad);
+        form.latex = formats === 'latex' ? true : false;
+        form.approach = {
+            topic : temaSeleccionado,
+            area : areaSeleccionada,
+            subarea : subareaSeleccionada,
+        }
+        form.answers = answer;
+        form.value = Number(ponderacion);
+        form.id = auxListaExamen[indexItemPregunta].id;
+        auxListaExamen[indexItemPregunta] = form;
+
+        // Clean Form
+        console.log(form)
+        setLoading(true);
+        postPreguntasExamen(form, exam_id)
+        .then( res => {
+            if (res) {
+                // Agregar Nueva Pregunta
+                setLoading(false);
+
+                let reversed = [...res.data.answers].reverse();
+                form.answers = reversed.map( elem => {
+                    return { content : elem.content, correct: elem.option ? true : false, id : elem.id }
+                })
+                console.log(form)
+                auxListaExamen[indexItemPregunta] = form;
+                setListaPreguntasExamen(auxListaExamen);
+
+                handleCleanForm();
+                setAlertSucessUpdate(true);
+            }
+        })
+    }
+
+    const handleEliminarPregunta = () => {
+        let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
+        auxListaExamen.splice(indexItemPregunta, 1);
+
+        setOpenModalEliminarPregunta(!openModalEliminarPregunta);
+        setListaPreguntasExamen(auxListaExamen);
+        setIndexItemPregunta(null);
+        setFlagEditarPregunta(false);
+        handleCleanForm();
+    }
 
     useMemo( () => {
         if (pregunta) verifyData('pregunta');
@@ -277,6 +386,19 @@ const StepCrearPreguntas = () => {
     useMemo(() => {
         if (subareaSeleccionada) verifyData('subareaSeleccionada');
     }, [subareaSeleccionada])
+
+    useMemo(() => {
+        if (flagEditarPregunta) {
+            setErrores({
+                preguntaError : false, 
+                areaSeleccionadaError : false,
+                subareaSeleccionadaError : false,
+                temaSeleccionadoError : false,
+                ponderacionError : false,
+                dificultadError : false,
+            })
+        }
+    }, [flagEditarPregunta])
     
     return( 
         <Fragment>
@@ -309,7 +431,7 @@ const StepCrearPreguntas = () => {
                                     onClick={ () => nextStep()}
                                     endIcon={<PublishIcon/>}
                                 >
-                                    Publicar Examen
+                                    Finalizar Creación
                                 </Button> :
                                 <Button
                                     type="submit"
@@ -349,40 +471,74 @@ const StepCrearPreguntas = () => {
             <Grid item xs={12} md={12} lg={12}>
                 <Paper className="paper-crear-test">
                     <Box className="div-buttons-respuestas">
-                        {/* <Button
-                            type="submit"
-                            variant="contained"
-                            style={{marginRight: '8px', backgroundColor : 'orange'}}
-                            disable={true}
-                            startIcon={<UpdateIcon/>}
-                        >
-                            Actualizar Pregunta
-                        </Button> */}
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            style={{marginRight: '8px'}}
-                            onClick={() => handleCrearPregunta()}
-                            startIcon={<PostAddIcon/>}
-                        >
-                            Crear Pregunta
-                        </Button>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="secondary"
-                            disable={true}
-                            startIcon={<DeleteForeverIcon/>}
-                        >
-                            Eliminar Pregunta
-                        </Button>
+                        { flagEditarPregunta ? 
+                            <Fragment>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    style={{marginRight: '8px', backgroundColor : 'orange'}}
+                                    disable={true}
+                                    onClick={() => handleActualizarPregunta()}
+                                    startIcon={<UpdateIcon/>}
+                                >
+                                    Actualizar Pregunta
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    style={{marginRight: '8px'}}
+                                    onClick={() => handleCrearNuevaPregunta()}
+                                    startIcon={<PostAddIcon/>}
+                                >
+                                    Crear Nueva Pregunta
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="secondary"
+                                    disable={true}
+                                    onClick={() => handleModalEliminarPregunta()}
+                                    startIcon={<DeleteForeverIcon/>}
+                                >
+                                    Eliminar Pregunta
+                                </Button>
+                            </Fragment>
+                            :
+                            <Fragment>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    style={{marginRight: '8px'}}
+                                    onClick={() => handleCrearPregunta()}
+                                    startIcon={<PostAddIcon/>}
+                                >
+                                    Crear Pregunta
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="secondary"
+                                    disable={true}
+                                    onClick={() => handleCleanForm()}
+                                    startIcon={<BackspaceIcon/>}
+                                    >
+                                    Limpiar Formulario
+                                </Button>
+                            </Fragment>
+                        }
                     </Box>
                 </Paper>
             </Grid> 
             <Snackbar open={alertSucess} autoHideDuration={5000} onClose={handleCloseAlertSuccess} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleCloseAlertSuccess} severity="success">
                     Pregunta Creada exitosamente.
+                </Alert>
+            </Snackbar>
+            <Snackbar open={alertSucessUpdate} autoHideDuration={5000} onClose={handleCloseAlertSuccessUpdate} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert onClose={handleCloseAlertSuccessUpdate} severity="success">
+                    Pregunta Actualizada exitosamente.
                 </Alert>
             </Snackbar>
             <Snackbar open={alertError} autoHideDuration={5000} onClose={handleCloseAlertError} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
@@ -400,7 +556,6 @@ const StepCrearPreguntas = () => {
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             ¿Está seguro que desea terminar la creación del examen?
-                            Esta opción es irreversible.
                         </DialogContentText>
                     </DialogContent>
                 <DialogActions>
@@ -409,6 +564,49 @@ const StepCrearPreguntas = () => {
                     </Button>
                     <Button onClick={() => finishStep()} color="primary" autoFocus>
                         Sí, estoy seguro
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={openModalEliminarPregunta}
+                onClose={handleModalEliminarPregunta}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Advertencia"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            ¿Está seguro que desea eliminar esta pregunta?
+                            Esta opción es irreversible.
+                        </DialogContentText>
+                    </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleModalEliminarPregunta} color="secondary">
+                        No, en verdad no
+                    </Button>
+                    <Button onClick={() => handleEliminarPregunta()} color="primary" autoFocus>
+                        Sí, estoy seguro
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={openConfirmacion}
+                onClose={handleModalConfirmacion}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Advertencia"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            ¿Desea guardar los cambios realizados?
+                        </DialogContentText>
+                    </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleModalConfirmacion} color="secondary">
+                        No, en verdad no
+                    </Button>
+                    <Button onClick={() => handleNextStep()} color="primary" autoFocus>
+                        Sí, guardar
                     </Button>
                 </DialogActions>
             </Dialog>

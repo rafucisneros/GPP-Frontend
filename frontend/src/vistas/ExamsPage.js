@@ -15,8 +15,12 @@ import { useGeneral } from '../context/generalContext';
 import { useUsuario } from '../context/usuarioContext';
 
 // servicios
+<<<<<<< HEAD
+import { getTeacherExams } from '../servicios/servicioGeneral';
+=======
 import { getExamsForTeacher, getResultsForStudent } from '../servicios/servicioGeneral';
 import { createTest } from '../servicios/servicioCrearExamen.js';
+>>>>>>> 3bc41cfdefe2834d4068f5fb49c4ff46ccfbe7dc
 
 import { Alert } from '../componentes/alert/Alert.js'
 import { useHistory } from "react-router-dom"
@@ -28,6 +32,7 @@ export default function ExamsPage(){
     const [ columnas, setColumnas] = useState([])
 
     const { setContentMenu } = useGeneral();
+    const { usuario } = useUsuario();
     // const [examanes, setExamanes] = useState([]);
     const [examanes, setExamanes] = useState([]);
     setContentMenu(`edit_test`);
@@ -37,6 +42,17 @@ export default function ExamsPage(){
 
     // GET requests y componentes de montaje
     useEffect(() => {
+<<<<<<< HEAD
+        console.log(usuario)
+        getTeacherExams(usuario.id)
+        .then( res => {
+            if (res.data) {
+                console.log(res)
+                setExamanes(res.data);
+            }
+        })
+    }, [usuario])
+=======
         const columns = usuario.groups.map(x => x.name).some(role => ["Professor"].includes(role)) ?
         // columnas para profesores 
         [
@@ -129,6 +145,7 @@ export default function ExamsPage(){
             history.push(`/resumen_examen/${rowData.id}`)
         }
     }
+>>>>>>> 3bc41cfdefe2834d4068f5fb49c4ff46ccfbe7dc
 
     if(usuario.id){
         return (
@@ -176,6 +193,31 @@ export default function ExamsPage(){
                             </CardContent>
                         {/* </Card> */}
                     </Grid>
+<<<<<<< HEAD
+                </Box>
+            </Grid> */}
+            <Grid container spacing={3}>
+                {/* <Card style={{width: "100%"}}> */}
+                    <CardContent style={{width: "100%"}}>
+                        <DataTable 
+                            title="Lista de Examenes" 
+                            data={[...examanes]} 
+                            columns={columns} 
+                            onRowAdd={()=>{}}
+                            onRowDelete={()=>{}}
+                            onRowUpdate={()=>{}}
+                            isCalificacion={true}
+                            isEstadistica={true}
+                            selection={false}
+                            customExam={true}
+                        />
+                    </CardContent>
+                {/* </Card> */}
+            </Grid>
+        </Container>
+    </Fragment>
+    );
+=======
                 </Container>
                 <Alert 
                     open={alertOpen}
@@ -187,4 +229,5 @@ export default function ExamsPage(){
     } else {
         return <Loading />
     }    
+>>>>>>> 3bc41cfdefe2834d4068f5fb49c4ff46ccfbe7dc
 }

@@ -52,7 +52,7 @@ export default function MenuCreateTest({step}) {
   };
 
   const openModal = (key) => {
-    handleSeleccionarItem(key);
+    // handleSeleccionarItem(key);
     handleModal();
   }
 
@@ -64,7 +64,7 @@ export default function MenuCreateTest({step}) {
   return(
     <div>
       <List>
-        <Link to="home" className="link">
+        <Link to="/home" className="link">
           <ListItem
             button
             selected={itemSeleccionado === '3'}

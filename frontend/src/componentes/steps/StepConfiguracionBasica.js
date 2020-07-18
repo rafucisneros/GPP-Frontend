@@ -140,7 +140,8 @@ const StepConfiguracionBasica = () => {
         msgAlert,
         setMsgAlert,
         alertError,
-        setAlertError
+        setAlertError,
+        exam_id
     } = useCreateTestPage();
 
     const [errores, setErrores] = useState({tituloError : false, duracionError : false, nroIntentosError: false, openExamError : false});
@@ -195,8 +196,10 @@ const StepConfiguracionBasica = () => {
                 static : !switchChecked,
                 email : usuario.email,
                 status : true,
-                open : openExam
+                open : openExam,
+                exam_id : exam_id,
             }
+            console.log(request)
             setLoading(true);
             createTest(request)
             .then( res => {
@@ -305,12 +308,16 @@ const StepConfiguracionBasica = () => {
                                     <Select
                                         error={errores && errores.duracionError}
                                         helperText="El campo es requerido"
-                                        label="Duracion del examen"
+                                        label="Duración del examen"
                                         id='duracion'
                                         name='duracion'
-                                        value={duracion}
+                                        value={duracion ? duracion : ''}
                                         MenuProps={MenuProps}
-                                        onChange={handleCambiarValor} 
+                                        onChange={handleCambiarValor}
+                                        // textFieldProps={{
+                                        //     label: "Duración del examen",
+                                        //     InputLabelProps: duracion ? { shrink : false } : {} 
+                                        // }}
                                     >
                                     {duracionExamen.map(item => (
                                         <MenuItem key={item.valor} value={item.valor} >
@@ -332,7 +339,7 @@ const StepConfiguracionBasica = () => {
                                         label="Duracion del examen"
                                         id='open_exam'
                                         name='open_exam'
-                                        value={openExam}
+                                        value={openExam === false || openExam === true ? openExam : ''}
                                         MenuProps={MenuProps}
                                         onChange={handleCambiarValor} 
                                     >
@@ -354,7 +361,7 @@ const StepConfiguracionBasica = () => {
                                         label="Número de intentos"
                                         id='nro_intentos'
                                         name='nro_intentos'
-                                        value={nroIntentos}
+                                        value={nroIntentos ? nroIntentos : ''}
                                         MenuProps={MenuProps}
                                         onChange={handleCambiarValor} 
                                     >
@@ -380,7 +387,7 @@ const StepConfiguracionBasica = () => {
                                             name='start_date'
                                             value={valorFechaInicio} 
                                             onChange={(e) => handleChangeStartDate(e)} 
-                                            label="Fecha y hora de comienzo"
+                                            label="Fecha de Habilitación del Examen"
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}
@@ -399,7 +406,7 @@ const StepConfiguracionBasica = () => {
                                             name='finish_date'
                                             value={valorFechaFin}  
                                             onChange={(e) => handleChangeFinishDate(e)} 
-                                            label="Fecha y hora de culminacion"
+                                            label="Fecha de Deshabilitación del Examen"
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}

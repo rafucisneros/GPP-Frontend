@@ -34,12 +34,15 @@ export default function FormCrearPregunta(props) {
         respuestas,
         setRespuestas,
         selectedRespuesta,
-        setSelectedRespuesta
+        setSelectedRespuesta,
+        flagEditarPregunta
     } = useCreateTestPage();
 
     useEffect(() => {
-        setRespuestas([]);
-        setSelectedRespuesta('verdadero');
+        if(!flagEditarPregunta){
+            setRespuestas([]);
+            setSelectedRespuesta('verdadero');
+        }
     }, [tipoPregunta])
 
     const handleCheckedRespuesta = () => {
@@ -121,7 +124,7 @@ export default function FormCrearPregunta(props) {
                         variant="outlined"
                         fullWidth
                         name="pregunta"
-                        value={pregunta}
+                        value={pregunta ? pregunta : ''}
                         placeholder="Introduzca su pregunta..."
                         onChange={(e) => handleChangeInput(e)}
                         multiline

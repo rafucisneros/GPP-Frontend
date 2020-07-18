@@ -496,6 +496,5 @@ export default function CompareDashboard(props){
                 </Grid>
             </Container>
         </Fragment>
-        
     )
 }

@@ -110,7 +110,7 @@ const App = () => {
         />
         <Route
           exact
-          path='/register'
+          path='/registro'
           render={(props) => forzarLogin(RegisterPage, props)}
         />
         <Route

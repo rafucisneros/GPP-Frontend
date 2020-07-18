@@ -2,7 +2,7 @@ import Axios from 'axios';
 import auth from './helpers/auth.js'
 
 // const SERVER_NAME = 'http://192.168.1.129:8000';
-const SERVER_NAME = 'http://gpiback.herokuapp.com';
+const SERVER_NAME = 'http://gpiback.herokuapp.com'; 
 // const SERVER_NAME = 'http://localhost:8000';
 
 export const global = {
@@ -16,8 +16,9 @@ export const global = {
     POST_CREATE_TEST: `${SERVER_NAME}/exam/create_exam/`,
     POST_SECTION: `${SERVER_NAME}/exam/_id_/section/`,
     POST_QUESTION_EXAM: `${SERVER_NAME}/exam/_id_/question/`,
+    POST_ALL_QUESTIONS_EXAM: `${SERVER_NAME}/exam/_id_/questions/`,
     PATCH_CONF_DINAMICA: `${SERVER_NAME}/exam/_id_/configuration/`,
-    PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
+    // PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
 
     GET_STUDENTS: `${SERVER_NAME}/students`,
     GET_RESULTADOS_ESTADISTICAS: `${SERVER_NAME}/resultados/_eid_`,
@@ -25,6 +26,7 @@ export const global = {
     TOPICS: `${SERVER_NAME}/approach/`,
 
     GET_EXAM:  `${SERVER_NAME}/exam/_id_`,
+    GET_ALL_INFO_EXAM:  `${SERVER_NAME}/exam/_id_/complete/`,
     GET_EXAM_QUESTIONS:  `${SERVER_NAME}/exam/_id_/questions/`,
     POST_STUDENT_EXAM_QUESTIONS: `${SERVER_NAME}/student/_sid_/exam/_eid_/answers/`,
 
@@ -35,6 +37,7 @@ export const global = {
     DELETE_USER:  `${SERVER_NAME}/users/_id_/`,
     PATCH_USER:  `${SERVER_NAME}/users/_id_/`,
     GET_TEACHERS:  `${SERVER_NAME}/teachers`,
+    GET_TEACHER_EXAMS:  `${SERVER_NAME}/exams/teacher/_id_`,
     GET_STUDENTSS:  `${SERVER_NAME}/students`,
     GET_ADMINS:  `${SERVER_NAME}/admins`,
     POST_USER_PASSWORD:  `${SERVER_NAME}/user/password`,
@@ -61,6 +64,10 @@ Axios.interceptors.response
     .use( (response) => {
         return response;
     }, (error) => {
+<<<<<<< HEAD
+        if (401 === error.response.status || 403 === error.response.status) auth.logout();
+=======
         // if (401 === error.response.status) auth.logout();
+>>>>>>> 3bc41cfdefe2834d4068f5fb49c4ff46ccfbe7dc
         return Promise.reject(error.response);
 });

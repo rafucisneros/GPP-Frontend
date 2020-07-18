@@ -6,12 +6,20 @@ import { useUsuario } from '../context/usuarioContext';
 import { getTopics, getStudents } from '../servicios/servicioCrearExamen.js';
 
 const CreateTestPageContext = React.createContext();
+let opciones = {
+    'selección simple' : 'Selección Simple',
+    'selección múltiple' : 'Selección Múltiple',
+    'verdadero o falso' : 'Verdadero o Falso',
+    'ordenamiento' : 'Ordenamiento'
+}
 
 export function CreateTestPageProvider(props) {
 
     // Mensajes, errores y exitos
     const [msgAlert, setMsgAlert] = useState(null);
     const [alertError, setAlertError] = useState(false);
+    const [editTest, setEditTest] = useState(null);
+    const [flagGetAllInfo, setFlagGetAllInfo] = useState(null);
 
     // Página
     const [ step, setStep ] = useState('step_0');
@@ -29,6 +37,10 @@ export function CreateTestPageProvider(props) {
     const [comentarios, setComentarios] = useState(null);
     
     // Step Crear Preguntas (Variables de estados)
+    const [indexItemPregunta, setIndexItemPregunta] = useState(null);
+    const [flagEditarPregunta, setFlagEditarPregunta] = useState(false);
+    const [formats, setFormats] = useState('text');
+
     const [areas, setAreas] = useState([]);  
     const [subareas, setSubareas] = useState({});  
     const [temas, setTemas] = useState({}); 
@@ -57,9 +69,10 @@ export function CreateTestPageProvider(props) {
 
     // Step Secciones (Variables de estados)
     const [estudiantes, setEstudiantes] = useState([]);
+    const [missingEstudiantes, setMissingEstudiantes] = useState([]);
     const [secciones, setSecciones] = useState([]);
     const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
-    const { usuario, setUsuario } = useUsuario();
+    const {usuario, setUsuario} = useUsuario();
 
     // GET requests y componentes de montaje
     useEffect(() => {
@@ -99,6 +112,94 @@ export function CreateTestPageProvider(props) {
         if (tipo === "Configuración Dinámica") setSwitchChecked(true);
         else setSwitchChecked(false);
     }, [tipoConfiguracion, setTipoConfiguracion])
+
+    const handleColocarData = (data) => {
+        setEditTest(true);
+        console.log(data);
+
+        // Paso Basico Inicial
+        SetExamId(data.conf_ini.id);
+        setSwitchChecked(!data.conf_ini.static);
+        setDuracion(data.conf_ini.duration);
+        setValorFechaInicio(moment(data.conf_ini.start_date).toDate());
+        setValorFechaFin( moment(data.conf_ini.finish_date).toDate());
+        setTitulo(data.conf_ini.name);
+        setComentarios(data.conf_ini.comments);
+        SetNroIntentos(data.conf_ini.attempt);
+        setOpenExam(data.conf_ini.open);
+
+        // Paso Crear Preguntas
+        let preguntas = [];
+        data.questions.reverse().forEach( item => {
+            let aux = {};
+            aux.content = item.content;
+            aux.difficulty = item.difficulty
+            aux.id = item.id
+            aux.latex = item.latex
+            aux.q_type = opciones[item.q_type.name]
+            aux.q_type_id = opciones[item.q_type.name]
+            aux.exam = item.exam;
+            aux.value = item.value;
+            aux.position = item.position;
+            aux.approach =  {
+                topic : item.topic.name,
+                subarea : item.topic.subarea.name,
+                area : item.topic.subarea.area.name
+            }
+            let reversed = [...item.answers].reverse();
+            aux.answers = reversed.map( elem => {
+                return { content : elem.content, correct: elem.option ? true : false, id : elem.id }
+            })
+            preguntas.push(aux);
+        })
+        setListaPreguntasExamen(preguntas);
+
+        // Paso Dinamico
+        let approachAux = data.dinamic.approach === 'topic' ? 'tema' : data.dinamic.approach;
+        setTipoPreguntaSeleccionado(approachAux);
+        if (data.dinamic.distribution){
+            let count = 0;
+            let enfoques = data.dinamic.distribution.reverse().map( distri => {
+                count += Number(distri.quantity)
+                return { 
+                    label : distri.name,
+                    valor : Number(distri.quantity),
+                    max : distri.max_quantity,
+                    id : distri.id
+                }
+            })
+            setListaTipoPregunta(enfoques);
+            setMaxPreguntas(data.dinamic.total_questions);
+            setCountPreguntas(count);
+        }
+        // setMaxPreguntas(data.dinamic.total_quantity)
+
+        // Paso Secciones
+        let auxSections = [];
+        let missEmails = [];
+        let keys = Object.keys(data.sections).reverse();
+        keys.forEach( key => {
+            let info = {};
+            let id = key.split(' ')[1];
+            info.id = id;
+            info.estudiantes = [];
+            console.log(data.sections[key])
+            data.sections[key].forEach( email => {
+                let studentInfo = {};
+                let indexEstudiante = estudiantes.findIndex( est => email === est.email);
+                if (indexEstudiante === -1 ) {
+                    missEmails.push(email);
+                }
+                else if (indexEstudiante > 0 ) {
+                    studentInfo.email = email;
+                    info.estudiantes.push(studentInfo);
+                }
+            })
+            auxSections.push(info);
+        });
+        setMissingEstudiantes(missEmails);
+        setSecciones(auxSections);
+    }
 
     // Funciones globales
     const handleChangeStep = (step) =>  setStep(step);
@@ -149,7 +250,9 @@ export function CreateTestPageProvider(props) {
 
     const handleChangeInput = (e) => {
         if (e.target.name === 'dificultad') setDificultad(e.target.value);
-        else if (e.target.name === 'ponderacion') setPonderacion(e.target.value);
+        else if (e.target.name === 'ponderacion') {
+            if (Number(e.target.value) >= 1) setPonderacion(e.target.value);
+        }
         else if (e.target.name === 'pregunta') setPregunta(e.target.value);
     }
 
@@ -157,7 +260,7 @@ export function CreateTestPageProvider(props) {
     const handleChangeComp = (item, type) => {
         if (type === 'secciones') setSecciones(item);
         else if (type === 'seccion_seleccionada') setSeccionSeleccionada(item);
-        else if (type === 'esudiantes') setEstudiantes(item); 
+        else if (type === 'estudiantes') setEstudiantes(item); 
     }
 
     // Step Finish
@@ -190,7 +293,6 @@ export function CreateTestPageProvider(props) {
         setListaTipoPregunta([])
         setCountPreguntas(0)
         setMaxPreguntas(0)
-        setEstudiantes([])
         setSecciones([])
         setSeccionSeleccionada(null)
     }
@@ -255,7 +357,19 @@ export function CreateTestPageProvider(props) {
             setAreas,
             setSubareas,
             setTemas,
-            setAreaSeleccionada
+            setAreaSeleccionada,
+            indexItemPregunta,
+            setIndexItemPregunta,
+            flagEditarPregunta,
+            setFlagEditarPregunta,
+            formats,
+            setFormats,
+            handleColocarData,
+            setEstudiantes,
+            editTest,
+            setFlagGetAllInfo,
+            flagGetAllInfo,
+            missingEstudiantes
         })
     }, [
         areas, 
@@ -293,7 +407,12 @@ export function CreateTestPageProvider(props) {
         nroIntentos,
         openExam,
         msgAlert,
-        alertError
+        alertError,
+        indexItemPregunta,
+        flagEditarPregunta,
+        formats,
+        editTest,
+        missingEstudiantes
     ]);
 
     return <CreateTestPageContext.Provider value = {value} {...props} />

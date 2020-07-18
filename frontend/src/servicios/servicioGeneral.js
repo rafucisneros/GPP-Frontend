@@ -23,6 +23,17 @@ export function getExams(){
     });
 }
 
+export function getTeacherExams(id){
+    let url = global.GET_TEACHER_EXAMS.replace("_id_", id);
+    return Axios.get(url)
+    .then((response) => {
+        return response;
+    })
+    .catch( (error) => {
+        return Promise.reject(error);
+    });
+}
+
 export function getResultadosEstadisticas(id){
     let url = global.GET_RESULTADOS_ESTADISTICAS.replace("_eid_", id);
 
@@ -70,6 +81,17 @@ export function getResultsForExam(examId){
 
 export function getResultsForStudent(studentId){
     let url = global.GET_STUDENT_RESULTS.replace("_sid_", studentId);
+    return Axios.get(url)
+    .then((response) => {
+        return response;
+    })
+    .catch( (error) => {
+        return Promise.reject(error);
+    });
+}
+
+export function getAllInfoExamen(id){
+    let url = global.GET_ALL_INFO_EXAM.replace("_id_", id);
     return Axios.get(url)
     .then((response) => {
         return response;

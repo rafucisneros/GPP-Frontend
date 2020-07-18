@@ -86,7 +86,8 @@ const StepConfiguracionDinamica = (props) => {
         setMaxPreguntas,
         listaPreguntasExamen,
         exam_id,
-        openExam
+        openExam,
+        editTest
     } = useCreateTestPage();
 
     const [ errores, setErrores ] = useState({tipoPreguntaSeleccionadoError : false, maxPreguntasError : false});
@@ -99,29 +100,31 @@ const StepConfiguracionDinamica = (props) => {
     const [ open, setOpen ] = useState(false);
 
     useEffect( () => {
-        let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
-        let obj_areas = {};
-        let obj_subareas = {};
-        let obj_temas = {};
-        if (auxListaExamen && auxListaExamen.length > 0){
-            auxListaExamen.forEach( item => {
-                let content = item.approach;
-                if(content['area']) contarTemarios(obj_areas, content['area']);
-                if(content['topic']) contarTemarios(obj_temas, content['topic']);
-                if(content['subarea']) contarTemarios(obj_subareas, content['subarea']);
-            })
+        if (!editTest){
+            let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
+            let obj_areas = {};
+            let obj_subareas = {};
+            let obj_temas = {};
+            if (auxListaExamen && auxListaExamen.length > 0){
+                auxListaExamen.forEach( item => {
+                    let content = item.approach;
+                    if(content['area']) contarTemarios(obj_areas, content['area']);
+                    if(content['topic']) contarTemarios(obj_temas, content['topic']);
+                    if(content['subarea']) contarTemarios(obj_subareas, content['subarea']);
+                })
+            }
+            let array_areas = Object.keys(obj_areas).map( key => { return obj_areas[key] } );
+            let array_subareas = Object.keys(obj_subareas).map( key => { return obj_subareas[key] } );
+            let array_temas = Object.keys(obj_temas).map( key => { return obj_temas[key] } );
+    
+            setAreas(array_areas);
+            setSubareas(array_subareas);
+            setTemas(array_temas);
+    
+            if (tipoPreguntaSeleccionado === 'area') setListaTipoPregunta(array_areas);
+            else if (tipoPreguntaSeleccionado === 'subarea') setListaTipoPregunta(array_subareas);
+            else if (tipoPreguntaSeleccionado === 'tema') setListaTipoPregunta(array_temas);
         }
-        let array_areas = Object.keys(obj_areas).map( key => { return obj_areas[key] } );
-        let array_subareas = Object.keys(obj_subareas).map( key => { return obj_subareas[key] } );
-        let array_temas = Object.keys(obj_temas).map( key => { return obj_temas[key] } );
-
-        setAreas(array_areas);
-        setSubareas(array_subareas);
-        setTemas(array_temas);
-
-        if (tipoPreguntaSeleccionado === 'area') setListaTipoPregunta(array_areas);
-        else if (tipoPreguntaSeleccionado === 'subarea') setListaTipoPregunta(array_subareas);
-        else if (tipoPreguntaSeleccionado === 'tema') setListaTipoPregunta(array_temas);
     }, [listaPreguntasExamen])
 
     const contarTemarios = (obj, especialidad) => {
@@ -246,6 +249,7 @@ const StepConfiguracionDinamica = (props) => {
                 }
             })
             request.distribution = divisions;
+            console.log(request)
             setLoading(true);
             patchConfigDinamica(request, exam_id)
             .then( res => {
@@ -317,7 +321,7 @@ const StepConfiguracionDinamica = (props) => {
                                     onClick={ () => sendConfDinamica()}
                                     endIcon={<PublishIcon/>}
                                 >
-                                    Publicar Examen
+                                    Finalizar Creación
                                 </Button> :
                                 <Button
                                     type="submit"
@@ -465,7 +469,6 @@ const StepConfiguracionDinamica = (props) => {
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             ¿Está seguro que desea terminar la creación del examen?
-                            Esta opción es irreversible.
                         </DialogContentText>
                     </DialogContent>
                 <DialogActions>

@@ -67,7 +67,7 @@ export default function PonderacionDificultad(props) {
                         label="Dificultad"
                         id='dificultad'
                         name='dificultad'
-                        value={dificultad}
+                        value={dificultad ? dificultad : ''}
                         MenuProps={MenuProps}
                         onChange={handleCambiarRespuesta}
                         // style={{lineHeight : '1.5'}}
@@ -95,12 +95,12 @@ export default function PonderacionDificultad(props) {
                     fullWidth
                     name="ponderacion"
                     autoFocus
-                    value={ponderacion}
+                    value={ponderacion ? ponderacion : ''}
                     className={{lineHeight : 1.5}}
                     onChange={(e) => handleCambiarRespuesta(e)}
                     InputProps={{
                         inputProps: { 
-                            min: 0, step : 0.25
+                            min: 1, step : 0.25
                     }}}
                 />
             </Grid>
