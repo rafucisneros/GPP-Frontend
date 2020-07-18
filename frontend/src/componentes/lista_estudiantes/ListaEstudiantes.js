@@ -31,25 +31,65 @@ const ListaEstudiantes = (props) => {
         seccionSeleccionada,
         secciones,
         estudiantes,
+        missingEstudiantes
     } = useCreateTestPage();
 
     useEffect(() => {
         const aux = estudiantes.map( value => { return {...value} });
         setData(aux);
-    }, [])
+    }, [estudiantes])
 
     useEffect(() => {
         let auxEstudiantes = estudiantes.map( value => { return {...value} });
         if (seccionSeleccionada) {
-            let finalData = [];
+            let finalData = [];            
             let lenSecciones = secciones.length;
+
+            // for(let seccion of secciones) {
+            //     if(seccionSeleccionada.id === seccion.id){
+            //         for( let estudianteSeleccionado of seccionSeleccionada.estudiantes) {
+            //             if(estudianteSeleccionado.email === estudiante.email) {
+            //                 estudiante.tableData = {};
+            //                 estudiante.tableData.checked = true;
+            //                 finalData.push(estudiante);
+            //                 encontrado = true;
+            //                 break;
+            //             }
+            //         }
+            //     } else if (seccionSeleccionada.id !== seccion.id) {
+            //         for( let estudianteNoSeleccionado of seccion.estudiantes) {
+            //             if(estudianteNoSeleccionado.email === estudiante.email) {
+            //                 encontrado = true;
+            //                 break;
+            //             }
+            //         }
+            //     } 
+            //     count++;
+            //     if (encontrado) {
+            //         break;
+            //     } else {
+            //         if(count === lenSecciones){
+            //             estudiante.tableData = {};
+            //             estudiante.tableData.checked = false;
+            //             finalData.push(estudiante);
+            //         }
+            //     }
+            // }
             for(let estudiante of auxEstudiantes){
                 let encontrado = false;
                 let count = 0;
                 for(let seccion of secciones) {
                     if(seccionSeleccionada.id === seccion.id){
                         for( let estudianteSeleccionado of seccionSeleccionada.estudiantes) {
-                            if(estudianteSeleccionado.email === estudiante.email) {
+                            if (missingEstudiantes && missingEstudiantes.length > 0 && missingEstudiantes.includes(estudianteSeleccionado.email)) {
+                                let newStudent = { email : estudianteSeleccionado.email }
+                                newStudent.tableData = {};
+                                newStudent.tableData.checked = true;
+                                finalData.push(newStudent);
+                                encontrado = true;
+                                break;
+                            }
+                            else if(estudianteSeleccionado.email === estudiante.email) {
                                 estudiante.tableData = {};
                                 estudiante.tableData.checked = true;
                                 finalData.push(estudiante);
@@ -59,7 +99,11 @@ const ListaEstudiantes = (props) => {
                         }
                     } else if (seccionSeleccionada.id !== seccion.id) {
                         for( let estudianteNoSeleccionado of seccion.estudiantes) {
-                            if(estudianteNoSeleccionado.email === estudiante.email) {
+                            if (missingEstudiantes && missingEstudiantes.length > 0 && missingEstudiantes.includes(estudianteNoSeleccionado.email)) {
+                                encontrado = true;
+                                break;
+                            }
+                            else if(estudianteNoSeleccionado.email === estudiante.email) {
                                 encontrado = true;
                                 break;
                             }
@@ -93,7 +137,7 @@ const ListaEstudiantes = (props) => {
                         options={{
                             grouping: true,
                             selection: true,
-                            exportButton: true,
+                            // exportButton: true,
                             toolbar: true,
                             showSelectAllCheckbox: false,
                             actionsColumnIndex: -1,

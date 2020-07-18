@@ -387,7 +387,7 @@ const StepConfiguracionBasica = () => {
                                             name='start_date'
                                             value={valorFechaInicio} 
                                             onChange={(e) => handleChangeStartDate(e)} 
-                                            label="Fecha y hora de comienzo"
+                                            label="Fecha de Habilitación del Examen"
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}
@@ -406,7 +406,7 @@ const StepConfiguracionBasica = () => {
                                             name='finish_date'
                                             value={valorFechaFin}  
                                             onChange={(e) => handleChangeFinishDate(e)} 
-                                            label="Fecha y hora de culminacion"
+                                            label="Fecha de Deshabilitación del Examen"
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}

@@ -35,7 +35,7 @@ const DataTable = ({
           options={{
             grouping: grouping,
             selection: selection,
-            exportButton: exportButton,
+            // exportButton: exportButton,
             toolbar: toolbar,
             showSelectAllCheckbox: showSelectAllCheckbox,
             actionsColumnIndex: actionsColumnIndex,

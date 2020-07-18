@@ -52,7 +52,7 @@ export default function MenuCreateTest({step}) {
   };
 
   const openModal = (key) => {
-    handleSeleccionarItem(key);
+    // handleSeleccionarItem(key);
     handleModal();
   }
 

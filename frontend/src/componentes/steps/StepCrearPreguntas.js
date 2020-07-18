@@ -88,9 +88,7 @@ const StepCrearPreguntas = () => {
     });
 
     const handleFormat = (event, newFormats) => {
-        let event_preg = { target : { name : 'pregunta', value : ''}};
         setFormats(newFormats);
-        handleChangeInput(event_preg);
     };
 
     const verifyDataListaPregunta = () => {
@@ -279,6 +277,7 @@ const StepCrearPreguntas = () => {
         let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
         let form = {};
         let answer = [];
+        console.log(auxListaExamen[indexItemPregunta])
 
         if (tipoPregunta === 'verdadero_falso'){
             answer.push({
@@ -307,9 +306,30 @@ const StepCrearPreguntas = () => {
         }
         form.answers = answer;
         form.value = Number(ponderacion);
+        form.id = auxListaExamen[indexItemPregunta].id;
         auxListaExamen[indexItemPregunta] = form;
-        setListaPreguntasExamen(auxListaExamen);
-        setAlertSucessUpdate(true);
+
+        // Clean Form
+        console.log(form)
+        setLoading(true);
+        postPreguntasExamen(form, exam_id)
+        .then( res => {
+            if (res) {
+                // Agregar Nueva Pregunta
+                setLoading(false);
+
+                let reversed = [...res.data.answers].reverse();
+                form.answers = reversed.map( elem => {
+                    return { content : elem.content, correct: elem.option ? true : false, id : elem.id }
+                })
+                console.log(form)
+                auxListaExamen[indexItemPregunta] = form;
+                setListaPreguntasExamen(auxListaExamen);
+
+                handleCleanForm();
+                setAlertSucessUpdate(true);
+            }
+        })
     }
 
     const handleEliminarPregunta = () => {
@@ -395,7 +415,7 @@ const StepCrearPreguntas = () => {
                                     onClick={ () => nextStep()}
                                     endIcon={<PublishIcon/>}
                                 >
-                                    Publicar Examen
+                                    Finalizar Creación
                                 </Button> :
                                 <Button
                                     type="submit"
@@ -520,7 +540,6 @@ const StepCrearPreguntas = () => {
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             ¿Está seguro que desea terminar la creación del examen?
-                            Esta opción es irreversible.
                         </DialogContentText>
                     </DialogContent>
                 <DialogActions>

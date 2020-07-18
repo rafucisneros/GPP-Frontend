@@ -29,10 +29,11 @@ const CreateTestPage = (props) => {
     const { setContentMenu } = useGeneral();
     const { 
         step,
-        exam_id,
         SetExamId,
         handleColocarData,
-        setEstudiantes, estudiantes
+        setEstudiantes, 
+        flagGetAllInfo,
+        setFlagGetAllInfo
     } = useCreateTestPage();
     const [ loading, setLoading ] = useState(false);
     const [ redirectExams ] = useState(false);
@@ -44,14 +45,17 @@ const CreateTestPage = (props) => {
             setLoading(true);
             getStudents()
             .then( res => {
-                if (res.data) setEstudiantes(res.data.results);
+                if (res.data) {
+                    setEstudiantes(res.data.results);
+                    setFlagGetAllInfo(true);
+                }
                 
             })
         }
     }, [])
 
     useMemo(() => {
-        if (estudiantes && estudiantes.length > 0){
+        if (flagGetAllInfo){
             getAllInfoExamen(props.match.params.id)
             .then( res => {
                 if (res.data) {
@@ -61,7 +65,7 @@ const CreateTestPage = (props) => {
                 }
             })
         }
-    }, [estudiantes])
+    }, [flagGetAllInfo])
 
     return (
         <div>

@@ -40,7 +40,7 @@ const StepSecciones = (props) => {
         handleChangeComp,
         secciones,
         tipoConfiguracion,
-        exam_id
+        exam_id,
     } = useCreateTestPage();
 
     const [open, setOpen] = useState(false);
@@ -65,9 +65,7 @@ const StepSecciones = (props) => {
     }
 
     const sendSectionsData = () => {
-        let data = {};
-        console.log(secciones)
-        secciones.forEach( seccion => {
+        let data = {};        secciones.forEach( seccion => {
             if (seccion) {
                 let students = seccion.estudiantes.map( estudiante => {
                     return estudiante.email;
@@ -89,7 +87,10 @@ const StepSecciones = (props) => {
         })
     }
 
-    const handleAgregarEstudiante = (estudiante) => handleChangeComp(estudiante, 'estudiantes');
+    const handleAgregarEstudiante = (estudiante) => {
+        console.log(estudiante)
+        handleChangeComp(estudiante, 'estudiantes');
+    }
 
     const handleSeleccionarSeccion = (id) => {
         if (secciones.length > 0){
@@ -157,7 +158,7 @@ const StepSecciones = (props) => {
                                 onClick={handleWarning}
                                 endIcon={<PublishIcon/>}
                             >
-                                Publicar Examen
+                                Finalizar Creación
                             </Button>
                         </Grid>
                     </Box>
@@ -187,7 +188,6 @@ const StepSecciones = (props) => {
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             ¿Está seguro que desea terminar la creación del examen?
-                            Esta opción es irreversible.
                         </DialogContentText>
                     </DialogContent>
                 <DialogActions>
