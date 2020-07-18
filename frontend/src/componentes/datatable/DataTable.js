@@ -7,7 +7,8 @@ import Switch from '@material-ui/core/Switch';
 const DataTable = ({ 
   title, columns, data, grouping, selection, exportButton, toolbar,
   showSelectAllCheckbox, actionsColumnIndex, onRowAdd, onRowUpdate, onRowDelete,
-  isCalificacion, isEstadistica, isTeachersExamList, handleToggleExamEnabled
+  isCalificacion, isEstadistica, isTeachersExamList, handleToggleExamEnabled,
+  onRowClick
 }) => {
 
   const [ redirectEstadistica, setRedirectEstadistica ] = useState(false);
@@ -31,10 +32,11 @@ const DataTable = ({
           title={title}
           columns={columns}
           data={[...data]}
+          onRowClick={onRowClick}
           options={{
             grouping: grouping,
             selection: selection,
-            exportButton: exportButton,
+            // exportButton: exportButton,
             toolbar: toolbar,
             showSelectAllCheckbox: showSelectAllCheckbox,
             actionsColumnIndex: actionsColumnIndex,

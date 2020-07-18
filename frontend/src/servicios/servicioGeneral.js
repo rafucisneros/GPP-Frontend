@@ -67,3 +67,14 @@ export function getResultsForExam(examId){
         return Promise.reject(error);
     });
 }
+
+export function getResultsForStudent(studentId){
+    let url = global.GET_STUDENT_RESULTS.replace("_sid_", studentId);
+    return Axios.get(url)
+    .then((response) => {
+        return response;
+    })
+    .catch( (error) => {
+        return Promise.reject(error);
+    });
+}

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import DataTable from '../datatable/DataTable.js';
 import { getTeachers, postSignUp, deleteUser, postUser, patchUser } from '../../servicios/servicioAdmin.js';
 import { Alert } from '../alert/Alert.js';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 const columns = [
     { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
@@ -16,7 +19,7 @@ const ListaProfesores = (props) => {
     const [ errorMsg, setErrorMsg] = useState("")
     const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
     const [ successMsg, setSuccessMsg] = useState("")
-
+    const [ password, setPassword ] = useState("123456789")
     useEffect(() => {
       let fetchData = async () => {
         try {
@@ -33,7 +36,7 @@ const ListaProfesores = (props) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            profesor["password"] = "123456789"
+            profesor["password"] = password
             profesor["role"] = "Professor"
             let addingUser = await postSignUp(profesor)
             let newData = [...data]
@@ -102,15 +105,40 @@ const ListaProfesores = (props) => {
     }
 
     return (
-      <Fragment>
-        <DataTable 
-          title="Lista de Profesores" 
-          data={data} 
-          columns={columns} 
-          onRowAdd={handleAgregarProfesor}
-          onRowDelete={handleBorrarProfesor}
-          onRowUpdate={handleModificarProfesor}
-        />
+      <Grid container>
+        <Grid item xs={12} md={12} lg={12}>
+          <DataTable 
+            title="Lista de Profesores" 
+            data={data} 
+            columns={columns} 
+            onRowAdd={handleAgregarProfesor}
+            onRowDelete={handleBorrarProfesor}
+            onRowUpdate={handleModificarProfesor}
+          />
+        </Grid>
+        <Grid item xs={6} md={6} lg={6} style={{display: "flex", alignItems: "center"}}>  
+          <Typography>
+              Utilice el siguiente campo para asignar una contraseña para nuevos profesores:
+          </Typography>
+        </Grid>        
+        <Grid item xs={6} md={6} lg={6}>          
+          <TextField
+            id='password'
+            name='password'
+            type="text"
+            margin="normal"
+            label="Password"
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            variant="outlined"
+            fullWidth
+            autoFocus
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </Grid>
         <Alert 
           open={alertOpen}
           setAlert={setAlertOpen}
@@ -122,7 +150,7 @@ const ListaProfesores = (props) => {
           message={successMsg}
           severity="success"
         />
-      </Fragment>
+      </Grid>
     );
 };
 

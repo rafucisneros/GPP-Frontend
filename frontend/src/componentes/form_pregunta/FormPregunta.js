@@ -191,12 +191,13 @@ export default function FormPregunta({
             </div>)
           }
         </Grid>
-        <Grid container spacing={2} direction="row" justify="space-around">
-          <Box className="div-buttons-respuestas">
+        <Grid container spacing={2} direction="row" justify="space-around" style={{marginTop: "5px"}}>
+          <Box className="div-buttons-respuestas" style={{justifyContent: "space-between"}}>
             <Button
               type="submit"
               variant="contained"
               color="primary"
+              style={{background: !isFirstQuestion ? "#6a3df3" : "", color : "white", marginRight: '4px'}}
               disabled={isFirstQuestion}
               onClick={handlePreviousQuestion}
             >
@@ -205,19 +206,20 @@ export default function FormPregunta({
             <Button
               type="submit"
               variant="contained"
-              color="primary"
-              disabled={isLastQuestion}
-              onClick={handleNextQuestion}
-            >
-              Siguiente
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
               color="secondary"
               onClick={finishExam}
             >
             Terminar Examen
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isLastQuestion}
+              style={{marginRight: '4px'}}
+              onClick={handleNextQuestion}
+            >
+              Siguiente
             </Button>
           </Box>
         </Grid>
