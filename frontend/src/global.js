@@ -64,10 +64,6 @@ Axios.interceptors.response
     .use( (response) => {
         return response;
     }, (error) => {
-<<<<<<< HEAD
         if (401 === error.response.status || 403 === error.response.status) auth.logout();
-=======
-        // if (401 === error.response.status) auth.logout();
->>>>>>> 3bc41cfdefe2834d4068f5fb49c4ff46ccfbe7dc
         return Promise.reject(error.response);
 });
