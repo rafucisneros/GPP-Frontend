@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { Link } from 'react-router-dom';
 import Loading from '../componentes/loading/Loading.js';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,7 +15,8 @@ import ClockIcon from '@material-ui/icons/AccessTime';
 import { 
   getExamQuestions, 
   getExam,
-  saveExamAnswers 
+  saveExamAnswers,
+  finishExam as finishExamService
 } from '../servicios/servicioPresentarExamen.js';
 import { Alert } from '../componentes/alert/Alert.js'
 import {
@@ -27,6 +29,7 @@ import {
   Button
 } from '@material-ui/core';
 
+import { useHistory } from "react-router-dom"
 
 import "../assets/css/makeTestPage.css";
 
@@ -53,19 +56,23 @@ export default function MakeTestPage(props){
   const [timeoutAlert, setTimeoutAlert] = React.useState(false);
 
   const [ultimoGuardado, setUltimoGuardado] = useState("Nunca");
+  // Para el Alert
+  const [ alertOpen, setAlertOpen] = useState(false)
+  const [ errorMsg, setErrorMsg] = useState("")
+  const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
+  const [ successMsg, setSuccessMsg] = useState("")
 
-    // Para el Alert
-    const [ alertOpen, setAlertOpen] = useState(false)
-    const [ errorMsg, setErrorMsg] = useState("")
-    const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
-    const [ successMsg, setSuccessMsg] = useState("")
+  let history = useHistory();
 
   const confirmFinishExam = async () => {
     try {
-      await SaveExam()
-      window.location = "/exam_finished/1"
+      let response1 = await SaveExam()
+      let response2 = await finishExamService({attempt: exam.attempt}, examID)
+      history.push(`/examen_terminado/${examID}/estudiante/${usuario.id}`)
+      // window.location = `/examen_terminado/${examID}/estudiante/${usuario.id}`
     } catch {
-      alert("No se pudo guardar el examen. Intente nuevamente")
+      setErrorMsg("No se pudo guardar el examen. Intente nuevamente")
+      setAlertOpen(true)
     }
   };
 
@@ -114,7 +121,7 @@ export default function MakeTestPage(props){
             }
           } 
           break;
-        case "seleccion simple":
+        case "selección simple":
           if(pregunta["respuesta"]){
             answers = pregunta["answers"].map( x => {
               return {
@@ -126,7 +133,7 @@ export default function MakeTestPage(props){
             answers.find(x => x["id"] == pregunta["respuesta"])["correct"] = 1
           } 
           break;
-        case "seleccion multiple":
+        case "selección múltiple":
           if(pregunta["respuesta"]){
             answers = pregunta["answers"].map( x => {
               return {
@@ -156,7 +163,7 @@ export default function MakeTestPage(props){
     setUltimoGuardado(time().format("DD/MM/YYYY - hh:mm:ss A"))
   }
 
-  const timer = (horaFin) => {
+  const timer = async (horaFin) => {
     let ahora = time()
     let fin = time(horaFin, "DD/MM/YYYY - hh:mm:ss A")
     let restanteSegundos = parseInt(time.duration(fin.diff(ahora)).asSeconds() % 60)
@@ -169,66 +176,102 @@ export default function MakeTestPage(props){
 
     let restante = `${restanteHoras}:${restanteMinutos}:${restanteSegundos}`
     setTiempoRestante(restante)
-    if(restante === "00:00:00"){
+    if(restante === "00:00:00"){      
       setTimeoutAlert(true);
+      try{
+        let response1 = await SaveExam()
+        let response2 = await finishExamService({attempt: exam.attempt}, examID)
+      } catch (error) {
+
+      }
     } 
   }
 
   const timeoutFinish = () => {
-    window.location = "/exam_finished/" + examID
+    history.push(`/examen_terminado/${examID}/estudiante/${usuario.id}`)
   }
 
   useEffect(() => {
-    let runTimer = false;
-    let fin;
-    let intervalID;
-    async function fetchExam(){
-      // Obtenemos los detalles del examen
-      let { data: examData } = await getExam({}, examID);
-      // Obtenemos las preguntas del examen
-      let { data: preguntas } = await getExamQuestions({}, examID);
-      examData["Preguntas"] = preguntas["questions"];
-      // Asignamos contador para saber cual es el orden de las preguntas
-      let i = 1;
-      examData["Preguntas"].forEach(x => {
-        x["index"] = i++;
-        if (x["type"] === "seleccion simple" || x["type"] === "verdadero o falso"){
-          x["respuesta"] = ""; // Error input uncontrolled si qutas esto
+    if(usuario.id){
+      let runTimer = false;
+      let fin;
+      let intervalID;
+      async function fetchExam(){
+        // Obtenemos los detalles del examen
+        let { data: examData } = await getExam({}, examID);
+        // Obtenemos las preguntas del examen
+        let { data: preguntas } = await getExamQuestions({}, examID);
+        examData["Preguntas"] = preguntas["questions"];
+        // Asignamos contador para saber cual es el orden de las preguntas
+        let i = 1;
+        examData["Preguntas"].forEach(x => {
+          x["index"] = i++;
+          if (x["type"] === "seleccion simple" || x["type"] === "verdadero o falso"){
+            x["respuesta"] = ""; // Error input uncontrolled si qutas esto
+          }
+        })
+        // Colocamos la primera pregunta como la actual
+        setPreguntaActual(examData["Preguntas"][0]["index"])
+        // Asignamos hora de inicio y fin del examen
+        examData["fecha_inicio"] = time(preguntas.init_time).format("DD/MM/YYYY - hh:mm:ss A")
+        examData["fecha_fin"] = time(examData["fecha_inicio"], "DD/MM/YYYY - hh:mm:ss A").add(examData.duration, "minutes").format("DD/MM/YYYY - hh:mm:ss A")
+        fin = examData["fecha_fin"]
+        // Chequeamos si las preguntas ya tienen respuestaS
+        preguntas.questions.forEach( question => {
+          switch(question.type){
+            case "selección simple": 
+              if(question.current_answer && question.current_answer.length > 0){
+                question["respuesta"] = question.current_answer.find(x => x.option == 1).id.toString()
+              }
+            break
+            case "selección múltiple": 
+              if(question.current_answer && question.current_answer.length > 0){
+                question["respuesta"] = question.current_answer.filter(x => x.option == "1").map(x =>{
+                  return question.answers.find(y => x.content === y.content).id.toString()
+                })
+              }
+            break
+            case "ordenamiento": 
+              if(question.current_answer && question.current_answer.length > 0){
+                question["respuesta"] = question.current_answer.sort((x,y) => x.option > y.option ? 1 : -1)
+              }
+            break
+            case "verdadero o falso": 
+              if(question.current_answer && question.current_answer.length > 0){
+                question["respuesta"] = question.current_answer[0].option.toString()
+              }
+            break
+          }
+        })
+        let newExam = {
+          ...examData,
+          changeQuestion,
+          attempt: preguntas["attempt"]
         }
-      })
-      // Colocamos la primera pregunta como la actual
-      setPreguntaActual(examData["Preguntas"][0]["index"])
-      // Asignamos hora de inicio y fin del examen
-      examData["fecha_inicio"] = time().format("DD/MM/YYYY - hh:mm:ss A")
-      examData["fecha_fin"] = time(examData["fecha_inicio"], "DD/MM/YYYY - hh:mm:ss A").add(examData.duration, "minutes").format("DD/MM/YYYY - hh:mm:ss A")
-      fin = examData["fecha_fin"]
-      setExam({
-        ...examData,
-        changeQuestion,
-        attempt: preguntas["attempt"]
-      })
-      runTimer = true;
-      setContentMenu('make_test');
-      // Iniciamos el cronometro
-      let tiempoRestante = `${Math.floor(examData["duration"] / 60)}:${examData["duration"] % 60}:00`
-      setTiempoRestante(tiempoRestante)
-      // SaveExam(exam) 
-    }
-    fetchExam()
-
-    intervalID = setInterval(()=>{
-      if(runTimer){
-        if(fin){
-          timer(fin)
-        }
+        setExam(newExam)
+        runTimer = true;
+        setContentMenu('make_test');
+        // Iniciamos el cronometro
+        let tiempoRestante = `${Math.floor(examData["duration"] / 60)}:${examData["duration"] % 60}:00`
+        setTiempoRestante(tiempoRestante)
+        SaveExam(newExam) 
       }
-    }, 500)
-
-    // Limpiamos el timer
-    return () => {
-      window.clearInterval(intervalID)
+      fetchExam()
+  
+      intervalID = setInterval(()=>{
+        if(runTimer){
+          if(fin){
+            timer(fin)
+          }
+        }
+      }, 500)
+  
+      // Limpiamos el timer
+      return () => {
+        window.clearInterval(intervalID)
+      }
     }
-  }, [])
+  }, [usuario])
 
   if(exam){
     return (

@@ -76,10 +76,12 @@ export function CreateTestPageProvider(props) {
 
     // GET requests y componentes de montaje
     useEffect(() => {
-        getStudents()
-        .then( res => {
-            if (res.data) setEstudiantes(res.data.results);
-        })
+        if(usuario.groups.find(x => x.name === "Professor")){
+            getStudents()
+            .then( res => {
+                if (res.data) setEstudiantes(res.data.results);
+            })
+        }
     }, [])
 
     useEffect(() => {

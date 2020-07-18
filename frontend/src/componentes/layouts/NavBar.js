@@ -163,16 +163,18 @@ const NavBar = () => {
                             <ExitToAppIcon style={{ fontSize : 30}} />
                         </IconButton>
                         <Grid style={{display : 'flex', justifyContent : 'flex-end'}}>
-                            <IconButton color="inherit" className={classes.iconButtonAvatar}>
-                                <Avatar>
-                                    <PersonIcon />
-                                </Avatar>
-                                <Box style={{ marginLeft : '8px'}}>
-                                    <Typography variant="subtitle1" color="inherit" noWrap style={{flexGrow: 1}}>
-                                        {`${usuario.first_name.charAt(0).toUpperCase()}${usuario.first_name.slice(1).toLowerCase()}`}
-                                    </Typography>
-                                </Box>
-                            </IconButton>
+                            <Link to={"/perfil"} className='link'style={{color: "white"}}>
+                                <IconButton color="inherit" className={classes.iconButtonAvatar}>
+                                    <Avatar>
+                                        <PersonIcon />
+                                    </Avatar>
+                                    <Box style={{ marginLeft : '8px'}}>
+                                        <Typography variant="subtitle1" color="inherit" noWrap style={{flexGrow: 1}}>
+                                            {`${usuario.first_name.charAt(0).toUpperCase()}${usuario.first_name.slice(1).toLowerCase()}`}
+                                        </Typography>
+                                    </Box>
+                                </IconButton>
+                            </Link>
                         </Grid>
                     </Box>
                 </Toolbar>
@@ -219,25 +221,28 @@ const NavBar = () => {
                                 />
                             </ListItem>
                         </Link>
-                        <ListItem
-                            button
-                            onClick={() => handleClickItem()}
-                            selected={clickItem}
-                        >
-                            <ListItemIcon>
-                                <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Examenes </Typography>}
-                            />
-                            {collapse ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
+                        {
+                            usuario.groups.map(x => x.name).some(role => ["Professor", "Student"].includes(role)) &&
+                                <ListItem
+                                    button
+                                    onClick={() => handleClickItem()}
+                                    selected={clickItem}
+                                >
+                                    <ListItemIcon>
+                                        <AssignmentIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Examenes </Typography>}
+                                    />
+                                    {collapse ? <ExpandLess /> : <ExpandMore />}
+                                </ListItem>
+                        }
                         <Collapse
                             in={collapse}
                             timeout="auto"
                             unmountOnExit
                         >
-                            <Link to={"/crear_examen"} className='link'>
+                            {usuario.groups.find(x => x.name === "Professor") && <Link to={"/crear_examen"} className='link'>
                                 <ListItem
                                     button 
                                     style={{paddingLeft : '38px'}} 
@@ -249,7 +254,7 @@ const NavBar = () => {
                                         primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Crear Examen </Typography>}
                                     />
                                 </ListItem>
-                            </Link>
+                            </Link>}
                             <Link to={"/examenes"} className='link'>
                                 <ListItem
                                     button 

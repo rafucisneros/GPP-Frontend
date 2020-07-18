@@ -20,7 +20,7 @@ export const global = {
     PATCH_CONF_DINAMICA: `${SERVER_NAME}/exam/_id_/configuration/`,
     // PUT_CREATE_TEST: `${SERVER_NAME}/exam/_id_`,
 
-    GET_STUDENTS: `${SERVER_NAME}/users/`,
+    GET_STUDENTS: `${SERVER_NAME}/students`,
     GET_RESULTADOS_ESTADISTICAS: `${SERVER_NAME}/resultados/_eid_`,
     GET_EXAMS: `${SERVER_NAME}/exams/`,
     TOPICS: `${SERVER_NAME}/approach/`,
@@ -40,9 +40,15 @@ export const global = {
     GET_TEACHER_EXAMS:  `${SERVER_NAME}/exams/teacher/_id_`,
     GET_STUDENTSS:  `${SERVER_NAME}/students`,
     GET_ADMINS:  `${SERVER_NAME}/admins`,
-    // POST_USER:  `${SERVER_NAME}/`,
     POST_USER_PASSWORD:  `${SERVER_NAME}/user/password`,
-    
+    GET_EXAMS_TEACHER:  `${SERVER_NAME}/exams/teacher/_id_`,
+    GET_SECTION_STUDENT:  `${SERVER_NAME}/section/student/_id_`,
+    GET_EXAM_RESULTS:  `${SERVER_NAME}/exam/_id_/results/`,
+    GET_EXAM_COMPLETE:  `${SERVER_NAME}/exam/_id_/complete/`,
+    GET_EXAM_RESULTS_STUDENT:  `${SERVER_NAME}/exam/_eid_/results/student/_sid_`,
+    POST_EXAM_FINISH:  `${SERVER_NAME}/exam/_id_/finish/`,
+    GET_STUDENT_RESULTS:  `${SERVER_NAME}/student/_sid_/results`,
+    // POST_USER:  `${SERVER_NAME}/`,
 
 };
 
@@ -58,6 +64,10 @@ Axios.interceptors.response
     .use( (response) => {
         return response;
     }, (error) => {
+<<<<<<< HEAD
         if (401 === error.response.status || 403 === error.response.status) auth.logout();
+=======
+        // if (401 === error.response.status) auth.logout();
+>>>>>>> 3bc41cfdefe2834d4068f5fb49c4ff46ccfbe7dc
         return Promise.reject(error.response);
 });

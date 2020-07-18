@@ -38,3 +38,16 @@ export function saveExamAnswers(req, studentId, attemp){
       return Promise.reject(error);
   });
 }
+
+export function finishExam(req, examId){
+  let url = global.POST_EXAM_FINISH
+                  .replace("_id_", examId);
+
+  return Axios.post(url, req)
+  .then((response) => {
+      return response;
+  })
+  .catch( (error) => {
+      return Promise.reject(error);
+  });
+}

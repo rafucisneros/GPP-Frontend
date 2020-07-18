@@ -2,11 +2,13 @@ import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import MaterialTable from "material-table";
 import { Redirect } from 'react-router-dom';
+import Switch from '@material-ui/core/Switch';
 
 const DataTable = ({ 
   title, columns, data, grouping, selection, exportButton, toolbar,
   showSelectAllCheckbox, actionsColumnIndex, onRowAdd, onRowUpdate, onRowDelete,
-  isCalificacion, isEstadistica, customExam
+  isCalificacion, isEstadistica, isTeachersExamList, handleToggleExamEnabled,
+  onRowClick, customExam
 }) => {
 
   const [ redirectEstadistica, setRedirectEstadistica ] = useState(false);
@@ -26,12 +28,13 @@ const DataTable = ({
     return (
       <Fragment>
         { redirectEstadistica && <Redirect push to={redirectEstadistica}/> }
-        { redirectCalificaciones && <Redirect push to={"examen/1/calificaciones"}/> }
+        { redirectCalificaciones && <Redirect push to={`exam/${redirectCalificaciones}/calificaciones`}/> }
         <MaterialTable
           style={{width: "100%"}}
           title={title}
           columns={columns}
           data={[...data]}
+          onRowClick={onRowClick}
           options={{
             grouping: grouping,
             selection: selection,
@@ -81,11 +84,24 @@ const DataTable = ({
             onRowDelete: onRowDelete
           }}
           actions={[
+            rowData => ({
+              icon: ()=>{
+                return <Switch
+                  checked={rowData.status}
+                  name="enabled"
+                  color="primary"
+                />
+              },
+              // iconProps: rowdata,
+              tooltip: 'Habilitar/Deshabilitar',
+              onClick: handleToggleExamEnabled,
+              hidden: !isTeachersExamList
+            }),
             {
               icon: 'list_alt',
               tooltip: 'Calificaciones',
               // onClick: (event, rowData) => alert("You saved " + rowData.name),
-              onClick: (event, rowData) => handleRedirectCalificaciones(),
+              onClick: (event, rowData) => handleRedirectCalificaciones(rowData),
               hidden: !isCalificacion
             },
             {
@@ -119,14 +135,17 @@ DataTable.propTypes = {
   selection: PropTypes.bool,
   exportButton: PropTypes.bool,
   toolbar: PropTypes.bool,
+  isTeachersExamList: PropTypes.bool,
   showSelectAllCheckbox: PropTypes.bool,
   actionsColumnIndex: PropTypes.number,
   onRowAdd: PropTypes.func,
   onRowUpdate: PropTypes.func,
   onRowDelete: PropTypes.func,
+  handleToggleExamEnabled: PropTypes.func,
 };
 
 DataTable.defaultProps = {
+  isTeachersExamList: false,
   grouping: true, 
   selection: true,
   exportButton: true,

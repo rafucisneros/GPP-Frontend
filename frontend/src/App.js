@@ -18,6 +18,7 @@ import DashboardExamPage from './vistas/DashboardExamPage.js';
 import ExamFinishedPage from './vistas/ExamFinishedPage.js';
 import AdminPage from './vistas/AdminPage.js';
 import NonResponsivePage from './vistas/NonResponsivePage.js';
+import TestPreviewPage from './vistas/TestPreviewPage.js';
 
 // componentes
 // import NavBar from './componentes/layouts/NavBar.js';
@@ -39,9 +40,9 @@ export default () => <UsuarioProvider>
 
 const App = () => {
 
-  const { cargandoUsuario } = useUsuario();
+  const { usuario, cargandoUsuario } = useUsuario();
 
-  const requireAuth = (Comp, props) => {
+  const requireAuth = (Comp, props, rolesEnabled=null) => {
     if( !getToken() ){
       return (<Redirect to="/login" />);
     } else{
@@ -53,21 +54,36 @@ const App = () => {
             <Loading/>
           )
         } else {
-          return (
-            <div>
-                <TipoPreguntaRespuestaProvider>
-                  <MakeTestProvider>
-                    <CreateTestPageProvider>
-                      <GeneralProvider>
-                        <Layout > 
-                          <Comp {...props}/>
-                        </Layout>
-                      </GeneralProvider>
-                    </CreateTestPageProvider>
-                  </MakeTestProvider>
-                </TipoPreguntaRespuestaProvider> 
-            </div>
-          )
+          // Permisologia 
+          if(rolesEnabled){
+            if(usuario.groups.length > 0 && !usuario.groups.map(x => x.name).some(role => rolesEnabled.includes(role))){
+              console.log("Redirigiendo por permisos", usuario)
+              return (<Redirect to="/home" />);
+            } 
+          }
+          if(usuario.groups.length){
+            return (
+              <div>
+                  <TipoPreguntaRespuestaProvider>
+                    <MakeTestProvider>
+                      <CreateTestPageProvider>
+                        <GeneralProvider>
+                          <Layout > 
+                            <Comp {...props}/>
+                          </Layout>
+                        </GeneralProvider>
+                      </CreateTestPageProvider>
+                    </MakeTestProvider>
+                  </TipoPreguntaRespuestaProvider> 
+              </div>
+            )
+          } else {
+            return (
+              <div>
+                <Loading/>
+              </div>
+            )
+          }
         }
       }
     }
@@ -108,33 +124,28 @@ const App = () => {
           render={(props) => requireAuth(MensajitoPage, props)}
         />
         <Route
-          path='/make_test/:id'
-          render={(props) => requireAuth(MakeTestPage, props)}
+          path='/presentar_examen/:id'
+          render={(props) => requireAuth(MakeTestPage, props, ["Student"])}
         />
         <Route
           exact
-          path='/crear_examen'
-          render={(props) => requireAuth(CreateTestPage, props)}
+          path='/create_test'
+          render={(props) => requireAuth(CreateTestPage, props, ["Professor"])}
         />
         <Route
           exact
-          path='/examen/:id'
-          render={(props) => requireAuth(CreateTestPage, props)}
+          path='/exam/:id/calificaciones'
+          render={(props) => requireAuth(CalificacionesPage, props, ["Professor"])}
         />
         <Route
           exact
-          path='/examen/:id/calificaciones'
-          render={(props) => requireAuth(CalificacionesPage, props)}
-        />
-        <Route
-          exact
-          path='/examenes'
-          render={(props) => requireAuth(ExamsPage, props)}
+          path='/exams'
+          render={(props) => requireAuth(ExamsPage, props, ["Professor", "Student"])}
         />
         <Route
           exact
           path='/admin'
-          render={(props) => requireAuth(AdminPage, props)}
+          render={(props) => requireAuth(AdminPage, props, ["Admin"])}
         />
         <Route
           exact
@@ -142,8 +153,8 @@ const App = () => {
           render={(props) => requireAuth(ProfilePage, props)}
         />
         <Route
-          path='/test_details/:id'
-          render={(props) => requireAuth(TestDetailsPage, props)}
+          path='/detalles_examen/:id'
+          render={(props) => requireAuth(TestDetailsPage, props, ["Professor"])}
         />
         <Route
           path='/mantenimiento'
@@ -152,11 +163,15 @@ const App = () => {
         <Route
           exact
           path='/estadisticas/exam/:id'
-          render={(props) => requireAuth(DashboardExamPage, props)}
+          render={(props) => requireAuth(DashboardExamPage, props, ["Professor"])}
         />
         <Route
-          path='/exam_finished/:id'
-          render={(props) => requireAuth(ExamFinishedPage, props)}
+          path='/examen_terminado/:eid/estudiante/:sid'
+          render={(props) => requireAuth(ExamFinishedPage, props, ["Student"])}
+        />
+        <Route
+          path='/resumen_examen/:id'
+          render={(props) => requireAuth(TestPreviewPage, props, ["Student"])}
         />
         <Redirect strict from="/" to="/login" />
       </Switch>

@@ -40,3 +40,7 @@
     transform: rotate(360deg);
   }
 }
+
+.MuiGrid-item{
+  word-break: break-word;
+}

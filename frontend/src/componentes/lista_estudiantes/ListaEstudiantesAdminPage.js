@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import DataTable from '../datatable/DataTable.js';
 import { getStudents, postSignUp, deleteUser, postUser, patchUser } from '../../servicios/servicioAdmin.js';
 import { Alert } from '../alert/Alert.js';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 const columns = [
     { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
@@ -16,7 +19,7 @@ const ListaEstudiantes = (props) => {
     const [ errorMsg, setErrorMsg] = useState("")
     const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
     const [ successMsg, setSuccessMsg] = useState("")
-
+    let [ password, setPassword ] = useState("123456789")
     useEffect(() => {
       let fetchData = async () => {
         try {
@@ -33,7 +36,7 @@ const ListaEstudiantes = (props) => {
       return new Promise((resolve, reject) => {
         setTimeout(async () => {
           try {
-            estudiante["password"] = "123456789"
+            estudiante["password"] = password
             estudiante["role"] = "Student"
             let addingUser = await postSignUp(estudiante)
             let newData = [...data]
@@ -42,8 +45,14 @@ const ListaEstudiantes = (props) => {
             setSuccessMsg("Agregado Exitosamente")
             setAlertSuccessOpen(true)            
             resolve();
-          } catch {
-            setErrorMsg("Error agregando estudiante")
+          } catch (error) {
+            let mensaje = "Ocurrio un error agregando al estudiante"
+            if(typeof(error.data.email) === "object"){
+              if(error.data.email.includes("Enter a valid email address.")){
+                mensaje += ": Ingrese un correo electrónico válido."
+              }
+            }
+            setErrorMsg(mensaje)
             setAlertOpen(true)
             reject()
           }
@@ -96,15 +105,40 @@ const ListaEstudiantes = (props) => {
     }
 
     return (
-      <Fragment>
-        <DataTable 
-          title="Lista de Estudiantes" 
-          data={data} 
-          columns={columns} 
-          onRowAdd={handleAgregarEstudiante}
-          onRowDelete={handleBorrarEstudiante}
-          onRowUpdate={handleModificarEstudiante}
-        />
+      <Grid container>
+        <Grid item xs={12} md={12} lg={12}>
+          <DataTable 
+            title="Lista de Estudiantes" 
+            data={data} 
+            columns={columns} 
+            onRowAdd={handleAgregarEstudiante}
+            onRowDelete={handleBorrarEstudiante}
+            onRowUpdate={handleModificarEstudiante}
+          />
+        </Grid>
+        <Grid item xs={6} md={6} lg={6} style={{display: "flex", alignItems: "center"}}>  
+          <Typography>
+              Utilice el siguiente campo para asignar una contraseña para nuevos estudiantes:
+          </Typography>
+        </Grid>        
+        <Grid item xs={6} md={6} lg={6}>          
+          <TextField
+            id='password'
+            name='password'
+            type="text"
+            margin="normal"
+            label="Password"
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            variant="outlined"
+            fullWidth
+            autoFocus
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        </Grid>
         <Alert 
           open={alertOpen}
           setAlert={setAlertOpen}
@@ -116,8 +150,7 @@ const ListaEstudiantes = (props) => {
           message={successMsg}
           severity="success"
         />
-      </Fragment>
-      
+      </Grid>      
     );
 };
 

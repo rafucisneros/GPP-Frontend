@@ -5,9 +5,7 @@ import React, {
  } from 'react';
 import uuid from 'uuid/v1';
 
-import ListaSecciones from '../componentes/lista_secciones/ListaSecciones.js';
-import ListaEstudiantes from '../componentes/lista_estudiantes/ListaEstudiantes.js';
-import { useCreateTestPage } from '../context/createTestPageContext';
+import { ListaEstudiantes } from '../componentes/lista_estudiantes/ListaEstudiantesTeacherPage.js';
 
 // material
 import Container from '@material-ui/core/Container';
@@ -17,10 +15,12 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { getExamConfiguration, getExamSections } from '../servicios/servicioDetalleExamen'
-import { getExam, getExamQuestions } from '../servicios/servicioPresentarExamen'
+import { getExamConfiguration, getExamSections, getExamComplete } from '../servicios/servicioDetalleExamen'
+import { getExam } from '../servicios/servicioPresentarExamen'
 import Loading from '../componentes/loading/Loading.js';
 import { Divider } from '@material-ui/core';
+
+const Latex = require('react-latex');
 
 export default function TestDetailsPage(props){
     const examID = props.match.params.id;
@@ -44,61 +44,18 @@ export default function TestDetailsPage(props){
 
     useEffect(() => {
         let fetchData = async () => {
-            let { data: examConfig } = await getExamConfiguration({}, examID);
-            let { data: examen } = await getExam({}, examID);
-            let {data} = await getExamQuestions({}, examID);
-            let { questions: Preguntas } = data;
-            let { data: Sections} = await getExamSections({}, examID);
-            
+            let { data: examComplete} = await getExamComplete(examID);
             let newExam = {
-                ...examen,
-                Preguntas,
-                Sections
+                Preguntas: examComplete.questions,
+                ...examComplete.conf_ini,
+                Secciones: examComplete.sections
             }
             setExam(newExam);
         }
         fetchData()
     }, [])
 
-    // Secciones Andres
-    const {  
-        handleChangeStep,
-        handleChangeComp,
-        secciones,
-        tipoConfiguracion
-    } = useCreateTestPage();
-
-    const handleAgregarEstudiante = (estudiante) => handleChangeComp(estudiante, 'estudiantes');
-
-    const handleSeleccionarSeccion = (id) => {
-        if (secciones.length > 0){
-            for( let seccion of secciones){
-                if(seccion.id === id) {
-                    handleChangeComp(seccion, 'seccion_seleccionada');
-                    break;
-                }    
-            }
-        }
-    }
-
-    const handleAgregarSecciones = () => {
-        let data = [...secciones];
-        data.push({
-            id: uuid(),
-            estudiantes : []
-        });
-        handleChangeComp(data, 'secciones');
-    }
-
-    const handleEliminarSecciones = (index) => {
-        let data = [...secciones];
-        data.splice(index, 1);
-        handleChangeComp(data, 'secciones');
-    }
-    // Fin Secciones Andres
-
     if(exam){
-
         return (
             <div>
                 <div className="toolbar-icono"/>
@@ -123,9 +80,7 @@ export default function TestDetailsPage(props){
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
-                                                {exam.name}
-                                            </Typography>
+                                            {exam.name}
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
                                             <Typography>
@@ -133,9 +88,7 @@ export default function TestDetailsPage(props){
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
-                                                {exam.start_date}
-                                            </Typography>
+                                            {exam.start_date}
                                         </Grid>
                                     </Grid> 
                                     <Grid container spacing={2} direction={"row"}>
@@ -145,9 +98,7 @@ export default function TestDetailsPage(props){
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
-                                                {exam.static ? "Estático": "Dinámico"}
-                                            </Typography>
+                                            {exam.static ? "Estático": "Dinámico"}
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
                                             <Typography>
@@ -155,9 +106,7 @@ export default function TestDetailsPage(props){
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
                                             {exam.finish_date}
-                                            </Typography>
                                         </Grid>
                                     </Grid> 
                                     <Grid container spacing={2} direction={"row"}>
@@ -167,9 +116,15 @@ export default function TestDetailsPage(props){
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
+                                            {exam.duration} minutos
+                                        </Grid>
+                                        <Grid item xs={3} md={3} lg={3}>
                                             <Typography>
-                                                {exam.duration} minutos
+                                                Intentos Permitidos:
                                             </Typography>
+                                        </Grid>
+                                        <Grid item xs={3} md={3} lg={3}>
+                                            {exam.attempt}
                                         </Grid>
                                     </Grid> 
                                 </Grid>
@@ -193,57 +148,78 @@ export default function TestDetailsPage(props){
                                         <Fragment>
                                             <Grid container>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    Tipo de Pregunta:
+                                                    <Typography>
+                                                        Tipo de Pregunta:
+                                                    </Typography>
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    {pregunta.type[0].toUpperCase() + pregunta.type.slice(1)}
+                                                    {pregunta.q_type.name[0].toUpperCase() + pregunta.q_type.name.slice(1)}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    Dificultad:
+                                                    <Typography>
+                                                        Dificultad:
+                                                    </Typography>
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    {pregunta.dificultad}
+                                                    {pregunta.difficulty}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    Area:
+                                                    <Typography>
+                                                        Tema:
+                                                    </Typography>
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    {pregunta.area}
+                                                    {pregunta.topic.name}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    Subarea:
+                                                    <Typography>
+                                                        Area:
+                                                    </Typography>
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    {pregunta.subarea}
+                                                    {pregunta.topic.subarea.area.name}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    Ponderación:
+                                                    <Typography>
+                                                        Subarea:
+                                                    </Typography>
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    {pregunta.ponderacion}
+                                                    {pregunta.topic.subarea.name}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                   
+                                                    <Typography>
+                                                        Ponderación:
+                                                    </Typography>
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    
+                                                    {pregunta.value}
+                                                </Grid>
+                                            </Grid>
+                                            <Grid container style={{marginTop: "15px"}}>
+                                                <Grid item xs={3} md={3} lg={3}>
+                                                    <Typography>
+                                                        Enunciado:  
+                                                    </Typography>
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    Enunciado:
+                                                    {pregunta.latex ? 
+                                                        <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                                                        : pregunta["content"]
+                                                    }  
                                                 </Grid>
-                                                <Grid item xs={3} md={3} lg={3}>
-                                                    {pregunta.content}
-                                                </Grid>
-                                                {pregunta.type != "verdadero o falso" &&
+                                                {pregunta.q_type.name != "verdadero o falso" &&
                                                 <Fragment>
                                                     <Grid item xs={3} md={3} lg={3}>
-                                                        Respuestas:
+                                                        <Typography>
+                                                            Respuestas:
+                                                        </Typography>
                                                     </Grid>
                                                     <Grid item xs={3} md={3} lg={3}>
                                                         {pregunta.answers.map( respuesta => {
                                                             return (
                                                                 <div>
-                                                                    {respuesta.content}
+                                                                    -) {respuesta.content}
                                                                 </div>
                                                             )
                                                         })}
@@ -275,20 +251,11 @@ export default function TestDetailsPage(props){
                             <Divider />
                             <ExpansionPanelDetails>
                                 <Grid container>
-                                <Grid container>
-                                    <Grid item lg={4} md={4} xl={4} xs={12}>
-                                        <ListaSecciones 
-                                            handleAgregarSecciones = {handleAgregarSecciones}
-                                            handleEliminarSecciones = {handleEliminarSecciones}
-                                            handleSeleccionarSeccion = {handleSeleccionarSeccion}
-                                        />
-                                    </Grid>
-                                    <Grid item lg={8} md={8} xl={8} xs={12}>
+                                    <Grid item lg={12} md={12} xl={12} xs={12}>
                                         <ListaEstudiantes 
-                                            handleAgregarEstudiante = {handleAgregarEstudiante}
+                                          secciones={exam.Secciones}
                                         />
                                     </Grid>
-                                </Grid>
                                 </Grid>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
