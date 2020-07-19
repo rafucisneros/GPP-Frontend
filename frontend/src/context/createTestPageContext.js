@@ -251,7 +251,8 @@ export function CreateTestPageProvider(props) {
     const handleChangeInput = (e) => {
         if (e.target.name === 'dificultad') setDificultad(e.target.value);
         else if (e.target.name === 'ponderacion') {
-            if (Number(e.target.value) >= 1) setPonderacion(e.target.value);
+            if (e.target.value && Number(e.target.value) >= 1) setPonderacion(e.target.value);
+            else setPonderacion(e.target.value);
         }
         else if (e.target.name === 'pregunta') setPregunta(e.target.value);
     }

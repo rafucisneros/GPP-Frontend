@@ -112,7 +112,7 @@ export default function LoginForm(props) {
                   </Link>
                 </Grid> */}
                 <Grid item>
-                  <Link href="/registo" variant="body2">
+                  <Link href="/registro" variant="body2">
                     {"¿No posee una cuenta? Regístrese"}
                   </Link>
                 </Grid>

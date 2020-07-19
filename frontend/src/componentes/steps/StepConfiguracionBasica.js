@@ -259,7 +259,7 @@ const StepConfiguracionBasica = () => {
             <Card>
                 <form>
                     <CardHeader
-                        subheader={`Aquí puedes modificar las configuraciones de tu examen.`}
+                        subheader={`Datos iniciales del examen`}
                         title="Configuraciones Básicas"
                     />
                     <Divider />

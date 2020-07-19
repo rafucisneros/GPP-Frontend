@@ -24,7 +24,7 @@ const Footer = props => {
             {`. ${year}`}
             </Typography> */}
             <div>
-                <img style={{height: "30px"}} src= {logoUSB}/> 
+                <img style={{height: "60px"}} src= {logoUSB}/> 
             </div>
             <Typography variant="caption">
                 Creado por{' '}
