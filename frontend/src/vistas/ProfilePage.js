@@ -100,12 +100,103 @@ export default function ProfilePage(){
     <div>
       <div className="toolbar-icono"/>
       <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px', width : '100%'}}>
-        <Grid container spacing={2}>
-          <Card style={{width : '100%'}}>
-            <form>
+        <Grid container spacing={3} >
+          <Grid item xs={12} md={12} lg={12}>
+            <Card style={{width : '100%'}}>
+              <form>
+                <CardHeader
+                  title="Perfil"
+                />
+                <Divider />
+                <CardContent>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6} md={6} lg={6}>
+                      <TextField
+                        error={errores && errores.tituloError}
+                        helperText={errores && errores.tituloError ? "El campo es requerido" : null}
+                        id='nombre'
+                        name='nombre'
+                        type="text"
+                        margin="normal"
+                        label="Nombre"
+                        required
+                        value={nombre}
+                        onChange={(event) => setNombre(event.target.value)}
+                        variant="outlined"
+                        fullWidth
+                        autoFocus
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </Grid>                  
+                    <Grid item xs={6} md={6} lg={6}>
+                      <TextField
+                        error={errores && errores.tituloError}
+                        helperText={errores && errores.tituloError ? "El campo es requerido" : null}
+                        id='apellido'
+                        name='apellido'
+                        type="text"
+                        margin="normal"
+                        label="Apellido"
+                        required
+                        value={apellido}
+                        onChange={(event) => setApellido(event.target.value)}
+                        variant="outlined"
+                        fullWidth
+                        autoFocus
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </Grid> 
+                    <Grid item xs={6} md={6} lg={6}>
+                      <TextField
+                        error={errores && errores.tituloError}
+                        helperText={errores && errores.tituloError ? "El campo es requerido" : null}
+                        id='email'
+                        name='email'
+                        type="text"
+                        margin="normal"
+                        label="Email"
+                        required
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        variant="outlined"
+                        fullWidth
+                        autoFocus
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </Grid> 
+                    <Grid item xs={6} md={6} lg={6}>
+                      <Grid
+                        container
+                        direction="row"
+                        justify="flex-end"
+                        alignItems="flex-end"
+                        style={{height: "100%"}}
+                      >
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={changeProfile}
+                        >
+                          Cambiar Perfil
+                        </Button> 
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+                <Divider />
+              </form>
+            </Card>
+          </Grid> 
+          <Grid item xs={12} md={12} lg={12}>
+            <Card style={{width : '100%'}}>
               <CardHeader
-                subheader={`Aquí puedes modificar tu información personal.`}
-                title="Perfil"
+                title="Cambiar contraseña"
               />
               <Divider />
               <CardContent>
@@ -114,34 +205,14 @@ export default function ProfilePage(){
                     <TextField
                       error={errores && errores.tituloError}
                       helperText={errores && errores.tituloError ? "El campo es requerido" : null}
-                      id='nombre'
-                      name='nombre'
-                      type="text"
+                      id='contraseña_nueva'
+                      name='contraseña_nueva'
+                      type="password"
                       margin="normal"
-                      label="Nombre"
+                      label="Contraseña Nueva"
                       required
-                      value={nombre}
-                      onChange={(event) => setNombre(event.target.value)}
-                      variant="outlined"
-                      fullWidth
-                      autoFocus
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  </Grid>                  
-                  <Grid item xs={6} md={6} lg={6}>
-                    <TextField
-                      error={errores && errores.tituloError}
-                      helperText={errores && errores.tituloError ? "El campo es requerido" : null}
-                      id='apellido'
-                      name='apellido'
-                      type="text"
-                      margin="normal"
-                      label="Apellido"
-                      required
-                      value={apellido}
-                      onChange={(event) => setApellido(event.target.value)}
+                      value={contraseñaNueva}
+                      onChange={(event) => setContraseñaNueva(event.target.value)}
                       variant="outlined"
                       fullWidth
                       autoFocus
@@ -154,14 +225,14 @@ export default function ProfilePage(){
                     <TextField
                       error={errores && errores.tituloError}
                       helperText={errores && errores.tituloError ? "El campo es requerido" : null}
-                      id='email'
-                      name='email'
-                      type="text"
+                      id='contraseñaActual'
+                      name='contraseñaActual'
+                      type="password"
                       margin="normal"
-                      label="Email"
+                      label="Contraseña Actual"
                       required
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
+                      value={contraseñaActual}
+                      onChange={(event) => setContraseñaActual(event.target.value)}
                       variant="outlined"
                       fullWidth
                       autoFocus
@@ -170,6 +241,26 @@ export default function ProfilePage(){
                       }}
                     />
                   </Grid> 
+                  <Grid item xs={6} md={6} lg={6}>
+                    <TextField
+                      error={errores && errores.tituloError}
+                      helperText={errores && errores.tituloError ? "El campo es requerido" : null}
+                      id='contraseñaNuevaConfirmacion'
+                      name='contraseñaNuevaConfirmacion'
+                      type="password"
+                      margin="normal"
+                      label="Confirmación Contraseña Nueva"
+                      required
+                      value={contraseñaNuevaConfirmar}
+                      onChange={(event) => setContraseñaNuevaConfirmar(event.target.value)}
+                      variant="outlined"
+                      fullWidth
+                      autoFocus
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid>
                   <Grid item xs={6} md={6} lg={6}>
                     <Grid
                       container
@@ -181,105 +272,16 @@ export default function ProfilePage(){
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={changeProfile}
+                        onClick={changePassword}
                       >
-                        Cambiar Perfil
+                        Cambiar contraseña
                       </Button> 
                     </Grid>
                   </Grid>
                 </Grid>
               </CardContent>
-              <Divider />
-            </form>
-          </Card>
-          <Card style={{width : '100%'}}>
-            <CardHeader
-              subheader={`Aquí puedes modificar tu contraseña.`}
-              title="Cambiar contraseña"
-            />
-            <Divider />
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={6} md={6} lg={6}>
-                  <TextField
-                    error={errores && errores.tituloError}
-                    helperText={errores && errores.tituloError ? "El campo es requerido" : null}
-                    id='contraseña_nueva'
-                    name='contraseña_nueva'
-                    type="password"
-                    margin="normal"
-                    label="Contraseña Nueva"
-                    required
-                    value={contraseñaNueva}
-                    onChange={(event) => setContraseñaNueva(event.target.value)}
-                    variant="outlined"
-                    fullWidth
-                    autoFocus
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid> 
-                <Grid item xs={6} md={6} lg={6}>
-                  <TextField
-                    error={errores && errores.tituloError}
-                    helperText={errores && errores.tituloError ? "El campo es requerido" : null}
-                    id='contraseñaActual'
-                    name='contraseñaActual'
-                    type="password"
-                    margin="normal"
-                    label="Contraseña Actual"
-                    required
-                    value={contraseñaActual}
-                    onChange={(event) => setContraseñaActual(event.target.value)}
-                    variant="outlined"
-                    fullWidth
-                    autoFocus
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid> 
-                <Grid item xs={6} md={6} lg={6}>
-                  <TextField
-                    error={errores && errores.tituloError}
-                    helperText={errores && errores.tituloError ? "El campo es requerido" : null}
-                    id='contraseñaNuevaConfirmacion'
-                    name='contraseñaNuevaConfirmacion'
-                    type="password"
-                    margin="normal"
-                    label="Confirmación Contraseña Nueva"
-                    required
-                    value={contraseñaNuevaConfirmar}
-                    onChange={(event) => setContraseñaNuevaConfirmar(event.target.value)}
-                    variant="outlined"
-                    fullWidth
-                    autoFocus
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6} md={6} lg={6}>
-                  <Grid
-                    container
-                    direction="row"
-                    justify="flex-end"
-                    alignItems="flex-end"
-                    style={{height: "100%"}}
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={changePassword}
-                    >
-                      Cambiar contraseña
-                    </Button> 
-                  </Grid>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+            </Card>
+          </Grid>
         </Grid>
       </Container>
       <Alert 

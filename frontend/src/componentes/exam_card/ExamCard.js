@@ -23,7 +23,7 @@ export const ExamCard = ({title, id, type}) => {
           <Button size="small">Ir a Examen</Button>
         </Link> :
         <Fragment>
-          <Link to={`/exam/${id}/calificaciones`} className='link'>
+          <Link to={`/examen/${id}/calificaciones`} className='link'>
             <Button size="small">Ver Calificaciones</Button>
           </Link>  
           <Link to={`/detalles_examen/${id}`} className='link'>

@@ -13,7 +13,7 @@ const Footer = props => {
             {...rest}
             style={{padding : '32px', textAlign : 'center'}}
         >
-            <Typography variant="body1">
+            {/* <Typography variant="body1">
                 &copy;{' '}
                 <Link
                     // component="a"
@@ -22,7 +22,10 @@ const Footer = props => {
                     GPI
                 </Link>
             {`. ${year}`}
-            </Typography>
+            </Typography> */}
+            <div>
+                <img style={{height: "30px"}} src= {logoUSB}/> 
+            </div>
             <Typography variant="caption">
                 Creado por{' '}
                 <Link
@@ -52,7 +55,7 @@ const Footer = props => {
                 >
                     Rafael Cisneros
                 </Link>
-                {' '}bajo la tutoria de la Prof. {' '}
+                {' '}bajo la tutoría de la Prof. {' '}
                 <Link
                     // component="a"
                     href="#"
@@ -63,9 +66,8 @@ const Footer = props => {
             </Typography>
             <div>
                 <Typography variant="caption">
-                    Desarrollado como parte de un miniproyecto para la Universidad Simón Bolívar {'  '}
+                    Desarrollado como miniproyecto para la Universidad Simón Bolívar.
                 </Typography>
-                <img style={{height: "30px"}} src= {logoUSB}/> 
             </div>
         </div>
     );
