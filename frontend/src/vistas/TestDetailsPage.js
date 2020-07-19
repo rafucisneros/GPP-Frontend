@@ -68,14 +68,14 @@ export default function TestDetailsPage(props){
                             aria-controls="panel1a-content"
                             id="panel1a-header"
                             >
-                            <Typography>Configuración Básica</Typography>
+                            <Typography variant="h6" style={{fontWeight : 600}}>Configuración Básica</Typography>
                             </ExpansionPanelSummary>
                             <Divider />
                             <ExpansionPanelDetails>
                                 <Grid container>
                                     <Grid container spacing={2} direction={"row"}>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
+                                            <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                 Nombre: 
                                             </Typography>
                                         </Grid>
@@ -83,8 +83,8 @@ export default function TestDetailsPage(props){
                                             {exam.name}
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
-                                                Fecha de Inicio:
+                                            <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                                                Fecha de Habilitación:
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
@@ -93,7 +93,7 @@ export default function TestDetailsPage(props){
                                     </Grid> 
                                     <Grid container spacing={2} direction={"row"}>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
+                                            <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                 Tipo de examen:
                                             </Typography>
                                         </Grid>
@@ -101,8 +101,8 @@ export default function TestDetailsPage(props){
                                             {exam.static ? "Estático": "Dinámico"}
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
-                                                Fecha de Finalización:
+                                            <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                                                Fecha de Deshabilitación:
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
@@ -111,7 +111,7 @@ export default function TestDetailsPage(props){
                                     </Grid> 
                                     <Grid container spacing={2} direction={"row"}>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
+                                            <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                 Duración:
                                             </Typography>
                                         </Grid>
@@ -119,7 +119,7 @@ export default function TestDetailsPage(props){
                                             {exam.duration} minutos
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            <Typography>
+                                            <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                 Intentos Permitidos:
                                             </Typography>
                                         </Grid>
@@ -137,7 +137,7 @@ export default function TestDetailsPage(props){
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography>Preguntas</Typography>
+                            <Typography variant="h6" style={{fontWeight : 600}}>Preguntas</Typography>
                             </ExpansionPanelSummary>
                             <Divider />
                             <ExpansionPanelDetails>
@@ -148,7 +148,7 @@ export default function TestDetailsPage(props){
                                         <Fragment>
                                             <Grid container>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    <Typography>
+                                                    <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                         Tipo de Pregunta:
                                                     </Typography>
                                                 </Grid>
@@ -156,7 +156,7 @@ export default function TestDetailsPage(props){
                                                     {pregunta.q_type.name[0].toUpperCase() + pregunta.q_type.name.slice(1)}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    <Typography>
+                                                    <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                         Dificultad:
                                                     </Typography>
                                                 </Grid>
@@ -164,7 +164,7 @@ export default function TestDetailsPage(props){
                                                     {pregunta.difficulty}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    <Typography>
+                                                    <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                         Tema:
                                                     </Typography>
                                                 </Grid>
@@ -172,7 +172,7 @@ export default function TestDetailsPage(props){
                                                     {pregunta.topic.name}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    <Typography>
+                                                    <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                         Area:
                                                     </Typography>
                                                 </Grid>
@@ -180,7 +180,7 @@ export default function TestDetailsPage(props){
                                                     {pregunta.topic.subarea.area.name}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    <Typography>
+                                                    <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                         Subarea:
                                                     </Typography>
                                                 </Grid>
@@ -188,7 +188,7 @@ export default function TestDetailsPage(props){
                                                     {pregunta.topic.subarea.name}
                                                 </Grid>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    <Typography>
+                                                    <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                         Ponderación:
                                                     </Typography>
                                                 </Grid>
@@ -198,7 +198,7 @@ export default function TestDetailsPage(props){
                                             </Grid>
                                             <Grid container style={{marginTop: "15px"}}>
                                                 <Grid item xs={3} md={3} lg={3}>
-                                                    <Typography>
+                                                    <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                         Enunciado:  
                                                     </Typography>
                                                 </Grid>
@@ -211,7 +211,7 @@ export default function TestDetailsPage(props){
                                                 {pregunta.q_type.name != "verdadero o falso" &&
                                                 <Fragment>
                                                     <Grid item xs={3} md={3} lg={3}>
-                                                        <Typography>
+                                                        <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                             Respuestas:
                                                         </Typography>
                                                     </Grid>
@@ -246,14 +246,14 @@ export default function TestDetailsPage(props){
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography>Secciones</Typography>
+                            <Typography variant="h6" style={{fontWeight : 600}}>Secciones</Typography>
                             </ExpansionPanelSummary>
                             <Divider />
                             <ExpansionPanelDetails>
                                 <Grid container>
                                     <Grid item lg={12} md={12} xl={12} xs={12}>
                                         <ListaEstudiantes 
-                                          secciones={exam.Secciones}
+                                            secciones={exam.Secciones}
                                         />
                                     </Grid>
                                 </Grid>

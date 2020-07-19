@@ -162,7 +162,7 @@ const App = () => {
         />
         <Route
           exact
-          path='/estadisticas/exam/:id'
+          path='/estadisticas/examen/:id'
           render={(props) => requireAuth(DashboardExamPage, props, ["Professor"])}
         />
         <Route

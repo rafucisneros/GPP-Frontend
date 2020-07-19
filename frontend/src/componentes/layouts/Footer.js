@@ -66,7 +66,7 @@ const Footer = props => {
             </Typography>
             <div>
                 <Typography variant="caption">
-                    Desarrollado como miniproyecto para la Universidad Simón Bolívar {'  '}
+                    Desarrollado como miniproyecto para la Universidad Simón Bolívar.
                 </Typography>
             </div>
         </div>

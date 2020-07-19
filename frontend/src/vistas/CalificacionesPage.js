@@ -12,6 +12,7 @@ import { useGeneral } from '../context/generalContext';
 import { Alert } from '../componentes/alert/Alert.js'
 
 import { getResultsForExam } from '../servicios/servicioGeneral.js'
+
 const columns = [
     { title: 'Alummo', field: 'name', defaultSort : 'asc' },
     { title: 'Nota (100%)', field: 'total_score' },
@@ -65,6 +66,7 @@ export default function EditTestPage(props){
                                 onRowAdd={()=>{}}
                                 onRowDelete={()=>{}}
                                 onRowUpdate={()=>{}}
+                                customExam={true}
                             /> : <Loading/>
                         }
                     </CardContent>
@@ -75,7 +77,7 @@ export default function EditTestPage(props){
             open={alertOpen}
             setAlert={setAlertOpen}
             message={errorMsg}
-          />
+        />
     </Fragment>
     );
 }
