@@ -240,25 +240,28 @@ export default function TestDetailsPage(props){
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         {/* Lista Secciones */}
-                        <ExpansionPanel expanded={listSectionsExpanded} onChange={handleChangeListSectionsExpanded} style={{width: "100%"}}>
-                            <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1a-content"
-                                id="panel1a-header"
-                            >
-                                <Typography>Secciones</Typography>
-                            </ExpansionPanelSummary>
-                            <Divider />
-                            <ExpansionPanelDetails>
-                                <Grid container>
-                                    <Grid item lg={12} md={12} xl={12} xs={12}>
-                                        <ListaEstudiantes 
-                                          secciones={exam.Secciones}
-                                        />
+                        { !exam.open && (
+                            <ExpansionPanel expanded={listSectionsExpanded} onChange={handleChangeListSectionsExpanded} style={{width: "100%"}}>
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <Typography>Secciones</Typography>
+                                </ExpansionPanelSummary>
+                                <Divider />
+                                <ExpansionPanelDetails>
+                                    <Grid container>
+                                        <Grid item lg={12} md={12} xl={12} xs={12}>
+                                            <ListaEstudiantes 
+                                            secciones={exam.Secciones}
+                                            />
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        )
+                        }
                         {/*Estadisticas*/}
                     </Grid>
                 </Container>

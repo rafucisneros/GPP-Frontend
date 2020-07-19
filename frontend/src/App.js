@@ -139,7 +139,7 @@ const App = () => {
         />
         <Route
           exact
-          path='/exams'
+          path='/examenes'
           render={(props) => requireAuth(ExamsPage, props, ["Professor", "Student"])}
         />
         <Route
