@@ -41,8 +41,8 @@ export default function HomePage(){
         try {
           let request = await getExamsForTeacher(usuario.id)
           let now = time()
-          setActiveExams(request.data.filter( x => now.isBefore(time(x.finish_date))))
-          setFinishedExams(request.data.filter( x => !now.isBefore(time(x.finish_date))))
+          setActiveExams(request.data.filter( x => now.isBefore(time(x.finish_date))).slice(0,5))
+          setFinishedExams(request.data.filter( x => !now.isBefore(time(x.finish_date))).slice(0,5))
         } catch (error) {
           console.log(error)
           setErrorMsg("Ocurrio un error cargando los examenes")
@@ -53,7 +53,7 @@ export default function HomePage(){
           let request = await getExamsForStudent(usuario.id)
           let now = time()
           if(request.data.open){
-            setOpenExams(request.data.open.filter( x => !now.isBefore(time(x.finish_date))))
+            setOpenExams(request.data.open.filter( x => !now.isBefore(time(x.finish_date))).slice(0,5))
           } else {
             setOpenExams([])
           }
