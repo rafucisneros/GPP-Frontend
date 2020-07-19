@@ -80,7 +80,7 @@ const ListaSecciones = (props) => {
                             selected={item && seccionSeleccionada ? item.id === seccionSeleccionada.id : false}
                         >
                         <ListItemText
-                            primary={`Sección ${index + 1}`}
+                            primary={`${item.id}`}
                             secondary={`${item.estudiantes.length} estudiante(s) escogido(s)`}
                         />
                         <IconButton

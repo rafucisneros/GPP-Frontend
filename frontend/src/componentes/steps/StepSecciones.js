@@ -106,7 +106,7 @@ const StepSecciones = (props) => {
     const handleAgregarSecciones = () => {
         let data = [...secciones];
         data.push({
-            id: uuid(),
+            id: `Sección ${data.length + 1}`,
             estudiantes : []
         });
         handleChangeComp(data, 'secciones');
@@ -115,7 +115,12 @@ const StepSecciones = (props) => {
     const handleEliminarSecciones = (index) => {
         let data = [...secciones];
         data.splice(index, 1);
-        handleChangeComp(data, 'secciones');
+
+        let newData = data.map( (item, index) => {
+            item.id = `Sección ${index + 1}`;
+            return item;
+        })
+        handleChangeComp(newData, 'secciones');
     }
 
     const finishStep = () => {
