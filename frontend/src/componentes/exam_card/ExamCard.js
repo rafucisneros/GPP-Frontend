@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 
 export const ExamCard = ({title, id, type}) => {
   return (
-  <Card style={{maxWidth: "150px", wordBreak: "break-word", display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
+  <Card style={{marginTop: "10px", maxWidth: "150px", wordBreak: "break-word", display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
     <CardContent style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
       <AssignmentIcon style={{fontSize: "5.5rem"}}/>
       <Divider />

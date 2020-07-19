@@ -21,6 +21,7 @@ import Loading from '../componentes/loading/Loading.js';
 import { Divider } from '@material-ui/core';
 
 const Latex = require('react-latex');
+let time = require("moment")
 
 export default function TestDetailsPage(props){
     const examID = props.match.params.id;
@@ -88,7 +89,7 @@ export default function TestDetailsPage(props){
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            {exam.start_date}
+                                            {time(exam.start_date).format("DD/MM/YYYY - hh:mm:ss A")}
                                         </Grid>
                                     </Grid> 
                                     <Grid container spacing={2} direction={"row"}>
@@ -106,7 +107,7 @@ export default function TestDetailsPage(props){
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            {exam.finish_date}
+                                            {time(exam.finish_date).format("DD/MM/YYYY - hh:mm:ss A")}
                                         </Grid>
                                     </Grid> 
                                     <Grid container spacing={2} direction={"row"}>

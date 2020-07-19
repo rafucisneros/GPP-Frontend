@@ -47,7 +47,7 @@ export default function ExamsPage(){
             { title: 'Fecha Fin', field: 'finish_date', render: rowData => {
                 return moment(rowData.finish_date).format('DD/MM/YYYY hh:mm a');
             } },
-            { title: 'Duracion', field: 'duration', render: rowData => {
+            { title: 'Duración', field: 'duration', render: rowData => {
                 let hora = parseInt(rowData.duration / 60);
                 if (hora >= 1) return `${hora} h ${rowData.duration % 60} min`
                 else return `${rowData.duration % 60} min`

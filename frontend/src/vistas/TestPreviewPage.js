@@ -86,13 +86,13 @@ export default function TestPreviewPage(props){
                       <Typography>Habilitado a partir de:</Typography>
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
-                      {exam.start_date}
+                      {time(exam.start_date).format("DD/MM/YYYY - hh:mm:ss A")}
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
                       <Typography>Habilitado hasta:</Typography>
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
-                      {exam.finish_date}
+                      {time(exam.finish_date).format("DD/MM/YYYY - hh:mm:ss A")}
                     </Grid>  
                   </Grid>
                   <Grid container spacing={2} direction={"row"}>
