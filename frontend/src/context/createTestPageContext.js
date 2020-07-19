@@ -185,8 +185,7 @@ export function CreateTestPageProvider(props) {
         let keys = Object.keys(data.sections).reverse();
         keys.forEach( key => {
             let info = {};
-            let id = key.split(' ')[1];
-            info.id = id;
+            info.id = key;
             info.estudiantes = [];
             console.log(data.sections[key])
             data.sections[key].forEach( email => {

@@ -292,7 +292,7 @@ const StepConfiguracionBasica = () => {
                                     margin="normal"
                                     label="Título del Examen"
                                     required
-                                    value={titulo}
+                                    value={titulo ? titulo : ''}
                                     onChange={handleCambiarValor}
                                     variant="outlined"
                                     fullWidth

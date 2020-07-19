@@ -150,7 +150,7 @@ const StepCrearPreguntas = () => {
         }
 
         if(flag === 'all' || flag === 'ponderacion'){
-            if( !ponderacion || validator.isEmpty(String(ponderacion)) || (!isNaN(parseFloat(ponderacion)) && Number(parseFloat(ponderacion) === 0 )) ){
+            if( !ponderacion || validator.isEmpty(String(ponderacion)) || (!isNaN(parseFloat(ponderacion)) && Number(parseFloat(ponderacion) < 1 )) ){
                 error = true;
                 listError.ponderacionError = true;
             } 

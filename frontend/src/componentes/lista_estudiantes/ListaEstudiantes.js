@@ -124,7 +124,7 @@ const ListaEstudiantes = (props) => {
             setData(finalData);
         }
         
-    }, [seccionSeleccionada])
+    }, [seccionSeleccionada, estudiantes])
 
     return (
         <Fragment>
