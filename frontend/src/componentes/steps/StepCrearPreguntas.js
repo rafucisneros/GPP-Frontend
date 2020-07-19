@@ -239,9 +239,9 @@ const StepCrearPreguntas = () => {
     };
 
     const handleCleanForm = () => {
-        let event_pond = { target : { name : 'ponderacion', value : ''}};
-        let event_diff = { target : { name : 'dificultad', value : ''}};
-        let event_preg = { target : { name : 'pregunta', value : ''}};
+        let event_pond = { target : { name : 'ponderacion', value : null}};
+        let event_diff = { target : { name : 'dificultad', value : null}};
+        let event_preg = { target : { name : 'pregunta', value : null}};
 
         handleChangeInput(event_pond);
         handleChangeInput(event_diff);

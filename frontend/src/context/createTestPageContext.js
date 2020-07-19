@@ -251,9 +251,11 @@ export function CreateTestPageProvider(props) {
     const handleChangeInput = (e) => {
         if (e.target.name === 'dificultad') setDificultad(e.target.value);
         else if (e.target.name === 'ponderacion') {
-            if (e.target.value && Number(e.target.value) >= 1) setPonderacion(e.target.value);
-            else setPonderacion(e.target.value);
-        }
+            console.log(e.target.value)
+            if (e.target.value === null || e.target.value === undefined) setPonderacion(e.target.value);
+            else if (e.target.value && Number(e.target.value) >= 1) setPonderacion(e.target.value);
+            else if(e.target.value && e.target.value.length === 0) setPonderacion(e.target.value);
+        } 
         else if (e.target.name === 'pregunta') setPregunta(e.target.value);
     }
 
@@ -413,7 +415,8 @@ export function CreateTestPageProvider(props) {
         flagEditarPregunta,
         formats,
         editTest,
-        missingEstudiantes
+        missingEstudiantes,
+        flagGetAllInfo
     ]);
 
     return <CreateTestPageContext.Provider value = {value} {...props} />

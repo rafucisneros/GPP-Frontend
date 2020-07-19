@@ -33,7 +33,7 @@ const StepFinish = () => {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} style={{marginTop: '32px'}}>
-                    <Link to={"home"} className="link" onClick={handleStep}>
+                    <Link to={"/home"} className="link" onClick={handleStep}>
                         <Button
                             // type="submit"
                             variant="contained"
