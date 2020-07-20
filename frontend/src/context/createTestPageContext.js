@@ -74,7 +74,7 @@ export function CreateTestPageProvider(props) {
 
     // Step Secciones (Variables de estados)
     const [estudiantes, setEstudiantes] = useState([]);
-    const [missingEstudiantes, setMissingEstudiantes] = useState([]);
+    const [missingEstudiantes, setMissingEstudiantes] = useState({});
     const [secciones, setSecciones] = useState([]);
     const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
     const {usuario, setUsuario} = useUsuario();
@@ -181,27 +181,32 @@ export function CreateTestPageProvider(props) {
 
         // Paso Secciones
         let auxSections = [];
-        let missEmails = [];
+        let missingEmails = {};
+        missingEmails['ALL'] =  [];
         let keys = Object.keys(data.sections).reverse();
         keys.forEach( key => {
             let info = {};
             info.id = key;
             info.estudiantes = [];
             console.log(data.sections[key])
-            data.sections[key].forEach( email => {
+            data.sections[key].students.forEach( email => {
                 let studentInfo = {};
                 let indexEstudiante = estudiantes.findIndex( est => email === est.email);
-                if (indexEstudiante === -1 ) {
-                    missEmails.push(email);
-                }
-                else if (indexEstudiante > 0 ) {
+                if (indexEstudiante > 0 ) {
                     studentInfo.email = email;
                     info.estudiantes.push(studentInfo);
                 }
             })
+            data.sections[key].missing_emails.forEach( email => {
+                let studentInfo = {};
+                studentInfo.email = email;
+                info.estudiantes.push(studentInfo);
+            })
+            missingEmails[key] =  data.sections[key].missing_emails;
+            missingEmails['ALL'] =  [... missingEmails['ALL'], ...data.sections[key].missing_emails]
             auxSections.push(info);
         });
-        setMissingEstudiantes(missEmails);
+        setMissingEstudiantes(missingEmails);
         setSecciones(auxSections);
     }
 
