@@ -87,7 +87,7 @@ export default function HomePage(){
                   <Grid container spacing={2} direction="column" style={{width: "80%"}}>
                   {/* <Grid container spacing={2} direction="column" style={{width: activeExams && activeExams.length < 6  ? "80%" : "80%"}}> */}
                     <div>
-                      <h1>Examenes Activos</h1>
+                      <h1>Exámenes Activos</h1>
                     </div>                    
                     <Grid container direction="row" style={{justifyContent: activeExams && activeExams.length < 6 ? "space-around" : ""}}>
                       {activeExams ? (
@@ -110,7 +110,7 @@ export default function HomePage(){
                   <br/>
                   <Grid container spacing={2} direction="column" style={{width: "80%"}}>
                     <div>
-                      <h1>Examenes Culminados</h1>
+                      <h1>Exámenes Culminados</h1>
                     </div>
                     <Grid container direction="row" style={{justifyContent: finishedExams && finishedExams.length < 6 ? "space-around" : ""}}>
                       {finishedExams ? (
@@ -138,7 +138,7 @@ export default function HomePage(){
                 <Fragment>
                   <Grid container spacing={2} direction="column" style={{width: "80%"}}>
                     <div>
-                      <h1>Examenes Asignados</h1>
+                      <h1>Exámenes Asignados</h1>
                     </div>
                     <Grid container direction="row" style={{justifyContent: sectionExams && sectionExams.length < 6 ? "space-around" : ""}}>
                       {sectionExams ? (
@@ -161,7 +161,7 @@ export default function HomePage(){
                   <br/>
                   <Grid container spacing={2} direction="column" style={{width: "80%"}}>
                     <div>
-                      <h1>Examenes Libres</h1>
+                      <h1>Exámenes Libres</h1>
                     </div>
                     <Grid container direction="row" style={{justifyContent: openExams && openExams.length < 6 ? "space-around" : ""}}>
                       {openExams ? (
