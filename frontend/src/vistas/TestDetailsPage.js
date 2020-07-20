@@ -125,14 +125,14 @@ export default function TestDetailsPage(props){
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={3} md={3} lg={3}>
-                                            {exam.attempt}
+                                            {exam.attempt ? exam.attempt : "Sin Límite"}
                                         </Grid>
                                     </Grid> 
                                 </Grid>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         {/* Preguntas */}
-                        <ExpansionPanel expanded={questionsExpanded} onChange={handleChangeQuestionsExpanded}>
+                        <ExpansionPanel expanded={questionsExpanded} onChange={handleChangeQuestionsExpanded} style={{width: "100%"}}>
                             <ExpansionPanelSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1a-content"
@@ -224,6 +224,27 @@ export default function TestDetailsPage(props){
                                                                 </div>
                                                             )
                                                         })}
+                                                    </Grid>
+                                                </Fragment>
+                                                }
+                                                {pregunta.q_type.name === "verdadero o falso" &&
+                                                <Fragment>
+                                                    <Grid item xs={3} md={3} lg={3}>
+                                                        <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                                                            Respuestas:
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={3} md={3} lg={3}>
+                                                        <div 
+                                                            style={{border: pregunta.option ===  1 ? "1px solid green" : "none"}}
+                                                        >
+                                                            Verdadero
+                                                        </div>
+                                                        <div
+                                                            style={{border: pregunta.option !==  1 ? "1px solid green" : "none"}}
+                                                        >
+                                                            Falso
+                                                        </div>
                                                     </Grid>
                                                 </Fragment>
                                                 }

@@ -51,9 +51,10 @@ const ListaAdmins = (props) => {
           } catch (error) {
             let mensaje = "Ocurrio un agregando al administrador"
             if(typeof(error.data.email) === "object"){
-              if(error.data.email.includes("Enter a valid email address.")){
-                mensaje += ": Ingrese un correo electrónico válido."
-              }
+              mensaje += ": " + error.data.email[0]
+            }            
+            if(typeof(error.data.password) === "object"){
+              mensaje += ": " + error.data.password[0].replace("este campo", "la contraseña")
             }
             setErrorMsg(mensaje)
             setAlertOpen(true)
@@ -98,8 +99,12 @@ const ListaAdmins = (props) => {
             setSuccessMsg("Modificado Exitosamente")
             setAlertSuccessOpen(true)
             resolve();
-          } catch {
-            setErrorMsg("Error modificando el admin")
+          } catch (error){
+            let mensaje = "Ocurrio un error modificando al administrador"
+            if(typeof(error.data.email) === "object"){
+              mensaje += ": " + error.data.email[0]
+            }
+            setErrorMsg(mensaje)
             setAlertOpen(true)
             reject()
           }
