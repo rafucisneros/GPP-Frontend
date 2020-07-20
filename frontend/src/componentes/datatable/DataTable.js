@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import Switch from '@material-ui/core/Switch';
 
 const DataTable = ({ 
-  title, columns, data, grouping, selection, exportButton, toolbar,
+  title, columns, data, grouping, selection, exportButton, toolbar, useActions,
   showSelectAllCheckbox, actionsColumnIndex, onRowAdd, onRowUpdate, onRowDelete,
   isCalificacion, isEstadistica, isTeachersExamList, handleToggleExamEnabled,
   onRowClick, customExam
@@ -83,7 +83,7 @@ const DataTable = ({
             onRowUpdate: onRowUpdate,                   
             onRowDelete: onRowDelete
           }}
-          actions={[
+          actions={ useActions ? [
             rowData => ({
               icon: ()=>{
                 return <Switch
@@ -122,7 +122,7 @@ const DataTable = ({
             //   onClick: (event, rowData) => {alert("Borrar elemento")},
             //   hidden: !customExam
             // }
-          ]}
+          ] : null}
         />
       </Fragment>
     );
@@ -137,6 +137,7 @@ DataTable.propTypes = {
   toolbar: PropTypes.bool,
   isTeachersExamList: PropTypes.bool,
   showSelectAllCheckbox: PropTypes.bool,
+  useActions: PropTypes.bool,
   actionsColumnIndex: PropTypes.number,
   onRowAdd: PropTypes.func,
   onRowUpdate: PropTypes.func,
@@ -146,6 +147,7 @@ DataTable.propTypes = {
 
 DataTable.defaultProps = {
   isTeachersExamList: false,
+  useActions: true, 
   grouping: true, 
   selection: true,
   exportButton: true,

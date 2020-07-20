@@ -31,7 +31,7 @@ export default function EditTestPage(props){
 
     const { setContentMenu } = useGeneral();
     const [ calificaciones, setCalificaciones ] = useState(null);
-    setContentMenu(`edit_test`);
+    setContentMenu(`home`);
 
     useEffect(() => {
         let fetchData = async () => {
@@ -67,10 +67,6 @@ export default function EditTestPage(props){
                                 title="Calificaciones" 
                                 data={[...calificaciones]} 
                                 columns={columns} 
-                                onRowAdd={()=>{}}
-                                onRowDelete={()=>{}}
-                                onRowUpdate={()=>{}}
-                                customExam={true}
                             /> : <Loading/>
                         }
                     </CardContent>

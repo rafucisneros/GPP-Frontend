@@ -232,7 +232,7 @@ const NavBar = () => {
                                         <AssignmentIcon />
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Examenes </Typography>}
+                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Exámenes </Typography>}
                                     />
                                     {collapse ? <ExpandLess /> : <ExpandMore />}
                                 </ListItem>
@@ -264,7 +264,7 @@ const NavBar = () => {
                                         <EditIcon />
                                     </ListItemIcon>
                                     <ListItemText 
-                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Ver Examenes </Typography>}
+                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Ver Exámenes </Typography>}
                                     />
                                 </ListItem>
                             </Link>

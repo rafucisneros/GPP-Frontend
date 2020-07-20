@@ -19,6 +19,7 @@ import { getExamConfiguration, getExamSections, getExamComplete } from '../servi
 import { getExam } from '../servicios/servicioPresentarExamen'
 import Loading from '../componentes/loading/Loading.js';
 import { Divider } from '@material-ui/core';
+import { useGeneral } from '../context/generalContext';
 
 const Latex = require('react-latex');
 let time = require("moment")
@@ -26,6 +27,7 @@ let time = require("moment")
 export default function TestDetailsPage(props){
     const examID = props.match.params.id;
 
+    const { setContentMenu } = useGeneral();
     const [exam, setExam] = useState(null)
     
     const [basicConfigExpanded, setBasicConfigExpanded] = React.useState(true);
@@ -42,6 +44,7 @@ export default function TestDetailsPage(props){
     const handleChangeListSectionsExpanded = () => {
         setListSectionsExpanded(!listSectionsExpanded);
     };
+    setContentMenu(`home`);
 
     useEffect(() => {
         let fetchData = async () => {
@@ -218,11 +221,31 @@ export default function TestDetailsPage(props){
                                                     </Grid>
                                                     <Grid item xs={3} md={3} lg={3}>
                                                         {pregunta.answers.map( respuesta => {
-                                                            return (
-                                                                <div>
-                                                                    -) {respuesta.content}
-                                                                </div>
-                                                            )
+                                                            switch(pregunta.q_type.name){
+                                                                case "ordenamiento":
+                                                                    return (
+                                                                        <div>
+                                                                            <span style={{color:"green", fontWeight: "bold"}}>({respuesta.option})</span>
+                                                                            {respuesta.content}{" "} 
+                                                                        </div>
+                                                                    )
+                                                                case "selección múltiple":
+                                                                case "selección simple":
+                                                                    return (
+                                                                        <div style={{
+                                                                            color: respuesta.option ===  1 ? "green" : "rgba(0,0,0,0.87)",
+                                                                            fontWeight: respuesta.option ===  1 ? "bold" : "400",
+                                                                        }}>
+                                                                            {respuesta.content}
+                                                                        </div>
+                                                                    )
+                                                                default:
+                                                                    return (
+                                                                        <div>
+                                                                            {respuesta.content}
+                                                                        </div>
+                                                                    )
+                                                            }
                                                         })}
                                                     </Grid>
                                                 </Fragment>
@@ -236,12 +259,18 @@ export default function TestDetailsPage(props){
                                                     </Grid>
                                                     <Grid item xs={3} md={3} lg={3}>
                                                         <div 
-                                                            style={{border: pregunta.option ===  1 ? "1px solid green" : "none"}}
+                                                            style={{
+                                                                color: pregunta.option ===  1 ? "green" : "rgba(0,0,0,0.87)",
+                                                                fontWeight: pregunta.option ===  1 ? "bold" : "400",
+                                                            }}
                                                         >
                                                             Verdadero
                                                         </div>
                                                         <div
-                                                            style={{border: pregunta.option !==  1 ? "1px solid green" : "none"}}
+                                                            style={{
+                                                                color: pregunta.option !==  1 ? "green" : "rgba(0,0,0,0.87)",
+                                                                fontWeight: pregunta.option !==  1 ? "bold" : "400",
+                                                            }}
                                                         >
                                                             Falso
                                                         </div>

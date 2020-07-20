@@ -31,7 +31,7 @@ export default function ExamsPage(){
     const { usuario } = useUsuario();
     // const [examanes, setExamanes] = useState([]);
     const [examanes, setExamanes] = useState([]);
-    setContentMenu(`edit_test`);
+    setContentMenu(`home`);
 
     // GET requests y componentes de montaje
     useEffect(() => {
@@ -66,7 +66,7 @@ export default function ExamsPage(){
             { title: 'Nombre', field: 'name'},
             { title: 'Intentos realizados', field: 'attempts'},
             { title: 'Nota Obtenida', field: 'score'},
-            { title: 'Nota Total', field: 'total_value_exam'},
+            { title: 'Aprobado', field: 'approved'},
             // { title: '', field: 'name'},
         ] 
         setColumnas(columns)
@@ -81,7 +81,20 @@ export default function ExamsPage(){
             getResultsForStudent(usuario.id)
             .then( res => {
                 if (res.data) {
-                    setExamanes(res.data);
+                    let examenes = []
+                    Object.keys(res.data).forEach( key => {
+                        examenes.push({
+                            ...res.data[key],
+                            id: key,
+                            approved: res.data[key].passed ? "Si" : "No"
+                        })
+                    })
+                    setExamanes(examenes.map( x => {
+                        return {
+                            ...x,
+                            score: x.score + "/" + x.total_value_exam,
+                        }
+                    }));
                 }
             })
         }
@@ -147,7 +160,7 @@ export default function ExamsPage(){
                             <CardContent style={{width: "100%"}}>
                                 {usuario.groups.map(x => x.name).some(role => ["Professor"].includes(role)) ? 
                                     <DataTable 
-                                        title="Lista de Examenes" 
+                                        title="Lista de Exámenes" 
                                         data={[...examanes]} 
                                         columns={columnas} 
                                         onRowAdd={()=>{}}
@@ -161,15 +174,13 @@ export default function ExamsPage(){
                                         customExam={true}
                                     /> :
                                     <DataTable 
-                                        title="Lista de Examenes" 
+                                        title="Lista de Exámenes" 
                                         data={[...examanes]} 
                                         columns={columnas} 
-                                        isCalificacion={true}
-                                        isEstadistica={true}
                                         selection={false}
-                                        isTeachersExamList={true}
                                         handleToggleExamEnabled={handleToggleExamEnabled}
                                         onRowClick={onRowClick}
+                                        useActions={false}
                                     />
                                 }
                             </CardContent>
