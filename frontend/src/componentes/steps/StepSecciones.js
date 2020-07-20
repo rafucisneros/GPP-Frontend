@@ -84,7 +84,7 @@ const StepSecciones = (props) => {
         .then( res => {
             console.log(res)
             if (res) {
-                // setLoading(true);
+                setLoading(true);
                 handleChangeStep('step_4');
                 console.log("Update Secciones")
             }
@@ -100,7 +100,7 @@ const StepSecciones = (props) => {
         if (secciones.length > 0){
             for( let seccion of secciones){
                 if(seccion.id === id) {
-                    handleLoading(true);
+                    // handleLoading(true);
                     handleChangeComp(seccion, 'seccion_seleccionada');
                     break;
                 }    
