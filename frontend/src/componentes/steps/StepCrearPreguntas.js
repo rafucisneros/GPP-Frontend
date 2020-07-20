@@ -277,7 +277,16 @@ const StepCrearPreguntas = () => {
     const handleNextStep = () => {
         setLoading(true);
         handleModalConfirmacion();
+        let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
         console.log(listaPreguntasExamen)
+        auxListaExamen.forEach( value => {
+            if (value.q_type_id === 'Ordenamiento') {
+                value.answers.forEach( (res, index) => {
+                    res.correct = index;
+                })
+            }
+        })
+        console.log(auxListaExamen);
         postAllPreguntasExamen(listaPreguntasExamen, exam_id)
         .then( res => {
             if (res) {
