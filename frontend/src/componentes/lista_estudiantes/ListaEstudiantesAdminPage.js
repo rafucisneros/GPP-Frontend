@@ -46,12 +46,11 @@ const ListaEstudiantes = (props) => {
             setAlertSuccessOpen(true)            
             resolve();
           } catch (error) {
+            debugger
             let mensaje = "Ocurrio un error agregando al estudiante"
             if(typeof(error.data.email) === "object"){
-              if(error.data.email.includes("Enter a valid email address.")){
-                mensaje += ": Ingrese un correo electrónico válido."
-              }
-            }
+              mensaje += ": " + error.data.email[0]
+            }  
             setErrorMsg(mensaje)
             setAlertOpen(true)
             reject()
@@ -72,8 +71,15 @@ const ListaEstudiantes = (props) => {
             setSuccessMsg("Eliminado Exitosamente")
             setAlertSuccessOpen(true)            
             resolve();
-          } catch {
-            setErrorMsg("Error borrando el estudiante")
+          } catch (error) {
+            let mensaje = "Ocurrio un error modificando al estudiante"
+            if(typeof(error.data.email) === "object"){
+              mensaje += ": " + error.data.email[0]
+            }
+            if(typeof(error.data.password) === "object"){
+              mensaje += ": " + error.data.password[0].replace("este campo", "la contraseña")
+            }
+            setErrorMsg(mensaje)
             setAlertOpen(true)
             reject()
           }

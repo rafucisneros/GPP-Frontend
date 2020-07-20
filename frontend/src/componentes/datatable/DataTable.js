@@ -23,7 +23,7 @@ const DataTable = ({
     setRedirectEstadistica(`examen/${rowData.id}`);
   }
 
-  const handleRedirectCalificaciones = () => setRedirectCalificaciones(true);
+  const handleRedirectCalificaciones = (rowData) => setRedirectCalificaciones(rowData.id);
 
     return (
       <Fragment>

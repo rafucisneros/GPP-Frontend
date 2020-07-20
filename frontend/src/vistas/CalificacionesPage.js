@@ -14,9 +14,11 @@ import { Alert } from '../componentes/alert/Alert.js'
 import { getResultsForExam } from '../servicios/servicioGeneral.js'
 
 const columns = [
-    { title: 'Alummo', field: 'name', defaultSort : 'asc' },
-    { title: 'Nota (100%)', field: 'total_score' },
-    { title: 'Puntaje', field: 'score' },
+    { title: 'Alumno', field: 'name', defaultSort : 'asc' },
+    { title: 'Correo', field: 'email', defaultSort : 'asc' },
+    { title: 'Sección', field: 'section', defaultSort : 'asc' },
+    { title: 'Puntaje Obtenido', field: 'score' },
+    { title: 'Aprobado', field: 'approved' },
     { title: 'Intentos realizados', field: 'attempts' },
 ]
 
@@ -38,7 +40,9 @@ export default function EditTestPage(props){
                 let calificaciones = response.data.students.map( x => {
                     return {
                         ...x, 
-                        total_score: response.data.total_score
+                        score: x.score + "/" + response.data.total_score,
+                        approved: x.passed ? "Si" : "No",
+                        section: x.section.split(" ")[1]
                     }
                 })
                 setCalificaciones(calificaciones)

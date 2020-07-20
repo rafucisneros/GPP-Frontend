@@ -47,7 +47,7 @@ export const ListaEstudiantes = ({ secciones }) => {
         <TabPanel value={activeTab} index={index}>
           <DataTable 
             title={"Sección " + (index + 1)} 
-            data={secciones[section].map( x => {
+            data={secciones[section].students.concat(secciones[section].missing_emails).map( x => {
               return {
                 email: x
               }
