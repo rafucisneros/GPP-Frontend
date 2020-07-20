@@ -48,3 +48,10 @@
 .detalle-examen-respuesta{
   margin-bottom: 5px;
 }
+
+.cardTitle{
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}

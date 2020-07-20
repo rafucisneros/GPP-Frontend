@@ -84,7 +84,7 @@ export default function HomePage(){
                 // Profesores
                 usuario.groups.find(x => x.name === "Professor") && (
                 <Fragment>
-                  <Grid container spacing={2} direction="column" style={{width: "80%"}}>
+                  <Grid container spacing={2} direction="column">
                   {/* <Grid container spacing={2} direction="column" style={{width: activeExams && activeExams.length < 6  ? "80%" : "80%"}}> */}
                     <div>
                       <h1>Exámenes Activos</h1>
@@ -108,7 +108,7 @@ export default function HomePage(){
                     </Grid>
                   </Grid>
                   <br/>
-                  <Grid container spacing={2} direction="column" style={{width: "80%"}}>
+                  <Grid container spacing={2} direction="column">
                     <div>
                       <h1>Exámenes Culminados</h1>
                     </div>
@@ -136,7 +136,7 @@ export default function HomePage(){
               {
                 usuario.groups.find(x => x.name === "Student") && (
                 <Fragment>
-                  <Grid container spacing={2} direction="column" style={{width: "80%"}}>
+                  <Grid container spacing={2} direction="column">
                     <div>
                       <h1>Exámenes Asignados</h1>
                     </div>
@@ -159,7 +159,7 @@ export default function HomePage(){
                     </Grid>
                   </Grid>
                   <br/>
-                  <Grid container spacing={2} direction="column" style={{width: "80%"}}>
+                  <Grid container spacing={2} direction="column">
                     <div>
                       <h1>Exámenes Libres</h1>
                     </div>

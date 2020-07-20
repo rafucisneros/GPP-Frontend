@@ -15,6 +15,8 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Tooltip from '@material-ui/core/Tooltip';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { getExamConfiguration, getExamSections, getExamComplete } from '../servicios/servicioDetalleExamen'
 import { getExam } from '../servicios/servicioPresentarExamen'
 import Loading from '../componentes/loading/Loading.js';
@@ -228,7 +230,9 @@ export default function TestDetailsPage(props){
                                                                         <div
                                                                             className="detalle-examen-respuesta" 
                                                                         >
-                                                                            <span style={{color:"green", fontWeight: "bold"}}>({respuesta.option}){" "}</span>
+                                                                            <Tooltip title="Posicion Correcta" placement="right" arrow>
+                                                                                <span style={{color:"green", fontWeight: "bold"}}>({respuesta.option}){" "}</span>
+                                                                            </Tooltip>
                                                                             {respuesta.content}{" "} 
                                                                         </div>
                                                                     )
@@ -242,7 +246,16 @@ export default function TestDetailsPage(props){
                                                                                 fontWeight: respuesta.option ===  1 ? "bold" : "400",
                                                                             }}
                                                                         >
-                                                                            {respuesta.content}
+                                                                            <div style={{display: "flex", alignItems: "center"}}>
+                                                                                {respuesta.content}
+                                                                                {respuesta.option ===  1 && 
+                                                                                (
+                                                                                    <Tooltip title="Respuesta Correcta" placement="right" arrow>
+                                                                                        <CheckBoxIcon color="green"/>
+                                                                                    </Tooltip>
+                                                                                )
+                                                                                }
+                                                                            </div>
                                                                         </li>
                                                                     )
                                                                 default:
@@ -270,17 +283,29 @@ export default function TestDetailsPage(props){
                                                             style={{
                                                                 color: pregunta.option ===  1 ? "green" : "rgba(0,0,0,0.87)",
                                                                 fontWeight: pregunta.option ===  1 ? "bold" : "400",
+                                                                display: "flex",
+                                                                alignItems: "center"
                                                             }}
                                                         >
                                                             Verdadero
+                                                            {pregunta.option ===  1 && 
+                                                            (<Tooltip title="Respuesta Correcta" placement="right" arrow>
+                                                                <CheckBoxIcon color="green"/>
+                                                            </Tooltip>)}
                                                         </div>
                                                         <div
                                                             style={{
                                                                 color: pregunta.option !==  1 ? "green" : "rgba(0,0,0,0.87)",
                                                                 fontWeight: pregunta.option !==  1 ? "bold" : "400",
+                                                                display: "flex",
+                                                                alignItems: "center"
                                                             }}
                                                         >
                                                             Falso
+                                                            {pregunta.option !==  1 && 
+                                                            (<Tooltip title="Respuesta Correcta" placement="right" arrow>
+                                                                <CheckBoxIcon color="green"/>
+                                                            </Tooltip>)}
                                                         </div>
                                                     </Grid>
                                                 </Fragment>
