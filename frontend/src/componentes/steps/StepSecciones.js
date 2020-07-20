@@ -100,7 +100,7 @@ const StepSecciones = (props) => {
         if (secciones.length > 0){
             for( let seccion of secciones){
                 if(seccion.id === id) {
-                    handleLoading(true);
+                    // handleLoading(true);
                     handleChangeComp(seccion, 'seccion_seleccionada');
                     break;
                 }    

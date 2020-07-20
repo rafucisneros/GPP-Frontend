@@ -1,6 +1,15 @@
 import React from 'react';
 import nonMobile from '../assets/imagenes/non-moviles.png';
 
+// helpers
+import { logout } from '../helpers/auth.js'
+
+// material
+import {
+    Button,
+} from '@material-ui/core';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 export default function NonResponsivePage(){
 
     return(
@@ -15,6 +24,15 @@ export default function NonResponsivePage(){
             <p>
                 {'Disculpe las molestias ofrecidas.'}
             </p>
+            <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                onClick={logout}
+                endIcon={<ExitToAppIcon/>}
+            >
+                Salir
+            </Button>
             </header>
         </div>
     )

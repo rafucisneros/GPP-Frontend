@@ -176,7 +176,7 @@ const ListaEstudiantes = (props) => {
             //         finalData.push(estudiante);
             //     }
             // }
-            props.handleLoading(false);
+            // props.handleLoading(false);
             setData(finalData);
         }
         
