@@ -84,7 +84,7 @@ const StepSecciones = (props) => {
         .then( res => {
             console.log(res)
             if (res) {
-                setLoading(true);
+                // setLoading(true);
                 handleChangeStep('step_4');
                 console.log("Update Secciones")
             }

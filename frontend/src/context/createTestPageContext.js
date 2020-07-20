@@ -130,7 +130,7 @@ export function CreateTestPageProvider(props) {
         setValorFechaFin( moment(data.conf_ini.finish_date).toDate());
         setTitulo(data.conf_ini.name);
         setComentarios(data.conf_ini.comments);
-        SetNroIntentos(data.conf_ini.attempt);
+        SetNroIntentos(data.conf_ini.attempt ? data.conf_ini.attempt : "infinito");
         setOpenExam(data.conf_ini.open);
 
         // Paso Crear Preguntas
