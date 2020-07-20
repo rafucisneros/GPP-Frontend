@@ -312,7 +312,18 @@ export default function ModalAddAreaSubAreaTema(props) {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={sendTopics} color="primary">
+          <Button 
+            onClick={sendTopics} 
+            color="primary" 
+            disabled={
+              ( seleccionado === 'tema' && areaSeleccionada && subareaSeleccionada && elemento ) ? 
+                false :
+                ( seleccionado === 'subarea' && areaSeleccionada && elemento ) ?
+                  false :
+                  ( seleccionado === 'area' && elemento ) ? 
+                  false :
+                  true
+            }>
             Agregar
           </Button>
           <Button onClick={handleCloseModal} color="secondary">
