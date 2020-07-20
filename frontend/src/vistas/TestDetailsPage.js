@@ -214,12 +214,13 @@ export default function TestDetailsPage(props){
                                                 </Grid>
                                                 {pregunta.q_type.name != "verdadero o falso" &&
                                                 <Fragment>
-                                                    <Grid item xs={3} md={3} lg={3}>
+                                                    <Grid item xs={2} md={2} lg={2}>
                                                         <Typography variant="subtitle1" style={{fontWeight : 600}}>
                                                             Respuestas:
                                                         </Typography>
                                                     </Grid>
-                                                    <Grid item xs={3} md={3} lg={3}>
+                                                    <Grid item xs={4} md={4} lg={4}>
+                                                        <ul>                                                        
                                                         {pregunta.answers.map( respuesta => {
                                                             switch(pregunta.q_type.name){
                                                                 case "ordenamiento":
@@ -234,7 +235,7 @@ export default function TestDetailsPage(props){
                                                                 case "selección múltiple":
                                                                 case "selección simple":
                                                                     return (
-                                                                        <div
+                                                                        <li
                                                                             className="detalle-examen-respuesta" 
                                                                             style={{
                                                                                 color: respuesta.option ===  1 ? "green" : "rgba(0,0,0,0.87)",
@@ -242,16 +243,17 @@ export default function TestDetailsPage(props){
                                                                             }}
                                                                         >
                                                                             {respuesta.content}
-                                                                        </div>
+                                                                        </li>
                                                                     )
                                                                 default:
                                                                     return (
-                                                                        <div className="detalle-examen-respuesta" >
+                                                                        <li className="detalle-examen-respuesta" >
                                                                             {respuesta.content}
-                                                                        </div>
+                                                                        </li>
                                                                     )
                                                             }
                                                         })}
+                                                        </ul>
                                                     </Grid>
                                                 </Fragment>
                                                 }
