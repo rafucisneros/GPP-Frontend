@@ -224,24 +224,29 @@ export default function TestDetailsPage(props){
                                                             switch(pregunta.q_type.name){
                                                                 case "ordenamiento":
                                                                     return (
-                                                                        <div>
-                                                                            <span style={{color:"green", fontWeight: "bold"}}>({respuesta.option})</span>
+                                                                        <div
+                                                                            className="detalle-examen-respuesta" 
+                                                                        >
+                                                                            <span style={{color:"green", fontWeight: "bold"}}>({respuesta.option}){" "}</span>
                                                                             {respuesta.content}{" "} 
                                                                         </div>
                                                                     )
                                                                 case "selección múltiple":
                                                                 case "selección simple":
                                                                     return (
-                                                                        <div style={{
-                                                                            color: respuesta.option ===  1 ? "green" : "rgba(0,0,0,0.87)",
-                                                                            fontWeight: respuesta.option ===  1 ? "bold" : "400",
-                                                                        }}>
+                                                                        <div
+                                                                            className="detalle-examen-respuesta" 
+                                                                            style={{
+                                                                                color: respuesta.option ===  1 ? "green" : "rgba(0,0,0,0.87)",
+                                                                                fontWeight: respuesta.option ===  1 ? "bold" : "400",
+                                                                            }}
+                                                                        >
                                                                             {respuesta.content}
                                                                         </div>
                                                                     )
                                                                 default:
                                                                     return (
-                                                                        <div>
+                                                                        <div className="detalle-examen-respuesta" >
                                                                             {respuesta.content}
                                                                         </div>
                                                                     )
@@ -259,6 +264,7 @@ export default function TestDetailsPage(props){
                                                     </Grid>
                                                     <Grid item xs={3} md={3} lg={3}>
                                                         <div 
+                                                            className="detalle-examen-respuesta" 
                                                             style={{
                                                                 color: pregunta.option ===  1 ? "green" : "rgba(0,0,0,0.87)",
                                                                 fontWeight: pregunta.option ===  1 ? "bold" : "400",
