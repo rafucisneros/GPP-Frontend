@@ -15,6 +15,10 @@ import { useGeneral } from '../context/generalContext'
 import { patchUser } from '../servicios/servicioAdmin.js'
 import { postUserPassword } from '../servicios/servicioUsuario.js'
 import { Alert } from '../componentes/alert/Alert.js'
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 
 export default function ProfilePage(){
 
@@ -26,6 +30,10 @@ export default function ProfilePage(){
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
+  const [showContraseñaNueva, setShowContraseñaNueva] = useState(false);
+  const [showContraseñaActual, setShowContraseñaActual] = useState(false);
+  const [showContraseñaNuevaConfirmar, setShowContraseñaNuevaConfirmar] = useState(false);
+
 
   // Para el Alert
   const [ alertOpen, setAlertOpen] = useState(false)
@@ -63,6 +71,16 @@ export default function ProfilePage(){
       setAlertOpen(true)
     }
   }
+
+  const handleClickShowPassword = (type) => {
+    if (type === 'nueva') setShowContraseñaNueva(!showContraseñaNueva);
+    else if (type === 'actual') setShowContraseñaActual(!showContraseñaActual);
+    else if (type === 'confirmar') setShowContraseñaNuevaConfirmar(!showContraseñaNuevaConfirmar);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
  
   const changePassword = async () => {
     try{
@@ -207,7 +225,7 @@ export default function ProfilePage(){
                       helperText={errores && errores.tituloError ? "El campo es requerido" : null}
                       id='contraseña_nueva'
                       name='contraseña_nueva'
-                      type="password"
+                      type={showContraseñaNueva ? 'text' : 'password'}
                       margin="normal"
                       label="Contraseña Nueva"
                       required
@@ -216,6 +234,19 @@ export default function ProfilePage(){
                       variant="outlined"
                       fullWidth
                       autoFocus
+                      InputProps={{
+                        endAdornment: 
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => handleClickShowPassword('nueva')}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showContraseñaNueva ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>,
+                      }}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -227,7 +258,7 @@ export default function ProfilePage(){
                       helperText={errores && errores.tituloError ? "El campo es requerido" : null}
                       id='contraseñaActual'
                       name='contraseñaActual'
-                      type="password"
+                      type={showContraseñaActual ? 'text' : 'password'}
                       margin="normal"
                       label="Contraseña Actual"
                       required
@@ -236,6 +267,19 @@ export default function ProfilePage(){
                       variant="outlined"
                       fullWidth
                       autoFocus
+                      InputProps={{
+                        endAdornment: 
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => handleClickShowPassword('actual')}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showContraseñaActual ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>,
+                      }}
                       InputLabelProps={{
                         shrink: true,
                       }}
@@ -247,7 +291,7 @@ export default function ProfilePage(){
                       helperText={errores && errores.tituloError ? "El campo es requerido" : null}
                       id='contraseñaNuevaConfirmacion'
                       name='contraseñaNuevaConfirmacion'
-                      type="password"
+                      type={showContraseñaNuevaConfirmar ? 'text' : 'password'}
                       margin="normal"
                       label="Confirmación Contraseña Nueva"
                       required
@@ -256,6 +300,19 @@ export default function ProfilePage(){
                       variant="outlined"
                       fullWidth
                       autoFocus
+                      InputProps={{
+                        endAdornment: 
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => handleClickShowPassword('confirmar')}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showContraseñaNuevaConfirmar ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>,
+                      }}
                       InputLabelProps={{
                         shrink: true,
                       }}

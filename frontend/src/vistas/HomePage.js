@@ -89,7 +89,7 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Activos</h1>
                     </div>                    
-                    <Grid container direction="row" style={{justifyContent: activeExams && activeExams.length < 6 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: activeExams && activeExams.length < 6 ? "space-around" : "center"}}>
                       {activeExams ? (
                         activeExams.length < 6 ? (activeExams.map((exam, index) => {
                           return (
@@ -112,7 +112,7 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Culminados</h1>
                     </div>
-                    <Grid container direction="row" style={{justifyContent: finishedExams && finishedExams.length < 6 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: finishedExams && finishedExams.length < 6 ? "space-around" : "center"}}>
                       {finishedExams ? (
                         finishedExams.length < 6 ? (finishedExams.map((exam, index) => {
                           return (
