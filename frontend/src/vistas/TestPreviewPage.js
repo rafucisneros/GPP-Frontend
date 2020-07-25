@@ -75,7 +75,9 @@ export default function TestPreviewPage(props){
                 <Grid container spacing={2} style={{margin: "8px 0px"}}>
                   <Grid container spacing={2} direction={"row"}>
                     <Grid item xs={3} md={3} lg={3}>
-                      <Typography>Nombre:</Typography>
+                      <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                        Nombre:
+                      </Typography>
                     </Grid>  
                     <Grid item xs={9} md={9} lg={9}>
                       {exam.name}
@@ -83,13 +85,17 @@ export default function TestPreviewPage(props){
                   </Grid>
                   <Grid container spacing={2} direction={"row"}>
                     <Grid item xs={3} md={3} lg={3}>
-                      <Typography>Habilitado a partir de:</Typography>
+                      <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                        Habilitado a partir de:
+                      </Typography>
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
                       {exam.start_date}
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
-                      <Typography>Habilitado hasta:</Typography>
+                      <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                        Habilitado hasta:
+                      </Typography>
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
                       {exam.finish_date}
@@ -97,13 +103,17 @@ export default function TestPreviewPage(props){
                   </Grid>
                   <Grid container spacing={2} direction={"row"}>
                     <Grid item xs={3} md={3} lg={3}>
-                      <Typography>Intentos Permitidos:</Typography>
+                      <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                        Intentos Permitidos:
+                      </Typography>
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
                       {exam.attempt}
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
-                      <Typography>Duración:</Typography>
+                      <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                        Duración:
+                      </Typography>
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
                       {exam.duration} minutos
@@ -111,7 +121,9 @@ export default function TestPreviewPage(props){
                   </Grid>
                   <Grid container spacing={2} direction={"row"}>
                     <Grid item xs={3} md={3} lg={3}>
-                      <Typography>Cantidad de preguntas:</Typography>
+                      <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                        Cantidad de preguntas:
+                      </Typography>
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
                       {exam.question_quantity}
@@ -128,7 +140,9 @@ export default function TestPreviewPage(props){
                       <Grid container spacing={2} style={{margin: "8px 0px"}}>
                         <Grid container spacing={2} direction={"row"}>
                           <Grid item xs={3} md={3} lg={3}>
-                            <Typography>Resultados Obtenidos:</Typography>
+                            <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                              Resultados Obtenidos:
+                            </Typography>
                           </Grid>  
                           <Grid item xs={3} md={3} lg={3}>
                             {exam.passed ? (
@@ -139,7 +153,9 @@ export default function TestPreviewPage(props){
                             }
                           </Grid>  
                           <Grid item xs={3} md={3} lg={3}>
-                            <Typography>Nota (último intento realizado):</Typography>
+                            <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                              Nota (último intento realizado):
+                            </Typography>
                           </Grid>  
                           <Grid item xs={3} md={3} lg={3}>
                             {exam.score} / {exam.total_score_exam}
@@ -147,7 +163,9 @@ export default function TestPreviewPage(props){
                         </Grid>
                         <Grid container spacing={2} direction={"row"}>
                           <Grid item xs={3} md={3} lg={3}>
-                            <Typography>Intentos realizados:</Typography>
+                            <Typography variant="subtitle1" style={{fontWeight : 600}}>
+                              Intentos realizados:
+                            </Typography>
                           </Grid>  
                           <Grid item xs={3} md={3} lg={3}>
                             {exam.attempts} intento(s)
@@ -171,7 +189,7 @@ export default function TestPreviewPage(props){
                         }
                       </Fragment>             
                     ) : (
-                      <Grid container spacing={2} style={{margin: "8px 0px", paddingTop: "8px"}}>
+                      <Grid container spacing={2} style={{margin: "8px 0px", paddingTop: "20px"}}>
                         <Grid container spacing={2} direction={"row"}  style={{justifyContent: "center"}}>
                           <Button 
                             onClick={() => setOpen(true)} 

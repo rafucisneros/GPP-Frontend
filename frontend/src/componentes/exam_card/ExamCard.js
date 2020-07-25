@@ -42,7 +42,7 @@ export const ExamCard = ({title, id, type}) => {
               variant="contained"
               style={{marginBottom: "2px", width: "100%"}}
             >
-              Ver Calificaciones
+              Ver notas
             </Button>
           </Link>  
           <Link style={{width: "100%", margin: 0}} to={`/detalles_examen/${id}`} className='link'>

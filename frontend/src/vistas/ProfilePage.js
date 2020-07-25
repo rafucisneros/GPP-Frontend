@@ -119,7 +119,7 @@ export default function ProfilePage(){
       <div className="toolbar-icono"/>
       <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px', width : '100%'}}>
         <Grid container spacing={3} >
-          <Grid item xs={12} md={12} lg={12}>
+          <Grid item xs={6} md={6} lg={6}>
             <Card style={{width : '100%'}}>
               <form>
                 <CardHeader
@@ -128,7 +128,7 @@ export default function ProfilePage(){
                 <Divider />
                 <CardContent>
                   <Grid container spacing={2}>
-                    <Grid item xs={6} md={6} lg={6}>
+                    <Grid item xs={12} md={12} lg={12}>
                       <TextField
                         error={errores && errores.tituloError}
                         helperText={errores && errores.tituloError ? "El campo es requerido" : null}
@@ -148,7 +148,7 @@ export default function ProfilePage(){
                         }}
                       />
                     </Grid>                  
-                    <Grid item xs={6} md={6} lg={6}>
+                    <Grid item xs={12} md={12} lg={12}>
                       <TextField
                         error={errores && errores.tituloError}
                         helperText={errores && errores.tituloError ? "El campo es requerido" : null}
@@ -168,7 +168,7 @@ export default function ProfilePage(){
                         }}
                       />
                     </Grid> 
-                    <Grid item xs={6} md={6} lg={6}>
+                    <Grid item xs={12} md={12} lg={12}>
                       <TextField
                         error={errores && errores.tituloError}
                         helperText={errores && errores.tituloError ? "El campo es requerido" : null}
@@ -183,12 +183,13 @@ export default function ProfilePage(){
                         variant="outlined"
                         fullWidth
                         autoFocus
+                        disabled={true}
                         InputLabelProps={{
                           shrink: true,
                         }}
                       />
                     </Grid> 
-                    <Grid item xs={6} md={6} lg={6}>
+                    <Grid item xs={12} md={12} lg={12}>
                       <Grid
                         container
                         direction="row"
@@ -211,7 +212,7 @@ export default function ProfilePage(){
               </form>
             </Card>
           </Grid> 
-          <Grid item xs={12} md={12} lg={12}>
+          <Grid item xs={6} md={6} lg={6}>
             <Card style={{width : '100%'}}>
               <CardHeader
                 title="Cambiar contraseña"
@@ -219,40 +220,7 @@ export default function ProfilePage(){
               <Divider />
               <CardContent>
                 <Grid container spacing={2}>
-                  <Grid item xs={6} md={6} lg={6}>
-                    <TextField
-                      error={errores && errores.tituloError}
-                      helperText={errores && errores.tituloError ? "El campo es requerido" : null}
-                      id='contraseña_nueva'
-                      name='contraseña_nueva'
-                      type={showContraseñaNueva ? 'text' : 'password'}
-                      margin="normal"
-                      label="Contraseña Nueva"
-                      required
-                      value={contraseñaNueva}
-                      onChange={(event) => setContraseñaNueva(event.target.value)}
-                      variant="outlined"
-                      fullWidth
-                      autoFocus
-                      InputProps={{
-                        endAdornment: 
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={() => handleClickShowPassword('nueva')}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                          >
-                            {showContraseñaNueva ? <Visibility /> : <VisibilityOff />}
-                          </IconButton>
-                        </InputAdornment>,
-                      }}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    />
-                  </Grid> 
-                  <Grid item xs={6} md={6} lg={6}>
+                  <Grid item xs={12} md={12} lg={12}>
                     <TextField
                       error={errores && errores.tituloError}
                       helperText={errores && errores.tituloError ? "El campo es requerido" : null}
@@ -285,7 +253,40 @@ export default function ProfilePage(){
                       }}
                     />
                   </Grid> 
-                  <Grid item xs={6} md={6} lg={6}>
+                  <Grid item xs={12} md={12} lg={12}>
+                    <TextField
+                      error={errores && errores.tituloError}
+                      helperText={errores && errores.tituloError ? "El campo es requerido" : null}
+                      id='contraseña_nueva'
+                      name='contraseña_nueva'
+                      type={showContraseñaNueva ? 'text' : 'password'}
+                      margin="normal"
+                      label="Contraseña Nueva"
+                      required
+                      value={contraseñaNueva}
+                      onChange={(event) => setContraseñaNueva(event.target.value)}
+                      variant="outlined"
+                      fullWidth
+                      autoFocus
+                      InputProps={{
+                        endAdornment: 
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => handleClickShowPassword('nueva')}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showContraseñaNueva ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>,
+                      }}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                    />
+                  </Grid> 
+                  <Grid item xs={12} md={12} lg={12}>
                     <TextField
                       error={errores && errores.tituloError}
                       helperText={errores && errores.tituloError ? "El campo es requerido" : null}
@@ -318,7 +319,7 @@ export default function ProfilePage(){
                       }}
                     />
                   </Grid>
-                  <Grid item xs={6} md={6} lg={6}>
+                  <Grid item xs={12} md={12} lg={12}>
                     <Grid
                       container
                       direction="row"

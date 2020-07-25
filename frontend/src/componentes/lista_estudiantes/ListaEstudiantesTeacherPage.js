@@ -26,10 +26,19 @@ function TabPanel(props) {
   );
 }
 
-const columns = [
-  { title: 'Correo Electrónico', field: 'email', defaultSort : 'asc'  },
-]
+const defaultStyle = {
+  cellStyle: {
+      textAlign : 'center'
+  },
+}
 
+const columns = [
+  { 
+    title: 'Correo Electrónico', 
+    field: 'email',
+    ...defaultStyle
+  }
+]
 
 export const ListaEstudiantes = ({ secciones }) => {
   const [activeTab, setActiveTab] = useState(0)
@@ -43,19 +52,19 @@ export const ListaEstudiantes = ({ secciones }) => {
           {Object.keys(secciones).map( (section, index) => <Tab label={"Sección " + (index + 1)}  />)}
         </Tabs>
       </AppBar>
-       {Object.keys(secciones).map( (section, index) => (
-        <TabPanel value={activeTab} index={index}>
-          <DataTable 
-            title={"Sección " + (index + 1)} 
-            data={secciones[section].students.concat(secciones[section].missing_emails).map( x => {
-              return {
-                email: x
-              }
-            })} 
-            columns={columns} 
-          />
-        </TabPanel>
-       ))}
+        {Object.keys(secciones).map( (section, index) => (
+          <TabPanel value={activeTab} index={index}>
+            <DataTable 
+              title={"Sección " + (index + 1)} 
+              data={secciones[section].students.concat(secciones[section].missing_emails).map( x => {
+                return {
+                  email: x
+                }
+              })} 
+              columns={columns} 
+            />
+          </TabPanel>
+        ))}
     </Fragment>
 
   )

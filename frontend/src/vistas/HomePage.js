@@ -140,7 +140,7 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Asignados</h1>
                     </div>
-                    <Grid container direction="row" style={{justifyContent: sectionExams && sectionExams.length < 6 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: sectionExams && sectionExams.length < 6 ? "space-around" : "center"}}>
                       {sectionExams ? (
                         sectionExams.length < 6 ? (sectionExams.map((exam, index) => {
                           return (
@@ -163,7 +163,7 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Libres</h1>
                     </div>
-                    <Grid container direction="row" style={{justifyContent: openExams && openExams.length < 6 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: openExams && openExams.length < 6 ? "space-around" : "center"}}>
                       {openExams ? (
                         openExams.length < 6 ? (openExams.map((exam, index) => {
                           return (

@@ -2,7 +2,7 @@ import React, {
     useEffect,
     useState,
     Fragment
- } from 'react';
+} from 'react';
 import uuid from 'uuid/v1';
 
 import { ListaEstudiantes } from '../componentes/lista_estudiantes/ListaEstudiantesTeacherPage.js';

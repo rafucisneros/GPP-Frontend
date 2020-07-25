@@ -13,13 +13,47 @@ import { Alert } from '../componentes/alert/Alert.js'
 
 import { getResultsForExam } from '../servicios/servicioGeneral.js'
 
+const defaultStyle = {
+    cellStyle: {
+        textAlign : 'center'
+    },
+}
+
 const columns = [
-    { title: 'Alumno', field: 'name', defaultSort : 'asc' },
-    { title: 'Correo', field: 'email', defaultSort : 'asc' },
-    { title: 'Sección', field: 'section', defaultSort : 'asc' },
-    { title: 'Puntaje Obtenido', field: 'score' },
-    { title: 'Aprobado', field: 'approved' },
-    { title: 'Intentos realizados', field: 'attempts' },
+    { 
+        title: 'Alumno', 
+        field: 'name',
+        ...defaultStyle
+    },
+    { 
+        title: 'Correo', 
+        field: 'email',
+        ...defaultStyle 
+    },
+    { 
+        title: 'Sección', 
+        field: 'section', 
+        render: rowData => {
+            return rowData.section ? rowData.section.split(' ')[1]  : '';
+        },
+        ...defaultStyle
+    },
+    { 
+        title: 
+        'Puntaje Obtenido', 
+        field: 'score',
+        ...defaultStyle 
+    },
+    { 
+        title: 'Aprobado', 
+        field: 'approved',
+        ...defaultStyle 
+    },
+    { 
+        title: 'Intentos realizados', 
+        field: 'attempts',
+        ...defaultStyle 
+    },
 ]
 
 export default function EditTestPage(props){
@@ -42,7 +76,6 @@ export default function EditTestPage(props){
                         ...x, 
                         score: x.score + "/" + response.data.total_score,
                         approved: x.passed ? "Si" : "No",
-                        section: x.section.split(" ")[1]
                     }
                 })
                 setCalificaciones(calificaciones)
@@ -67,6 +100,8 @@ export default function EditTestPage(props){
                                 title="Calificaciones" 
                                 data={[...calificaciones]} 
                                 columns={columns} 
+                                selection={false}
+                                useActions={false}
                             /> : <Loading/>
                         }
                     </CardContent>

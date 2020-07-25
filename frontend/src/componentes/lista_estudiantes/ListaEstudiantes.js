@@ -7,10 +7,28 @@ import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
+const defaultStyle = {
+    cellStyle: {
+        textAlign : 'center'
+    },
+}
+
 const columns = [
-    { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
-    { title: 'Apellidos', field: 'last_name' },
-    { title: 'Correo Electrónico', field: 'email' },
+    { 
+        title: 'Nombres', 
+        field: 'first_name',
+        ...defaultStyle
+    },
+    { 
+        title: 'Apellidos', 
+        field: 'last_name',
+        ...defaultStyle
+    },
+    { 
+        title: 'Correo Electrónico', 
+        ield: 'email',
+        ...defaultStyle
+    },
 ]
 
 const theme = createMuiTheme({
