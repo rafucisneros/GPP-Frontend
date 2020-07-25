@@ -7,10 +7,29 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+const defaultStyle = {
+  cellStyle: {
+      textAlign : 'center'
+  },
+}
+
 const columns = [
-    { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
-    { title: 'Apellidos', field: 'last_name' },
-    { title: 'Correo Electrónico', field: 'email' },
+    { 
+      title: 'Nombres', 
+      field: 'first_name',
+      ...defaultStyle
+      
+    },
+    { 
+      title: 'Apellidos', 
+      field: 'last_name',
+      ...defaultStyle 
+    },
+    { 
+      title: 'Correo Electrónico', 
+      field: 'email',
+      ...defaultStyle 
+    },
 ]
 
 const ListaAdmins = (props) => {

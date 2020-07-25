@@ -17,9 +17,20 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import Tooltip from '@material-ui/core/Tooltip';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import { withStyles } from '@material-ui/core/styles';
 
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
+
+const stylesTooltip = {
+    tooltip: {
+        fontSize : '13px',
+        textAlign : 'center'
+    }
+};
+
+const CustomTooltip = withStyles(stylesTooltip)(Tooltip);
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -58,14 +69,26 @@ const ListaSecciones = (props) => {
                 subheader={`${secciones.length} en total`}
                 action={
                     <Box style={{alignSelf: 'center', paddingTop: '8px'}}>
-                        <Tooltip title={'Agregar sección'} placement="right" arrow>
+                        <CustomTooltip title={'Agregar sección'} placement="right" arrow>
                             <IconButton
                                 variant="text"
                                 onClick={() => props.handleAgregarSecciones()}
                             >
                                 <AddBoxIcon/>
                             </IconButton>
-                        </Tooltip>
+                        </CustomTooltip>
+                        <CustomTooltip 
+                            title={[  
+                                'Ayuda: Seleccione la opción de "añadir sección" seguido de la flecha con dirección hacia ',
+                                'la derecha para mostrar la lista de estudiantes disponibles. Para añadir un estudiante que no este registrado en el sistema en una seccion ya creada ',
+                                'deberá deseleccionar todos los estudiantes y añadir al nuevo estudiante en la misma o puede tbién crear una nueva sección con el nuevo estudiante.',
+                            ].join('')} arrow>
+                            <IconButton
+                                variant="text"
+                            >
+                                <InfoOutlinedIcon/>
+                            </IconButton>
+                        </CustomTooltip>
                     </Box>
                 }
             />

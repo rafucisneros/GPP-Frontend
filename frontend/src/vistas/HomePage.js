@@ -88,7 +88,7 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Activos</h1>
                     </div>                    
-                    <Grid container direction="row" style={{justifyContent: activeExams && activeExams.length < 6 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: activeExams && activeExams.length < 6 ? "space-around" : "center"}}>
                       {activeExams ? (
                         activeExams.length < 6 ? (activeExams.map((exam, index) => {
                           return (
@@ -111,7 +111,7 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Culminados</h1>
                     </div>
-                    <Grid container direction="row" style={{justifyContent: finishedExams && finishedExams.length < 6 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: finishedExams && finishedExams.length < 6 ? "space-around" : "center"}}>
                       {finishedExams ? (
                         finishedExams.length < 6 ? (finishedExams.map((exam, index) => {
                           return (
@@ -139,7 +139,7 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Asignados</h1>
                     </div>
-                    <Grid container direction="row" style={{justifyContent: sectionExams && sectionExams.length < 5 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: sectionExams && sectionExams.length < 5 ? "space-around" : "center"}}>
                       {sectionExams ? (
                         sectionExams.length < 5 ? (sectionExams.map((exam, index) => {
                           return (
@@ -162,7 +162,7 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Libres</h1>
                     </div>
-                    <Grid container direction="row" style={{justifyContent: openExams && openExams.length < 5 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: openExams && openExams.length < 5 ? "space-around" : "center"}}>
                       {openExams ? (
                         openExams.length < 5 ? (openExams.map((exam, index) => {
                           return (

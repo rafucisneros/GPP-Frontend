@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import MaterialTable from "material-table";
 import { Redirect } from 'react-router-dom';
 import Switch from '@material-ui/core/Switch';
+import { TablePagination } from '@material-ui/core';
 
 const DataTable = ({ 
   title, columns, data, grouping, selection, exportButton, toolbar, useActions,
@@ -42,7 +43,14 @@ const DataTable = ({
             toolbar: toolbar,
             showSelectAllCheckbox: showSelectAllCheckbox,
             actionsColumnIndex: actionsColumnIndex,
-            rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? 'rgb(238, 238, 238)' : '' }),
+            headerStyle: {
+              textAlign : 'center',
+              backgroundColor: '#3f51b5',
+              color: '#FFF'
+            },
+            rowStyle: rowData => ({ 
+              backgroundColor: rowData.tableData.checked ? 'rgb(238, 238, 238)' : '',
+            }),
           }}
           localization={{
             body: {
@@ -55,7 +63,7 @@ const DataTable = ({
               }
             },
             header :{
-              actions: 'Acciones'
+              actions: 'Acciones',
             },
             grouping: {
               placeholder: 'Arrastre los encabezados aquí para agrupar por:'
