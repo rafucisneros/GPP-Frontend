@@ -14,7 +14,7 @@ export const Carousel = ({ items, type="Professor" }) => {
   const [activeItem, setActiveItem] = useState(0)
 
   return (
-    <div style={{"maxWidth":"70%","margin":"0 40px"}}>
+    <div style={{"maxWidth":"100%","margin":"0 40px"}}>
       <ItemsCarousel
         infiniteLoop={false}
         gutter={12}

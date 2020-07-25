@@ -58,7 +58,6 @@ export default function TestPreviewPage(props){
   const presentarExamen = () => {
     history.push("/presentar_examen/" + examID)
   }
-
   return (
     <div>
       <div className="toolbar-icono"/>
@@ -100,7 +99,7 @@ export default function TestPreviewPage(props){
                       <Typography>Intentos Permitidos:</Typography>
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
-                      {exam.attempt}
+                      {exam.attempt ? exam.attempt : "Sin Límite"}
                     </Grid>  
                     <Grid item xs={3} md={3} lg={3}>
                       <Typography>Duración:</Typography>
@@ -155,6 +154,7 @@ export default function TestPreviewPage(props){
                         </Grid>
                       </Grid>
                         {
+                          time(exam.finish_date, "DD/MM/YYYY - hh:mm:ss A").isAfter() && 
                           exam.attempts < exam.attempt && (
                             <Fragment>
                               <Divider style={{width: "100%", marginBottom: "5px"}}/>
@@ -171,17 +171,23 @@ export default function TestPreviewPage(props){
                         }
                       </Fragment>             
                     ) : (
-                      <Grid container spacing={2} style={{margin: "8px 0px", paddingTop: "8px"}}>
-                        <Grid container spacing={2} direction={"row"}  style={{justifyContent: "center"}}>
-                          <Button 
-                            onClick={() => setOpen(true)} 
-                            color="primary"
-                            variant="contained"
-                          >
-                            Presentar Examen
-                          </Button>
-                        </Grid>
-                      </Grid>
+                      <Fragment>
+                        {
+                          time(exam.finish_date, "DD/MM/YYYY - hh:mm:ss A").isAfter() && (
+                          <Grid container spacing={2} style={{margin: "8px 0px", paddingTop: "8px"}}>
+                            <Grid container spacing={2} direction={"row"}  style={{justifyContent: "center"}}>
+                              <Button 
+                                onClick={() => setOpen(true)} 
+                                color="primary"
+                                variant="contained"
+                              >
+                                Presentar Examen
+                              </Button>
+                            </Grid>
+                          </Grid>
+                          )
+                        }
+                      </Fragment>
                     )
                   }
               </CardContent>

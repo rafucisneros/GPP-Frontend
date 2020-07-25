@@ -54,7 +54,7 @@ export default function HomePage(){
           let request = await getExamsForStudent(usuario.id)
           let now = time()
           if(request.data.open){
-            setOpenExams(request.data.open.filter( x => !now.isBefore(time(x.finish_date))))
+            setOpenExams(request.data.open.filter( x => now.isBefore(time(x.finish_date))))
           } else {
             setOpenExams([])
           }
@@ -74,8 +74,7 @@ export default function HomePage(){
   }, [usuario])
 
   return (
-    <div>
-      <main className="content-main-crear-test">
+    <div style={{width: "70vw"}}>
       <div className="toolbar-icono"/>
         <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}>
           {usuario.groups.length > 0 ? (
@@ -140,9 +139,9 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Asignados</h1>
                     </div>
-                    <Grid container direction="row" style={{justifyContent: sectionExams && sectionExams.length < 6 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: sectionExams && sectionExams.length < 5 ? "space-around" : ""}}>
                       {sectionExams ? (
-                        sectionExams.length < 6 ? (sectionExams.map((exam, index) => {
+                        sectionExams.length < 5 ? (sectionExams.map((exam, index) => {
                           return (
                             <ExamCard 
                               key={index} 
@@ -163,9 +162,9 @@ export default function HomePage(){
                     <div>
                       <h1>Exámenes Libres</h1>
                     </div>
-                    <Grid container direction="row" style={{justifyContent: openExams && openExams.length < 6 ? "space-around" : ""}}>
+                    <Grid container direction="row" style={{justifyContent: openExams && openExams.length < 5 ? "space-around" : ""}}>
                       {openExams ? (
-                        openExams.length < 6 ? (openExams.map((exam, index) => {
+                        openExams.length < 5 ? (openExams.map((exam, index) => {
                           return (
                             <ExamCard 
                               key={index} 
@@ -200,7 +199,6 @@ export default function HomePage(){
               severity="success"
             />
         </Container>
-      </main>
     </div>
   )
 }
