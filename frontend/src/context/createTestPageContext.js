@@ -27,9 +27,9 @@ export function CreateTestPageProvider(props) {
     const [flagGetAllInfo, setFlagGetAllInfo] = useState(null);
 
     // Página
-    const [ step, setStep ] = useState('step_0');
-    const [ tipoConfiguracion, setTipoConfiguracion ] = useState("Configuración Dinámica");
-    const [ exam_id, SetExamId ] = useState(null);
+    const [step, setStep] = useState('step_0');
+    const [tipoConfiguracion, setTipoConfiguracion] = useState("Configuración Dinámica");
+    const [exam_id, SetExamId] = useState(null);
 
     // Step Configuracion Basica (Variables de estados)
     const [switchChecked, setSwitchChecked] = useState(true);

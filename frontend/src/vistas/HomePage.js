@@ -74,7 +74,7 @@ export default function HomePage(){
   }, [usuario])
 
   return (
-    <div style={{width: "70vw"}}>
+    <div >
       <div className="toolbar-icono"/>
         <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}>
           {usuario.groups.length > 0 ? (
