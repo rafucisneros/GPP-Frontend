@@ -7,10 +7,29 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+const defaultStyle = {
+  cellStyle: {
+      textAlign : 'center'
+  },
+}
+
 const columns = [
-    { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
-    { title: 'Apellidos', field: 'last_name' },
-    { title: 'Correo Electrónico', field: 'email' },
+    { 
+      title: 'Nombres', 
+      field: 'first_name',
+      ...defaultStyle
+      
+    },
+    { 
+      title: 'Apellidos', 
+      field: 'last_name',
+      ...defaultStyle 
+    },
+    { 
+      title: 'Correo Electrónico', 
+      field: 'email',
+      ...defaultStyle 
+    },
 ]
 
 const ListaAdmins = (props) => {
@@ -51,9 +70,10 @@ const ListaAdmins = (props) => {
           } catch (error) {
             let mensaje = "Ocurrio un agregando al administrador"
             if(typeof(error.data.email) === "object"){
-              if(error.data.email.includes("Enter a valid email address.")){
-                mensaje += ": Ingrese un correo electrónico válido."
-              }
+              mensaje += ": " + error.data.email[0]
+            }            
+            if(typeof(error.data.password) === "object"){
+              mensaje += ": " + error.data.password[0].replace("este campo", "la contraseña")
             }
             setErrorMsg(mensaje)
             setAlertOpen(true)
@@ -98,8 +118,12 @@ const ListaAdmins = (props) => {
             setSuccessMsg("Modificado Exitosamente")
             setAlertSuccessOpen(true)
             resolve();
-          } catch {
-            setErrorMsg("Error modificando el admin")
+          } catch (error){
+            let mensaje = "Ocurrio un error modificando al administrador"
+            if(typeof(error.data.email) === "object"){
+              mensaje += ": " + error.data.email[0]
+            }
+            setErrorMsg(mensaje)
             setAlertOpen(true)
             reject()
           }

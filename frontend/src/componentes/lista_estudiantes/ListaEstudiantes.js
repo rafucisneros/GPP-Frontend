@@ -7,10 +7,28 @@ import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
+const defaultStyle = {
+    cellStyle: {
+        textAlign : 'center'
+    },
+}
+
 const columns = [
-    { title: 'Nombres', field: 'first_name', defaultSort : 'asc' },
-    { title: 'Apellidos', field: 'last_name' },
-    { title: 'Correo Electrónico', field: 'email' },
+    { 
+        title: 'Nombres', 
+        field: 'first_name',
+        ...defaultStyle
+    },
+    { 
+        title: 'Apellidos', 
+        field: 'last_name',
+        ...defaultStyle
+    },
+    { 
+        title: 'Correo Electrónico', 
+        ield: 'email',
+        ...defaultStyle
+    },
 ]
 
 const theme = createMuiTheme({
@@ -42,67 +60,75 @@ const ListaEstudiantes = (props) => {
     useEffect(() => {
         let auxEstudiantes = estudiantes.map( value => { return {...value} });
         if (seccionSeleccionada) {
-            let finalData = [];            
-            let lenSecciones = secciones.length;
-
-            // for(let seccion of secciones) {
-            //     if(seccionSeleccionada.id === seccion.id){
-            //         for( let estudianteSeleccionado of seccionSeleccionada.estudiantes) {
-            //             if(estudianteSeleccionado.email === estudiante.email) {
+            // for(let estudiante of auxEstudiantes){
+            //     let encontrado = false;
+            //     let count = 0;
+            //     for(let seccion of secciones) {
+            //         if(seccionSeleccionada.id === seccion.id){
+            //             for( let estudianteSeleccionado of seccionSeleccionada.estudiantes) {
+            //                 if(estudianteSeleccionado.email === estudiante.email) {
+            //                     estudiante.tableData = {};
+            //                     estudiante.tableData.checked = true;
+            //                     finalData.push(estudiante);
+            //                     encontrado = true;
+            //                     break;
+            //                 }
+            //             }
+            //         } else if (seccionSeleccionada.id !== seccion.id) {
+            //             for( let estudianteNoSeleccionado of seccion.estudiantes) {
+            //                 if(estudianteNoSeleccionado.email === estudiante.email) {
+            //                     encontrado = true;
+            //                     break;
+            //                 }
+            //             }
+            //         } 
+            //         count++;
+            //         if (encontrado) {
+            //             break;
+            //         } else {
+            //             if(count === lenSecciones){
             //                 estudiante.tableData = {};
-            //                 estudiante.tableData.checked = true;
+            //                 estudiante.tableData.checked = false;
             //                 finalData.push(estudiante);
-            //                 encontrado = true;
-            //                 break;
             //             }
-            //         }
-            //     } else if (seccionSeleccionada.id !== seccion.id) {
-            //         for( let estudianteNoSeleccionado of seccion.estudiantes) {
-            //             if(estudianteNoSeleccionado.email === estudiante.email) {
-            //                 encontrado = true;
-            //                 break;
-            //             }
-            //         }
-            //     } 
-            //     count++;
-            //     if (encontrado) {
-            //         break;
-            //     } else {
-            //         if(count === lenSecciones){
-            //             estudiante.tableData = {};
-            //             estudiante.tableData.checked = false;
-            //             finalData.push(estudiante);
             //         }
             //     }
             // }
+            let finalData = [];            
+            for( let estudianteSeleccionado of seccionSeleccionada.estudiantes) {
+                // Checked missing emails
+                if (missingEstudiantes[seccionSeleccionada.id] && missingEstudiantes[seccionSeleccionada.id].includes(estudianteSeleccionado.email)) {
+                    let newStudent = { email : estudianteSeleccionado.email }
+                    newStudent.tableData = {};
+                    newStudent.tableData.checked = true;
+                    finalData.push(newStudent);
+                } else {
+                    // Checked
+                    for(let estudiante of auxEstudiantes){ 
+                        if(estudianteSeleccionado.email === estudiante.email) {
+                            estudiante.tableData = {};
+                            estudiante.tableData.checked = true;
+                            finalData.push(estudiante);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            let lenSecciones = secciones.length;
             for(let estudiante of auxEstudiantes){
                 let encontrado = false;
                 let count = 0;
                 for(let seccion of secciones) {
                     if(seccionSeleccionada.id === seccion.id){
-                        for( let estudianteSeleccionado of seccionSeleccionada.estudiantes) {
-                            // if (missingEstudiantes && missingEstudiantes.length > 0 && missingEstudiantes.includes(estudianteSeleccionado.email)) {
-                            //     let newStudent = { email : estudianteSeleccionado.email }
-                            //     newStudent.tableData = {};
-                            //     newStudent.tableData.checked = true;
-                            //     finalData.push(newStudent);
-                            //     encontrado = true;
-                            //     break;
-                            // }
-                            if(estudianteSeleccionado.email === estudiante.email) {
-                                estudiante.tableData = {};
-                                estudiante.tableData.checked = true;
-                                finalData.push(estudiante);
+                        for(let infoSection of finalData ){
+                            if(infoSection.email === estudiante.email) {
                                 encontrado = true;
                                 break;
                             }
                         }
                     } else if (seccionSeleccionada.id !== seccion.id) {
                         for( let estudianteNoSeleccionado of seccion.estudiantes) {
-                            // if (missingEstudiantes && missingEstudiantes.length > 0 && missingEstudiantes.includes(estudianteNoSeleccionado.email)) {
-                            //     encontrado = true;
-                            //     break;
-                            // }
                             if(estudianteNoSeleccionado.email === estudiante.email) {
                                 encontrado = true;
                                 break;
@@ -121,10 +147,58 @@ const ListaEstudiantes = (props) => {
                     }
                 }
             }
+            
+            for(let email of missingEstudiantes['ALL']){
+                let encontrado = false;
+                let count = 0;
+                for(let seccion of secciones) {
+                    if(seccionSeleccionada.id === seccion.id){
+                        for(let infoSection of finalData ){
+                            if(infoSection.email === email) {
+                                encontrado = true;
+                                break;
+                            }
+                        }
+                    } else if (seccionSeleccionada.id !== seccion.id) {
+                        for( let estudianteNoSeleccionado of seccion.estudiantes) {
+                            if(estudianteNoSeleccionado.email === email) {
+                                encontrado = true;
+                                break;
+                            }
+                        }
+                    } 
+                    count++;
+                    if (encontrado) {
+                        break;
+                    } else {
+                        if(count === lenSecciones){
+                            let studentInfo = { email : email };
+                            studentInfo.tableData = {};
+                            studentInfo.tableData.checked = false;
+                            finalData.push(studentInfo);
+                        }
+                    }
+                }
+            }
+            // for(let estudiante of auxEstudiantes){
+            //     let encontrado = false;
+            //     for(let infoSection of finalData ){
+            //         if(infoSection.email === estudiante.email) {
+            //             encontrado = true;
+            //             break;
+            //         }
+            //     }
+            //     if (!encontrado){
+            //         estudiante.tableData = {};
+            //         estudiante.tableData.checked = false;
+            //         finalData.push(estudiante);
+            //     }
+            // }
+            // props.handleLoading(false);
             setData(finalData);
         }
         
-    }, [seccionSeleccionada])
+    }, [seccionSeleccionada, estudiantes])
 
     return (
         <Fragment>

@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import MaterialTable from "material-table";
 import { Redirect } from 'react-router-dom';
 import Switch from '@material-ui/core/Switch';
+import { TablePagination } from '@material-ui/core';
 
 const DataTable = ({ 
-  title, columns, data, grouping, selection, exportButton, toolbar,
+  title, columns, data, grouping, selection, exportButton, toolbar, useActions,
   showSelectAllCheckbox, actionsColumnIndex, onRowAdd, onRowUpdate, onRowDelete,
   isCalificacion, isEstadistica, isTeachersExamList, handleToggleExamEnabled,
   onRowClick, customExam
@@ -23,7 +24,7 @@ const DataTable = ({
     setRedirectEstadistica(`examen/${rowData.id}`);
   }
 
-  const handleRedirectCalificaciones = () => setRedirectCalificaciones(true);
+  const handleRedirectCalificaciones = (rowData) => setRedirectCalificaciones(rowData.id);
 
     return (
       <Fragment>
@@ -42,7 +43,14 @@ const DataTable = ({
             toolbar: toolbar,
             showSelectAllCheckbox: showSelectAllCheckbox,
             actionsColumnIndex: actionsColumnIndex,
-            rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? 'rgb(238, 238, 238)' : '' }),
+            headerStyle: {
+              textAlign : 'center',
+              backgroundColor: '#3f51b5',
+              color: '#FFF'
+            },
+            rowStyle: rowData => ({ 
+              backgroundColor: rowData.tableData.checked ? 'rgb(238, 238, 238)' : '',
+            }),
           }}
           localization={{
             body: {
@@ -55,7 +63,7 @@ const DataTable = ({
               }
             },
             header :{
-              actions: 'Acciones'
+              actions: 'Acciones',
             },
             grouping: {
               placeholder: 'Arrastre los encabezados aquí para agrupar por:'
@@ -83,7 +91,7 @@ const DataTable = ({
             onRowUpdate: onRowUpdate,                   
             onRowDelete: onRowDelete
           }}
-          actions={[
+          actions={ useActions ? [
             rowData => ({
               icon: ()=>{
                 return <Switch
@@ -122,7 +130,7 @@ const DataTable = ({
             //   onClick: (event, rowData) => {alert("Borrar elemento")},
             //   hidden: !customExam
             // }
-          ]}
+          ] : null}
         />
       </Fragment>
     );
@@ -137,6 +145,7 @@ DataTable.propTypes = {
   toolbar: PropTypes.bool,
   isTeachersExamList: PropTypes.bool,
   showSelectAllCheckbox: PropTypes.bool,
+  useActions: PropTypes.bool,
   actionsColumnIndex: PropTypes.number,
   onRowAdd: PropTypes.func,
   onRowUpdate: PropTypes.func,
@@ -146,6 +155,7 @@ DataTable.propTypes = {
 
 DataTable.defaultProps = {
   isTeachersExamList: false,
+  useActions: true, 
   grouping: true, 
   selection: true,
   exportButton: true,

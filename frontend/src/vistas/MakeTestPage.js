@@ -113,9 +113,9 @@ export default function MakeTestPage(props){
       switch(pregunta["type"]){
         case "ordenamiento":
           if(pregunta["respuesta"]){
-            for(let i=1; i < pregunta["respuesta"].length + 1; i++){
+            for(let i=0; i < pregunta["respuesta"].length; i++){
               answers.push({
-                content: pregunta["respuesta"][i-1]["content"],
+                content: pregunta["respuesta"][i]["content"],
                 correct: i
               })
             }

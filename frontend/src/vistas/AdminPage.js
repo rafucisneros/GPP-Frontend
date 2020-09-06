@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 // material
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Divider, CardContent, Card, CardHeader } from '@material-ui/core';
@@ -46,45 +46,45 @@ export default function HomePage(){
           <Container style={{paddingTop: '12px', paddingBottom: '12px'}}>
             <Grid container spacing={2}>                               
               {/* Profesores */}
-              <ExpansionPanel expanded={profesoresExpanded} onChange={handleProfesoresExpanded} style={{width: "100%"}}>
-                <ExpansionPanelSummary
+              <Accordion expanded={profesoresExpanded} onChange={handleProfesoresExpanded} style={{width: "100%"}}>
+                <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
                   <Typography>Profesores</Typography>
-                </ExpansionPanelSummary>
+                </AccordionSummary>
                 <Divider />
-                <ExpansionPanelDetails>
+                <AccordionDetails>
                   <ListaProfesores />
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-              <ExpansionPanel expanded={estudiantesExpanded} onChange={handleEstudiantesExpanded} style={{width: "100%"}}>
-                <ExpansionPanelSummary
+                </AccordionDetails>
+              </Accordion>
+              <Accordion expanded={estudiantesExpanded} onChange={handleEstudiantesExpanded} style={{width: "100%"}}>
+                <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
                   <Typography>Estudiantes</Typography>
-                </ExpansionPanelSummary>
+                </AccordionSummary>
                 <Divider />
-                <ExpansionPanelDetails>
+                <AccordionDetails>
                   <ListaEstudiantes />
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-              <ExpansionPanel expanded={administradoresExpanded} onChange={handleAdministradoresExpanded} style={{width: "100%"}}>
-                <ExpansionPanelSummary
+                </AccordionDetails>
+              </Accordion>
+              <Accordion expanded={administradoresExpanded} onChange={handleAdministradoresExpanded} style={{width: "100%"}}>
+                <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                 >
                   <Typography>Administradores</Typography>
-                </ExpansionPanelSummary>
+                </AccordionSummary>
                 <Divider />
-                <ExpansionPanelDetails>
+                <AccordionDetails>
                   <ListaAdmins />
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
+                </AccordionDetails>
+              </Accordion>
             </Grid>
           </Container>
         </CardContent>

@@ -85,7 +85,7 @@ export default function PonderacionDificultad(props) {
             <Grid item lg={6} sm={6} xl={6} xs={6} md={6} style={{paddingLeft : '4px'}}>
                 <TextField
                     error={props.errores && props.errores.ponderacionError}
-                    helperText={props.errores && props.errores.ponderacionError ? "El campo es requerido" : null}
+                    helperText={props.errores && props.errores.ponderacionError ? "El campo es requerido y mayor o igual a uno (1)" : null}
                     id="ponderacion"
                     type="number"
                     margin="normal"

@@ -36,6 +36,9 @@ import {
     DateTimePicker,
     MuiPickersUtilsProvider,
 } from '@material-ui/pickers'
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 // contexts
 import { useCreateTestPage } from '../../context/createTestPageContext';
@@ -43,6 +46,15 @@ import { useUsuario } from '../../context/usuarioContext';
 
 // servicios
 import { createTest } from '../../servicios/servicioCrearExamen.js';
+
+const stylesTooltip = {
+    tooltip: {
+        fontSize : '13px',
+        textAlign : 'center'
+    }
+};
+
+const CustomTooltip = withStyles(stylesTooltip)(Tooltip);
 
 const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -216,6 +228,15 @@ const StepConfiguracionBasica = () => {
         setAlertError(false);
     }
 
+    // const handleClickShowPassword = () => {
+    //     setShowPassword(!showPassword);
+    // };
+    
+    const handleMouseDownPassword = (event) => {
+        event.preventDefault();
+        event.stopPropagation()
+    };
+
     useMemo( () => {
         if (titulo) verifyData('titulo');
     }, [titulo])
@@ -259,7 +280,7 @@ const StepConfiguracionBasica = () => {
             <Card>
                 <form>
                     <CardHeader
-                        subheader={`Aquí puedes modificar las configuraciones de tu examen.`}
+                        subheader={`Datos iniciales del examen`}
                         title="Configuraciones Básicas"
                     />
                     <Divider />
@@ -273,9 +294,9 @@ const StepConfiguracionBasica = () => {
                     >
                         <Box style={{display: 'flex'}}>
                             <GpiSwitch checked={switchChecked} onClick={() => handleCambiarSwitch()} />
-                            <Tooltip title={tituloTooltip} placement="right" arrow>
+                            <CustomTooltip title={tituloTooltip} placement="right" arrow>
                                 <Box style={{alignSelf: 'center'}}><span style={{fontWeight: 800}}>{tipoConfiguracion}</span></Box>
-                            </Tooltip>
+                            </CustomTooltip>
                         </Box>
                     </Grid>
                     <Fragment>
@@ -292,7 +313,7 @@ const StepConfiguracionBasica = () => {
                                     margin="normal"
                                     label="Título del Examen"
                                     required
-                                    value={titulo}
+                                    value={titulo ? titulo : ''}
                                     onChange={handleCambiarValor}
                                     variant="outlined"
                                     fullWidth
@@ -391,6 +412,19 @@ const StepConfiguracionBasica = () => {
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}
+                                            InputProps={{
+                                                endAdornment: 
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onMouseDown={(e) => handleMouseDownPassword(e)}
+                                                        edge="end"
+                                                    >
+                                                        <CustomTooltip title="Esta fecha señala cuando el examen comenzará a estar disponible para su realización." arrow>
+                                                            <InfoOutlinedIcon/>
+                                                        </CustomTooltip>
+                                                    </IconButton>
+                                                </InputAdornment>,
+                                            }}
                                         />
                                     </MuiPickersUtilsProvider>
                                 </FormControl>
@@ -409,6 +443,19 @@ const StepConfiguracionBasica = () => {
                                             label="Fecha de Deshabilitación del Examen"
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
+                                            }}
+                                            InputProps={{
+                                                endAdornment: 
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onMouseDown={(e) => handleMouseDownPassword(e)}
+                                                        edge="end"
+                                                    >
+                                                        <CustomTooltip title="Esta fecha señala cuando el examen dejará de estar disponible para ser realizado." arrow>
+                                                            <InfoOutlinedIcon/>
+                                                        </CustomTooltip>
+                                                    </IconButton>
+                                                </InputAdornment>,
                                             }}
                                         />
                                     </MuiPickersUtilsProvider>

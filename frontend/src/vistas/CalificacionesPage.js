@@ -13,11 +13,47 @@ import { Alert } from '../componentes/alert/Alert.js'
 
 import { getResultsForExam } from '../servicios/servicioGeneral.js'
 
+const defaultStyle = {
+    cellStyle: {
+        textAlign : 'center'
+    },
+}
+
 const columns = [
-    { title: 'Alummo', field: 'name', defaultSort : 'asc' },
-    { title: 'Nota (100%)', field: 'total_score' },
-    { title: 'Puntaje', field: 'score' },
-    { title: 'Intentos realizados', field: 'attempts' },
+    { 
+        title: 'Alumno', 
+        field: 'name',
+        ...defaultStyle
+    },
+    { 
+        title: 'Correo', 
+        field: 'email',
+        ...defaultStyle 
+    },
+    { 
+        title: 'Sección', 
+        field: 'section', 
+        render: rowData => {
+            return rowData.section ? rowData.section.split(' ')[1]  : '';
+        },
+        ...defaultStyle
+    },
+    { 
+        title: 
+        'Puntaje Obtenido', 
+        field: 'score',
+        ...defaultStyle 
+    },
+    { 
+        title: 'Aprobado', 
+        field: 'approved',
+        ...defaultStyle 
+    },
+    { 
+        title: 'Intentos realizados', 
+        field: 'attempts',
+        ...defaultStyle 
+    },
 ]
 
 export default function EditTestPage(props){
@@ -29,7 +65,7 @@ export default function EditTestPage(props){
 
     const { setContentMenu } = useGeneral();
     const [ calificaciones, setCalificaciones ] = useState(null);
-    setContentMenu(`edit_test`);
+    setContentMenu(`home`);
 
     useEffect(() => {
         let fetchData = async () => {
@@ -38,7 +74,8 @@ export default function EditTestPage(props){
                 let calificaciones = response.data.students.map( x => {
                     return {
                         ...x, 
-                        total_score: response.data.total_score
+                        score: x.score + "/" + response.data.total_score,
+                        approved: x.passed ? "Si" : "No",
                     }
                 })
                 setCalificaciones(calificaciones)
@@ -63,10 +100,8 @@ export default function EditTestPage(props){
                                 title="Calificaciones" 
                                 data={[...calificaciones]} 
                                 columns={columns} 
-                                onRowAdd={()=>{}}
-                                onRowDelete={()=>{}}
-                                onRowUpdate={()=>{}}
-                                customExam={true}
+                                selection={false}
+                                useActions={false}
                             /> : <Loading/>
                         }
                     </CardContent>

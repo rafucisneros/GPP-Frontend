@@ -21,6 +21,12 @@ import { createTest } from '../servicios/servicioCrearExamen.js';
 import { Alert } from '../componentes/alert/Alert.js'
 import { useHistory } from "react-router-dom"
 
+const defaultStyle = {
+    cellStyle: {
+        textAlign : 'center'
+    },
+}
+
 export default function ExamsPage(){
 
     const [ alertOpen, setAlertOpen] = useState(false)
@@ -31,43 +37,92 @@ export default function ExamsPage(){
     const { usuario } = useUsuario();
     // const [examanes, setExamanes] = useState([]);
     const [examanes, setExamanes] = useState([]);
-    setContentMenu(`edit_test`);
+    setContentMenu(`home`);
 
     // GET requests y componentes de montaje
     useEffect(() => {
         const columns = usuario.groups.map(x => x.name).some(role => ["Professor"].includes(role)) ?
         // columnas para profesores 
         [
-            { title: 'ID', field: 'id', defaultSort : 'desc' },
+            { 
+                title: 'ID', 
+                field: 'id', 
+                ...defaultStyle,
+                // defaultSort : 'desc',
+            },
             // { title: 'ID', field: 'id', hidden: true},
-            { title: 'Nombre', field: 'name'},
-            { title: 'Fecha Inicio', field: 'start_date', render: rowData => {
-                return moment(rowData.start_date).format('DD/MM/YYYY hh:mm a');
-            } },
-            { title: 'Fecha Fin', field: 'finish_date', render: rowData => {
-                return moment(rowData.finish_date).format('DD/MM/YYYY hh:mm a');
-            } },
-            { title: 'Duracion', field: 'duration', render: rowData => {
-                let hora = parseInt(rowData.duration / 60);
-                if (hora >= 1) return `${hora} h ${rowData.duration % 60} min`
-                else return `${rowData.duration % 60} min`
-            }  },
-            { title: 'Estático o Dinámico', field: 'static', render: rowData => {
-                if (rowData.static) return 'Dinámico'
-                else return 'Estático'
-            } },
-            { title: 'Público o Secciones', field: 'open', render: rowData => {
-                if (rowData.open) return 'Público'
-                else return 'Secciones'
-            }  }
-        ] :
+            { 
+                title: 'Nombre', 
+                field: 'name',
+                ...defaultStyle
+            },
+            { 
+                title: 'Fecha de Habilitación', 
+                field: 'start_date', 
+                render: rowData => {
+                    return moment(rowData.start_date).format('DD/MM/YYYY hh:mm a');
+                },
+                ...defaultStyle
+            },
+            { 
+                title: 'Fecha de Deshabilitación', 
+                field: 'finish_date', 
+                render: rowData => {
+                    return moment(rowData.finish_date).format('DD/MM/YYYY hh:mm a');
+                },
+                ...defaultStyle
+            },
+            { 
+                title: 'Duración', 
+                field: 'duration', 
+                render: rowData => {
+                    let hora = parseInt(rowData.duration / 60);
+                    if (hora >= 1) return `${hora} h ${rowData.duration % 60} min`
+                    else return `${rowData.duration % 60} min`
+                },
+                ...defaultStyle
+            },
+            { 
+                title: 'Estático o Dinámico', 
+                field: 'static', 
+                render: rowData => {
+                    if (rowData.static) return 'Dinámico'
+                    else return 'Estático'
+                },
+                ...defaultStyle
+            },
+            { 
+                title: 'Público o Secciones', 
+                field: 'open', 
+                render: rowData => {
+                    if (rowData.open) return 'Público'
+                    else return 'Secciones'
+                },
+                ...defaultStyle
+            }
+        ]:
         // columnas para estudiantes
         [
-            { title: 'Nombre', field: 'name'},
-            { title: 'Intentos realizados', field: 'attempts'},
-            { title: 'Nota Obtenida', field: 'score'},
-            { title: 'Nota Total', field: 'total_value_exam'},
-            // { title: '', field: 'name'},
+            { 
+                title: 'Nombre', 
+                field: 'name',
+                ...defaultStyle
+            },
+            { 
+                title: 'Intentos realizados', 
+                field: 'attempts',
+                ...defaultStyle
+            },
+            { 
+                title: 'Nota Obtenida', 
+                field: 'score',
+                ...defaultStyle
+            },
+            { 
+                title: 'Aprobado', 
+                field: 'approved',
+                ...defaultStyle
+            },
         ] 
         setColumnas(columns)
         if(usuario.groups.map(x => x.name).some(role => ["Professor"].includes(role))){
@@ -81,7 +136,20 @@ export default function ExamsPage(){
             getResultsForStudent(usuario.id)
             .then( res => {
                 if (res.data) {
-                    setExamanes(res.data);
+                    let examenes = []
+                    Object.keys(res.data).forEach( key => {
+                        examenes.push({
+                            ...res.data[key],
+                            id: key,
+                            approved: res.data[key].passed ? "Si" : "No"
+                        })
+                    })
+                    setExamanes(examenes.map( x => {
+                        return {
+                            ...x,
+                            score: x.score + "/" + x.total_value_exam,
+                        }
+                    }));
                 }
             })
         }
@@ -147,7 +215,7 @@ export default function ExamsPage(){
                             <CardContent style={{width: "100%"}}>
                                 {usuario.groups.map(x => x.name).some(role => ["Professor"].includes(role)) ? 
                                     <DataTable 
-                                        title="Lista de Examenes" 
+                                        title="Lista de Exámenes" 
                                         data={[...examanes]} 
                                         columns={columnas} 
                                         onRowAdd={()=>{}}
@@ -161,15 +229,13 @@ export default function ExamsPage(){
                                         customExam={true}
                                     /> :
                                     <DataTable 
-                                        title="Lista de Examenes" 
+                                        title="Lista de Exámenes" 
                                         data={[...examanes]} 
                                         columns={columnas} 
-                                        isCalificacion={true}
-                                        isEstadistica={true}
                                         selection={false}
-                                        isTeachersExamList={true}
                                         handleToggleExamEnabled={handleToggleExamEnabled}
                                         onRowClick={onRowClick}
+                                        useActions={false}
                                     />
                                 }
                             </CardContent>

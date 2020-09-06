@@ -21,6 +21,7 @@ import './NavBar.css';
 
 // material
 import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -51,6 +52,7 @@ import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import Tooltip from '@material-ui/core/Tooltip';
 
 // constants
 const drawerWidth = 240;
@@ -97,6 +99,15 @@ const useStyle = makeStyles(theme => ({
         // },
     },
 }))
+
+const stylesTooltip = {
+    tooltip: {
+        fontSize : '13px',
+        textAlign : 'center'
+    }
+};
+
+const CustomTooltip = withStyles(stylesTooltip)(Tooltip);
 
 const NavBar = () => {
     const { contentMenu } = useGeneral();
@@ -159,21 +170,28 @@ const NavBar = () => {
                         <Typography component="h2" variant="h6" color="inherit" noWrap style={{flexGrow: 1}}>
                             GPI
                         </Typography>
-                        <IconButton color="inherit" onClick={logout}>
-                            <ExitToAppIcon style={{ fontSize : 30}} />
-                        </IconButton>
+                        <CustomTooltip title={'Salir'} arrow>
+                            <IconButton
+                                color="inherit"
+                                onClick={logout}
+                            >
+                                <ExitToAppIcon style={{ fontSize : 30}} />
+                            </IconButton>
+                        </CustomTooltip>
                         <Grid style={{display : 'flex', justifyContent : 'flex-end'}}>
                             <Link to={"/perfil"} className='link'style={{color: "white"}}>
-                                <IconButton color="inherit" className={classes.iconButtonAvatar}>
-                                    <Avatar>
-                                        <PersonIcon />
-                                    </Avatar>
-                                    <Box style={{ marginLeft : '8px'}}>
-                                        <Typography variant="subtitle1" color="inherit" noWrap style={{flexGrow: 1}}>
-                                            {`${usuario.first_name.charAt(0).toUpperCase()}${usuario.first_name.slice(1).toLowerCase()}`}
-                                        </Typography>
-                                    </Box>
-                                </IconButton>
+                                <CustomTooltip title={'Ir al Perfil'} arrow>
+                                    <IconButton color="inherit" className={classes.iconButtonAvatar}>
+                                        <Avatar>
+                                            <PersonIcon />
+                                        </Avatar>
+                                        <Box style={{ marginLeft : '8px'}}>
+                                            <Typography variant="subtitle1" color="inherit" noWrap style={{flexGrow: 1}}>
+                                                {`${usuario.first_name.charAt(0).toUpperCase()}${usuario.first_name.slice(1).toLowerCase()}`}
+                                            </Typography>
+                                        </Box>
+                                    </IconButton>
+                                </CustomTooltip>
                             </Link>
                         </Grid>
                     </Box>
@@ -232,7 +250,7 @@ const NavBar = () => {
                                         <AssignmentIcon />
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Examenes </Typography>}
+                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Exámenes </Typography>}
                                     />
                                     {collapse ? <ExpandLess /> : <ExpandMore />}
                                 </ListItem>
@@ -264,7 +282,7 @@ const NavBar = () => {
                                         <EditIcon />
                                     </ListItemIcon>
                                     <ListItemText 
-                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Ver Examenes </Typography>}
+                                        primary={<Typography type="body2" style={{ fontSize: 'inherit' }}> Ver Exámenes </Typography>}
                                     />
                                 </ListItem>
                             </Link>

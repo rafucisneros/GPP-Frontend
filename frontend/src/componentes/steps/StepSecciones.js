@@ -52,6 +52,10 @@ const StepSecciones = (props) => {
         setAlertModal(false);
     };
 
+    const handleLoading = (bool) => {
+        setLoading(bool)
+    }
+
     const verifyData = () => {
         let error = true;
         secciones.forEach( seccion => {
@@ -80,7 +84,7 @@ const StepSecciones = (props) => {
         .then( res => {
             console.log(res)
             if (res) {
-                setLoading(false);
+                setLoading(true);
                 handleChangeStep('step_4');
                 console.log("Update Secciones")
             }
@@ -96,6 +100,7 @@ const StepSecciones = (props) => {
         if (secciones.length > 0){
             for( let seccion of secciones){
                 if(seccion.id === id) {
+                    // handleLoading(true);
                     handleChangeComp(seccion, 'seccion_seleccionada');
                     break;
                 }    
@@ -106,7 +111,7 @@ const StepSecciones = (props) => {
     const handleAgregarSecciones = () => {
         let data = [...secciones];
         data.push({
-            id: uuid(),
+            id: `Sección ${data.length + 1}`,
             estudiantes : []
         });
         handleChangeComp(data, 'secciones');
@@ -115,7 +120,12 @@ const StepSecciones = (props) => {
     const handleEliminarSecciones = (index) => {
         let data = [...secciones];
         data.splice(index, 1);
-        handleChangeComp(data, 'secciones');
+
+        let newData = data.map( (item, index) => {
+            item.id = `Sección ${index + 1}`;
+            return item;
+        })
+        handleChangeComp(newData, 'secciones');
     }
 
     const finishStep = () => {
@@ -170,11 +180,13 @@ const StepSecciones = (props) => {
                         handleAgregarSecciones = {handleAgregarSecciones}
                         handleEliminarSecciones = {handleEliminarSecciones}
                         handleSeleccionarSeccion = {handleSeleccionarSeccion}
+                        handleLoading = {handleLoading}
                     />
                 </Grid>
                 <Grid item lg={8} md={8} xl={8} xs={12}>
                     <ListaEstudiantes 
                         handleAgregarEstudiante = {handleAgregarEstudiante}
+                        handleLoading = {handleLoading}
                     />
                 </Grid>
             </Grid>

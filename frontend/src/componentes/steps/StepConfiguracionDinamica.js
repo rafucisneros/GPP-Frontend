@@ -99,37 +99,18 @@ const StepConfiguracionDinamica = (props) => {
     const [ loading, setLoading ] = useState(false);
     const [ open, setOpen ] = useState(false);
 
-    useEffect( () => {
-        if (!editTest){
-            let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
-            let obj_areas = {};
-            let obj_subareas = {};
-            let obj_temas = {};
-            if (auxListaExamen && auxListaExamen.length > 0){
-                auxListaExamen.forEach( item => {
-                    let content = item.approach;
-                    if(content['area']) contarTemarios(obj_areas, content['area']);
-                    if(content['topic']) contarTemarios(obj_temas, content['topic']);
-                    if(content['subarea']) contarTemarios(obj_subareas, content['subarea']);
-                })
-            }
-            let array_areas = Object.keys(obj_areas).map( key => { return obj_areas[key] } );
-            let array_subareas = Object.keys(obj_subareas).map( key => { return obj_subareas[key] } );
-            let array_temas = Object.keys(obj_temas).map( key => { return obj_temas[key] } );
-    
-            setAreas(array_areas);
-            setSubareas(array_subareas);
-            setTemas(array_temas);
-    
-            if (tipoPreguntaSeleccionado === 'area') setListaTipoPregunta(array_areas);
-            else if (tipoPreguntaSeleccionado === 'subarea') setListaTipoPregunta(array_subareas);
-            else if (tipoPreguntaSeleccionado === 'tema') setListaTipoPregunta(array_temas);
-        }
-    }, [listaPreguntasExamen])
-
     const contarTemarios = (obj, especialidad) => {
-        if (obj[especialidad]) obj[especialidad].max = obj[especialidad].max + 1;
-        else obj[especialidad] = {label: especialidad, max: 1};
+        let auxLabelPosition = {};
+        let labels = Object.keys(listaTipoPreguntas).map( key => {
+            auxLabelPosition[listaTipoPreguntas[key].label] = key;
+            return listaTipoPreguntas[key].label;
+        });
+        if (labels.includes(especialidad)){
+            obj[especialidad] = listaTipoPreguntas[auxLabelPosition[especialidad]];
+        } else {
+            if (obj[especialidad]) obj[especialidad].max = obj[especialidad].max + 1;
+            else obj[especialidad] = {label: especialidad, max: 1, valor : 0};
+        }
     }
 
     const handleTipoPregunta = (e) => {
@@ -287,6 +268,33 @@ const StepConfiguracionDinamica = (props) => {
     useMemo( () => {
         if (maxPreguntas) verifyData('maxPreguntas');
     }, [maxPreguntas])
+
+    useMemo( () => {
+            console.log("kakaka")
+            let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
+            let obj_areas = {};
+            let obj_subareas = {};
+            let obj_temas = {};
+            if (auxListaExamen && auxListaExamen.length > 0){
+                auxListaExamen.forEach( item => {
+                    let content = item.approach;
+                    if(content['area']) contarTemarios(obj_areas, content['area']);
+                    if(content['topic']) contarTemarios(obj_temas, content['topic']);
+                    if(content['subarea']) contarTemarios(obj_subareas, content['subarea']);
+                })
+            }
+            let array_areas = Object.keys(obj_areas).map( key => { return obj_areas[key] } );
+            let array_subareas = Object.keys(obj_subareas).map( key => { return obj_subareas[key] } );
+            let array_temas = Object.keys(obj_temas).map( key => { return obj_temas[key] } );
+    
+            setAreas(array_areas);
+            setSubareas(array_subareas);
+            setTemas(array_temas);
+    
+            if (tipoPreguntaSeleccionado === 'area') setListaTipoPregunta(array_areas);
+            else if (tipoPreguntaSeleccionado === 'subarea') setListaTipoPregunta(array_subareas);
+            else if (tipoPreguntaSeleccionado === 'tema') setListaTipoPregunta(array_temas);
+    }, [listaPreguntasExamen])
     
     return( 
         <Fragment>

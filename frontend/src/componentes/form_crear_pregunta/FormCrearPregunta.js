@@ -137,7 +137,8 @@ export default function FormCrearPregunta(props) {
                             <Grid item xs={12} md={12} lg={12} style={{textAlign: 'center'}}>
                                 <Typography variant="subtitle2" style={{fontWeight : 600, paddingBottom: '8px'}}> Visualización del texto en Latex: </Typography>
                                 <Typography variant="h6" >
-                                    <Latex displayMode={true}>{pregunta}</Latex>
+                                    {/* <Latex displayMode={true}>{pregunta}</Latex> */}
+                                    <Latex>{pregunta ? pregunta : ''}</Latex>
                                 </Typography>
                             </Grid>
                         </Grid>

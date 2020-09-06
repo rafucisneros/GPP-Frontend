@@ -16,6 +16,7 @@ import { useUsuario } from '../context/usuarioContext';
 import { Alert } from '../componentes/alert/Alert.js'
 import { getExamsForTeacher, getExamsForStudent } from '../servicios/servicioGeneral.js'
 import Loading from '../componentes/loading/Loading.js';
+import { Carousel } from '../componentes/carousel/carousel.js';
 import { ExamCard } from '../componentes/exam_card/ExamCard.js';
 
 let time = require("moment")
@@ -41,8 +42,8 @@ export default function HomePage(){
         try {
           let request = await getExamsForTeacher(usuario.id)
           let now = time()
-          setActiveExams(request.data.filter( x => now.isBefore(time(x.finish_date))).slice(0,5))
-          setFinishedExams(request.data.filter( x => !now.isBefore(time(x.finish_date))).slice(0,5))
+          setActiveExams(request.data.filter( x => now.isBefore(time(x.finish_date))).slice(0,20))
+          setFinishedExams(request.data.filter( x => !now.isBefore(time(x.finish_date))).slice(0,20))
         } catch (error) {
           console.log(error)
           setErrorMsg("Ocurrio un error cargando los examenes")
@@ -53,12 +54,12 @@ export default function HomePage(){
           let request = await getExamsForStudent(usuario.id)
           let now = time()
           if(request.data.open){
-            setOpenExams(request.data.open.filter( x => now.isBefore(time(x.finish_date))).slice(0,5))
+            setOpenExams(request.data.open.filter( x => now.isBefore(time(x.finish_date))))
           } else {
             setOpenExams([])
           }
           if(request.data.secciones){
-            setSectionExams(request.data.secciones.map(x => x.exam).filter( x => now.isBefore(time(x.finish_date))).slice(0,5))
+            setSectionExams(request.data.secciones.map(x => x.exam).filter( x => now.isBefore(time(x.finish_date))))
           } else {
             setSectionExams([])
           }
@@ -73,8 +74,7 @@ export default function HomePage(){
   }, [usuario])
 
   return (
-    <div>
-      <main className="content-main-crear-test">
+    <div >
       <div className="toolbar-icono"/>
         <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}>
           {usuario.groups.length > 0 ? (
@@ -84,20 +84,24 @@ export default function HomePage(){
                 usuario.groups.find(x => x.name === "Professor") && (
                 <Fragment>
                   <Grid container spacing={2} direction="column">
+                  {/* <Grid container spacing={2} direction="column" style={{width: activeExams && activeExams.length < 6  ? "80%" : "80%"}}> */}
                     <div>
-                      <h1>Examenes Activos</h1>
-                    </div>
-                    <Grid container spacing={2} direction="row" justify="space-around">
-                      {activeExams ? (activeExams.map((exam, index) => {
-                        return (
-                          <ExamCard 
-                            key={index} 
-                            title={exam.name}
-                            id={exam.id}
-                            type="Professor"
-                          />
-                        )                
-                      })) :
+                      <h1>Exámenes Activos</h1>
+                    </div>                    
+                    <Grid container direction="row" style={{justifyContent: activeExams && activeExams.length < 6 ? "space-around" : "center"}}>
+                      {activeExams ? (
+                        activeExams.length < 6 ? (activeExams.map((exam, index) => {
+                          return (
+                            <ExamCard 
+                              key={index} 
+                              title={exam.name}
+                              id={exam.id}
+                              type="Professor"
+                            />
+                          )                
+                        }))
+                        : <Carousel items={activeExams} type="Professor"/>                      
+                      ):
                         <Loading/>
                       }
                     </Grid>
@@ -105,19 +109,22 @@ export default function HomePage(){
                   <br/>
                   <Grid container spacing={2} direction="column">
                     <div>
-                      <h1>Examenes Culminados</h1>
+                      <h1>Exámenes Culminados</h1>
                     </div>
-                    <Grid container spacing={2} direction="row" justify="space-around">
-                      {finishedExams ? (finishedExams.map((exam, index) => {
-                        return (
-                          <ExamCard 
-                            key={index} 
-                            title={exam.name}
-                            id={exam.id}
-                            type="Professor"
-                          />
-                        )                
-                      })) :
+                    <Grid container direction="row" style={{justifyContent: finishedExams && finishedExams.length < 6 ? "space-around" : "center"}}>
+                      {finishedExams ? (
+                        finishedExams.length < 6 ? (finishedExams.map((exam, index) => {
+                          return (
+                            <ExamCard 
+                              key={index} 
+                              title={exam.name}
+                              id={exam.id}
+                              type="Professor"
+                            />
+                          )                
+                        }))
+                        : <Carousel items={finishedExams} type="Professor"/>                      
+                      ):
                         <Loading/>
                       }
                     </Grid>
@@ -130,19 +137,22 @@ export default function HomePage(){
                 <Fragment>
                   <Grid container spacing={2} direction="column">
                     <div>
-                      <h1>Examenes Asignados</h1>
+                      <h1>Exámenes Asignados</h1>
                     </div>
-                    <Grid container spacing={2} direction="row" justify="space-around">
-                      {sectionExams ? (sectionExams.map((exam, index) => {
-                        return (
-                          <ExamCard 
-                            key={index} 
-                            title={exam.name}
-                            id={exam.id}
-                            type="Student"
-                          />
-                        )                
-                      })) :
+                    <Grid container direction="row" style={{justifyContent: sectionExams && sectionExams.length < 5 ? "space-around" : "center"}}>
+                      {sectionExams ? (
+                        sectionExams.length < 5 ? (sectionExams.map((exam, index) => {
+                          return (
+                            <ExamCard 
+                              key={index} 
+                              title={exam.name}
+                              id={exam.id}
+                              type="Student"
+                            />
+                          )                
+                        }))
+                        : <Carousel items={sectionExams} type="Student"/>                      
+                      ):
                         <Loading/>
                       }
                     </Grid>
@@ -150,19 +160,22 @@ export default function HomePage(){
                   <br/>
                   <Grid container spacing={2} direction="column">
                     <div>
-                      <h1>Examenes Libres</h1>
+                      <h1>Exámenes Libres</h1>
                     </div>
-                    <Grid container spacing={2} direction="row" justify="space-around">
-                      {openExams ? (openExams.map((exam, index) => {
-                        return (
-                          <ExamCard 
-                            key={index} 
-                            title={exam.name}
-                            id={exam.id}
-                            type="Student"
-                          />
-                        )                
-                      })) :
+                    <Grid container direction="row" style={{justifyContent: openExams && openExams.length < 5 ? "space-around" : "center"}}>
+                      {openExams ? (
+                        openExams.length < 5 ? (openExams.map((exam, index) => {
+                          return (
+                            <ExamCard 
+                              key={index} 
+                              title={exam.name}
+                              id={exam.id}
+                              type="Student"
+                            />
+                          )                
+                        }))
+                        : <Carousel items={openExams} type="Student"/>                      
+                      ):
                         <Loading/>
                       }
                     </Grid>
@@ -186,7 +199,6 @@ export default function HomePage(){
               severity="success"
             />
         </Container>
-      </main>
     </div>
   )
 }

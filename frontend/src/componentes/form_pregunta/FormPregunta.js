@@ -75,7 +75,7 @@ export default function FormPregunta({
               <FormControl component="fieldset">
                 <FormLabel component="legend" style={{marginBottom: "20px"}}>
                   {pregunta.latex ? 
-                    <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                    <Latex >{pregunta["content"]}</Latex>
                     : pregunta["content"]
                   }  
                 </FormLabel>
@@ -92,7 +92,7 @@ export default function FormPregunta({
               <FormGroup>
                 <FormLabel component="legend" style={{marginBottom: "20px"}}>
                   {pregunta.latex ? 
-                    <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                    <Latex >{pregunta["content"]}</Latex>
                     : pregunta["content"]
                   }
                 </FormLabel>
@@ -120,7 +120,7 @@ export default function FormPregunta({
               <FormControl component="fieldset">
                 <FormLabel component="legend" style={{marginBottom: "20px"}}>
                   {pregunta.latex ? 
-                    <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                    <Latex >{pregunta["content"]}</Latex>
                     : pregunta["content"]
                   }
                 </FormLabel>
@@ -136,7 +136,7 @@ export default function FormPregunta({
               <FormControl component="fieldset">
                 <FormLabel component="legend" style={{marginBottom: "20px"}}>
                   {pregunta.latex ? 
-                    <Latex displayMode={true}>{pregunta["content"]}</Latex>
+                    <Latex>{pregunta["content"]}</Latex>
                     : pregunta["content"]
                   }
                 </FormLabel>

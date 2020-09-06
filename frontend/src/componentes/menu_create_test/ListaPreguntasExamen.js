@@ -31,7 +31,19 @@ const estilosDropDragging = (style, snapshot) => {
 }
 
 const EstilosStartDragging = styled.div`
-    opacity : ${props => props.isDragging ? 0.4 : 1};
+    opacity : ${props => props.isDragging ? 0.4 : 0.8};
+    &:hover {
+        opacity: 1;
+        transition: all .2s ease-in-out;
+        -webkit-transition: all .2s ease-in-out;
+        -moz-transition: all .2s ease-in-out;
+        -ms-transition: all .2s ease-in-out;
+        -o-transition: all .2s ease-in-out;
+        -webkit-transform: scale(1.05);
+        -moz-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        -o-transform: scale(1.05);
+    }
 `
 
 export default () => <ListaPreguntasExamen></ListaPreguntasExamen>
@@ -49,7 +61,8 @@ const ListaPreguntasExamen = () => {
         setSelectedRespuesta,
         setRespuestas,
         setFormats,
-        setListaPreguntasExamen
+        setListaPreguntasExamen,
+        setearDataItemSeleccionado
     } = useCreateTestPage();
     const { tituloRespuesta, tipoPregunta, handleOpcionExamen } = useTipoPreguntaRespuesta();
     const [ lista, setLista ] = useState([]);
@@ -92,53 +105,6 @@ const ListaPreguntasExamen = () => {
         let pregunta = listaPreguntasExamen[index];
         setearDataItemSeleccionado(pregunta);
         setIndexItemPregunta(index);
-    }
-
-    const setearDataItemSeleccionado = (pregunta) => {
-        let event_pond = { target : { name : 'ponderacion', value : pregunta.value }};
-        let event_diff = { target : { name : 'dificultad', value : pregunta.difficulty }};
-        let event_preg = { target : { name : 'pregunta', value : pregunta.content }};
-        let latex = pregunta.latex ? 'latex' : 'text';
-
-        let menu = {};
-        if (pregunta.q_type_id === "Selección Simple"){
-            menu.value = "seleccion_simple";
-            menu.key = '1.1';
-        } 
-        else if (pregunta.q_type_id === "Selección Múltiple"){
-            menu.value = "seleccion_multiple";
-            menu.key = '1.2';
-        }
-        else if (pregunta.q_type_id === "Verdadero o Falso"){
-            menu.value = "verdadero_falso";
-            menu.key = '1.3';
-        }
-        else if (pregunta.q_type_id === "Ordenamiento"){
-            menu.value = "ordenamiento";
-            menu.key = '1.4';
-        }
-
-        if (menu.value === 'verdadero_falso'){
-            let valor = pregunta.answers[0].correct === 1 ? 'verdadero' : 'falso';
-            setSelectedRespuesta(valor);
-        } else {
-            let respuestas = pregunta.answers.map( (respuesta, index) => {
-                return { respuesta : respuesta.content, checked: respuesta.correct, id : respuesta.id }
-            })
-            setRespuestas(respuestas);
-        }
-        
-        handleOpcionExamen(menu.value, menu.key);
-        setFlagEditarPregunta(true);
-        handleChangeInput(event_pond);
-        handleChangeInput(event_diff);
-        handleChangeInput(event_preg);
-        handleChangeAreaSubAreaTema(pregunta.approach.area, 'area_seleccionada');
-        handleChangeAreaSubAreaTema(pregunta.approach.subarea, 'subarea_seleccionada');
-        handleChangeAreaSubAreaTema(true, 'permitir_subarea');
-        handleChangeAreaSubAreaTema(pregunta.approach.topic, 'tema_seleccionada');
-        handleChangeAreaSubAreaTema(true, 'permitir_tema');
-        setFormats(latex);
     }
 
     return (

@@ -5,6 +5,9 @@ import { useUsuario } from '../context/usuarioContext';
 // servicios
 import { getTopics, getStudents } from '../servicios/servicioCrearExamen.js';
 
+// context
+import { useTipoPreguntaRespuesta } from './createTestContext';
+
 const CreateTestPageContext = React.createContext();
 let opciones = {
     'selección simple' : 'Selección Simple',
@@ -15,6 +18,8 @@ let opciones = {
 
 export function CreateTestPageProvider(props) {
 
+    const { handleOpcionExamen } = useTipoPreguntaRespuesta();
+
     // Mensajes, errores y exitos
     const [msgAlert, setMsgAlert] = useState(null);
     const [alertError, setAlertError] = useState(false);
@@ -22,9 +27,9 @@ export function CreateTestPageProvider(props) {
     const [flagGetAllInfo, setFlagGetAllInfo] = useState(null);
 
     // Página
-    const [ step, setStep ] = useState('step_0');
-    const [ tipoConfiguracion, setTipoConfiguracion ] = useState("Configuración Dinámica");
-    const [ exam_id, SetExamId ] = useState(null);
+    const [step, setStep] = useState('step_0');
+    const [tipoConfiguracion, setTipoConfiguracion] = useState("Configuración Dinámica");
+    const [exam_id, SetExamId] = useState(null);
 
     // Step Configuracion Basica (Variables de estados)
     const [switchChecked, setSwitchChecked] = useState(true);
@@ -69,7 +74,7 @@ export function CreateTestPageProvider(props) {
 
     // Step Secciones (Variables de estados)
     const [estudiantes, setEstudiantes] = useState([]);
-    const [missingEstudiantes, setMissingEstudiantes] = useState([]);
+    const [missingEstudiantes, setMissingEstudiantes] = useState({});
     const [secciones, setSecciones] = useState([]);
     const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
     const {usuario, setUsuario} = useUsuario();
@@ -125,7 +130,7 @@ export function CreateTestPageProvider(props) {
         setValorFechaFin( moment(data.conf_ini.finish_date).toDate());
         setTitulo(data.conf_ini.name);
         setComentarios(data.conf_ini.comments);
-        SetNroIntentos(data.conf_ini.attempt);
+        SetNroIntentos(data.conf_ini.attempt ? data.conf_ini.attempt : "infinito");
         setOpenExam(data.conf_ini.open);
 
         // Paso Crear Preguntas
@@ -176,28 +181,32 @@ export function CreateTestPageProvider(props) {
 
         // Paso Secciones
         let auxSections = [];
-        let missEmails = [];
+        let missingEmails = {};
+        missingEmails['ALL'] =  [];
         let keys = Object.keys(data.sections).reverse();
         keys.forEach( key => {
             let info = {};
-            let id = key.split(' ')[1];
-            info.id = id;
+            info.id = key;
             info.estudiantes = [];
             console.log(data.sections[key])
-            data.sections[key].forEach( email => {
+            data.sections[key].students.forEach( email => {
                 let studentInfo = {};
                 let indexEstudiante = estudiantes.findIndex( est => email === est.email);
-                if (indexEstudiante === -1 ) {
-                    missEmails.push(email);
-                }
-                else if (indexEstudiante > 0 ) {
+                if (indexEstudiante > 0 ) {
                     studentInfo.email = email;
                     info.estudiantes.push(studentInfo);
                 }
             })
+            data.sections[key].missing_emails.forEach( email => {
+                let studentInfo = {};
+                studentInfo.email = email;
+                info.estudiantes.push(studentInfo);
+            })
+            missingEmails[key] =  data.sections[key].missing_emails;
+            missingEmails['ALL'] =  [... missingEmails['ALL'], ...data.sections[key].missing_emails]
             auxSections.push(info);
         });
-        setMissingEstudiantes(missEmails);
+        setMissingEstudiantes(missingEmails);
         setSecciones(auxSections);
     }
 
@@ -215,6 +224,8 @@ export function CreateTestPageProvider(props) {
 
     const handleCambiarSwitch = () => setSwitchChecked(!switchChecked);
     const handleChangeStartDate = (e) => {
+        e.preventDefault();
+        e.stopPropagation()
         let now = moment();
         if ( e < now ) {
             e = now;
@@ -250,10 +261,55 @@ export function CreateTestPageProvider(props) {
 
     const handleChangeInput = (e) => {
         if (e.target.name === 'dificultad') setDificultad(e.target.value);
-        else if (e.target.name === 'ponderacion') {
-            if (Number(e.target.value) >= 1) setPonderacion(e.target.value);
-        }
+        else if (e.target.name === 'ponderacion') setPonderacion(e.target.value);
         else if (e.target.name === 'pregunta') setPregunta(e.target.value);
+    }
+
+    const setearDataItemSeleccionado = (pregunta) => {
+        let event_pond = { target : { name : 'ponderacion', value : pregunta.value }};
+        let event_diff = { target : { name : 'dificultad', value : pregunta.difficulty }};
+        let event_preg = { target : { name : 'pregunta', value : pregunta.content }};
+        let latex = pregunta.latex ? 'latex' : 'text';
+
+        let menu = {};
+        if (pregunta.q_type_id === "Selección Simple"){
+            menu.value = "seleccion_simple";
+            menu.key = '1.1';
+        } 
+        else if (pregunta.q_type_id === "Selección Múltiple"){
+            menu.value = "seleccion_multiple";
+            menu.key = '1.2';
+        }
+        else if (pregunta.q_type_id === "Verdadero o Falso"){
+            menu.value = "verdadero_falso";
+            menu.key = '1.3';
+        }
+        else if (pregunta.q_type_id === "Ordenamiento"){
+            menu.value = "ordenamiento";
+            menu.key = '1.4';
+        }
+
+        if (menu.value === 'verdadero_falso'){
+            let valor = pregunta.answers[0].correct === 1 ? 'verdadero' : 'falso';
+            setSelectedRespuesta(valor);
+        } else {
+            let respuestas = pregunta.answers.map( (respuesta, index) => {
+                return { respuesta : respuesta.content, checked: respuesta.correct, id : respuesta.id }
+            })
+            setRespuestas(respuestas);
+        }
+        
+        handleOpcionExamen(menu.value, menu.key);
+        setFlagEditarPregunta(true);
+        handleChangeInput(event_pond);
+        handleChangeInput(event_diff);
+        handleChangeInput(event_preg);
+        handleChangeAreaSubAreaTema(pregunta.approach.area, 'area_seleccionada');
+        handleChangeAreaSubAreaTema(pregunta.approach.subarea, 'subarea_seleccionada');
+        handleChangeAreaSubAreaTema(true, 'permitir_subarea');
+        handleChangeAreaSubAreaTema(pregunta.approach.topic, 'tema_seleccionada');
+        handleChangeAreaSubAreaTema(true, 'permitir_tema');
+        setFormats(latex);
     }
 
     // Step Secciones
@@ -369,7 +425,8 @@ export function CreateTestPageProvider(props) {
             editTest,
             setFlagGetAllInfo,
             flagGetAllInfo,
-            missingEstudiantes
+            missingEstudiantes,
+            setearDataItemSeleccionado
         })
     }, [
         areas, 
@@ -412,7 +469,8 @@ export function CreateTestPageProvider(props) {
         flagEditarPregunta,
         formats,
         editTest,
-        missingEstudiantes
+        missingEstudiantes,
+        flagGetAllInfo
     ]);
 
     return <CreateTestPageContext.Provider value = {value} {...props} />

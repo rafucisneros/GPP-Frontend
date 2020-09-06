@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useMemo, }  from 'react';
+import React, { Fragment, useState, useMemo, useEffect }  from 'react';
 import validator from 'validator';
 
 // componentes
@@ -69,6 +69,8 @@ const StepCrearPreguntas = () => {
         indexItemPregunta,
         setIndexItemPregunta,
         setFlagEditarPregunta,
+        setearDataItemSeleccionado,
+        flagGetAllInfo
     } = useCreateTestPage();
 
     const [ alertSucess, setAlertSucess ] = useState(false);
@@ -87,6 +89,17 @@ const StepCrearPreguntas = () => {
         ponderacionError : false,
         dificultadError : false,
     });
+
+    useEffect(() => {
+        console.log(flagGetAllInfo, listaPreguntasExamen)
+        if (flagGetAllInfo && listaPreguntasExamen && listaPreguntasExamen.length > 0) {
+            console.log("dsds")
+            let index = 0;
+            let pregunta = listaPreguntasExamen[index];
+            setIndexItemPregunta(index);
+            setearDataItemSeleccionado(pregunta);
+        }
+    }, [])
 
     const handleFormat = (event, newFormats) => {
         setFormats(newFormats);
@@ -137,7 +150,7 @@ const StepCrearPreguntas = () => {
         }
 
         if(flag === 'all' || flag === 'ponderacion'){
-            if( !ponderacion || validator.isEmpty(String(ponderacion))){
+            if( !ponderacion || validator.isEmpty(String(ponderacion)) || (!isNaN(parseFloat(ponderacion)) && Number(parseFloat(ponderacion) < 1 )) ){
                 error = true;
                 listError.ponderacionError = true;
             } 
@@ -239,9 +252,9 @@ const StepCrearPreguntas = () => {
     };
 
     const handleCleanForm = () => {
-        let event_pond = { target : { name : 'ponderacion', value : ''}};
-        let event_diff = { target : { name : 'dificultad', value : ''}};
-        let event_preg = { target : { name : 'pregunta', value : ''}};
+        let event_pond = { target : { name : 'ponderacion', value : null}};
+        let event_diff = { target : { name : 'dificultad', value : null}};
+        let event_preg = { target : { name : 'pregunta', value : null}};
 
         handleChangeInput(event_pond);
         handleChangeInput(event_diff);
@@ -264,7 +277,16 @@ const StepCrearPreguntas = () => {
     const handleNextStep = () => {
         setLoading(true);
         handleModalConfirmacion();
+        let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
         console.log(listaPreguntasExamen)
+        auxListaExamen.forEach( value => {
+            if (value.q_type_id === 'Ordenamiento') {
+                value.answers.forEach( (res, index) => {
+                    res.correct = index;
+                })
+            }
+        })
+        console.log(auxListaExamen);
         postAllPreguntasExamen(listaPreguntasExamen, exam_id)
         .then( res => {
             if (res) {
@@ -293,7 +315,6 @@ const StepCrearPreguntas = () => {
         let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
         let form = {};
         let answer = [];
-        console.log(auxListaExamen[indexItemPregunta])
 
         if (tipoPregunta === 'verdadero_falso'){
             answer.push({
@@ -342,7 +363,7 @@ const StepCrearPreguntas = () => {
                 auxListaExamen[indexItemPregunta] = form;
                 setListaPreguntasExamen(auxListaExamen);
 
-                handleCleanForm();
+                handleCrearNuevaPregunta();
                 setAlertSucessUpdate(true);
             }
         })
@@ -418,7 +439,7 @@ const StepCrearPreguntas = () => {
                         </Grid>
                         <Grid item lg={6} sm={6} xl={6} xs={6}  style={{textAlign : 'center'}}>
                             <Typography variant="h6">
-                                Paso - Creación Examen ({tipoConfiguracion}) - {tituloRespuesta}
+                                Paso - Creación Examen ({tipoConfiguracion})<Typography variant="h6" style={{fontWeight : 600}}>{tituloRespuesta}</Typography>
                             </Typography>
                         </Grid>
                         <Grid item lg={3} sm={3} xl={3} xs={3} style={{textAlignLast : 'right'}}>
@@ -531,12 +552,12 @@ const StepCrearPreguntas = () => {
                     </Box>
                 </Paper>
             </Grid> 
-            <Snackbar open={alertSucess} autoHideDuration={5000} onClose={handleCloseAlertSuccess} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Snackbar open={alertSucess} autoHideDuration={3000} onClose={handleCloseAlertSuccess} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleCloseAlertSuccess} severity="success">
                     Pregunta Creada exitosamente.
                 </Alert>
             </Snackbar>
-            <Snackbar open={alertSucessUpdate} autoHideDuration={5000} onClose={handleCloseAlertSuccessUpdate} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Snackbar open={alertSucessUpdate} autoHideDuration={3000} onClose={handleCloseAlertSuccessUpdate} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleCloseAlertSuccessUpdate} severity="success">
                     Pregunta Actualizada exitosamente.
                 </Alert>
