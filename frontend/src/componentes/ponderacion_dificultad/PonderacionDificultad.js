@@ -10,7 +10,6 @@ import {
     TextField,
     FormHelperText,
     Grid,
-    ListItemText
 } from '@material-ui/core';
 
 // contexts

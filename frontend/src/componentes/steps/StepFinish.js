@@ -23,7 +23,7 @@ const StepFinish = () => {
 
     return( 
         <Fragment>
-            <Grid container spacing={3} style={{textAlign : 'center', display: 'flex', width : '100%', paddingTop: '25vh'}}>
+            <Grid container spacing={3} style={{textAlign : 'center', display: 'flex', width : '100%', paddingTop: '15vh'}}>
                 <Grid item xs={12}>
                     <CheckCircleOutlinedIcon style={{ color: 'green', fontSize : 100 }}/>
                 </Grid>

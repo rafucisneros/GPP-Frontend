@@ -215,6 +215,11 @@ const ListaEstudiantes = (props) => {
                             toolbar: true,
                             showSelectAllCheckbox: false,
                             actionsColumnIndex: -1,
+                            headerStyle: {
+                                textAlign : 'center',
+                                backgroundColor: '#3f51b5',
+                                color: '#FFF'
+                            },
                             rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? 'rgb(238, 238, 238)' : '' }),
                             // selectionProps: rowData => ( console.log(rowData), ({
                             //     checked: rowData.tableData.checked,
@@ -224,7 +229,7 @@ const ListaEstudiantes = (props) => {
                         }}
                         localization={{
                             body: {
-                                addTooltip: 'Agregar',
+                                addTooltip: 'Agregar Estudiante',
                                 editRow : {
                                     cancelTooltip : 'Cancelar',
                                     saveTooltip : 'Guardar',
@@ -273,12 +278,12 @@ const ListaEstudiantes = (props) => {
                             })
                         }}
                         actions={[
-                            {
+                            rowData => ({
                                 icon: 'delete',
                                 tooltip: 'Eliminar Elemento',
-                                onClick: (event, rowData) => window.confirm("¿Seguro que desea eliminar a " + rowData.name)
-                                // disabled: rowData.birthYear < 2000
-                            }
+                                onClick: (event, rowData) => window.confirm("¿Seguroooo que desea eliminar a " + rowData.name),
+                                hidden: !rowData.no_hidden
+                            }),
                         ]}
                         editable={{
                             onRowAdd: (newData) =>
@@ -286,30 +291,16 @@ const ListaEstudiantes = (props) => {
                                 setTimeout(() => {
                                     resolve();
                                     const auxData = [...estudiantes];
+                                    newData.no_hidden = false;
                                     auxData.push(newData);
                                     handleAgregarEstudiante(auxData);
-                                    
                                 }, 600);
                             }),
-                            // onRowUpdate: (newData, oldData) =>
-                            // new Promise((resolve) => {
-                            //     setTimeout(() => {
-                            //         if (oldData) {
-                            //             setState(() => {
-                            //             const auxData = [...prevState.auxData];
-                            //             auxData[auxData.indexOf(oldData)] = newData;
-                            //             return { ...prevState, auxData };
-                            //             });
-                            //         }
-                            //         resolve();
-                            //     }, 600);
-                            // }),
                             onRowDelete: (oldData) =>
                             new Promise((resolve) => {
                                 setTimeout(() => {
                                     const auxData = [...estudiantes];
                                     const nuevaSeccion = [...secciones];
-
                                     auxData.splice(auxData.indexOf(oldData), 1);
 
                                     for( let seccion of nuevaSeccion ){
@@ -322,7 +313,6 @@ const ListaEstudiantes = (props) => {
                                     handleAgregarEstudiante(auxData);
                                     resolve();
                                     handleChangeComp(nuevaSeccion, 'secciones');
-                                    
                                 }, 1000);
                             }),
                         }}

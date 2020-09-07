@@ -68,27 +68,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function getSteps() {
-    return ['Configuración Básica', 'Crear Preguntas', 'Configuración Dinámica', 'Crear Secciones', 'Terminar Creación de Examen'];
-}
-
-function getStepContent(stepIndex) {
-    switch (stepIndex) {
-        case 'step_0':
-            return 'Configuración Básica';
-        case 'step_1':
-            return 'Crear Preguntas';
-        case 'step_2':
-            return 'Configuración Dinámica';
-        case 'step_3':
-            return 'Crear Secciones';
-        case 'step_4':
-            return 'Terminar Creación de Examen';
-        // default:
-        //     return 'Configuración Básica';
-    }
-}
-
 export default (props) => <CreateTestPage {...props} />
 
 const CreateTestPage = (props) => {

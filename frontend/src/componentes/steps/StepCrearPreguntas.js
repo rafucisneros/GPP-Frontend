@@ -12,9 +12,10 @@ import { useTipoPreguntaRespuesta } from '../../context/createTestContext';
 import { useCreateTestPage } from '../../context/createTestPageContext';
 
 // servicios
-import { postPreguntasExamen, postAllPreguntasExamen } from '../../servicios/servicioCrearExamen.js';
+import { postPreguntasExamen, postAllPreguntasExamen, deletePregunta} from '../../servicios/servicioCrearExamen.js';
 
 // material
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import SaveIcon from '@material-ui/icons/Save';
 import BackspaceIcon from '@material-ui/icons/Backspace';
@@ -35,6 +36,18 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PublishIcon from '@material-ui/icons/Publish';
+import Tooltip from '@material-ui/core/Tooltip';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import IconButton from '@material-ui/core/IconButton';
+
+const stylesTooltip = {
+    tooltip: {
+        fontSize : '13px',
+        textAlign : 'center'
+    }
+};
+
+const CustomTooltip = withStyles(stylesTooltip)(Tooltip);
 
 const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -371,13 +384,24 @@ const StepCrearPreguntas = () => {
 
     const handleEliminarPregunta = () => {
         let auxListaExamen = listaPreguntasExamen.map( value => { return {...value} });
-        auxListaExamen.splice(indexItemPregunta, 1);
-
+        let question = auxListaExamen[indexItemPregunta];
         setOpenModalEliminarPregunta(!openModalEliminarPregunta);
-        setListaPreguntasExamen(auxListaExamen);
-        setIndexItemPregunta(null);
-        setFlagEditarPregunta(false);
-        handleCleanForm();
+        setLoading(true);
+        deletePregunta(question.exam, question.id)
+        .then( res => {
+            if (res) {
+                auxListaExamen.splice(indexItemPregunta, 1);
+                setLoading(false);
+                setListaPreguntasExamen(auxListaExamen);
+                setIndexItemPregunta(null);
+                setFlagEditarPregunta(false);
+                handleCleanForm();
+            }
+        })
+        .catch( err => {
+            console.log(err);
+            setLoading(false);
+        })
     }
 
     useMemo( () => {
@@ -471,14 +495,32 @@ const StepCrearPreguntas = () => {
 
             <Grid item lg={8} sm={8} xl={8} xs={8}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
-                    Enfoque
+                    <Box>
+                        Enfoque
+                        <IconButton
+                            edge="end"
+                        >
+                            <CustomTooltip title="Nota: si desea añadir un nuevo elemento dentro de la lista de áreas, subáreas o temas, deberá crearlo respectivamente en la oopción Añadir Contenido ubicado en el menú." arrow>
+                                <InfoOutlinedIcon/>
+                            </CustomTooltip>
+                        </IconButton>
+                    </Box>
                     <SeleccionarAreaTema errores={errores}/>
                 </Paper>
             </Grid>
 
             <Grid item lg={4} sm={4} xl={4} xs={4}>
                 <Paper className="paper-crear-test" style={{height : '100%'}}>
-                    Evaluación
+                    <Box>
+                        Evaluación
+                        <IconButton
+                            edge="end"
+                        >
+                            <CustomTooltip title="Nota: el campo Ponderación es un número entre 1 y 100." arrow>
+                                <InfoOutlinedIcon/>
+                            </CustomTooltip>
+                        </IconButton>
+                    </Box>
                     <PonderacionDificultad errores={errores}/>
                 </Paper>
             </Grid>
