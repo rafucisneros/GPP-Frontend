@@ -62,7 +62,7 @@ const Alert = (props) => {
 
 const GpiSwitch = withStyles({
     switchBase: {
-        color: '#6a3df3',
+        color: '#fff',
         '&$checked': {
             color: '#6a3df3',
         },
@@ -292,11 +292,16 @@ const StepConfiguracionBasica = () => {
                         xs={12}
                         style = {{'display' : 'block', 'padding': '16px'}}
                     >
-                        <Box style={{display: 'flex'}}>
+                        <Box style={{display: 'flex', alignItems : 'center'}}>
                             <GpiSwitch checked={switchChecked} onClick={() => handleCambiarSwitch()} />
-                            <CustomTooltip title={tituloTooltip} placement="right" arrow>
-                                <Box style={{alignSelf: 'center'}}><span style={{fontWeight: 800}}>{tipoConfiguracion}</span></Box>
-                            </CustomTooltip>
+                            <Box style={{alignSelf: 'center', paddingLeft : '4px'}}>
+                                <span style={{fontWeight: 800}}>{tipoConfiguracion}</span>
+                            </Box>
+                            <IconButton edge="end">
+                                <CustomTooltip title={tituloTooltip} placement="right" arrow>
+                                    <InfoOutlinedIcon/>
+                                </CustomTooltip>
+                            </IconButton>
                         </Box>
                     </Grid>
                     <Fragment>
@@ -312,15 +317,12 @@ const StepConfiguracionBasica = () => {
                                     type="text"
                                     margin="normal"
                                     label="Título del Examen"
+                                    placeholder="Título del Examen"
                                     required
                                     value={titulo ? titulo : ''}
                                     onChange={handleCambiarValor}
                                     variant="outlined"
                                     fullWidth
-                                    autoFocus
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
                                 />
                             </Grid>
                             <Grid item xs={6} md={6} lg={6}>

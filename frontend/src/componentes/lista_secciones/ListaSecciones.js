@@ -79,7 +79,7 @@ const ListaSecciones = (props) => {
                         </CustomTooltip>
                         <CustomTooltip 
                             title={[  
-                                'Ayuda: Seleccione la opción de "añadir sección" seguido de la flecha con dirección hacia ',
+                                'Nota: Seleccione la opción de "Agregar sección" seguido de la flecha con dirección hacia ',
                                 'la derecha para mostrar la lista de estudiantes disponibles. Para añadir un estudiante que no este registrado en el sistema en una seccion ya creada ',
                                 'deberá deseleccionar todos los estudiantes y añadir al nuevo estudiante en la misma o puede tbién crear una nueva sección con el nuevo estudiante.',
                             ].join('')} arrow>

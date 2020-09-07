@@ -80,3 +80,15 @@ export function getTopics(){
         return Promise.reject(error);
     });
 }
+
+export function deletePregunta(eid, qid){
+    let url = global.DELETE_QUESTION.replace("_eid_", eid).replace("_qid_", qid);
+
+    return Axios.delete(url)
+    .then((response) => {
+        return response;
+    })
+    .catch( (error) => {
+        return Promise.reject(error);
+    });
+}
