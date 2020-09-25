@@ -10,7 +10,7 @@ import ItemsCarousel from 'react-items-carousel';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-export const Carousel = ({ items, type="Professor" }) => {
+export const Carousel = ({ itemsQuantity, items, type="Professor" }) => {
   const [activeItem, setActiveItem] = useState(0)
 
   return (
@@ -22,7 +22,7 @@ export const Carousel = ({ items, type="Professor" }) => {
         chevronWidth={60}
         disableSwipe={false}
         alwaysShowChevrons={false}
-        numberOfCards={4}
+        numberOfCards={itemsQuantity}
         slidesToScroll={2}
         outsideChevron={true}
         showSlither={false}

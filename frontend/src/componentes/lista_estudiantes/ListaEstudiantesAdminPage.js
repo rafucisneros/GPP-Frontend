@@ -6,6 +6,10 @@ import { Alert } from '../alert/Alert.js';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 
 const defaultStyle = {
   cellStyle: {
@@ -38,7 +42,16 @@ const ListaEstudiantes = (props) => {
     const [ errorMsg, setErrorMsg] = useState("")
     const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
     const [ successMsg, setSuccessMsg] = useState("")
-    let [ password, setPassword ] = useState("123456789")
+    const [ password, setPassword ] = useState("123456789")
+    const [ showPassword, setShowPassword ] = useState(false)
+
+    const handleClickShowPassword = () => {
+      setShowPassword(!showPassword);
+    };
+    const handleMouseDownPassword = (event) => {
+      event.preventDefault();
+    };
+
     useEffect(() => {
       let fetchData = async () => {
         try {
@@ -137,7 +150,7 @@ const ListaEstudiantes = (props) => {
             data={data} 
             columns={columns} 
             onRowAdd={handleAgregarEstudiante}
-            onRowDelete={handleBorrarEstudiante}
+            // onRowDelete={handleBorrarEstudiante}
             onRowUpdate={handleModificarEstudiante}
           />
         </Grid>
@@ -150,7 +163,7 @@ const ListaEstudiantes = (props) => {
           <TextField
             id='password'
             name='password'
-            type="text"
+            type={showPassword ? 'text' : 'password'}
             margin="normal"
             label="Password"
             required
@@ -161,6 +174,19 @@ const ListaEstudiantes = (props) => {
             autoFocus
             InputLabelProps={{
               shrink: true,
+            }}
+            InputProps={{
+              endAdornment: 
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>,
             }}
           />
         </Grid>

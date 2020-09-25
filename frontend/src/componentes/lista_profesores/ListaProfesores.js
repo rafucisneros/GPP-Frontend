@@ -6,6 +6,10 @@ import { Alert } from '../alert/Alert.js';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 
 const defaultStyle = {
   cellStyle: {
@@ -38,6 +42,15 @@ const ListaProfesores = (props) => {
     const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
     const [ successMsg, setSuccessMsg] = useState("")
     const [ password, setPassword ] = useState("123456789")
+    const [ showPassword, setShowPassword ] = useState(false)
+
+    const handleClickShowPassword = () => {
+      setShowPassword(!showPassword);
+    };
+    const handleMouseDownPassword = (event) => {
+      event.preventDefault();
+    };
+
     useEffect(() => {
       let fetchData = async () => {
         try {
@@ -135,7 +148,7 @@ const ListaProfesores = (props) => {
             data={data} 
             columns={columns} 
             onRowAdd={handleAgregarProfesor}
-            onRowDelete={handleBorrarProfesor}
+            // onRowDelete={handleBorrarProfesor}
             onRowUpdate={handleModificarProfesor}
           />
         </Grid>
@@ -148,7 +161,7 @@ const ListaProfesores = (props) => {
           <TextField
             id='password'
             name='password'
-            type="text"
+            type={showPassword ? 'text' : 'password'}
             margin="normal"
             label="Password"
             required
@@ -159,6 +172,19 @@ const ListaProfesores = (props) => {
             autoFocus
             InputLabelProps={{
               shrink: true,
+            }}
+            InputProps={{
+              endAdornment: 
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>,
             }}
           />
         </Grid>

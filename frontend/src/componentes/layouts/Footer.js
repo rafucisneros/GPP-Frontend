@@ -51,7 +51,7 @@ const Footer = props => {
                 {' y '}
                 <Link
                     // component="a"
-                    href="#"
+                    href="https://www.linkedin.com/in/rafael-cisneros-b60053169/"
                 >
                     Rafael Cisneros
                 </Link>
@@ -66,7 +66,7 @@ const Footer = props => {
             </Typography>
             <div>
                 <Typography variant="caption">
-                    Desarrollado como miniproyecto para la Universidad Simón Bolívar.
+                    Desarrollado como miniproyecto para la Universidad Simón Bolívar durante el trimestre Enero-Marzo 2020.
                 </Typography>
             </div>
         </div>

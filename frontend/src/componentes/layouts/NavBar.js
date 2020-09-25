@@ -109,14 +109,13 @@ const stylesTooltip = {
 
 const CustomTooltip = withStyles(stylesTooltip)(Tooltip);
 
-const NavBar = () => {
+const NavBar = ({ setBar, bar }) => {
     const { contentMenu } = useGeneral();
     const { setSubMenuTipoPregunta } = useTipoPreguntaRespuesta();
     const { exam } = useMakeTest();
     const { usuario } = useUsuario();
 
     const [ clickItem, setClickItem ] = useState(false);
-    const [ bar, setBar ] = useState(true);
     const [ collapse, setCollapse ] = useState(false);
     const classes = useStyle();
     
