@@ -35,60 +35,62 @@ export default function HomePage(){
 
   return (
     <div>
-      <div className="toolbar-icono"/>    
-      <Card>
-        <CardHeader
-          subheader={`Aquí puedes agregar, borrar y/o modificar tanto estudiantes, como administradores y profesores.`}
-          title="Administración"
-        />
-        <Divider />
-        <CardContent style={{padding: "6px"}}>
-          <Container style={{paddingTop: '12px', paddingBottom: '12px'}}>
-            <Grid container spacing={2}>                               
-              {/* Profesores */}
-              <Accordion expanded={profesoresExpanded} onChange={handleProfesoresExpanded} style={{width: "100%"}}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Profesores</Typography>
-                </AccordionSummary>
-                <Divider />
-                <AccordionDetails>
-                  <ListaProfesores />
-                </AccordionDetails>
-              </Accordion>
-              <Accordion expanded={estudiantesExpanded} onChange={handleEstudiantesExpanded} style={{width: "100%"}}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Estudiantes</Typography>
-                </AccordionSummary>
-                <Divider />
-                <AccordionDetails>
-                  <ListaEstudiantes />
-                </AccordionDetails>
-              </Accordion>
-              <Accordion expanded={administradoresExpanded} onChange={handleAdministradoresExpanded} style={{width: "100%"}}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Administradores</Typography>
-                </AccordionSummary>
-                <Divider />
-                <AccordionDetails>
-                  <ListaAdmins />
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
-          </Container>
-        </CardContent>
-      </Card>
+      <div className="toolbar-icono"/>  
+        <Container maxWidth="lg" style={{paddingTop: '32px', paddingBottom: '32px'}}> 
+        <Card style={{minHeight : '500px'}}>
+          <CardHeader
+            subheader={`Aquí puedes agregar, borrar y/o modificar tanto estudiantes, como administradores y profesores.`}
+            title="Administración"
+          />
+          <Divider />
+          <CardContent style={{padding: "6px"}}>
+            <Container style={{paddingTop: '12px', paddingBottom: '12px'}}>
+              <Grid container spacing={2}>                               
+                {/* Profesores */}
+                <Accordion expanded={profesoresExpanded} onChange={handleProfesoresExpanded} style={{width: "100%"}}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Profesores</Typography>
+                  </AccordionSummary>
+                  <Divider />
+                  <AccordionDetails>
+                    <ListaProfesores />
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={estudiantesExpanded} onChange={handleEstudiantesExpanded} style={{width: "100%"}}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Estudiantes</Typography>
+                  </AccordionSummary>
+                  <Divider />
+                  <AccordionDetails>
+                    <ListaEstudiantes />
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={administradoresExpanded} onChange={handleAdministradoresExpanded} style={{width: "100%"}}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>Administradores</Typography>
+                  </AccordionSummary>
+                  <Divider />
+                  <AccordionDetails>
+                    <ListaAdmins />
+                  </AccordionDetails>
+                </Accordion>
+              </Grid>
+            </Container>
+          </CardContent>
+        </Card>
+      </Container>
     </div>
   )
 }

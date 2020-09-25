@@ -26,7 +26,7 @@ const columns = [
     },
     { 
         title: 'Correo Electrónico', 
-        ield: 'email',
+        field: 'email',
         ...defaultStyle
     },
 ]

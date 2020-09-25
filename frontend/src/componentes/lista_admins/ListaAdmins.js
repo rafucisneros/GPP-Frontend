@@ -155,41 +155,43 @@ const ListaAdmins = (props) => {
             onRowUpdate={handleModificarAdmin}
           />
         </Grid>
-        <Grid item xs={6} md={6} lg={6} style={{display: "flex", alignItems: "center"}}>  
-          <Typography>
-              Utilice el siguiente campo para asignar una contraseña para nuevos administradores:
-          </Typography>
-        </Grid>        
-        <Grid item xs={6} md={6} lg={6}>          
-          <TextField
-            id='password'
-            name='password'
-            type={showPassword ? 'text' : 'password'}
-            margin="normal"
-            label="Password"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            variant="outlined"
-            fullWidth
-            autoFocus
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              endAdornment: 
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>,
-            }}
-          />
+        <Grid container spacing={2} style={{padding : '8px'}}>
+          <Grid item xs={6} md={6} lg={6} style={{display: "flex", alignItems: "center"}}>  
+            <Typography>
+                Utilice el siguiente campo para asignar una contraseña para nuevos administradores:
+            </Typography>
+          </Grid>        
+          <Grid item xs={6} md={6} lg={6}>          
+            <TextField
+              id='password'
+              name='password'
+              type={showPassword ? 'text' : 'password'}
+              margin="normal"
+              label="Password"
+              required
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              variant="outlined"
+              fullWidth
+              autoFocus
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                endAdornment: 
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>,
+              }}
+            />
+          </Grid>
         </Grid>
         <Alert 
           open={alertOpen}

@@ -58,7 +58,7 @@ const Footer = props => {
                 {' '}bajo la tutoría de la Prof. {' '}
                 <Link
                     // component="a"
-                    href="#"
+                    href="https://www.linkedin.com/in/ivettecarolinamartinez/"
                 >
                     Ivette Carolina Martinez                
                 </Link>
