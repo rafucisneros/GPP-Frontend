@@ -24,9 +24,13 @@ const RegisterPage = () => {
         .catch((error) => {
             console.log(error)
             let data = error.data;
+            let msg = '';
+            msg = data.email ? `Correo Electrónico: ${[...data.email]} ` : '';
+            msg += data.password ? `Contraseña: ${[...data.password]} ` : '';
+            if (msg && msg.length === 0) msg = 'Ups! Algo malo pasó';
             let mensaje = {
                 titulo : 'Registro Fallido',
-                mensaje : data.password ? `${[...data.password]}` : 'Algo malo pasó',
+                mensaje : msg,
                 type : 'error',
                 open : true
             }
