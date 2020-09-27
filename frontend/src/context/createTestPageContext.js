@@ -74,7 +74,7 @@ export function CreateTestPageProvider(props) {
 
     // Step Secciones (Variables de estados)
     const [estudiantes, setEstudiantes] = useState([]);
-    const [missingEstudiantes, setMissingEstudiantes] = useState({});
+    const [missingEstudiantes, setMissingEstudiantes] = useState({'ALL' : []});
     const [secciones, setSecciones] = useState([]);
     const [seccionSeleccionada, setSeccionSeleccionada] = useState(null);
     const {usuario, setUsuario} = useUsuario();
@@ -290,7 +290,7 @@ export function CreateTestPageProvider(props) {
         }
 
         if (menu.value === 'verdadero_falso'){
-            let valor = pregunta.answers[0].correct === 1 ? 'verdadero' : 'falso';
+            let valor = pregunta.answers[0].correct ? 'verdadero' : 'falso';
             setSelectedRespuesta(valor);
         } else {
             let respuestas = pregunta.answers.map( (respuesta, index) => {
