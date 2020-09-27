@@ -229,6 +229,7 @@ export default function MakeTestPage(props){
           switch(question.type){
             case "selección simple": 
               if(question.current_answer && question.current_answer.length > 0){
+                question["answers"] = question.current_answer
                 question["respuesta"] = question.current_answer.find(x => x.option == 1).id.toString()
               }
             break
