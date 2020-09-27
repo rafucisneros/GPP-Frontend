@@ -355,7 +355,7 @@ export function CreateTestPageProvider(props) {
 
     const value = useMemo( () => {
         return({
-            areas,
+            areas : [...areas],
             subareas,
             temas,
             step,

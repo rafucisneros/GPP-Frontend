@@ -181,20 +181,6 @@ export default function ModalAddAreaSubAreaTema(props) {
     setArraySubareas(data);
   }
 
-  // useEffect(() => {
-  //   if (subareas){
-  //     console.log(subareas)
-  //     let keys = Object.keys(subareas)
-  //     let data = [];
-  //     keys.map( key => {
-  //       subareas[`${key}`].forEach( sub => {
-  //         data.push(sub);
-  //       })
-  //     })
-  //     setArraySubareas(data);
-  //   }
-  // }, [subareas])
-
   useEffect(() => {
     if (subareaSeleccionada){
       let keys = Object.keys(subareasAux)
