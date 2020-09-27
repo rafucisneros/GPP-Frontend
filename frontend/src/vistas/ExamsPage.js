@@ -35,8 +35,8 @@ export default function ExamsPage(){
 
     const { setContentMenu } = useGeneral();
     const { usuario } = useUsuario();
-    // const [examanes, setExamanes] = useState([]);
     const [examanes, setExamanes] = useState([]);
+    const [loading, setLoading] = useState(true);
     setContentMenu(`home`);
 
     // GET requests y componentes de montaje
@@ -86,8 +86,8 @@ export default function ExamsPage(){
                 title: 'Estático o Dinámico', 
                 field: 'static', 
                 render: rowData => {
-                    if (rowData.static) return 'Dinámico'
-                    else return 'Estático'
+                    if (rowData.static) return 'Estático'
+                    else return 'Dinámico'
                 },
                 ...defaultStyle
             },
@@ -130,6 +130,7 @@ export default function ExamsPage(){
             .then( res => {
                 if (res.data) {
                     setExamanes(res.data);
+                    setLoading(false)
                 }
             })
         } else {
@@ -150,6 +151,7 @@ export default function ExamsPage(){
                             score: x.score + "/" + x.total_value_exam,
                         }
                     }));
+                    setLoading(false)
                 }
             })
         }
@@ -196,7 +198,7 @@ export default function ExamsPage(){
         }
     }
 
-    if(usuario.id){
+    if(usuario.id && !loading){
         return (
             <Fragment>
                 <div className="toolbar-icono"/>

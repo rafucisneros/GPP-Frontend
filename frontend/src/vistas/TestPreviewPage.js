@@ -173,7 +173,7 @@ export default function TestPreviewPage(props){
                       </Grid>
                         {
                           time(exam.finish_date, "DD/MM/YYYY - hh:mm:ss A").isAfter() && 
-                          exam.attempts < exam.attempt && (
+                          (!exam.attempt || exam.attempts < exam.attempt) && (
                             <Fragment>
                               <Divider style={{width: "100%", marginBottom: "5px"}}/>
                               <Grid container spacing={2} direction={"row"} style={{margin: "8px 0px", justifyContent: "center"}}>

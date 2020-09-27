@@ -61,16 +61,20 @@ export default function MakeTestPage(props){
   const [ errorMsg, setErrorMsg] = useState("")
   const [ alertSuccessOpen, setAlertSuccessOpen] = useState(false)
   const [ successMsg, setSuccessMsg] = useState("")
+  const [ terminandoExamen, setTerminandoExamen ] = useState(false)
 
   let history = useHistory();
 
   const confirmFinishExam = async () => {
+    setOpen(false);
+    setTerminandoExamen(true)
     try {
       let response1 = await SaveExam()
       let response2 = await finishExamService({attempt: exam.attempt}, examID)
       history.push(`/examen_terminado/${examID}/estudiante/${usuario.id}`)
       // window.location = `/examen_terminado/${examID}/estudiante/${usuario.id}`
     } catch {
+      setTerminandoExamen(false)
       setErrorMsg("No se pudo guardar el examen. Intente nuevamente")
       setAlertOpen(true)
     }
@@ -213,8 +217,12 @@ export default function MakeTestPage(props){
         // Colocamos la primera pregunta como la actual
         setPreguntaActual(examData["Preguntas"][0]["index"])
         // Asignamos hora de inicio y fin del examen
-        examData["fecha_inicio"] = time(preguntas.init_time).format("DD/MM/YYYY - hh:mm:ss A")
-        examData["fecha_fin"] = time(examData["fecha_inicio"], "DD/MM/YYYY - hh:mm:ss A").add(examData.duration, "minutes").format("DD/MM/YYYY - hh:mm:ss A")
+        // examData["fecha_inicio"] = time(preguntas.init_time).format("DD/MM/YYYY - hh:mm:ss A")
+        // examData["fecha_fin"] = time(examData["fecha_inicio"], "DD/MM/YYYY - hh:mm:ss A").add(examData.duration, "minutes").format("DD/MM/YYYY - hh:mm:ss A")
+        let timeLeftSplit = preguntas.time_left.split(":")
+        let elapsedSeconds = ((examData.duration - (timeLeftSplit[0] * 60) - timeLeftSplit[1]) * 60) - timeLeftSplit[2]
+        examData["fecha_inicio"] = time().add(-elapsedSeconds, "seconds").format("DD/MM/YYYY - hh:mm:ss A")
+        examData["fecha_fin"] = time().add(timeLeftSplit[0], "hours").add(timeLeftSplit[1], "minutes").add(timeLeftSplit[2], "seconds").format("DD/MM/YYYY - hh:mm:ss A")
         fin = examData["fecha_fin"]
         // Chequeamos si las preguntas ya tienen respuestaS
         preguntas.questions.forEach( question => {
@@ -273,7 +281,7 @@ export default function MakeTestPage(props){
     }
   }, [usuario])
 
-  if(exam){
+  if(exam && !terminandoExamen){
     return (
       <div className="content-main-presentar-test">
         <div className="toolbar-icono"/>
