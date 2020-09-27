@@ -86,8 +86,8 @@ export default function ExamsPage(){
                 title: 'Estático o Dinámico', 
                 field: 'static', 
                 render: rowData => {
-                    if (rowData.static) return 'Dinámico'
-                    else return 'Estático'
+                    if (rowData.static) return 'Estático'
+                    else return 'Dinámico'
                 },
                 ...defaultStyle
             },

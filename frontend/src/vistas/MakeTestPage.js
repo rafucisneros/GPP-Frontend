@@ -214,7 +214,9 @@ export default function MakeTestPage(props){
         setPreguntaActual(examData["Preguntas"][0]["index"])
         // Asignamos hora de inicio y fin del examen
         examData["fecha_inicio"] = time(preguntas.init_time).format("DD/MM/YYYY - hh:mm:ss A")
-        examData["fecha_fin"] = time(examData["fecha_inicio"], "DD/MM/YYYY - hh:mm:ss A").add(examData.duration, "minutes").format("DD/MM/YYYY - hh:mm:ss A")
+        // examData["fecha_fin"] = time(examData["fecha_inicio"], "DD/MM/YYYY - hh:mm:ss A").add(examData.duration, "minutes").format("DD/MM/YYYY - hh:mm:ss A")
+        let timeLeftSplit = preguntas.time_left.split(":")
+        examData["fecha_fin"] = time().add(timeLeftSplit[0], "hours").add(timeLeftSplit[1], "minutes").add(timeLeftSplit[2], "seconds").format("DD/MM/YYYY - hh:mm:ss A")
         fin = examData["fecha_fin"]
         // Chequeamos si las preguntas ya tienen respuestaS
         preguntas.questions.forEach( question => {
