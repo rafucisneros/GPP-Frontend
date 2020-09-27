@@ -293,7 +293,7 @@ export default function MakeTestPage(props){
             <h3>Hora de Fin: {exam.fecha_fin}</h3>
           </Grid>
         </Container>
-        <Container maxWidth="lg" style={{flex: "1", paddingTop: '32px', paddingBottom: '32px', width : '100%'}}>
+        <Container maxWidth="lg" style={{flex: "1", paddingTop: '10px', paddingBottom: '10px', width : '100%'}}>
             <Grid container spacing={2} style={{height: "100%"}}>
               <Card style={{width: '100%', display: "flex", flexDirection: "column"}}>
                 <CardHeader
