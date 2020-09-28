@@ -337,10 +337,6 @@ const StepConfiguracionBasica = () => {
                                         value={duracion ? duracion : ''}
                                         MenuProps={MenuProps}
                                         onChange={handleCambiarValor}
-                                        // textFieldProps={{
-                                        //     label: "Duración del examen",
-                                        //     InputLabelProps: duracion ? { shrink : false } : {} 
-                                        // }}
                                     >
                                     {duracionExamen.map(item => (
                                         <MenuItem key={item.valor} value={item.valor} >

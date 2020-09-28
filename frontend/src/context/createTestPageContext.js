@@ -28,14 +28,14 @@ export function CreateTestPageProvider(props) {
 
     // Página
     const [step, setStep] = useState('step_0');
-    const [tipoConfiguracion, setTipoConfiguracion] = useState("Configuración Dinámica");
+    const [tipoConfiguracion, setTipoConfiguracion] = useState("Configuración Estática");
     const [exam_id, SetExamId] = useState(null);
 
     // Step Configuracion Basica (Variables de estados)
-    const [switchChecked, setSwitchChecked] = useState(true);
+    const [switchChecked, setSwitchChecked] = useState(false);
     const [duracion, setDuracion] = useState(null); 
     const [nroIntentos, SetNroIntentos] = useState(null); 
-    const [openExam, setOpenExam] = useState(null); 
+    const [openExam, setOpenExam] = useState(true); 
     const [valorFechaInicio, setValorFechaInicio] = useState( moment().toDate() );
     const [valorFechaFin, setValorFechaFin] = useState( moment().add(1, 'd').toDate() );
     const [titulo, setTitulo] = useState(null);
@@ -322,9 +322,9 @@ export function CreateTestPageProvider(props) {
     // Step Finish
     const destroyData = () => {
         setStep('step_0')
-        setTipoConfiguracion("Configuración Dinámica")
+        setTipoConfiguracion("Configuración Estática")
         SetExamId(null)
-        setSwitchChecked(true)
+        setSwitchChecked(false)
         setDuracion(null)
         setValorFechaInicio(moment().toDate())
         setValorFechaFin( moment().add(1, 'd').toDate())
@@ -333,7 +333,7 @@ export function CreateTestPageProvider(props) {
         setListaFiltradoSubArea([])
         setListaFiltradoTema([])
         setPermitirSubArea(false)
-        setOpenExam(null)
+        setOpenExam(true)
         SetNroIntentos(null)
         setPermitirTarea(false)
         setPregunta(null)
