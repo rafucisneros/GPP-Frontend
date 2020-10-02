@@ -224,8 +224,6 @@ export function CreateTestPageProvider(props) {
 
     const handleCambiarSwitch = () => setSwitchChecked(!switchChecked);
     const handleChangeStartDate = (e) => {
-        e.preventDefault();
-        e.stopPropagation()
         let now = moment();
         if ( e < now ) {
             e = now;
