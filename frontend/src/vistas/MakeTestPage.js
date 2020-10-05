@@ -114,46 +114,65 @@ export default function MakeTestPage(props){
     }
     let request = savingExam.Preguntas.map( pregunta => {
       let answers = [];
+      if(pregunta.current_answer && pregunta.current_answer.length){
+        pregunta.answers = pregunta.current_answer
+      }
+
       switch(pregunta["type"]){
         case "ordenamiento":
           if(pregunta["respuesta"]){
             for(let i=0; i < pregunta["respuesta"].length; i++){
-              answers.push({
+              let respuesta = {
                 content: pregunta["respuesta"][i]["content"],
                 correct: i
-              })
+              }
+              if(pregunta.current_answer){
+                respuesta["id"] = pregunta["respuesta"]["id"]
+              }
+              answers.push(respuesta)
             }
           } 
           break;
         case "selección simple":
           if(pregunta["respuesta"]){
             answers = pregunta["answers"].map( x => {
-              return {
-                id: x["id"],
+              let respuesta = {
                 content: x["content"],
                 correct: 0
               }
+              if(pregunta.current_answer){
+                respuesta["id"] = x["id"]
+              }
+              return respuesta
             })
-            answers.find(x => x["id"] == pregunta["respuesta"])["correct"] = 1
+            answers.find(x => x["content"] == pregunta["respuesta"])["correct"] = 1
           } 
           break;
         case "selección múltiple":
           if(pregunta["respuesta"]){
             answers = pregunta["answers"].map( x => {
-              return {
+              let respuesta = {
                 content: x["content"],
-                correct: pregunta["respuesta"].includes(x["id"].toString()) ? 1 : 0
+                correct: pregunta["respuesta"].includes(x["content"].toString()) ? 1 : 0
               }
+              if(pregunta.current_answer){
+                respuesta["id"] = x["id"]
+              }
+              return respuesta
             })
           } 
           break;
         case "verdadero o falso":
           if(pregunta["respuesta"]){
             answers = pregunta["answers"].map( x => {
-              return {
+              let respuesta = {
                 content: x["content"],
                 correct: pregunta["respuesta"]
               }
+              if(pregunta.current_answer){
+                respuesta["id"] = x["id"]
+              }
+              return respuesta
             })
           }   
           break;
@@ -164,6 +183,12 @@ export default function MakeTestPage(props){
       }
     })
     let guardando = await saveExamAnswers(request, usuario["id"], savingExam.attempt)
+    guardando["data"].forEach( pregunta => {
+      if(pregunta.answer.length > 0){
+        savingExam.Preguntas.find(x => x["id"] === pregunta["question"])["current_answer"] = pregunta["answer"]
+      }
+    })
+    setExam(savingExam)
     setUltimoGuardado(time().format("DD/MM/YYYY - hh:mm:ss A"))
   }
 
@@ -230,13 +255,13 @@ export default function MakeTestPage(props){
             case "selección simple": 
               if(question.current_answer && question.current_answer.length > 0){
                 question["answers"] = question.current_answer
-                question["respuesta"] = question.current_answer.find(x => x.option == 1).id.toString()
+                question["respuesta"] = question.current_answer.find(x => x.option == 1).content.toString()
               }
             break
             case "selección múltiple": 
               if(question.current_answer && question.current_answer.length > 0){
                 question["respuesta"] = question.current_answer.filter(x => x.option == "1").map(x =>{
-                  return question.answers.find(y => x.content === y.content).id.toString()
+                  return question.answers.find(y => x.content === y.content).content.toString()
                 })
               }
             break

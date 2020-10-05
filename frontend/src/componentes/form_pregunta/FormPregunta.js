@@ -81,7 +81,7 @@ export default function FormPregunta({
                 </FormLabel>
                 <RadioGroup aria-label="respuesta" name="respuesta1" onChange={handleChange} value={pregunta.respuesta}>
                   {pregunta.answers.map((opcion, index) => {
-                    return <FormControlLabel value={opcion["id"].toString()} control={<Radio />} label={opcion["content"]} key={index} />
+                    return <FormControlLabel value={opcion["content"].toString()} control={<Radio />} label={opcion["content"]} key={index} />
                   })}
                 </RadioGroup>
               </FormControl>
@@ -101,11 +101,11 @@ export default function FormPregunta({
                       <FormControlLabel
                         control={
                           <Checkbox
-                            checked={pregunta.respuesta && pregunta.respuesta.find(x => x === opcion["id"].toString()) ? true : false}
+                            checked={pregunta.respuesta && pregunta.respuesta.find(x => x === opcion["content"].toString()) ? true : false}
                             onChange={handleChangeMultiple}
                             name="checkedB"
                             color="primary"
-                            value={opcion["id"]}
+                            value={opcion["content"]}
                           />
                         }
                         label={opcion["content"]}

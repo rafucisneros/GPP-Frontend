@@ -172,6 +172,7 @@ export default function TestPreviewPage(props){
                         </Grid>
                       </Grid>
                         {
+                          exam.can_present &&
                           time(exam.finish_date, "DD/MM/YYYY - hh:mm:ss A").isAfter() && 
                           (!exam.attempt || exam.attempts < exam.attempt) && (
                             <Fragment>
@@ -191,7 +192,7 @@ export default function TestPreviewPage(props){
                     ) : (
                       <Fragment>
                         {
-                          time(exam.finish_date, "DD/MM/YYYY - hh:mm:ss A").isAfter() && (
+                          (exam.can_present && time(exam.finish_date, "DD/MM/YYYY - hh:mm:ss A").isAfter()) && (
                           <Grid container spacing={2} style={{margin: "8px 0px", paddingTop: "20px"}}>
                             <Grid container spacing={2} direction={"row"}  style={{justifyContent: "center"}}>
                               <Button 
