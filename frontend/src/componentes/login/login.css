@@ -1,0 +1,52 @@
+body{
+    background-color: #f4fafb !important;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.container-login-signup{
+    height: 100vh;
+}
+
+.container-grid-form{
+    background-color: #f4fafb !important;
+}
+
+.container-image-login{
+    background-image: url(../../assets/imagenes/examen-signup.jpg);
+    background-repeat: 'no-repeat';
+    background-size: cover;
+    background-position: 'center';
+}
+
+.container-image-signup{
+    background-image: url(../../assets/imagenes/examen-login.jpg);
+    background-repeat: 'no-repeat';
+    background-size: cover;
+    background-position: 'center';
+}
+
+.container-login-signup-paper{
+    margin: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container-login-signup-avatar{
+    margin: 8px;
+}
+
+.container-login-signup-avatar.MuiAvatar-root{
+    width: 100px;
+    height: 100px;
+}
+
+.container-login-signup-form{
+    width: 100%;
+    margin-top: 16px;
+}
+
+.container-login-signup-form > button{
+    margin: 24px 0px 16px;
+}
